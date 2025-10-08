@@ -1,5 +1,5 @@
 /**
- * APP CORE MODULE  
+ * APP CORE MODULE
  * Main application initialization and bootstrap
  * Investment Portfolio Manager Pro v3.1.0
  */
@@ -8,15 +8,9 @@ import { PortfolioStorage, parseSafeNumber, validateFundData, debounce } from '.
 import {
   showToast,
   showConfirmDialog,
-  showLoading,
-  hideLoading,
-  exportChartAsPNG,
-  updateBulkActionsBar,
-  toggleRowSelection,
-  selectAllRows,
+  animateValue,
   getSelectedRows,
   clearSelectedRows,
-  animateValue,
 } from './ui-manager.js';
 import {
   calculatePortfolioMetrics,
@@ -34,24 +28,15 @@ import {
   setupViewModeToggle,
   setupSearchHandler,
   setPortfolioData,
-  getPortfolioData,
   getClientInfo,
 } from './event-handlers.js';
-import {
-  generateCSV,
-  formatCurrency,
-  formatPercentage,
-  truncateText,
-} from './utilities.js';
+import { generateCSV, formatCurrency, formatPercentage, truncateText } from './utilities.js';
 
-// ==================== GLOBAL STATE ====================
+// ==================== MODULE STATE ====================
 let portfolioData = [];
-let clientName = '';
-let advisorName = '';
-let advisorEmail = '';
 let viewMode = 'funds'; // 'funds' or 'producers'
-let currentSortColumn = null;
-let currentSortDirection = 'asc';
+const currentSortColumn = null;
+const currentSortDirection = 'asc';
 let searchQuery = '';
 
 const storage = new PortfolioStorage();
@@ -99,14 +84,18 @@ function updateDashboard() {
       yieldChange.classList.remove('negative');
       yieldChange.classList.add('positive');
       const arrow = yieldChange.querySelector('span:first-child');
-      if (arrow) arrow.textContent = '↑';
+      if (arrow) {
+        arrow.textContent = '↑';
+      }
     } else {
       yieldCard.classList.remove('positive');
       yieldCard.classList.add('negative');
       yieldChange.classList.remove('positive');
       yieldChange.classList.add('negative');
       const arrow = yieldChange.querySelector('span:first-child');
-      if (arrow) arrow.textContent = '↓';
+      if (arrow) {
+        arrow.textContent = '↓';
+      }
     }
   }
 
@@ -136,7 +125,9 @@ function updateFundList() {
 function updateFundTable() {
   const table = document.getElementById('fondTable');
   const tbody = table ? table.querySelector('tbody') : null;
-  if (!tbody) return;
+  if (!tbody) {
+    return;
+  }
 
   // Filter and sort
   let displayData = filterFunds(portfolioData, searchQuery);
@@ -202,23 +193,21 @@ function updateFundData(index, field, value) {
 function deleteFund(index) {
   if (index >= 0 && index < portfolioData.length) {
     const fund = portfolioData[index];
-    showConfirmDialog(
-      'Smazat fond?',
-      `Opravdu chcete smazat fond "${fund.name}"?`,
-      () => {
-        portfolioData.splice(index, 1);
-        storage.saveData(portfolioData);
-        updateFundList();
-        updateDashboard();
-        showToast('success', 'Fond smazán', `${fund.name} byl odstraněn z portfolia`);
-      }
-    );
+    showConfirmDialog('Smazat fond?', `Opravdu chcete smazat fond "${fund.name}"?`, () => {
+      portfolioData.splice(index, 1);
+      storage.saveData(portfolioData);
+      updateFundList();
+      updateDashboard();
+      showToast('success', 'Fond smazán', `${fund.name} byl odstraněn z portfolia`);
+    });
   }
 }
 
 function bulkDeleteSelected() {
   const selectedIndexes = Array.from(getSelectedRows()).sort((a, b) => b - a);
-  if (selectedIndexes.length === 0) return;
+  if (selectedIndexes.length === 0) {
+    return;
+  }
 
   showConfirmDialog(
     'Smazat vybrané fondy?',
@@ -230,17 +219,19 @@ function bulkDeleteSelected() {
       updateFundList();
       updateDashboard();
       showToast('success', 'Fondy smazány', `${selectedIndexes.length} fondů bylo odstraněno`);
-    }
+    },
   );
 }
 
 function bulkExportSelected() {
   const selectedIndexes = Array.from(getSelectedRows());
-  if (selectedIndexes.length === 0) return;
+  if (selectedIndexes.length === 0) {
+    return;
+  }
 
   const selectedFunds = selectedIndexes.map((i) => portfolioData[i]);
   const { clientName: client } = getClientInfo();
-  
+
   generateCSV(selectedFunds, client || 'client');
   showToast('success', 'Export dokončen', `${selectedFunds.length} fondů bylo exportováno`);
 }
@@ -258,19 +249,22 @@ function initializeApp() {
 
   // Load data from storage
   portfolioData = storage.loadData();
-  const savedClient = storage.loadClient();
-  if (savedClient) {
-    clientName = savedClient.clientName || '';
-    advisorName = savedClient.advisorName || '';
-    advisorEmail = savedClient.advisorEmail || '';
-  }
+  // Load saved client info (handled by event-handlers module)
+  storage.loadClient();
 
   // Sync with event handlers module
   setPortfolioData(portfolioData);
 
   // Setup event handlers
   setupClientFormHandler(storage, updateDashboard, showToast, initializeColorPicker);
-  setupPortfolioFormHandler(storage, validateFundData, parseSafeNumber, updateFundList, updateDashboard, showToast);
+  setupPortfolioFormHandler(
+    storage,
+    validateFundData,
+    parseSafeNumber,
+    updateFundList,
+    updateDashboard,
+    showToast,
+  );
   setupBulkActionsHandlers(bulkDeleteSelected, bulkExportSelected);
   setupViewModeToggle((newMode) => {
     viewMode = newMode;
@@ -324,7 +318,9 @@ function setupKeyboardShortcuts() {
 
 function setupDarkMode() {
   const darkModeToggle = document.getElementById('darkModeToggle');
-  if (!darkModeToggle) return;
+  if (!darkModeToggle) {
+    return;
+  }
 
   const savedDarkMode = localStorage.getItem('darkMode') === 'true';
   if (savedDarkMode) {

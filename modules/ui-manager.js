@@ -6,7 +6,9 @@
 // ==================== TOAST NOTIFICATIONS ====================
 function showToast(type, title, message, duration = 4000) {
   const container = document.getElementById('toastContainer');
-  if (!container) return;
+  if (!container) {
+    return;
+  }
 
   const toast = document.createElement('div');
   toast.className = `toast ${type}`;
@@ -65,18 +67,24 @@ function showConfirmDialog(title, message, onConfirm, onCancel) {
 
   confirmBtn.onclick = () => {
     cleanup();
-    if (onConfirm) onConfirm();
+    if (onConfirm) {
+      onConfirm();
+    }
   };
 
   cancelBtn.onclick = () => {
     cleanup();
-    if (onCancel) onCancel();
+    if (onCancel) {
+      onCancel();
+    }
   };
 
   overlay.onclick = (e) => {
     if (e.target === overlay) {
       cleanup();
-      if (onCancel) onCancel();
+      if (onCancel) {
+        onCancel();
+      }
     }
   };
 }
@@ -157,7 +165,9 @@ function clearSelectedRows() {
 // ==================== ANIMATIONS ====================
 function animateValue(elementId, start, end, duration, isCurrency = false) {
   const element = document.getElementById(elementId);
-  if (!element) return;
+  if (!element) {
+    return;
+  }
 
   const range = end - start;
   const increment = range / (duration / 16);

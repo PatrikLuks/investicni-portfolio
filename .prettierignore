@@ -1,0 +1,31 @@
+# Prettier Ignore
+# Files that should not be formatted by Prettier
+
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Build outputs
+dist/
+build/
+coverage/
+
+# Legacy/backup files
+ORIGINAL/
+app-monolithic-backup.js
+app-refactored.js
+investPortfolio-monolithic-backup.html
+
+# Generated files
+*.min.js
+*.bundle.js
+*.min.css
+
+# Documentation
+CHANGELOG.md
+LICENSE
+
+# Environment
+.env
+.env.*

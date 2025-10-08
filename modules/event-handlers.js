@@ -27,15 +27,17 @@ function initializeDOMReferences() {
 }
 
 // ==================== CLIENT FORM HANDLER ====================
-function setupClientFormHandler(storage, updateDashboard, showToast, initializeColorPicker) {
+function setupClientFormHandler(storage, updateDashboard, showToast, initColorPicker) {
   const elements = initializeDOMReferences();
   const { clientForm } = elements;
 
-  if (!clientForm) return;
+  if (!clientForm) {
+    return;
+  }
 
-  clientForm.addEventListener('submit', function (e) {
+  clientForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    
+
     clientName = document.getElementById('clientName').value;
     advisorName = document.getElementById('advisorName').value;
     advisorEmail = document.getElementById('advisorEmail').value;
@@ -53,8 +55,8 @@ function setupClientFormHandler(storage, updateDashboard, showToast, initializeC
       updateDashboard();
     }
 
-    initializeColorPicker();
-    
+    initColorPicker();
+
     storage.startAutosave(() => {
       storage.saveData(portfolioData);
       const display = document.getElementById('lastSaveDisplay');
@@ -77,10 +79,18 @@ function initializeColorPicker() {
       buttons.forEach((btn) => btn.classList.remove('active'));
       this.classList.add('active');
 
-      if (this.classList.contains('blue-scheme')) window.selectedColorScheme = 'blue';
-      if (this.classList.contains('red-scheme')) window.selectedColorScheme = 'red';
-      if (this.classList.contains('green-scheme')) window.selectedColorScheme = 'green';
-      if (this.classList.contains('yellow-scheme')) window.selectedColorScheme = 'yellow';
+      if (this.classList.contains('blue-scheme')) {
+        window.selectedColorScheme = 'blue';
+      }
+      if (this.classList.contains('red-scheme')) {
+        window.selectedColorScheme = 'red';
+      }
+      if (this.classList.contains('green-scheme')) {
+        window.selectedColorScheme = 'green';
+      }
+      if (this.classList.contains('yellow-scheme')) {
+        window.selectedColorScheme = 'yellow';
+      }
     });
   });
 
@@ -92,11 +102,20 @@ function initializeColorPicker() {
 }
 
 // ==================== PORTFOLIO FORM HANDLER ====================
-function setupPortfolioFormHandler(storage, validateFundData, parseSafeNumber, updateFundList, updateDashboard, showToast) {
+function setupPortfolioFormHandler(
+  storage,
+  validateFundData,
+  parseSafeNumber,
+  updateFundList,
+  updateDashboard,
+  showToast,
+) {
   const portfolioForm = document.getElementById('portfolioForm');
-  if (!portfolioForm) return;
+  if (!portfolioForm) {
+    return;
+  }
 
-  portfolioForm.addEventListener('submit', function (e) {
+  portfolioForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
     const fundData = {
@@ -119,10 +138,10 @@ function setupPortfolioFormHandler(storage, validateFundData, parseSafeNumber, u
       updateFundList();
       updateDashboard();
       portfolioForm.reset();
-      
+
       document.getElementById('fondListCard').classList.remove('hidden');
       document.getElementById('dashboard').classList.remove('hidden');
-      
+
       showToast('success', 'Fond přidán', `${fundData.name} byl úspěšně přidán do portfolia`);
     } catch (error) {
       console.error('Add fund failed:', error);
@@ -148,7 +167,7 @@ function setupBulkActionsHandlers(bulkDeleteSelected, bulkExportSelected) {
 // ==================== VIEW MODE TOGGLE ====================
 function setupViewModeToggle(onViewModeChange) {
   const viewModeRadios = document.querySelectorAll('input[name="viewMode"]');
-  
+
   viewModeRadios.forEach((radio) => {
     radio.addEventListener('change', (e) => {
       if (onViewModeChange) {
@@ -161,7 +180,9 @@ function setupViewModeToggle(onViewModeChange) {
 // ==================== SEARCH HANDLER ====================
 function setupSearchHandler(onSearch, debounce) {
   const searchInput = document.getElementById('searchInput');
-  if (!searchInput) return;
+  if (!searchInput) {
+    return;
+  }
 
   searchInput.addEventListener(
     'input',
@@ -169,7 +190,7 @@ function setupSearchHandler(onSearch, debounce) {
       if (onSearch) {
         onSearch(e.target.value);
       }
-    }, 300)
+    }, 300),
   );
 }
 

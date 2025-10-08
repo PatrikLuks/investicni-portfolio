@@ -21,9 +21,7 @@ class PortfolioStorage {
       return true;
     } catch (e) {
       console.error('Save failed:', e);
-      if (typeof showToast === 'function') {
-        showToast('error', 'Chyba uložení', 'Nepodařilo se uložit data do localStorage');
-      }
+      // Note: showToast should be called from the module that imports this
       return false;
     }
   }
@@ -63,9 +61,7 @@ class PortfolioStorage {
       localStorage.removeItem(this.storageKey);
       localStorage.removeItem(this.clientKey);
       localStorage.removeItem(this.lastSaveKey);
-      if (typeof showToast === 'function') {
-        showToast('info', 'Data smazána', 'Všechna data byla vymazána');
-      }
+      // Note: showToast should be called from the module that imports this
       return true;
     } catch (e) {
       console.error('Clear failed:', e);
@@ -78,7 +74,9 @@ class PortfolioStorage {
       clearInterval(this.autosaveInterval);
     }
     this.autosaveInterval = setInterval(() => {
-      if (callback) callback();
+      if (callback) {
+        callback();
+      }
     }, 30000); // 30 seconds
   }
 

@@ -19,11 +19,11 @@ export function generateCSV(data, clientName = 'client') {
   const csvRows = [
     `Název fondu,Producent,Datum investice,Čistá investice (${currencySymbol}),Aktuální hodnota (${currencySymbol})`,
   ];
-  
+
   data.forEach((item) => {
     const row = [
-      '"' + item.name + '"',
-      '"' + item.producer + '"',
+      `"${item.name}"`,
+      `"${item.producer}"`,
       item.investmentDate || '',
       item.investment,
       item.value,
@@ -34,16 +34,16 @@ export function generateCSV(data, clientName = 'client') {
   const csvContent = csvRows.join('\n');
   const BOM = '\uFEFF'; // UTF-8 BOM for Excel
   const csvContentWithBOM = BOM + csvContent;
-  
+
   const blob = new Blob([csvContentWithBOM], {
     type: 'text/csv;charset=utf-8',
   });
-  
+
   const url = window.URL.createObjectURL(blob);
   const link = document.createElement('a');
   const date = new Date().toISOString().split('T')[0];
   const fileName = `portfolio-${clientName}-${date}.csv`;
-  
+
   link.href = url;
   link.setAttribute('download', fileName);
   document.body.appendChild(link);
@@ -84,8 +84,10 @@ export function formatPercentage(value, decimals = 2) {
  * @returns {string} Truncated text
  */
 export function truncateText(text, maxLength = 50) {
-  if (!text || text.length <= maxLength) return text;
-  return text.substring(0, maxLength) + '...';
+  if (!text || text.length <= maxLength) {
+    return text;
+  }
+  return `${text.substring(0, maxLength)}...`;
 }
 
 /**
@@ -103,10 +105,18 @@ export function deepClone(obj) {
  * @returns {boolean} True if empty
  */
 export function isEmpty(value) {
-  if (value === null || value === undefined) return true;
-  if (typeof value === 'string' && value.trim() === '') return true;
-  if (Array.isArray(value) && value.length === 0) return true;
-  if (typeof value === 'object' && Object.keys(value).length === 0) return true;
+  if (value === null || value === undefined) {
+    return true;
+  }
+  if (typeof value === 'string' && value.trim() === '') {
+    return true;
+  }
+  if (Array.isArray(value) && value.length === 0) {
+    return true;
+  }
+  if (typeof value === 'object' && Object.keys(value).length === 0) {
+    return true;
+  }
   return false;
 }
 
@@ -152,7 +162,7 @@ export function downloadTextFile(content, filename, mimeType = 'text/plain') {
   const blob = new Blob([content], { type: mimeType });
   const url = window.URL.createObjectURL(blob);
   const link = document.createElement('a');
-  
+
   link.href = url;
   link.setAttribute('download', filename);
   document.body.appendChild(link);

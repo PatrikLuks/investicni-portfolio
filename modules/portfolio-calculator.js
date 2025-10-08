@@ -21,7 +21,7 @@ function calculatePortfolioMetrics(portfolioData) {
 
   const totalInvestment = portfolioData.reduce(
     (sum, item) => sum + parseSafeNumber(item.investment),
-    0
+    0,
   );
   const totalValue = portfolioData.reduce((sum, item) => sum + parseSafeNumber(item.value), 0);
   const totalProfit = totalValue - totalInvestment;
@@ -115,7 +115,9 @@ function calculateDiversification(portfolioData) {
 
 // ==================== PRODUCER AGGREGATION ====================
 function aggregateByProducer(portfolioData) {
-  if (!portfolioData || portfolioData.length === 0) return [];
+  if (!portfolioData || portfolioData.length === 0) {
+    return [];
+  }
 
   const producerMap = {};
 
@@ -147,9 +149,7 @@ function aggregateByProducer(portfolioData) {
   return Object.values(producerMap).map((producer) => ({
     ...producer,
     yield:
-      producer.totalInvestment !== 0
-        ? (producer.totalProfit / producer.totalInvestment) * 100
-        : 0,
+      producer.totalInvestment !== 0 ? (producer.totalProfit / producer.totalInvestment) * 100 : 0,
   }));
 }
 
@@ -168,15 +168,17 @@ function sortFunds(funds, column, direction = 'asc') {
         return direction === 'asc' ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
 
       case 'investment':
-      case 'value':
+      case 'value': {
         aVal = parseSafeNumber(a[column]);
         bVal = parseSafeNumber(b[column]);
         return direction === 'asc' ? aVal - bVal : bVal - aVal;
+      }
 
-      case 'yield':
+      case 'yield': {
         const yieldA = calculateFundYield(a);
         const yieldB = calculateFundYield(b);
         return direction === 'asc' ? yieldA - yieldB : yieldB - yieldA;
+      }
 
       default:
         return 0;
@@ -187,16 +189,17 @@ function sortFunds(funds, column, direction = 'asc') {
 }
 
 function filterFunds(funds, searchQuery) {
-  if (!searchQuery || searchQuery.trim() === '') return funds;
+  if (!searchQuery || searchQuery.trim() === '') {
+    return funds;
+  }
 
   const query = searchQuery.toLowerCase().trim();
 
-  return funds.filter((fund) => {
-    return (
+  return funds.filter(
+    (fund) =>
       (fund.name || '').toLowerCase().includes(query) ||
-      (fund.producer || '').toLowerCase().includes(query)
-    );
-  });
+      (fund.producer || '').toLowerCase().includes(query),
+  );
 }
 
 // Export module

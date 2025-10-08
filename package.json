@@ -2,6 +2,7 @@
   "name": "portfolio-manager-pro",
   "version": "3.1.0",
   "description": "Premium investment portfolio management application with dark mode, real-time market data, multi-portfolio support, and advanced analytics",
+  "type": "module",
   "main": "main.js",
   "scripts": {
     "dev": "vite",
@@ -27,12 +28,15 @@
     "docker:compose:down": "docker-compose down"
   },
   "devDependencies": {
+    "@eslint/js": "^9.37.0",
     "@types/jest": "^29.5.0",
     "@vitejs/plugin-legacy": "^7.2.1",
     "eslint": "^8.50.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
-    "prettier": "^3.0.3",
+    "prettier": "^3.6.2",
     "vite": "^7.1.9",
     "vite-plugin-compression": "^0.5.1"
   },
