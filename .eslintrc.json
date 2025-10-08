@@ -53,7 +53,10 @@
     "Chart": "readonly",
     "jsPDF": "readonly",
     "XLSX": "readonly",
-    "Fuse": "readonly"
+    "Fuse": "readonly",
+    "gapi": "readonly",
+    "showToast": "readonly",
+    "throttle": "readonly"
   },
   "ignorePatterns": [
     "node_modules/",

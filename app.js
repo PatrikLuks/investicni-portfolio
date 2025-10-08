@@ -1096,16 +1096,16 @@ function initializeApp() {
                 const annualizedReturn = Math.pow(value / investment, 1 / yearsHeld) - 1;
                 yieldPA = (annualizedReturn * 100).toFixed(2);
               } else {
-                yieldPA = yield; // Pokud je investice mladší než rok, použijeme běžný výnos
+                yieldPA = yieldPercent; // Pokud je investice mladší než rok, použijeme běžný výnos
               }
             } else {
-              yieldPA = yield; // Neplatné datum
+              yieldPA = yieldPercent; // Neplatné datum
             }
           } catch (e) {
-            yieldPA = yield; // Chyba při parsování data
+            yieldPA = yieldPercent; // Chyba při parsování data
           }
         } else {
-          yieldPA = yield; // Fallback na běžný výnos
+          yieldPA = yieldPercent; // Fallback na běžný výnos
         }
         let displayDate;
         if (
