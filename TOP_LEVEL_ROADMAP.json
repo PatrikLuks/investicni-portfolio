@@ -1,0 +1,756 @@
+{
+  "project": "Portfolio Manager - TOP LEVEL UPGRADE",
+  "version": "3.0.0",
+  "created": "2025-10-07",
+  "status": "PLANNING",
+  "currentVersion": "2.0.0",
+  "targetVersion": "3.0.0",
+  "estimatedTime": "2-3 weeks",
+  "priority": "HIGH",
+  
+  "overview": {
+    "goal": "Transform Portfolio Manager into enterprise-grade application",
+    "improvements": 50,
+    "categories": 5,
+    "expectedImpact": "+85% overall quality improvement"
+  },
+
+  "tiers": {
+    "tier1": {
+      "name": "KRITICKÁ VYLEPŠENÍ",
+      "priority": "CRITICAL",
+      "estimatedTime": "2-3 days",
+      "impact": "HIGH",
+      "items": [
+        {
+          "id": "T1-001",
+          "name": "Progressive Web App (PWA)",
+          "description": "Přidání PWA manifestu, service workeru pro offline režim a možnost instalace",
+          "benefits": [
+            "Offline přístup k aplikaci",
+            "Instalace na desktop/mobil",
+            "Rychlejší načítání (caching)",
+            "Native app experience"
+          ],
+          "files": [
+            "manifest.json (NEW)",
+            "service-worker.js (NEW)",
+            "investPortfolio.html (UPDATE)"
+          ],
+          "estimatedTime": "4 hours",
+          "complexity": "MEDIUM",
+          "priority": 1
+        },
+        {
+          "id": "T1-002",
+          "name": "Advanced Error Boundaries",
+          "description": "Komplexní error handling s graceful degradation a user-friendly chybové zprávy",
+          "benefits": [
+            "Žádné bílé obrazovky při chybách",
+            "Automatické recovery mechanismy",
+            "Detailní error logging",
+            "Lepší UX při problémech"
+          ],
+          "files": [
+            "app.js (UPDATE)",
+            "error-handler.js (NEW)"
+          ],
+          "estimatedTime": "3 hours",
+          "complexity": "MEDIUM",
+          "priority": 2
+        },
+        {
+          "id": "T1-003",
+          "name": "Performance Monitoring",
+          "description": "Real-time FPS monitoring, lazy loading, virtualized lists pro velké datasety",
+          "benefits": [
+            "60 FPS garantováno i s 1000+ fondy",
+            "Lazy loading obrazků a grafů",
+            "Virtual scrolling pro tabulky",
+            "Performance metrics dashboard"
+          ],
+          "files": [
+            "app.js (UPDATE)",
+            "performance-monitor.js (NEW)",
+            "virtual-list.js (NEW)"
+          ],
+          "estimatedTime": "6 hours",
+          "complexity": "HIGH",
+          "priority": 3
+        },
+        {
+          "id": "T1-004",
+          "name": "Accessibility (WCAG 2.1 AA)",
+          "description": "Plná podpora screen readerů, keyboard navigation, ARIA labels",
+          "benefits": [
+            "WCAG 2.1 AA compliance",
+            "Keyboard-only navigace",
+            "Screen reader friendly",
+            "High contrast mode"
+          ],
+          "files": [
+            "investPortfolio.html (UPDATE)",
+            "app.js (UPDATE)",
+            "accessibility.css (NEW)"
+          ],
+          "estimatedTime": "5 hours",
+          "complexity": "MEDIUM",
+          "priority": 4
+        },
+        {
+          "id": "T1-005",
+          "name": "Security Hardening",
+          "description": "XSS protection, input sanitization, CSP headers, secure localStorage",
+          "benefits": [
+            "XSS attack prevention",
+            "SQL injection protection",
+            "CSRF tokens",
+            "Encrypted localStorage"
+          ],
+          "files": [
+            "app.js (UPDATE)",
+            "security.js (NEW)",
+            "sanitizer.js (NEW)"
+          ],
+          "estimatedTime": "4 hours",
+          "complexity": "MEDIUM",
+          "priority": 5
+        }
+      ]
+    },
+    
+    "tier2": {
+      "name": "PRO FEATURES",
+      "priority": "HIGH",
+      "estimatedTime": "3-4 days",
+      "impact": "HIGH",
+      "items": [
+        {
+          "id": "T2-001",
+          "name": "Undo/Redo System",
+          "description": "Kompletní history stack s možností vrácení změn",
+          "benefits": [
+            "Command pattern implementace",
+            "Neomezená historie změn",
+            "Ctrl+Z / Ctrl+Y shortcuts",
+            "Visual history timeline"
+          ],
+          "files": [
+            "app.js (UPDATE)",
+            "command-stack.js (NEW)",
+            "history-manager.js (NEW)"
+          ],
+          "estimatedTime": "6 hours",
+          "complexity": "HIGH",
+          "priority": 6
+        },
+        {
+          "id": "T2-002",
+          "name": "Advanced Search & Filters",
+          "description": "Fuzzy search, multi-column filtering, saved searches",
+          "benefits": [
+            "Fuse.js fuzzy search",
+            "Multi-criteria filtering",
+            "Saved search templates",
+            "Real-time suggestions"
+          ],
+          "files": [
+            "app.js (UPDATE)",
+            "search-engine.js (NEW)",
+            "filter-manager.js (NEW)"
+          ],
+          "estimatedTime": "5 hours",
+          "complexity": "MEDIUM",
+          "priority": 7
+        },
+        {
+          "id": "T2-003",
+          "name": "Drag & Drop Interface",
+          "description": "Přetahování fondů pro reorganizaci, batch operations",
+          "benefits": [
+            "Intuitivní reorganizace",
+            "Visual feedback",
+            "Touch support",
+            "Batch operations"
+          ],
+          "files": [
+            "app.js (UPDATE)",
+            "drag-drop.js (NEW)",
+            "investPortfolio.html (UPDATE)"
+          ],
+          "estimatedTime": "6 hours",
+          "complexity": "MEDIUM",
+          "priority": 8
+        },
+        {
+          "id": "T2-004",
+          "name": "Cloud Backup & Sync",
+          "description": "Automatický backup do cloud storage (Google Drive, Dropbox)",
+          "benefits": [
+            "Automatický backup",
+            "Multi-device sync",
+            "Version control",
+            "Conflict resolution"
+          ],
+          "files": [
+            "app.js (UPDATE)",
+            "cloud-sync.js (NEW)",
+            "backup-manager.js (NEW)"
+          ],
+          "estimatedTime": "8 hours",
+          "complexity": "HIGH",
+          "priority": 9
+        },
+        {
+          "id": "T2-005",
+          "name": "Smart Auto-save",
+          "description": "Inteligentní auto-save s conflict resolution",
+          "benefits": [
+            "Debounced auto-save",
+            "Offline queue",
+            "Conflict detection",
+            "Save state indicator"
+          ],
+          "files": [
+            "app.js (UPDATE)",
+            "auto-save.js (NEW)"
+          ],
+          "estimatedTime": "4 hours",
+          "complexity": "MEDIUM",
+          "priority": 10
+        },
+        {
+          "id": "T2-006",
+          "name": "Data Validation Layer",
+          "description": "Komplexní validace dat s real-time feedback",
+          "benefits": [
+            "Schema validation (Joi/Yup)",
+            "Real-time field validation",
+            "Custom validation rules",
+            "Visual error indicators"
+          ],
+          "files": [
+            "app.js (UPDATE)",
+            "validator.js (NEW)",
+            "validation-rules.js (NEW)"
+          ],
+          "estimatedTime": "5 hours",
+          "complexity": "MEDIUM",
+          "priority": 11
+        }
+      ]
+    },
+    
+    "tier3": {
+      "name": "ENTERPRISE FEATURES",
+      "priority": "MEDIUM",
+      "estimatedTime": "5-7 days",
+      "impact": "VERY HIGH",
+      "items": [
+        {
+          "id": "T3-001",
+          "name": "Multi-Portfolio Management",
+          "description": "Správa více klientů současně s přepínáním mezi portfolii",
+          "benefits": [
+            "Multiple client support",
+            "Quick portfolio switching",
+            "Portfolio templates",
+            "Bulk operations across portfolios"
+          ],
+          "files": [
+            "app.js (REFACTOR)",
+            "portfolio-manager.js (NEW)",
+            "portfolio-switcher.js (NEW)"
+          ],
+          "estimatedTime": "10 hours",
+          "complexity": "HIGH",
+          "priority": 12
+        },
+        {
+          "id": "T3-002",
+          "name": "Advanced Analytics Dashboard",
+          "description": "Risk metrics, Sharpe ratio, beta, alpha, correlation analysis",
+          "benefits": [
+            "Sharpe ratio calculation",
+            "Portfolio beta/alpha",
+            "Risk-adjusted returns",
+            "Correlation matrix",
+            "Monte Carlo simulation"
+          ],
+          "files": [
+            "app.js (UPDATE)",
+            "analytics-engine.js (NEW)",
+            "risk-calculator.js (NEW)",
+            "statistics.js (NEW)"
+          ],
+          "estimatedTime": "12 hours",
+          "complexity": "VERY HIGH",
+          "priority": 13
+        },
+        {
+          "id": "T3-003",
+          "name": "Benchmark Comparison",
+          "description": "Porovnání s market indexy (S&P 500, DJIA, atd.)",
+          "benefits": [
+            "Index comparison",
+            "Relative performance",
+            "Benchmark overlay charts",
+            "Custom benchmarks"
+          ],
+          "files": [
+            "app.js (UPDATE)",
+            "benchmark-engine.js (NEW)",
+            "market-data.js (NEW)"
+          ],
+          "estimatedTime": "8 hours",
+          "complexity": "HIGH",
+          "priority": 14
+        },
+        {
+          "id": "T3-004",
+          "name": "Professional PDF Export",
+          "description": "High-quality PDF reporty s branding a customizací",
+          "benefits": [
+            "jsPDF with chart rendering",
+            "Custom templates",
+            "Multi-page reports",
+            "Watermarks & branding"
+          ],
+          "files": [
+            "app.js (UPDATE)",
+            "pdf-generator.js (NEW)",
+            "pdf-templates.js (NEW)"
+          ],
+          "estimatedTime": "10 hours",
+          "complexity": "HIGH",
+          "priority": 15
+        },
+        {
+          "id": "T3-005",
+          "name": "Email Automation",
+          "description": "Automatické odesílání reportů emailem",
+          "benefits": [
+            "Scheduled reports",
+            "Email templates",
+            "SMTP integration",
+            "Email tracking"
+          ],
+          "files": [
+            "app.js (UPDATE)",
+            "email-service.js (NEW)",
+            "scheduler.js (NEW)"
+          ],
+          "estimatedTime": "8 hours",
+          "complexity": "HIGH",
+          "priority": 16
+        },
+        {
+          "id": "T3-006",
+          "name": "API Integration Layer",
+          "description": "RESTful API pro integraci s jinými systémy",
+          "benefits": [
+            "REST API endpoints",
+            "Authentication (JWT)",
+            "Rate limiting",
+            "API documentation (Swagger)"
+          ],
+          "files": [
+            "api-server.js (NEW)",
+            "api-routes.js (NEW)",
+            "auth-middleware.js (NEW)"
+          ],
+          "estimatedTime": "12 hours",
+          "complexity": "VERY HIGH",
+          "priority": 17
+        }
+      ]
+    },
+    
+    "tier4": {
+      "name": "UX/UI ENHANCEMENTS",
+      "priority": "MEDIUM",
+      "estimatedTime": "2-3 days",
+      "impact": "HIGH",
+      "items": [
+        {
+          "id": "T4-001",
+          "name": "Advanced Theming System",
+          "description": "Customizable themes, color picker, preset themes",
+          "benefits": [
+            "10+ preset themes",
+            "Custom theme builder",
+            "Color picker integration",
+            "Theme import/export"
+          ],
+          "files": [
+            "investPortfolio.html (UPDATE)",
+            "app.js (UPDATE)",
+            "theme-manager.js (NEW)",
+            "themes.css (NEW)"
+          ],
+          "estimatedTime": "6 hours",
+          "complexity": "MEDIUM",
+          "priority": 18
+        },
+        {
+          "id": "T4-002",
+          "name": "Animations & Micro-interactions",
+          "description": "Smooth transitions, loading skeletons, animated feedback",
+          "benefits": [
+            "Skeleton loaders",
+            "Page transitions",
+            "Hover effects",
+            "Loading animations"
+          ],
+          "files": [
+            "investPortfolio.html (UPDATE)",
+            "animations.css (NEW)",
+            "app.js (UPDATE)"
+          ],
+          "estimatedTime": "5 hours",
+          "complexity": "LOW",
+          "priority": 19
+        },
+        {
+          "id": "T4-003",
+          "name": "Responsive Design 2.0",
+          "description": "Perfect mobile experience, tablet optimization",
+          "benefits": [
+            "Mobile-first design",
+            "Touch gestures",
+            "Responsive charts",
+            "Progressive enhancement"
+          ],
+          "files": [
+            "investPortfolio.html (UPDATE)",
+            "mobile.css (NEW)",
+            "app.js (UPDATE)"
+          ],
+          "estimatedTime": "8 hours",
+          "complexity": "MEDIUM",
+          "priority": 20
+        },
+        {
+          "id": "T4-004",
+          "name": "Guided Tours & Onboarding",
+          "description": "Interactive tutoriály pro nové uživatele",
+          "benefits": [
+            "Step-by-step tours",
+            "Tooltips & hints",
+            "Video tutorials",
+            "Help center"
+          ],
+          "files": [
+            "app.js (UPDATE)",
+            "tour-manager.js (NEW)",
+            "onboarding.js (NEW)"
+          ],
+          "estimatedTime": "6 hours",
+          "complexity": "MEDIUM",
+          "priority": 21
+        },
+        {
+          "id": "T4-005",
+          "name": "Customizable Dashboard",
+          "description": "Drag & drop widgets, personalized layouts",
+          "benefits": [
+            "Widget system",
+            "Customizable layouts",
+            "Save preferences",
+            "Dashboard templates"
+          ],
+          "files": [
+            "investPortfolio.html (UPDATE)",
+            "app.js (UPDATE)",
+            "dashboard-manager.js (NEW)",
+            "widgets.js (NEW)"
+          ],
+          "estimatedTime": "10 hours",
+          "complexity": "HIGH",
+          "priority": 22
+        }
+      ]
+    },
+    
+    "tier5": {
+      "name": "ADVANCED FEATURES",
+      "priority": "LOW",
+      "estimatedTime": "1-2 weeks",
+      "impact": "MEDIUM",
+      "items": [
+        {
+          "id": "T5-001",
+          "name": "Machine Learning Predictions",
+          "description": "AI-powered portfolio suggestions a predictions",
+          "benefits": [
+            "TensorFlow.js integration",
+            "Portfolio optimization",
+            "Risk prediction",
+            "Anomaly detection"
+          ],
+          "files": [
+            "ml-engine.js (NEW)",
+            "portfolio-optimizer.js (NEW)",
+            "prediction-model.js (NEW)"
+          ],
+          "estimatedTime": "20 hours",
+          "complexity": "VERY HIGH",
+          "priority": 23
+        },
+        {
+          "id": "T5-002",
+          "name": "Real-time Market Data",
+          "description": "Live ceny fondů z external API",
+          "benefits": [
+            "Real-time quotes",
+            "Auto-update prices",
+            "Market news feed",
+            "Price alerts"
+          ],
+          "files": [
+            "app.js (UPDATE)",
+            "market-data-service.js (NEW)",
+            "websocket-client.js (NEW)"
+          ],
+          "estimatedTime": "12 hours",
+          "complexity": "HIGH",
+          "priority": 24
+        },
+        {
+          "id": "T5-003",
+          "name": "Collaboration Features",
+          "description": "Multi-user collaboration, comments, sharing",
+          "benefits": [
+            "Real-time collaboration",
+            "Comments & annotations",
+            "Share portfolios",
+            "Permission management"
+          ],
+          "files": [
+            "app.js (UPDATE)",
+            "collaboration.js (NEW)",
+            "realtime-sync.js (NEW)"
+          ],
+          "estimatedTime": "15 hours",
+          "complexity": "VERY HIGH",
+          "priority": 25
+        },
+        {
+          "id": "T5-004",
+          "name": "Mobile App (React Native)",
+          "description": "Native mobile aplikace pro iOS/Android",
+          "benefits": [
+            "Native performance",
+            "Offline support",
+            "Push notifications",
+            "Biometric auth"
+          ],
+          "files": [
+            "mobile/ (NEW FOLDER)",
+            "React Native project (NEW)"
+          ],
+          "estimatedTime": "40 hours",
+          "complexity": "VERY HIGH",
+          "priority": 26
+        },
+        {
+          "id": "T5-005",
+          "name": "Blockchain Integration",
+          "description": "Crypto portfolio tracking, NFT support",
+          "benefits": [
+            "Crypto wallet integration",
+            "NFT portfolio",
+            "DeFi tracking",
+            "Blockchain verification"
+          ],
+          "files": [
+            "blockchain.js (NEW)",
+            "crypto-tracker.js (NEW)",
+            "web3-integration.js (NEW)"
+          ],
+          "estimatedTime": "25 hours",
+          "complexity": "VERY HIGH",
+          "priority": 27
+        }
+      ]
+    }
+  },
+
+  "implementation": {
+    "phase1": {
+      "name": "Foundation (Week 1)",
+      "duration": "5 days",
+      "items": ["T1-001", "T1-002", "T1-003", "T1-004", "T1-005"],
+      "deliverables": [
+        "PWA enabled",
+        "Error handling system",
+        "Performance monitoring",
+        "Accessibility compliance",
+        "Security hardening"
+      ]
+    },
+    "phase2": {
+      "name": "Pro Features (Week 2)",
+      "duration": "5 days",
+      "items": ["T2-001", "T2-002", "T2-003", "T2-004", "T2-005", "T2-006"],
+      "deliverables": [
+        "Undo/Redo system",
+        "Advanced search",
+        "Drag & drop",
+        "Cloud backup",
+        "Smart auto-save",
+        "Data validation"
+      ]
+    },
+    "phase3": {
+      "name": "Enterprise (Week 3)",
+      "duration": "7 days",
+      "items": ["T3-001", "T3-002", "T3-003", "T3-004", "T3-005", "T3-006"],
+      "deliverables": [
+        "Multi-portfolio",
+        "Advanced analytics",
+        "Benchmarking",
+        "PDF export",
+        "Email automation",
+        "API layer"
+      ]
+    },
+    "phase4": {
+      "name": "Polish (Week 4)",
+      "duration": "5 days",
+      "items": ["T4-001", "T4-002", "T4-003", "T4-004", "T4-005"],
+      "deliverables": [
+        "Advanced theming",
+        "Animations",
+        "Mobile optimization",
+        "Onboarding",
+        "Custom dashboard"
+      ]
+    }
+  },
+
+  "technical_stack": {
+    "current": {
+      "frontend": ["HTML5", "CSS3", "Vanilla JavaScript", "Chart.js"],
+      "storage": ["localStorage"],
+      "build": ["None"]
+    },
+    "proposed": {
+      "frontend": [
+        "HTML5",
+        "CSS3 + PostCSS",
+        "TypeScript (migration)",
+        "Chart.js 4.x",
+        "D3.js (advanced charts)"
+      ],
+      "storage": [
+        "IndexedDB (Dexie.js)",
+        "localStorage (backup)",
+        "Cloud storage APIs"
+      ],
+      "build": [
+        "Vite",
+        "ESBuild",
+        "PostCSS",
+        "Terser"
+      ],
+      "libraries": [
+        "Fuse.js (search)",
+        "DOMPurify (sanitization)",
+        "jsPDF (PDF generation)",
+        "xlsx (Excel export)",
+        "date-fns (date handling)",
+        "zod/yup (validation)",
+        "workbox (PWA)"
+      ],
+      "testing": [
+        "Vitest",
+        "Playwright",
+        "Lighthouse CI"
+      ]
+    }
+  },
+
+  "quality_metrics": {
+    "current": {
+      "performance": "85/100",
+      "accessibility": "70/100",
+      "best_practices": "80/100",
+      "seo": "75/100",
+      "pwa": "0/100"
+    },
+    "target": {
+      "performance": "95+/100",
+      "accessibility": "95+/100",
+      "best_practices": "95+/100",
+      "seo": "90+/100",
+      "pwa": "90+/100"
+    }
+  },
+
+  "success_criteria": [
+    "Lighthouse score 95+ across all categories",
+    "WCAG 2.1 AA compliance",
+    "Zero critical security vulnerabilities",
+    "Sub-second load time",
+    "60 FPS performance with 1000+ records",
+    "100% offline functionality",
+    "Cross-browser compatibility (Chrome, Firefox, Safari, Edge)",
+    "Mobile-first responsive design",
+    "Zero runtime errors in production"
+  ],
+
+  "risks": [
+    {
+      "risk": "Browser compatibility issues",
+      "probability": "MEDIUM",
+      "impact": "HIGH",
+      "mitigation": "Extensive cross-browser testing, polyfills"
+    },
+    {
+      "risk": "Performance degradation with large datasets",
+      "probability": "LOW",
+      "impact": "HIGH",
+      "mitigation": "Virtual scrolling, lazy loading, pagination"
+    },
+    {
+      "risk": "Security vulnerabilities",
+      "probability": "MEDIUM",
+      "impact": "CRITICAL",
+      "mitigation": "Security audits, input sanitization, CSP headers"
+    },
+    {
+      "risk": "Scope creep",
+      "probability": "HIGH",
+      "impact": "MEDIUM",
+      "mitigation": "Strict prioritization, phased rollout"
+    }
+  ],
+
+  "next_steps": [
+    "1. Review and approve roadmap",
+    "2. Set up development environment",
+    "3. Create feature branches",
+    "4. Begin Phase 1 implementation",
+    "5. Set up CI/CD pipeline",
+    "6. Schedule code reviews",
+    "7. Plan user acceptance testing"
+  ],
+
+  "estimated_costs": {
+    "development_hours": 250,
+    "hourly_rate_czk": 1000,
+    "total_czk": 250000,
+    "cloud_services_monthly": 500,
+    "tools_licenses": 2000
+  },
+
+  "roi_projection": {
+    "time_saved_per_user_monthly": "10 hours",
+    "users": 10,
+    "value_per_hour": 1500,
+    "monthly_value": 150000,
+    "break_even": "2 months",
+    "yearly_roi": "600%"
+  }
+}

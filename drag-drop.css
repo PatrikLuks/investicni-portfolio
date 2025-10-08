@@ -1,0 +1,288 @@
+/**
+ * Drag & Drop Styles
+ * Visual feedback for dragging, dropping, and reordering
+ */
+
+/* Dragging State */
+tr.dragging {
+  opacity: 0.4;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  transform: scale(0.98);
+  transition: all 0.2s ease;
+}
+
+tr.dragging * {
+  pointer-events: none;
+}
+
+/* Drag Handle */
+.drag-handle {
+  transition: all 0.2s ease;
+}
+
+.drag-handle:hover {
+  color: #667eea !important;
+  transform: scale(1.1);
+}
+
+.drag-handle:active {
+  cursor: grabbing !important;
+}
+
+/* Keyboard Selection */
+tr.keyboard-selected {
+  outline: 3px solid #667eea;
+  outline-offset: 2px;
+  background: rgba(102, 126, 234, 0.05);
+}
+
+tr.keyboard-selected .drag-handle {
+  color: #667eea !important;
+  font-weight: bold;
+}
+
+/* Drag Over State */
+tr.drag-over {
+  border-top: 3px solid #667eea;
+  background: rgba(102, 126, 234, 0.05);
+}
+
+/* Drop Animation */
+@keyframes slideIn {
+  from {
+    transform: translateY(-10px);
+    opacity: 0.5;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+tr[style*="animation"] {
+  animation: slideIn 0.3s ease !important;
+}
+
+/* Ghost Element (for touch) */
+.drag-ghost {
+  filter: drop-shadow(0 8px 32px rgba(0, 0, 0, 0.3));
+}
+
+.drag-ghost * {
+  pointer-events: none;
+}
+
+/* Drop Indicator */
+.drop-indicator {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(102, 126, 234, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(102, 126, 234, 0.9);
+  }
+}
+
+/* Drag Handle Cell */
+.drag-handle-cell {
+  vertical-align: middle;
+  border-right: 2px solid #f0f0f0;
+}
+
+/* Table Row Hover Effect */
+tbody tr:not(.dragging):hover .drag-handle {
+  color: #667eea;
+}
+
+tbody tr:not(.dragging):hover {
+  background: rgba(102, 126, 234, 0.02);
+}
+
+/* Mobile Touch Feedback */
+@media (hover: none) {
+  .drag-handle {
+    font-size: 1.5rem !important;
+    padding: 12px !important;
+  }
+
+  .drag-handle-cell {
+    width: 50px !important;
+  }
+}
+
+/* Accessibility - Focus States */
+.drag-handle:focus {
+  outline: 3px solid #667eea;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.drag-handle:focus-visible {
+  outline: 3px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* Disabled State */
+.drag-handle[draggable="false"] {
+  cursor: not-allowed !important;
+  opacity: 0.5 !important;
+  color: #ccc !important;
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  tr.dragging {
+    border: 3px dashed currentColor;
+  }
+
+  .drop-indicator {
+    height: 5px;
+    background: currentColor;
+  }
+
+  tr.keyboard-selected {
+    outline-width: 4px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  tr.dragging,
+  .drag-handle,
+  .drop-indicator {
+    transition: none;
+    animation: none;
+  }
+
+  @keyframes slideIn {
+    from, to {
+      transform: none;
+      opacity: 1;
+    }
+  }
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+  tr.dragging {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+  }
+
+  tr.keyboard-selected {
+    background: rgba(102, 126, 234, 0.1);
+  }
+
+  tr.drag-over {
+    background: rgba(102, 126, 234, 0.1);
+  }
+
+  .drag-handle-cell {
+    border-right-color: #333;
+  }
+
+  .drag-ghost {
+    background: #2a2a2a;
+  }
+
+  tbody tr:not(.dragging):hover {
+    background: rgba(102, 126, 234, 0.05);
+  }
+}
+
+/* Print Styles - Hide drag handles */
+@media print {
+  .drag-handle-cell,
+  .drag-handle {
+    display: none !important;
+  }
+
+  .drop-indicator,
+  .drag-ghost {
+    display: none !important;
+  }
+}
+
+/* Loading State */
+.drag-handle.loading {
+  pointer-events: none;
+  opacity: 0.5;
+  cursor: wait !important;
+}
+
+/* Success Animation */
+@keyframes dropSuccess {
+  0% {
+    background: rgba(76, 175, 80, 0.2);
+  }
+  100% {
+    background: transparent;
+  }
+}
+
+tr.drop-success {
+  animation: dropSuccess 0.5s ease;
+}
+
+/* Error Animation */
+@keyframes dropError {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-10px);
+  }
+  75% {
+    transform: translateX(10px);
+  }
+}
+
+tr.drop-error {
+  animation: dropError 0.4s ease;
+  background: rgba(244, 67, 54, 0.1);
+}
+
+/* Tooltip for drag handle */
+.drag-handle::after {
+  content: attr(aria-label);
+  position: absolute;
+  left: 50%;
+  top: -30px;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 1000;
+}
+
+.drag-handle:hover::after,
+.drag-handle:focus::after {
+  opacity: 1;
+}
+
+/* Responsive - Tablet */
+@media (max-width: 768px) {
+  .drag-handle-cell {
+    width: 45px;
+  }
+
+  .drag-handle {
+    font-size: 1.3rem !important;
+    padding: 10px !important;
+  }
+}
+
+/* Responsive - Mobile */
+@media (max-width: 480px) {
+  .drag-handle::after {
+    display: none;
+  }
+}

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧪 TEST - Bez Service Worker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, system-ui, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        .test-card {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        .status {
+            font-size: 4em;
+            margin: 20px 0;
+        }
+        .log {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
+            font-family: 'Monaco', monospace;
+            font-size: 0.9em;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .log-entry {
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .success { color: #00ff00; }
+        .error { color: #ff4444; }
+        .info { color: #00aaff; }
+        button {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+    </style>
+    
+    <!-- Module Loader CSS -->
+    <link rel="stylesheet" href="module-loader.css">
+</head>
+<body>
+    <div class="test-card">
+        <h1>🧪 Zjednodušený Test</h1>
+        <div class="status" id="status">⏳</div>
+        <p id="message">Inicializace...</p>
+        
+        <div class="log" id="log"></div>
+        
+        <button onclick="startTest()">▶️ Spustit test</button>
+        <button onclick="location.href='investPortfolio.html'">🚀 Otevřít plnou aplikaci</button>
+    </div>
+
+    <script>
+        // Simple logging
+        const logDiv = document.getElementById('log');
+        const statusDiv = document.getElementById('status');
+        const messageDiv = document.getElementById('message');
+        
+        function log(msg, type = 'info') {
+            console.log(msg);
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            logDiv.appendChild(entry);
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+        
+        function setStatus(emoji, msg) {
+            statusDiv.textContent = emoji;
+            messageDiv.textContent = msg;
+        }
+        
+        // Catch errors
+        window.addEventListener('error', (e) => {
+            log(`❌ ERROR: ${e.message} (${e.filename}:${e.lineno})`, 'error');
+            setStatus('❌', 'Chyba!');
+        });
+        
+        async function startTest() {
+            try {
+                log('🚀 Starting test...', 'info');
+                setStatus('⏳', 'Načítání...');
+                
+                // Test 1: Check if files exist
+                log('📁 Checking critical files...', 'info');
+                const files = [
+                    'module-loader.js',
+                    'error-handler.js',
+                    'accessibility.js',
+                    'notification-system.js',
+                    'app.js'
+                ];
+                
+                for (const file of files) {
+                    const response = await fetch(file, { method: 'HEAD' });
+                    if (response.ok) {
+                        log(`✅ ${file} exists`, 'success');
+                    } else {
+                        log(`❌ ${file} NOT FOUND`, 'error');
+                        throw new Error(`Missing file: ${file}`);
+                    }
+                }
+                
+                // Test 2: Load module-loader.js
+                log('📦 Loading module-loader.js...', 'info');
+                await new Promise((resolve, reject) => {
+                    const script = document.createElement('script');
+                    script.src = 'module-loader.js';
+                    script.onload = () => {
+                        log('✅ module-loader.js loaded', 'success');
+                        resolve();
+                    };
+                    script.onerror = (e) => {
+                        log('❌ Failed to load module-loader.js', 'error');
+                        reject(new Error('Failed to load module-loader.js'));
+                    };
+                    document.head.appendChild(script);
+                });
+                
+                // Test 3: Check if ModuleLoader exists
+                if (typeof ModuleLoader === 'undefined') {
+                    throw new Error('ModuleLoader class not found!');
+                }
+                log('✅ ModuleLoader class found', 'success');
+                
+                // Test 4: Create instance
+                const loader = new ModuleLoader();
+                log(`✅ ModuleLoader instance created`, 'success');
+                log(`   Safari: ${loader.isSafari}`, 'info');
+                log(`   Low power: ${loader.isLowPower}`, 'info');
+                log(`   Max parallel: ${loader.maxParallel}`, 'info');
+                
+                // Test 5: Load critical modules
+                log('📦 Loading critical modules...', 'info');
+                await loader.loadModule('error-handler.js', true);
+                log('✅ error-handler.js loaded', 'success');
+                
+                await loader.loadModule('accessibility.js', true);
+                log('✅ accessibility.js loaded', 'success');
+                
+                await loader.loadModule('notification-system.js', true);
+                log('✅ notification-system.js loaded', 'success');
+                
+                // Test 6: Load app.js
+                log('📦 Loading app.js...', 'info');
+                await loader.loadModule('app.js', true);
+                log('✅ app.js loaded', 'success');
+                
+                // Success!
+                setStatus('✅', 'Vše funguje!');
+                log('🎉 ALL TESTS PASSED!', 'success');
+                
+                setTimeout(() => {
+                    if (confirm('Test úspěšný! Otevřít plnou aplikaci?')) {
+                        location.href = 'investPortfolio.html';
+                    }
+                }, 1000);
+                
+            } catch (error) {
+                log(`❌ TEST FAILED: ${error.message}`, 'error');
+                log(`Stack: ${error.stack}`, 'error');
+                setStatus('❌', error.message);
+            }
+        }
+        
+        // Auto-start
+        log('🔍 Test page loaded', 'info');
+        log('Click "▶️ Spustit test" to begin', 'info');
+    </script>
+</body>
+</html>

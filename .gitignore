@@ -1,0 +1,20 @@
+# Server files
+server.log
+server.pid
+*.pid
+
+# macOS
+.DS_Store
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Editor
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*~
