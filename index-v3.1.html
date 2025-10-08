@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Profesionální správa investičních portfolií s pokročilými analytickými nástroji - v3.1.0 Premium Edition"
+    />
+    <meta name="theme-color" content="#1a237e" id="theme-color-meta" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Portfolio Manager Pro" />
+
+    <!-- Performance: Resource Hints -->
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+    <link rel="dns-prefetch" href="https://query1.finance.yahoo.com" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+
+    <!-- Security Headers -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://query1.finance.yahoo.com https://www.alphavantage.co https://finnhub.io;"
+    />
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-96x96.png" />
+
+    <title>Investment Portfolio Manager Pro v3.1.0</title>
+
+    <!-- Core Styles -->
+    <link rel="stylesheet" href="accessibility.css" />
+    <link rel="stylesheet" href="styles-v3.1.css" />
+    <link rel="stylesheet" href="calculations-styles.css" />
+
+    <!-- Chart.js (CDN for v3.1.0 advanced charts) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  </head>
+  <body>
+    <div id="app" class="container">
+      <!-- Header with Theme Toggle -->
+      <header class="app-header">
+        <div class="header-content">
+          <h1>📊 Investment Portfolio Manager Pro</h1>
+          <p class="subtitle">v3.1.0 Premium Edition - World-Class Portfolio Management</p>
+        </div>
+
+        <!-- Theme Toggle Button (will be injected by theme-manager.js) -->
+        <div id="themeToggleContainer"></div>
+      </header>
+
+      <!-- Portfolio Selector -->
+      <section class="portfolio-selector-section">
+        <div id="portfolioSelectorContainer"></div>
+      </section>
+
+      <!-- Market Data Widget -->
+      <section class="market-data-section">
+        <!-- Widget will be injected by market-data-ui.js -->
+      </section>
+
+      <!-- Controls -->
+      <section class="controls">
+        <div class="control-group">
+          <h2>➕ Add Investment</h2>
+          <div class="form-row">
+            <input type="text" id="investmentName" placeholder="Investment Name" />
+            <input type="text" id="symbol" placeholder="Symbol (e.g., AAPL)" />
+            <input type="number" id="shares" placeholder="Shares" step="0.01" />
+            <input type="number" id="purchasePrice" placeholder="Purchase Price" step="0.01" />
+            <input type="number" id="currentPrice" placeholder="Current Price" step="0.01" />
+          </div>
+          <button class="btn btn-primary" onclick="addInvestment()">Add Investment</button>
+        </div>
+
+        <div class="control-group">
+          <h2>💾 Data Management</h2>
+          <div class="button-group">
+            <button class="btn btn-secondary" onclick="exportToJSON()">Export JSON</button>
+            <button class="btn btn-secondary" onclick="exportToCSV()">Export CSV</button>
+            <button class="btn btn-secondary" onclick="exportToPDF()">Export PDF</button>
+            <button class="btn btn-secondary" onclick="openImportModal()">Import Data</button>
+            <button class="btn btn-secondary" onclick="clearAllData()">Clear All</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Summary Cards -->
+      <section class="summary-section">
+        <div class="summary-cards">
+          <div class="summary-card">
+            <div class="card-icon">💰</div>
+            <div class="card-content">
+              <div class="card-label">Total Investment</div>
+              <div class="card-value" id="totalInvestment">0 Kč</div>
+            </div>
+          </div>
+          <div class="summary-card">
+            <div class="card-icon">📈</div>
+            <div class="card-content">
+              <div class="card-label">Current Value</div>
+              <div class="card-value" id="currentValue">0 Kč</div>
+            </div>
+          </div>
+          <div class="summary-card">
+            <div class="card-icon">💵</div>
+            <div class="card-content">
+              <div class="card-label">Total Profit/Loss</div>
+              <div class="card-value" id="totalProfit">0 Kč (0%)</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Portfolio Table -->
+      <section class="portfolio-section">
+        <div class="section-header">
+          <h2>📋 Portfolio Overview</h2>
+          <div class="table-controls">
+            <input type="text" id="searchInput" placeholder="🔍 Search..." />
+            <select id="sortSelect">
+              <option value="name">Sort by Name</option>
+              <option value="symbol">Sort by Symbol</option>
+              <option value="value">Sort by Value</option>
+              <option value="profit">Sort by Profit</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table id="portfolioTable">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Symbol</th>
+                <th>Shares</th>
+                <th>Purchase Price</th>
+                <th>Current Price</th>
+                <th>Investment</th>
+                <th>Current Value</th>
+                <th>Profit/Loss</th>
+                <th>Profit %</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="portfolioTableBody">
+              <!-- Data will be injected here -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Advanced Charts Section -->
+      <section class="charts-section">
+        <h2>📊 Advanced Analytics</h2>
+
+        <div class="charts-grid">
+          <!-- Treemap Chart -->
+          <div class="chart-container">
+            <h3>Asset Allocation Treemap</h3>
+            <div id="treemapChart" style="width: 100%; height: 400px;"></div>
+          </div>
+
+          <!-- Pie Chart (existing) -->
+          <div class="chart-container">
+            <h3>Portfolio Distribution</h3>
+            <canvas id="pieChart"></canvas>
+          </div>
+
+          <!-- Performance Chart -->
+          <div class="chart-container">
+            <h3>Performance Overview</h3>
+            <canvas id="barChart"></canvas>
+          </div>
+
+          <!-- Waterfall Chart -->
+          <div class="chart-container">
+            <h3>Value Changes</h3>
+            <canvas id="waterfallChart"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="app-footer">
+        <p>
+          &copy; 2024 Investment Portfolio Manager Pro v3.1.0 | 
+          <a href="#" onclick="openApiSettingsModal(); return false;">API Settings</a> | 
+          <a href="#" onclick="openAggregateView(); return false;">All Portfolios</a> | 
+          <a href="README.md" target="_blank">Documentation</a>
+        </p>
+      </footer>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer"></div>
+
+    <!-- Core Scripts -->
+    <script src="error-handler.js"></script>
+    <script src="calculations-engine.js"></script>
+    <script src="data-validation.js"></script>
+    <script src="auto-save.js"></script>
+    <script src="notification-system.js"></script>
+    <script src="accessibility.js"></script>
+    <script src="keyboard-shortcuts-overlay.js"></script>
+
+    <!-- v3.1.0 New Features -->
+    <script src="theme-manager.js"></script>
+    <script src="market-data-service.js"></script>
+    <script src="market-data-ui.js"></script>
+    <script src="multi-portfolio.js"></script>
+    <script src="advanced-charts.js"></script>
+
+    <!-- Charts -->
+    <script src="charts-manager.js"></script>
+
+    <!-- Main Application -->
+    <script src="app.js"></script>
+
+    <!-- v3.1.0 Integration Script -->
+    <script>
+      // Initialize v3.1.0 features on page load
+      document.addEventListener('DOMContentLoaded', function() {
+        console.log('🚀 Portfolio Manager Pro v3.1.0 Initializing...');
+
+        // Initialize theme manager
+        if (window.themeManager) {
+          console.log('✅ Theme Manager loaded');
+        }
+
+        // Initialize market data service
+        if (window.marketDataService) {
+          console.log('✅ Market Data Service loaded');
+        }
+
+        // Initialize portfolio manager
+        if (window.portfolioManager) {
+          console.log('✅ Multi-Portfolio Manager loaded');
+        }
+
+        // Listen for portfolio updates to refresh charts
+        window.addEventListener('portfolioUpdated', function() {
+          console.log('Portfolio updated, refreshing charts...');
+          if (typeof updateAllCharts === 'function') {
+            updateAllCharts();
+          }
+        });
+
+        // Listen for portfolio switches
+        window.addEventListener('portfolioSwitched', function(event) {
+          console.log('Switched to portfolio:', event.detail.portfolioId);
+          if (typeof loadPortfolio === 'function') {
+            loadPortfolio();
+          }
+        });
+
+        // Listen for market data updates
+        window.addEventListener('marketDataUpdate', function(event) {
+          console.log('Market data updated:', event.detail.quotes.length, 'quotes');
+        });
+
+        // Initialize advanced charts after portfolio loads
+        setTimeout(function() {
+          initializeAdvancedCharts();
+        }, 1000);
+
+        console.log('✅ Portfolio Manager Pro v3.1.0 Ready!');
+      });
+
+      // Initialize advanced charts
+      function initializeAdvancedCharts() {
+        try {
+          // Treemap Chart
+          const treemapContainer = document.getElementById('treemapChart');
+          if (treemapContainer && window.TreemapChart) {
+            const treemap = new TreemapChart('treemapChart');
+            
+            // Get data from current portfolio
+            const portfolio = JSON.parse(localStorage.getItem('investmentPortfolio') || '[]');
+            if (portfolio.length > 0) {
+              const treemapData = portfolio.map(item => ({
+                name: item.symbol || item.name,
+                value: item.shares * (item.currentPrice || item.purchasePrice)
+              }));
+              treemap.render(treemapData);
+            } else {
+              // Use demo data
+              treemap.render(window.generateDemoTreemapData());
+            }
+          }
+
+          // Waterfall Chart
+          const waterfallCanvas = document.getElementById('waterfallChart');
+          if (waterfallCanvas && window.WaterfallChart) {
+            const waterfall = new WaterfallChart('waterfallChart');
+            
+            const portfolio = JSON.parse(localStorage.getItem('investmentPortfolio') || '[]');
+            if (portfolio.length > 0) {
+              const waterfallData = portfolio.map(item => ({
+                label: item.symbol || item.name,
+                value: (item.shares * (item.currentPrice || item.purchasePrice)) - (item.shares * item.purchasePrice)
+              }));
+              waterfall.render(waterfallData);
+            }
+          }
+
+          console.log('✅ Advanced charts initialized');
+        } catch (error) {
+          console.error('Error initializing advanced charts:', error);
+        }
+      }
+
+      // Refresh all charts
+      function updateAllCharts() {
+        initializeAdvancedCharts();
+        
+        // Trigger existing chart updates
+        if (typeof updateCharts === 'function') {
+          updateCharts();
+        }
+      }
+
+      // Export enhanced PDF with charts
+      function exportToPDF() {
+        if (typeof generatePDFReport === 'function') {
+          generatePDFReport();
+        } else {
+          showToast('PDF export feature loading...', 'info');
+          // Load jsPDF if not already loaded
+          const script = document.createElement('script');
+          script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+          script.onload = function() {
+            generatePDFReport();
+          };
+          document.head.appendChild(script);
+        }
+      }
+    </script>
+
+    <!-- Service Worker Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker
+            .register('sw.js')
+            .then(reg => console.log('Service Worker registered:', reg.scope))
+            .catch(err => console.log('Service Worker registration failed:', err));
+        });
+      }
+    </script>
+  </body>
+</html>
