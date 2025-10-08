@@ -1,3 +1,8 @@
+// ==================== GLOBAL VARIABLES ====================
+// Core data storage
+let portfolioData = [];
+let clientName = '';
+
 // ==================== DOM ELEMENT REFERENCES ====================
 // Lazy initialization - získání referencí až když jsou potřeba
 let clientForm, portfolioForm, generateReportBtn, fondList;
@@ -95,7 +100,7 @@ class PortfolioStorage {
       clearInterval(this.autosaveInterval);
     }
     this.autosaveInterval = setInterval(() => {
-      if (callback) callback();
+      if (callback) {callback();}
     }, 30000); // 30 sekund
   }
 
@@ -236,18 +241,18 @@ function showConfirmDialog(title, message, onConfirm, onCancel) {
 
   confirmBtn.onclick = () => {
     cleanup();
-    if (onConfirm) onConfirm();
+    if (onConfirm) {onConfirm();}
   };
 
   cancelBtn.onclick = () => {
     cleanup();
-    if (onCancel) onCancel();
+    if (onCancel) {onCancel();}
   };
 
   overlay.onclick = (e) => {
     if (e.target === overlay) {
       cleanup();
-      if (onCancel) onCancel();
+      if (onCancel) {onCancel();}
     }
   };
 }
@@ -303,7 +308,7 @@ function toggleEmptyState(show) {
 }
 
 // Bulk selection state
-let selectedRows = new Set();
+const selectedRows = new Set();
 
 function updateBulkActionsBar() {
   const bar = document.getElementById('bulkActionsBar');
@@ -339,7 +344,7 @@ function selectAllRows(checked) {
 }
 
 function bulkDeleteSelected() {
-  if (selectedRows.size === 0) return;
+  if (selectedRows.size === 0) {return;}
 
   showConfirmDialog(
     'Smazat vybrané fondy?',
@@ -369,7 +374,7 @@ function bulkDeleteSelected() {
 }
 
 function bulkExportSelected() {
-  if (selectedRows.size === 0) return;
+  if (selectedRows.size === 0) {return;}
 
   const selected = portfolioData.filter((_, index) => selectedRows.has(index));
   generateCSV(selected);
@@ -507,8 +512,8 @@ function updateFondList() {
             </thead>
             <tbody>
                 ${portfolioData
-                  .map(
-                    (item, index) => `
+    .map(
+      (item, index) => `
                     <tr>
                         <td><input type="text" class="inline-edit" value="${item.name}" onchange="updateFondData(${index}, 'name', this.value)"></td>
                         <td><input type="text" class="inline-edit" value="${item.producer}" onchange="updateFondData(${index}, 'producer', this.value)"></td>
@@ -519,8 +524,8 @@ function updateFondList() {
                         </td>
                     </tr>
                 `
-                  )
-                  .join('')}
+    )
+    .join('')}
             </tbody>
         </table>
     `;
@@ -586,7 +591,7 @@ function initializeApp() {
       if (display) {
         display.style.animation = 'pulse 0.5s ease-in-out';
         setTimeout(() => {
-          if (display) display.style.animation = '';
+          if (display) {display.style.animation = '';}
         }, 500);
       }
     });
@@ -606,10 +611,10 @@ function initializeApp() {
         this.classList.add('active');
 
         // Set the color scheme based on the clicked button
-        if (this.classList.contains('blue-scheme')) window.selectedColorScheme = 'blue';
-        if (this.classList.contains('red-scheme')) window.selectedColorScheme = 'red';
-        if (this.classList.contains('green-scheme')) window.selectedColorScheme = 'green';
-        if (this.classList.contains('yellow-scheme')) window.selectedColorScheme = 'yellow';
+        if (this.classList.contains('blue-scheme')) {window.selectedColorScheme = 'blue';}
+        if (this.classList.contains('red-scheme')) {window.selectedColorScheme = 'red';}
+        if (this.classList.contains('green-scheme')) {window.selectedColorScheme = 'green';}
+        if (this.classList.contains('yellow-scheme')) {window.selectedColorScheme = 'yellow';}
 
         console.log('Selected new color scheme:', window.selectedColorScheme);
       });
@@ -1134,7 +1139,7 @@ function initializeApp() {
                 <td data-value="${investment}">${investment.toLocaleString('cs-CZ')} ${currencySymbol}</td>
                 <td data-value="${value}">${value.toLocaleString('cs-CZ')} ${currencySymbol}</td>
                 <td data-value="${profit}" class="${profit >= 0 ? 'positive' : 'negative'}">${profit.toLocaleString('cs-CZ')} ${currencySymbol}</td>
-                <td data-value="${yield}" class="${yield >= 0 ? 'positive' : 'negative'}">${yield}%</td>
+                <td data-value="${yieldPercent}" class="${yieldPercent >= 0 ? 'positive' : 'negative'}">${yieldPercent}%</td>
                 <td data-value="${yieldPA}" class="${yieldPA >= 0 ? 'positive' : 'negative'}">${yieldPA}%</td>
             </tr>`;
         totalInvestment += investment;
