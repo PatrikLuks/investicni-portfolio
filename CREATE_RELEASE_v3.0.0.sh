@@ -1,3 +1,16 @@
+#!/bin/bash
+
+# GitHub Release Creation Script for Portfolio Manager Pro v3.0.0
+# This script creates a GitHub release with all necessary information
+
+VERSION="v3.0.0"
+REPO="PatrikLuks/investicni-portfolio"
+RELEASE_NAME="Portfolio Manager Pro v3.0.0 - Perfect Production Release"
+
+echo "🚀 Creating GitHub Release $VERSION..."
+
+# Create release notes
+cat > RELEASE_NOTES_v3.0.0.md << 'EOF'
 # 🏆 Portfolio Manager Pro v3.0.0 - Perfect Production Release
 
 ## 🎉 What's New
@@ -246,3 +259,20 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **[⬆ View on GitHub](https://github.com/PatrikLuks/investicni-portfolio)**
 
 </div>
+EOF
+
+echo "✅ Release notes created: RELEASE_NOTES_v3.0.0.md"
+echo ""
+echo "📋 Next steps:"
+echo "   1. Go to: https://github.com/$REPO/releases/new"
+echo "   2. Tag: $VERSION"
+echo "   3. Title: $RELEASE_NAME"
+echo "   4. Copy content from RELEASE_NOTES_v3.0.0.md"
+echo "   5. Mark as 'Set as the latest release'"
+echo "   6. Click 'Publish release'"
+echo ""
+echo "🎉 Or use GitHub CLI:"
+echo "   gh release create $VERSION --title \"$RELEASE_NAME\" --notes-file RELEASE_NOTES_v3.0.0.md"
+echo ""
+
+exit 0
