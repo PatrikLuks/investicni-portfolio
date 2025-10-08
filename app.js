@@ -396,10 +396,14 @@ function showToast(type, title, message, duration = 4000) {
             <div class="toast-title">${title}</div>
             ${message ? `<div class="toast-message">${message}</div>` : ''}
         </div>
-        <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+        <button class="toast-close">×</button>
     `;
 
   container.appendChild(toast);
+
+  // Add event listener to close button
+  const closeBtn = toast.querySelector('.toast-close');
+  if (closeBtn) closeBtn.addEventListener('click', () => toast.remove());
 
   // Auto remove after duration
   setTimeout(() => {
@@ -510,13 +514,13 @@ function updateFondList() {
                 ${portfolioData
     .map(
       (item, index) => `
-                    <tr>
-                        <td><input type="text" class="inline-edit" value="${item.name}" onchange="updateFondData(${index}, 'name', this.value)"></td>
-                        <td><input type="text" class="inline-edit" value="${item.producer}" onchange="updateFondData(${index}, 'producer', this.value)"></td>
-                        <td><input type="number" class="inline-edit" value="${item.investment}" onchange="updateFondData(${index}, 'investment', this.value)"></td>
-                        <td><input type="number" class="inline-edit" value="${item.value}" onchange="updateFondData(${index}, 'value', this.value)"></td>
+                    <tr data-row-index="${index}">
+                        <td><input type="text" class="inline-edit" data-field="name" value="${item.name}"></td>
+                        <td><input type="text" class="inline-edit" data-field="producer" value="${item.producer}"></td>
+                        <td><input type="number" class="inline-edit" data-field="investment" value="${item.investment}"></td>
+                        <td><input type="number" class="inline-edit" data-field="value" value="${item.value}"></td>
                         <td>
-                            <button class="delete-btn" onclick="deleteFond(${index})">Smazat</button>
+                            <button class="delete-btn" data-index="${index}">Smazat</button>
                         </td>
                     </tr>
                 `,
@@ -525,6 +529,27 @@ function updateFondList() {
             </tbody>
         </table>
     `;
+
+  // Add event delegation for inline edits
+  const tbody = fondTable.querySelector('tbody');
+  if (tbody) {
+    tbody.addEventListener('change', (e) => {
+      if (e.target.classList.contains('inline-edit')) {
+        const row = e.target.closest('tr');
+        const index = parseInt(row.dataset.rowIndex);
+        const field = e.target.dataset.field;
+        const value = e.target.value;
+        updateFondData(index, field, value);
+      }
+    });
+
+    tbody.addEventListener('click', (e) => {
+      if (e.target.classList.contains('delete-btn')) {
+        const index = parseInt(e.target.dataset.index);
+        deleteFond(index);
+      }
+    });
+  }
 }
 
 // Přidat tyto nové funkce
@@ -727,9 +752,17 @@ function initializeApp() {
                 <td><input type="date" class="inline-edit" value="${fond.investmentDate && fond.investmentDate !== '1970-01-01' ? fond.investmentDate : ''}" data-index="${originalIndex}" data-field="investmentDate"></td>
                 <td><input type="number" class="inline-edit" value="${fond.investment}" data-index="${originalIndex}" data-field="investment"></td>
                 <td><input type="number" class="inline-edit" value="${fond.value}" data-index="${originalIndex}" data-field="value"></td>
-                <td><button class="delete-btn" onclick="deleteFond(${originalIndex})">Smazat</button></td>
+                <td><button class="delete-btn" data-index="${originalIndex}">Smazat</button></td>
             `;
         tbody.appendChild(row);
+      });
+
+      // Add event delegation for delete buttons
+      tbody.addEventListener('click', (e) => {
+        if (e.target.classList.contains('delete-btn')) {
+          const index = parseInt(e.target.dataset.index);
+          deleteFond(index);
+        }
       });
 
       // Přidáme event listener pro změny v inputech

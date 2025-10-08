@@ -372,7 +372,7 @@ class PortfolioSelector {
 
     this.container.innerHTML = `
       <div class="portfolio-selector">
-        <div class="current-portfolio" onclick="togglePortfolioDropdown()">
+        <div class="current-portfolio" data-action="toggle-dropdown">
           <span class="portfolio-color" style="background-color: ${currentPortfolio.color}"></span>
           <span class="portfolio-name">${currentPortfolio.name}</span>
           <span class="dropdown-arrow">▼</span>
@@ -381,7 +381,7 @@ class PortfolioSelector {
         <div class="portfolio-dropdown" id="portfolioDropdown" style="display: none;">
           <div class="dropdown-header">
             <h3>Portfolios</h3>
-            <button class="btn-icon" onclick="openNewPortfolioModal()" title="New Portfolio">
+            <button class="btn-icon" data-action="new-portfolio" title="New Portfolio">
               ➕
             </button>
           </div>
@@ -391,7 +391,7 @@ class PortfolioSelector {
               .map(
                 (portfolio) => `
               <div class="portfolio-item ${portfolio.id === currentPortfolio.id ? 'active' : ''}" 
-                   onclick="switchToPortfolio('${portfolio.id}')">
+                   data-portfolio-switch data-portfolio-id('${portfolio.id}')">
                 <span class="portfolio-color" style="background-color: ${portfolio.color}"></span>
                 <div class="portfolio-info">
                   <div class="portfolio-name">${portfolio.name}</div>
@@ -400,13 +400,13 @@ class PortfolioSelector {
                   </div>
                 </div>
                 <div class="portfolio-actions">
-                  <button class="btn-icon-small" onclick="editPortfolio('${portfolio.id}'); event.stopPropagation();" title="Edit">
+                  <button class="btn-icon-small" data-action="edit" data-portfolio-id('${portfolio.id}'); event.stopPropagation();" title="Edit">
                     ✏️
                   </button>
                   ${
                     allPortfolios.length > 1
                       ? `
-                    <button class="btn-icon-small" onclick="deletePortfolioConfirm('${portfolio.id}'); event.stopPropagation();" title="Delete">
+                    <button class="btn-icon-small" data-action="delete" data-portfolio-id('${portfolio.id}'); event.stopPropagation();" title="Delete">
                       🗑️
                     </button>
                   `
@@ -420,7 +420,7 @@ class PortfolioSelector {
           </div>
           
           <div class="dropdown-footer">
-            <button class="btn btn-secondary btn-small" onclick="openAggregateView()">
+            <button class="btn btn-secondary btn-small" data-action="aggregate">
               📊 View All Portfolios
             </button>
           </div>
@@ -521,7 +521,7 @@ window.openAggregateView = function () {
     <div class="modal-content aggregate-view">
       <div class="modal-header">
         <h2>📊 All Portfolios Overview</h2>
-        <button class="modal-close" onclick="this.closest('.modal').remove()">&times;</button>
+        <button class="modal-close" class="modal-close-x">&times;</button>
       </div>
       
       <div class="modal-body">

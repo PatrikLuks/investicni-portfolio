@@ -391,7 +391,7 @@ class MarketDataFeed {
       .map(
         (symbol) => `
       <div 
-        onclick="window.marketDataFeed.addSymbolToWatch('${symbol}')"
+        data-action="add-symbol" data-symbol('${symbol}')"
         style="
           padding: 12px;
           margin: 4px;
@@ -492,7 +492,7 @@ class MarketDataFeed {
           <span>Ask: $${priceData.ask?.toFixed(2) || '-'}</span>
         </div>
         <button 
-          onclick="window.marketDataFeed.unsubscribe('${symbol}'); window.marketDataFeed.renderWatchlist();"
+          data-action="unsubscribe" data-symbol('${symbol}'); window.marketDataFeed.renderWatchlist();"
           style="
             margin-top: 8px;
             padding: 6px 12px;

@@ -159,13 +159,13 @@ class ErrorHandler {
                         ${this.getUserFriendlyMessage(errorEntry.message)}
                     </div>
                     <div style="display: flex; gap: 8px;">
-                        <button onclick="window.errorHandler.tryRecover()" 
+                        <button class="error-recover-btn" 
                                 style="flex: 1; padding: 8px 12px; background: rgba(255,255,255,0.2); 
                                        border: 1px solid rgba(255,255,255,0.3); color: white; 
                                        border-radius: 6px; cursor: pointer; font-size: 0.813rem;">
                             🔄 Zkusit znovu
                         </button>
-                        <button onclick="document.getElementById('error-notification').remove()" 
+                        <button class="error-dismiss-btn" 
                                 style="padding: 8px 12px; background: rgba(255,255,255,0.1); 
                                        border: 1px solid rgba(255,255,255,0.2); color: white; 
                                        border-radius: 6px; cursor: pointer; font-size: 0.813rem;">
@@ -177,6 +177,12 @@ class ErrorHandler {
         `;
 
     document.body.appendChild(errorDiv);
+
+    // Add event listeners (secure - no inline handlers)
+    const recoverBtn = errorDiv.querySelector('.error-recover-btn');
+    const dismissBtn = errorDiv.querySelector('.error-dismiss-btn');
+    if (recoverBtn) recoverBtn.addEventListener('click', () => window.errorHandler.tryRecover());
+    if (dismissBtn) dismissBtn.addEventListener('click', () => errorDiv.remove());
 
     // Auto-remove after 10 seconds
     setTimeout(() => {
@@ -241,12 +247,12 @@ class ErrorHandler {
                 doporučujeme obnovit stránku.
             </p>
             <div style="display: flex; gap: 12px;">
-                <button onclick="window.location.reload()" 
+                <button class="reload-btn"
                         style="padding: 12px 24px; background: #dc2626; color: white; 
                                border: none; border-radius: 8px; cursor: pointer; font-size: 1rem;">
                     🔄 Obnovit stránku
                 </button>
-                <button onclick="localStorage.clear(); window.location.reload()" 
+                <button class="clear-reload-btn"
                         style="padding: 12px 24px; background: #991b1b; color: white; 
                                border: none; border-radius: 8px; cursor: pointer; font-size: 1rem;">
                     🗑️ Vymazat data a obnovit
@@ -265,6 +271,17 @@ ${this.errors
         `;
 
     document.body.appendChild(stormDiv);
+
+    // Add event listeners
+    const reloadBtn = stormDiv.querySelector('.reload-btn');
+    const clearReloadBtn = stormDiv.querySelector('.clear-reload-btn');
+    if (reloadBtn) reloadBtn.addEventListener('click', () => window.location.reload());
+    if (clearReloadBtn) {
+      clearReloadBtn.addEventListener('click', () => {
+        localStorage.clear();
+        window.location.reload();
+      });
+    }
   }
 
   tryRecover() {

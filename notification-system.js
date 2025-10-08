@@ -213,11 +213,14 @@ class NotificationSystem {
           <div style="font-weight: 600; color: #333; margin-bottom: 4px;">${title}</div>
           ${body ? `<div style="font-size: 0.9rem; color: #666;">${body}</div>` : ''}
         </div>
-        <button onclick="this.closest('.notification-toast').remove()" style="background: none; border: none; color: #999; cursor: pointer; font-size: 1.2rem; padding: 0;">×</button>
+        <button class="toast-close-btn" style="background: none; border: none; color: #999; cursor: pointer; font-size: 1.2rem; padding: 0;">×</button>
       </div>
     `;
 
     document.body.appendChild(toast);
+
+    // Add close button handler
+    toast.querySelector('.toast-close-btn').addEventListener('click', () => toast.remove());
 
     // Auto remove after 5 seconds
     setTimeout(() => {
@@ -447,9 +450,19 @@ class NotificationSystem {
             ${notif.body ? `<div style="font-size: 0.9rem; color: #666; margin-bottom: 6px;">${notif.body}</div>` : ''}
             <div style="font-size: 0.8rem; color: #999;">${this.formatTimestamp(notif.timestamp)}</div>
           </div>
-          <button onclick="event.stopPropagation(); window.notificationSystem.deleteNotification(${notif.id})" style="background: none; border: none; color: #999; cursor: pointer; font-size: 1rem; padding: 0;">×</button>
+          <button class="delete-notif-btn" data-notif-id="${notif.id}" style="background: none; border: none; color: #999; cursor: pointer; font-size: 1rem; padding: 0;">×</button>
         </div>
       </div>
+    `;
+    
+    // Add event listener for delete button
+    item.querySelector('.delete-notif-btn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      const notifId = parseInt(e.target.dataset.notifId);
+      window.notificationSystem.deleteNotification(notifId);
+    });
+    
+    return item.outerHTML;
     `,
       )
       .join('');

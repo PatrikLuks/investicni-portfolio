@@ -509,22 +509,22 @@ class AdvancedChartsManager {
         <div class="chart-grid">
           <div class="chart-container">
             <div id="allocationChart" class="chart"></div>
-            <button onclick="window.chartsManager.exportChartAsPNG('allocationChart', 'alokace.png')" class="btn-export">💾 Export PNG</button>
+            <button class="btn-export" data-chart-id="allocationChart" data-filename="alokace.png">💾 Export PNG</button>
           </div>
           
           <div class="chart-container">
             <div id="performanceChart" class="chart"></div>
-            <button onclick="window.chartsManager.exportChartAsPNG('performanceChart', 'vykon.png')" class="btn-export">💾 Export PNG</button>
+            <button class="btn-export" data-chart-id="performanceChart" data-filename="vykon.png">💾 Export PNG</button>
           </div>
           
           <div class="chart-container">
             <div id="holdingsChart" class="chart"></div>
-            <button onclick="window.chartsManager.exportChartAsPNG('holdingsChart', 'pozice.png')" class="btn-export">💾 Export PNG</button>
+            <button class="btn-export" data-chart-id="holdingsChart" data-filename="pozice.png">💾 Export PNG</button>
           </div>
           
           <div class="chart-container">
             <div id="profitLossChart" class="chart"></div>
-            <button onclick="window.chartsManager.exportChartAsPNG('profitLossChart', 'zisk-ztrata.png')" class="btn-export">💾 Export PNG</button>
+            <button class="btn-export" data-chart-id="profitLossChart" data-filename="zisk-ztrata.png">💾 Export PNG</button>
           </div>
         </div>
       </div>
@@ -532,7 +532,14 @@ class AdvancedChartsManager {
 
     document.body.appendChild(panel);
 
-    // Attach event listeners
+    // Attach event listeners for export buttons
+    panel.querySelectorAll('.btn-export').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const chartId = btn.dataset.chartId;
+        const filename = btn.dataset.filename;
+        window.chartsManager.exportChartAsPNG(chartId, filename);
+      });
+    });
     document.getElementById('close-charts-panel')?.addEventListener('click', () => {
       panel.classList.add('hidden');
     });

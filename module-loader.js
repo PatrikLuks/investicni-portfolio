@@ -325,7 +325,7 @@ class ModuleLoader {
                 <div style="text-align: center; color: #ff4444;">
                     <h2>❌ Chyba při načítání</h2>
                     <p>${error.message}</p>
-                    <button onclick="location.reload()" 
+                    <button class="reload-btn" data-action="reload" 
                             style="margin-top: 20px; padding: 10px 20px; 
                                    background: white; border: none; 
                                    border-radius: 5px; cursor: pointer;">

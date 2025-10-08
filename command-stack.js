@@ -475,12 +475,12 @@ function toggleHistoryPanel() {
   panel.innerHTML = `
         <div style="padding: 16px; border-bottom: 1px solid #e0e0e0; display: flex; justify-content: space-between; align-items: center;">
             <h3 style="margin: 0; font-size: 1rem;">Historie změn</h3>
-            <button onclick="document.getElementById('historyPanel').remove()" 
+            <button class="close-history-btn"
                     style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #666;">×</button>
         </div>
         <div id="historyTimeline" style="max-height: 400px; overflow-y: auto; padding: 12px;"></div>
         <div style="padding: 12px; border-top: 1px solid #e0e0e0; display: flex; gap: 8px;">
-            <button onclick="window.commandStack.clear(); document.getElementById('historyPanel').remove();" 
+            <button class="clear-history-btn"
                     style="flex: 1; padding: 8px; background: #dc2626; color: white; border: none; border-radius: 6px; cursor: pointer;">
                 Vymazat historii
             </button>
@@ -488,6 +488,14 @@ function toggleHistoryPanel() {
     `;
 
   document.body.appendChild(panel);
+
+  // Add event listeners
+  panel.querySelector('.close-history-btn').addEventListener('click', () => panel.remove());
+  panel.querySelector('.clear-history-btn').addEventListener('click', () => {
+    window.commandStack.clear();
+    panel.remove();
+  });
+
   window.commandStack.updateHistoryTimeline();
 }
 

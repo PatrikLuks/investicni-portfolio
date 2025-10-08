@@ -13,7 +13,7 @@ function createApiSettingsModal() {
     <div class="modal-content">
       <div class="modal-header">
         <h2>🔑 Market Data API Settings</h2>
-        <button class="modal-close" onclick="closeApiSettingsModal()">&times;</button>
+        <button class="modal-close" class="modal-close-btn" data-action="close">&times;</button>
       </div>
       
       <div class="modal-body">
@@ -72,8 +72,8 @@ function createApiSettingsModal() {
       </div>
 
       <div class="modal-footer">
-        <button class="btn btn-secondary" onclick="closeApiSettingsModal()">Cancel</button>
-        <button class="btn btn-primary" onclick="saveApiSettings()">Save Settings</button>
+        <button class="btn btn-secondary" class="modal-close-btn" data-action="close">Cancel</button>
+        <button class="btn btn-primary" class="save-settings-btn" data-action="save">Save Settings</button>
       </div>
     </div>
   `;
@@ -182,10 +182,10 @@ function createMarketDataWidget() {
     <div class="widget-header">
       <span class="widget-title">📈 Market Data</span>
       <div class="widget-controls">
-        <button class="btn-icon" onclick="refreshMarketData()" title="Refresh now">
+        <button class="btn-icon" class="refresh-btn" data-action="refresh" title="Refresh now">
           🔄
         </button>
-        <button class="btn-icon" onclick="openApiSettingsModal()" title="API Settings">
+        <button class="btn-icon" class="open-settings-btn" data-action="open" title="API Settings">
           ⚙️
         </button>
       </div>
@@ -411,6 +411,31 @@ document.addEventListener('DOMContentLoaded', () => {
   if (symbolInput) {
     createSymbolSearchInput(symbolInput);
   }
+
+  // Add event delegation for all UI buttons
+  document.addEventListener('click', (e) => {
+    const target = e.target;
+    
+    // Modal close buttons
+    if (target.classList.contains('modal-close-btn') || target.dataset.action === 'close') {
+      closeApiSettingsModal();
+    }
+    
+    // Save settings button
+    if (target.classList.contains('save-settings-btn') || target.dataset.action === 'save') {
+      saveApiSettings();
+    }
+    
+    // Refresh button
+    if (target.classList.contains('refresh-btn') || target.dataset.action === 'refresh') {
+      refreshMarketData();
+    }
+    
+    // Open settings button
+    if (target.classList.contains('open-settings-btn') || target.dataset.action === 'open') {
+      openApiSettingsModal();
+    }
+  });
 });
 
 // Export functions
@@ -419,3 +444,4 @@ window.closeApiSettingsModal = closeApiSettingsModal;
 window.saveApiSettings = saveApiSettings;
 window.refreshMarketData = refreshMarketData;
 window.searchSymbol = searchSymbol;
+
