@@ -291,22 +291,6 @@ function hideLoading() {
   }
 }
 
-// Empty state management
-function toggleEmptyState(show) {
-  const emptyState = document.getElementById('emptyState');
-  const table = document.getElementById('fondTable');
-
-  if (emptyState && table) {
-    if (show) {
-      emptyState.style.display = 'block';
-      table.style.display = 'none';
-    } else {
-      emptyState.style.display = 'none';
-      table.style.display = 'table';
-    }
-  }
-}
-
 // Bulk selection state
 const selectedRows = new Set();
 
@@ -615,8 +599,6 @@ function initializeApp() {
         if (this.classList.contains('red-scheme')) {window.selectedColorScheme = 'red';}
         if (this.classList.contains('green-scheme')) {window.selectedColorScheme = 'green';}
         if (this.classList.contains('yellow-scheme')) {window.selectedColorScheme = 'yellow';}
-
-        console.log('Selected new color scheme:', window.selectedColorScheme);
       });
     });
 
@@ -976,7 +958,6 @@ function initializeApp() {
     };
 
     const selectedScheme = colorSchemes[selectedColor];
-    console.log('Using color scheme:', selectedColor); // Pro debugování
 
     const currentDate = new Date().toLocaleDateString('cs-CZ');
 
@@ -2475,7 +2456,6 @@ function initializeApp() {
                   formattedDate = dateObj.toISOString().split('T')[0]; // yyyy-mm-dd
                 }
               } catch (e) {
-                console.warn(`Invalid date format: ${investmentDate}`);
               }
             }
 
@@ -2488,7 +2468,6 @@ function initializeApp() {
             });
             importedCount++;
           } else {
-            console.warn(`Skipping row ${i + 1}: Invalid numbers in investment or value`);
             errorCount++;
           }
         } else if (columns.length >= 4) {
@@ -2509,11 +2488,9 @@ function initializeApp() {
             });
             importedCount++;
           } else {
-            console.warn(`Skipping row ${i + 1}: Invalid numbers in investment or value`);
             errorCount++;
           }
         } else {
-          console.warn(`Skipping row ${i + 1}: Invalid number of columns`);
           errorCount++;
         }
       }
