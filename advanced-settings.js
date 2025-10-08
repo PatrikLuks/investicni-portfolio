@@ -25,9 +25,9 @@ class AdvancedSettings {
       confirmDelete: true,
       confirmBeforeExit: false,
       devMode: false,
-      telemetry: false
+      telemetry: false,
     };
-    
+
     this.init();
   }
 
@@ -39,7 +39,7 @@ class AdvancedSettings {
       this.loadSettings();
       this.applySettings();
       this.setupKeyboardShortcut();
-      
+
       console.log('✅ Advanced Settings initialized');
     } catch (error) {
       console.error('❌ Settings initialization failed:', error);
@@ -78,12 +78,9 @@ class AdvancedSettings {
   saveSettings() {
     try {
       localStorage.setItem('advancedSettings', JSON.stringify(this.settings));
-      
+
       if (window.notificationSystem) {
-        window.notificationSystem.showInAppNotification(
-          '✅ Nastavení uloženo',
-          'success'
-        );
+        window.notificationSystem.showInAppNotification('✅ Nastavení uloženo', 'success');
       }
     } catch (error) {
       console.error('Failed to save settings:', error);
@@ -96,20 +93,20 @@ class AdvancedSettings {
   applySettings() {
     // Apply theme
     this.applyTheme();
-    
+
     // Apply font size
     this.applyFontSize();
-    
+
     // Apply compact mode
     if (this.settings.compactMode) {
       document.body.classList.add('compact-mode');
     }
-    
+
     // Apply performance mode
     if (this.settings.performanceMode) {
       this.enablePerformanceMode();
     }
-    
+
     // Apply animations
     if (!this.settings.animations) {
       this.disableAnimations();
@@ -122,7 +119,7 @@ class AdvancedSettings {
   show() {
     // Remove existing panel
     document.getElementById('settingsPanel')?.remove();
-    
+
     const panel = document.createElement('div');
     panel.id = 'settingsPanel';
     panel.style.cssText = `
@@ -140,7 +137,7 @@ class AdvancedSettings {
       overflow: hidden;
       animation: scaleIn 0.3s ease;
     `;
-    
+
     panel.innerHTML = `
       <div style="padding: 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -171,7 +168,7 @@ class AdvancedSettings {
         </button>
       </div>
     `;
-    
+
     // Add backdrop
     const backdrop = document.createElement('div');
     backdrop.id = 'settingsBackdrop';
@@ -184,10 +181,10 @@ class AdvancedSettings {
       background: rgba(0,0,0,0.5);
       z-index: 10009;
     `;
-    
+
     document.body.appendChild(backdrop);
     document.body.appendChild(panel);
-    
+
     this.setupListeners();
   }
 
@@ -204,16 +201,16 @@ class AdvancedSettings {
         </h3>
         
         ${this.renderSelect('theme', 'Téma', [
-          { value: 'light', label: '☀️ Světlé' },
-          { value: 'dark', label: '🌙 Tmavé' },
-          { value: 'auto', label: '🔄 Automatické' }
-        ])}
+    { value: 'light', label: '☀️ Světlé' },
+    { value: 'dark', label: '🌙 Tmavé' },
+    { value: 'auto', label: '🔄 Automatické' },
+  ])}
         
         ${this.renderSelect('fontSize', 'Velikost písma', [
-          { value: 'small', label: 'Malé' },
-          { value: 'medium', label: 'Střední' },
-          { value: 'large', label: 'Velké' }
-        ])}
+    { value: 'small', label: 'Malé' },
+    { value: 'medium', label: 'Střední' },
+    { value: 'large', label: 'Velké' },
+  ])}
         
         ${this.renderToggle('compactMode', 'Kompaktní režim', 'Menší mezery, více obsahu')}
         ${this.renderToggle('animations', 'Animace', 'Animované přechody a efekty')}
@@ -227,25 +224,25 @@ class AdvancedSettings {
         </h3>
         
         ${this.renderSelect('language', 'Jazyk', [
-          { value: 'cs', label: '🇨🇿 Čeština' },
-          { value: 'en', label: '🇬🇧 English' },
-          { value: 'de', label: '🇩🇪 Deutsch' },
-          { value: 'fr', label: '🇫🇷 Français' },
-          { value: 'es', label: '🇪🇸 Español' }
-        ])}
+    { value: 'cs', label: '🇨🇿 Čeština' },
+    { value: 'en', label: '🇬🇧 English' },
+    { value: 'de', label: '🇩🇪 Deutsch' },
+    { value: 'fr', label: '🇫🇷 Français' },
+    { value: 'es', label: '🇪🇸 Español' },
+  ])}
         
         ${this.renderSelect('currency', 'Měna', [
-          { value: 'CZK', label: 'CZK (Kč)' },
-          { value: 'EUR', label: 'EUR (€)' },
-          { value: 'USD', label: 'USD ($)' },
-          { value: 'GBP', label: 'GBP (£)' }
-        ])}
+    { value: 'CZK', label: 'CZK (Kč)' },
+    { value: 'EUR', label: 'EUR (€)' },
+    { value: 'USD', label: 'USD ($)' },
+    { value: 'GBP', label: 'GBP (£)' },
+  ])}
         
         ${this.renderSelect('dateFormat', 'Formát data', [
-          { value: 'DD.MM.YYYY', label: 'DD.MM.YYYY' },
-          { value: 'MM/DD/YYYY', label: 'MM/DD/YYYY' },
-          { value: 'YYYY-MM-DD', label: 'YYYY-MM-DD' }
-        ])}
+    { value: 'DD.MM.YYYY', label: 'DD.MM.YYYY' },
+    { value: 'MM/DD/YYYY', label: 'MM/DD/YYYY' },
+    { value: 'YYYY-MM-DD', label: 'YYYY-MM-DD' },
+  ])}
       </div>
       
       <!-- Behavior -->
@@ -310,11 +307,15 @@ class AdvancedSettings {
           id="setting-${key}" 
           style="width: 100%; padding: 10px; border: 1px solid #ced4da; border-radius: 6px; font-size: 0.95rem;"
         >
-          ${options.map(opt => `
+          ${options
+    .map(
+      (opt) => `
             <option value="${opt.value}" ${this.settings[key] === opt.value ? 'selected' : ''}>
               ${opt.label}
             </option>
-          `).join('')}
+          `
+    )
+    .join('')}
         </select>
       </div>
     `;
@@ -325,7 +326,7 @@ class AdvancedSettings {
    */
   renderToggle(key, label, description) {
     const checked = this.settings[key];
-    
+
     return `
       <div style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
         <div>
@@ -348,12 +349,12 @@ class AdvancedSettings {
     document.getElementById('closeSettings')?.addEventListener('click', () => {
       this.hide();
     });
-    
+
     // Backdrop click
     document.getElementById('settingsBackdrop')?.addEventListener('click', () => {
       this.hide();
     });
-    
+
     // Save button
     document.getElementById('saveSettings')?.addEventListener('click', () => {
       this.collectSettings();
@@ -361,19 +362,19 @@ class AdvancedSettings {
       this.applySettings();
       this.hide();
     });
-    
+
     // Reset button
     document.getElementById('resetSettings')?.addEventListener('click', () => {
       if (confirm('Opravdu chcete resetovat všechna nastavení na výchozí hodnoty?')) {
         this.resetToDefaults();
       }
     });
-    
+
     // Export button
     document.getElementById('exportSettings')?.addEventListener('click', () => {
       this.exportSettings();
     });
-    
+
     // Add toggle switch styles
     if (!document.getElementById('toggleStyles')) {
       const style = document.createElement('style');
@@ -438,7 +439,7 @@ class AdvancedSettings {
    * Collect settings from form
    */
   collectSettings() {
-    Object.keys(this.settings).forEach(key => {
+    Object.keys(this.settings).forEach((key) => {
       const el = document.getElementById(`setting-${key}`);
       if (el) {
         if (el.type === 'checkbox') {
@@ -482,18 +483,15 @@ class AdvancedSettings {
       confirmDelete: true,
       confirmBeforeExit: false,
       devMode: false,
-      telemetry: false
+      telemetry: false,
     };
-    
+
     this.saveSettings();
     this.applySettings();
     this.hide();
-    
+
     if (window.notificationSystem) {
-      window.notificationSystem.showInAppNotification(
-        '🔄 Nastavení resetováno na výchozí',
-        'info'
-      );
+      window.notificationSystem.showInAppNotification('🔄 Nastavení resetováno na výchozí', 'info');
     }
   }
 
@@ -504,24 +502,21 @@ class AdvancedSettings {
     const data = {
       version: '3.0',
       exported: new Date().toISOString(),
-      settings: this.settings
+      settings: this.settings,
     };
-    
+
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
-    
+
     const a = document.createElement('a');
     a.href = url;
     a.download = `portfolio-settings-${Date.now()}.json`;
     a.click();
-    
+
     URL.revokeObjectURL(url);
-    
+
     if (window.notificationSystem) {
-      window.notificationSystem.showInAppNotification(
-        '💾 Nastavení exportováno',
-        'success'
-      );
+      window.notificationSystem.showInAppNotification('💾 Nastavení exportováno', 'success');
     }
   }
 
@@ -530,35 +525,29 @@ class AdvancedSettings {
    */
   importSettings(file) {
     const reader = new FileReader();
-    
+
     reader.onload = (e) => {
       try {
         const data = JSON.parse(e.target.result);
-        
+
         if (data.settings) {
           this.settings = { ...this.settings, ...data.settings };
           this.saveSettings();
           this.applySettings();
-          
+
           if (window.notificationSystem) {
-            window.notificationSystem.showInAppNotification(
-              '✅ Nastavení importováno',
-              'success'
-            );
+            window.notificationSystem.showInAppNotification('✅ Nastavení importováno', 'success');
           }
         }
       } catch (error) {
         console.error('Import failed:', error);
-        
+
         if (window.notificationSystem) {
-          window.notificationSystem.showInAppNotification(
-            '❌ Import selhal',
-            'error'
-          );
+          window.notificationSystem.showInAppNotification('❌ Import selhal', 'error');
         }
       }
     };
-    
+
     reader.readAsText(file);
   }
 
@@ -583,9 +572,9 @@ class AdvancedSettings {
     const sizes = {
       small: '14px',
       medium: '16px',
-      large: '18px'
+      large: '18px',
     };
-    
+
     document.documentElement.style.fontSize = sizes[this.settings.fontSize] || '16px';
   }
 
@@ -594,7 +583,7 @@ class AdvancedSettings {
    */
   enablePerformanceMode() {
     document.body.classList.add('performance-mode');
-    
+
     // Disable heavy animations
     const style = document.createElement('style');
     style.id = 'performanceModeStyles';

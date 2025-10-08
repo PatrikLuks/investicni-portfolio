@@ -11,7 +11,7 @@ class VersionControl {
     this.head = null;
     this.maxCommits = 100;
     this.staged = null;
-    
+
     this.init();
   }
 
@@ -21,14 +21,14 @@ class VersionControl {
   init() {
     try {
       this.loadFromStorage();
-      
+
       // Create main branch if not exists
       if (!this.branches.has('main')) {
         this.createBranch('main');
       }
-      
+
       this.createVersionControlUI();
-      
+
       console.log('✅ Version Control initialized');
     } catch (error) {
       console.error('❌ Version Control initialization failed:', error);
@@ -48,7 +48,7 @@ class VersionControl {
    */
   commit(message, data = null) {
     const portfolioData = data || (window.getFondyData ? window.getFondyData() : []);
-    
+
     const commit = {
       id: this.generateCommitId(),
       branch: this.currentBranch,
@@ -56,32 +56,29 @@ class VersionControl {
       data: JSON.parse(JSON.stringify(portfolioData)),
       timestamp: new Date(),
       author: 'User',
-      parent: this.head
+      parent: this.head,
     };
 
     this.commits.push(commit);
     this.head = commit.id;
-    
+
     // Update branch pointer
     this.branches.set(this.currentBranch, commit.id);
-    
+
     // Cleanup old commits
     if (this.commits.length > this.maxCommits) {
       this.commits = this.commits.slice(-this.maxCommits);
     }
-    
+
     this.saveToStorage();
     this.updateVersionControlUI();
-    
+
     console.log('✅ Committed:', message);
-    
+
     if (window.notificationSystem) {
-      window.notificationSystem.showInAppNotification(
-        `Version saved: ${message}`,
-        'success'
-      );
+      window.notificationSystem.showInAppNotification(`Version saved: ${message}`, 'success');
     }
-    
+
     return commit.id;
   }
 
@@ -95,12 +92,12 @@ class VersionControl {
 
     const commitId = fromCommit || this.head || null;
     this.branches.set(name, commitId);
-    
+
     this.saveToStorage();
     this.updateVersionControlUI();
-    
+
     console.log('✅ Branch created:', name);
-    
+
     return name;
   }
 
@@ -122,17 +119,17 @@ class VersionControl {
 
     this.currentBranch = branchName;
     const commitId = this.branches.get(branchName);
-    
+
     if (commitId) {
       this.head = commitId;
       this.restoreCommit(commitId);
     }
-    
+
     this.saveToStorage();
     this.updateVersionControlUI();
-    
+
     console.log('✅ Switched to branch:', branchName);
-    
+
     if (window.notificationSystem) {
       window.notificationSystem.showInAppNotification(
         `Switched to branch: ${branchName}`,
@@ -145,7 +142,7 @@ class VersionControl {
    * Restore data from commit
    */
   restoreCommit(commitId) {
-    const commit = this.commits.find(c => c.id === commitId);
+    const commit = this.commits.find((c) => c.id === commitId);
     if (!commit) {
       throw new Error('Commit not found');
     }
@@ -154,13 +151,13 @@ class VersionControl {
     if (window.setFondyData) {
       window.setFondyData(commit.data);
     }
-    
+
     if (window.aktualizovatTabulku) {
       window.aktualizovatTabulku();
     }
-    
+
     this.head = commitId;
-    
+
     console.log('✅ Restored commit:', commit.message);
   }
 
@@ -168,21 +165,18 @@ class VersionControl {
    * Revert to specific commit
    */
   revert(commitId) {
-    const commit = this.commits.find(c => c.id === commitId);
+    const commit = this.commits.find((c) => c.id === commitId);
     if (!commit) {
       throw new Error('Commit not found');
     }
 
     this.restoreCommit(commitId);
-    
+
     // Create revert commit
     this.commit(`Revert to: ${commit.message}`);
-    
+
     if (window.notificationSystem) {
-      window.notificationSystem.showInAppNotification(
-        `Reverted to: ${commit.message}`,
-        'success'
-      );
+      window.notificationSystem.showInAppNotification(`Reverted to: ${commit.message}`, 'success');
     }
   }
 
@@ -195,8 +189,8 @@ class VersionControl {
     }
 
     const sourceCommitId = this.branches.get(sourceBranch);
-    const sourceCommit = this.commits.find(c => c.id === sourceCommitId);
-    
+    const sourceCommit = this.commits.find((c) => c.id === sourceCommitId);
+
     if (!sourceCommit) {
       throw new Error('Source commit not found');
     }
@@ -204,22 +198,20 @@ class VersionControl {
     // Simple merge: take source data
     const currentData = window.getFondyData ? window.getFondyData() : [];
     const mergedData = [...currentData, ...sourceCommit.data];
-    
+
     // Remove duplicates by ID
-    const uniqueData = Array.from(
-      new Map(mergedData.map(item => [item.id, item])).values()
-    );
-    
+    const uniqueData = Array.from(new Map(mergedData.map((item) => [item.id, item])).values());
+
     // Restore merged data
     if (window.setFondyData) {
       window.setFondyData(uniqueData);
     }
-    
+
     // Commit merge
     this.commit(`Merge branch ${sourceBranch} into ${this.currentBranch}`);
-    
+
     console.log('✅ Merged:', sourceBranch);
-    
+
     if (window.notificationSystem) {
       window.notificationSystem.showInAppNotification(
         `Merged: ${sourceBranch} → ${this.currentBranch}`,
@@ -234,7 +226,7 @@ class VersionControl {
   getHistory(branch = null) {
     const targetBranch = branch || this.currentBranch;
     return this.commits
-      .filter(c => !branch || c.branch === targetBranch)
+      .filter((c) => !branch || c.branch === targetBranch)
       .sort((a, b) => b.timestamp - a.timestamp);
   }
 
@@ -242,13 +234,13 @@ class VersionControl {
    * Check for uncommitted changes
    */
   hasUncommittedChanges() {
-    if (!this.head) return true;
-    
+    if (!this.head) {return true;}
+
     const currentData = window.getFondyData ? window.getFondyData() : [];
-    const lastCommit = this.commits.find(c => c.id === this.head);
-    
-    if (!lastCommit) return true;
-    
+    const lastCommit = this.commits.find((c) => c.id === this.head);
+
+    if (!lastCommit) {return true;}
+
     return JSON.stringify(currentData) !== JSON.stringify(lastCommit.data);
   }
 
@@ -265,20 +257,21 @@ class VersionControl {
   createVersionControlUI() {
     // Add version control button
     const portfolioCard = document.getElementById('portfolioCard');
-    if (!portfolioCard) return;
+    if (!portfolioCard) {return;}
 
     const headerDiv = portfolioCard.querySelector('div[style*="justify-content: space-between"]');
-    if (!headerDiv) return;
+    if (!headerDiv) {return;}
 
     const buttonContainer = headerDiv.querySelector('div[style*="gap"]');
-    if (!buttonContainer) return;
+    if (!buttonContainer) {return;}
 
     const versionBtn = document.createElement('button');
     versionBtn.id = 'versionControlBtn';
     versionBtn.className = 'btn-icon';
     versionBtn.title = 'Version Control';
     versionBtn.setAttribute('aria-label', 'Správa verzí');
-    versionBtn.style.cssText = 'font-size: 1.5rem; padding: 8px 16px; background: linear-gradient(135deg, #a8e063 0%, #56ab2f 100%); color: white; border: none; border-radius: 8px; cursor: pointer;';
+    versionBtn.style.cssText =
+      'font-size: 1.5rem; padding: 8px 16px; background: linear-gradient(135deg, #a8e063 0%, #56ab2f 100%); color: white; border: none; border-radius: 8px; cursor: pointer;';
     versionBtn.textContent = '🔀';
 
     versionBtn.addEventListener('click', () => this.toggleVersionPanel());
@@ -375,10 +368,7 @@ class VersionControl {
         try {
           this.createBranch(name);
           if (window.notificationSystem) {
-            window.notificationSystem.showInAppNotification(
-              `Branch created: ${name}`,
-              'success'
-            );
+            window.notificationSystem.showInAppNotification(`Branch created: ${name}`, 'success');
           }
         } catch (error) {
           alert(error.message);
@@ -393,9 +383,9 @@ class VersionControl {
   toggleVersionPanel() {
     const panel = document.getElementById('versionControlPanel');
     const isVisible = panel.style.display !== 'none';
-    
+
     panel.style.display = isVisible ? 'none' : 'block';
-    
+
     if (!isVisible) {
       this.updateVersionControlUI();
     }
@@ -433,7 +423,7 @@ class VersionControl {
    */
   updateBranchesList() {
     const list = document.getElementById('branchesList');
-    if (!list) return;
+    if (!list) {return;}
 
     if (this.branches.size === 0) {
       list.innerHTML = '<div style="color: #999; font-size: 0.85rem;">No branches</div>';
@@ -462,7 +452,9 @@ class VersionControl {
                 ${commitId ? commitId.substring(0, 8) : 'no commits'}
               </div>
             </div>
-            ${!isCurrent ? `
+            ${
+  !isCurrent
+    ? `
               <div style="display: flex; gap: 4px;">
                 <button 
                   onclick="window.versionControl.checkout('${name}')"
@@ -477,7 +469,9 @@ class VersionControl {
                   Merge
                 </button>
               </div>
-            ` : ''}
+            `
+    : ''
+}
           </div>
         `;
       })
@@ -489,21 +483,22 @@ class VersionControl {
    */
   updateCommitHistory() {
     const list = document.getElementById('commitHistoryList');
-    if (!list) return;
+    if (!list) {return;}
 
     const history = this.getHistory();
 
     if (history.length === 0) {
-      list.innerHTML = '<div style="color: #999; font-size: 0.85rem; text-align: center; padding: 20px;">No commits yet</div>';
+      list.innerHTML =
+        '<div style="color: #999; font-size: 0.85rem; text-align: center; padding: 20px;">No commits yet</div>';
       return;
     }
 
     list.innerHTML = history
       .slice(0, 20)
-      .map(commit => {
+      .map((commit) => {
         const isHead = commit.id === this.head;
         const date = new Date(commit.timestamp);
-        
+
         return `
           <div style="
             padding: 12px;
@@ -543,12 +538,15 @@ class VersionControl {
    */
   saveToStorage() {
     try {
-      localStorage.setItem('versionControl', JSON.stringify({
-        currentBranch: this.currentBranch,
-        branches: Array.from(this.branches.entries()),
-        commits: this.commits,
-        head: this.head
-      }));
+      localStorage.setItem(
+        'versionControl',
+        JSON.stringify({
+          currentBranch: this.currentBranch,
+          branches: Array.from(this.branches.entries()),
+          commits: this.commits,
+          head: this.head,
+        })
+      );
     } catch (error) {
       console.error('Failed to save version control state:', error);
     }
@@ -564,9 +562,9 @@ class VersionControl {
         const state = JSON.parse(data);
         this.currentBranch = state.currentBranch;
         this.branches = new Map(state.branches);
-        this.commits = state.commits.map(c => ({
+        this.commits = state.commits.map((c) => ({
           ...c,
-          timestamp: new Date(c.timestamp)
+          timestamp: new Date(c.timestamp),
         }));
         this.head = state.head;
       }

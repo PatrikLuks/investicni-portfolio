@@ -604,15 +604,15 @@
     grid-template-columns: repeat(8, 1fr);
   }
 
-  .dashboard-widget[style*="span 12"] {
+  .dashboard-widget[style*='span 12'] {
     grid-column: span 8 !important;
   }
 
-  .dashboard-widget[style*="span 6"] {
+  .dashboard-widget[style*='span 6'] {
     grid-column: span 4 !important;
   }
 
-  .dashboard-widget[style*="span 4"] {
+  .dashboard-widget[style*='span 4'] {
     grid-column: span 8 !important;
   }
 }

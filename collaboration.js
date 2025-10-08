@@ -17,7 +17,7 @@ class CollaborationManager {
     this.isConnected = false;
     this.roomId = null;
     this.cursorPositions = new Map();
-    
+
     this.init();
   }
 
@@ -28,17 +28,17 @@ class CollaborationManager {
     try {
       // Load collaboration UI
       this.createCollaborationUI();
-      
+
       // Setup event listeners
       this.setupEventListeners();
-      
+
       // Auto-connect if room ID in URL
       const urlParams = new URLSearchParams(window.location.search);
       const roomId = urlParams.get('room');
       if (roomId) {
         await this.connect(roomId);
       }
-      
+
       console.log('✅ Collaboration Manager initialized');
     } catch (error) {
       console.error('❌ Collaboration initialization failed:', error);
@@ -61,23 +61,23 @@ class CollaborationManager {
       // In production, use actual WebSocket server
       // For demo, simulate WebSocket with local storage sync
       this.simulateWebSocket();
-      
+
       this.isConnected = true;
       this.updateConnectionStatus(true);
-      
+
       // Announce presence
       this.broadcastPresence();
-      
+
       // Start periodic sync
       this.startSyncInterval();
-      
+
       console.log('✅ Connected to room:', this.roomId);
-      
+
       // Update URL with room ID
       const url = new URL(window.location);
       url.searchParams.set('room', this.roomId);
       window.history.pushState({}, '', url);
-      
+
       return this.roomId;
     } catch (error) {
       console.error('❌ Connection failed:', error);
@@ -121,7 +121,7 @@ class CollaborationManager {
     this.updateConnectionStatus(false);
     this.onlineUsers.clear();
     this.updatePresenceIndicators();
-    
+
     console.log('✅ Disconnected from collaboration');
   }
 
@@ -143,7 +143,7 @@ class CollaborationManager {
       userName: this.userName,
       userColor: this.userColor,
       timestamp: Date.now(),
-      roomId: this.roomId
+      roomId: this.roomId,
     };
 
     this.sendMessage(message);
@@ -158,12 +158,12 @@ class CollaborationManager {
       const key = `collab-${this.roomId}`;
       const existing = JSON.parse(localStorage.getItem(key) || '{"messages": []}');
       existing.messages.push(message);
-      
+
       // Keep only last 100 messages
       if (existing.messages.length > 100) {
         existing.messages = existing.messages.slice(-100);
       }
-      
+
       localStorage.setItem(key, JSON.stringify(existing));
     } catch (error) {
       console.error('Failed to send message:', error);
@@ -175,7 +175,7 @@ class CollaborationManager {
    */
   handleMessage(message) {
     // Ignore own messages
-    if (message.userId === this.userId) return;
+    if (message.userId === this.userId) {return;}
 
     switch (message.type) {
       case 'presence':
@@ -206,7 +206,7 @@ class CollaborationManager {
       userId: message.userId,
       userName: message.userName,
       userColor: message.userColor,
-      lastSeen: Date.now()
+      lastSeen: Date.now(),
     });
 
     this.updatePresenceIndicators();
@@ -218,10 +218,10 @@ class CollaborationManager {
    */
   handleEdit(message) {
     const { data } = message;
-    
+
     // Apply edit with conflict resolution
     this.applyRemoteEdit(data);
-    
+
     // Show edit indicator
     this.showEditIndicator(message.userName, message.userColor);
   }
@@ -233,21 +233,21 @@ class CollaborationManager {
     try {
       // Get current data
       const currentData = window.getFondyData ? window.getFondyData() : [];
-      
+
       // Apply edit based on type
       switch (edit.action) {
         case 'add':
           currentData.push(edit.row);
           break;
         case 'update':
-          const updateIndex = currentData.findIndex(row => row.id === edit.rowId);
+          const updateIndex = currentData.findIndex((row) => row.id === edit.rowId);
           if (updateIndex !== -1) {
             // Merge changes
             currentData[updateIndex] = { ...currentData[updateIndex], ...edit.changes };
           }
           break;
         case 'delete':
-          const deleteIndex = currentData.findIndex(row => row.id === edit.rowId);
+          const deleteIndex = currentData.findIndex((row) => row.id === edit.rowId);
           if (deleteIndex !== -1) {
             currentData.splice(deleteIndex, 1);
           }
@@ -260,7 +260,6 @@ class CollaborationManager {
         window.aktualizovatTabulku();
       }
       this.suppressNextBroadcast = false;
-      
     } catch (error) {
       console.error('Failed to apply remote edit:', error);
     }
@@ -271,12 +270,12 @@ class CollaborationManager {
    */
   handleCursor(message) {
     const { userId, position } = message.data;
-    
+
     this.cursorPositions.set(userId, {
       x: position.x,
       y: position.y,
       userName: message.userName,
-      userColor: message.userColor
+      userColor: message.userColor,
     });
 
     this.updateRemoteCursors();
@@ -287,7 +286,7 @@ class CollaborationManager {
    */
   handleSelection(message) {
     const { rowId, fieldName } = message.data;
-    
+
     // Highlight selected cell
     this.highlightRemoteSelection(rowId, fieldName, message.userColor);
   }
@@ -308,7 +307,7 @@ class CollaborationManager {
    */
   broadcastPresence() {
     this.broadcastChange('presence', {
-      status: 'online'
+      status: 'online',
     });
 
     // Broadcast periodically to maintain presence
@@ -323,13 +322,13 @@ class CollaborationManager {
    * Track cell changes
    */
   trackChange(action, rowId, changes) {
-    if (this.suppressNextBroadcast) return;
+    if (this.suppressNextBroadcast) {return;}
 
     this.broadcastChange('edit', {
       action,
       rowId,
       changes,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
   }
 
@@ -337,13 +336,13 @@ class CollaborationManager {
    * Track cursor movement
    */
   trackCursor(x, y) {
-    if (!this.isConnected) return;
+    if (!this.isConnected) {return;}
 
     // Throttle cursor updates
     clearTimeout(this.cursorThrottle);
     this.cursorThrottle = setTimeout(() => {
       this.broadcastChange('cursor', {
-        position: { x, y }
+        position: { x, y },
       });
     }, 100);
   }
@@ -352,11 +351,11 @@ class CollaborationManager {
    * Track cell selection
    */
   trackSelection(rowId, fieldName) {
-    if (!this.isConnected) return;
+    if (!this.isConnected) {return;}
 
     this.broadcastChange('selection', {
       rowId,
-      fieldName
+      fieldName,
     });
   }
 
@@ -433,21 +432,23 @@ class CollaborationManager {
    */
   addCollaborationButton() {
     const portfolioCard = document.getElementById('portfolioCard');
-    if (!portfolioCard) return;
+    if (!portfolioCard) {return;}
 
     const headerDiv = portfolioCard.querySelector('div[style*="justify-content: space-between"]');
-    if (!headerDiv) return;
+    if (!headerDiv) {return;}
 
     const buttonContainer = headerDiv.querySelector('div[style*="gap"]');
-    if (!buttonContainer) return;
+    if (!buttonContainer) {return;}
 
     const collabBtn = document.createElement('button');
     collabBtn.id = 'collaborationBtn';
     collabBtn.className = 'btn-icon';
     collabBtn.title = 'Collaboration';
     collabBtn.setAttribute('aria-label', 'Spolupráce');
-    collabBtn.style.cssText = 'font-size: 1.5rem; padding: 8px 16px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; cursor: pointer; position: relative;';
-    collabBtn.innerHTML = '👥 <span id="onlineCount" style="position: absolute; top: -8px; right: -8px; background: #2ecc71; color: white; border-radius: 50%; width: 20px; height: 20px; font-size: 0.7rem; display: flex; align-items: center; justify-content: center;">0</span>';
+    collabBtn.style.cssText =
+      'font-size: 1.5rem; padding: 8px 16px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; cursor: pointer; position: relative;';
+    collabBtn.innerHTML =
+      '👥 <span id="onlineCount" style="position: absolute; top: -8px; right: -8px; background: #2ecc71; color: white; border-radius: 50%; width: 20px; height: 20px; font-size: 0.7rem; display: flex; align-items: center; justify-content: center;">0</span>';
 
     collabBtn.addEventListener('click', () => {
       const panel = document.getElementById('collaborationPanel');
@@ -531,13 +532,14 @@ class CollaborationManager {
    */
   updatePresenceIndicators() {
     const usersList = document.getElementById('usersList');
-    if (!usersList) return;
+    if (!usersList) {return;}
 
     usersList.innerHTML = '';
 
     // Add self
     const selfUser = document.createElement('div');
-    selfUser.style.cssText = 'display: flex; align-items: center; gap: 8px; padding: 8px; background: #f8f9fa; border-radius: 6px; margin-bottom: 6px;';
+    selfUser.style.cssText =
+      'display: flex; align-items: center; gap: 8px; padding: 8px; background: #f8f9fa; border-radius: 6px; margin-bottom: 6px;';
     selfUser.innerHTML = `
       <div style="width: 10px; height: 10px; border-radius: 50%; background: ${this.userColor};"></div>
       <span style="font-weight: 600;">${this.userName} (You)</span>
@@ -547,7 +549,8 @@ class CollaborationManager {
     // Add other users
     this.onlineUsers.forEach((user, userId) => {
       const userDiv = document.createElement('div');
-      userDiv.style.cssText = 'display: flex; align-items: center; gap: 8px; padding: 8px; background: #f8f9fa; border-radius: 6px; margin-bottom: 6px;';
+      userDiv.style.cssText =
+        'display: flex; align-items: center; gap: 8px; padding: 8px; background: #f8f9fa; border-radius: 6px; margin-bottom: 6px;';
       userDiv.innerHTML = `
         <div style="width: 10px; height: 10px; border-radius: 50%; background: ${user.userColor};"></div>
         <span>${user.userName}</span>
@@ -567,7 +570,7 @@ class CollaborationManager {
    */
   updateRemoteCursors() {
     // Remove old cursors
-    document.querySelectorAll('.remote-cursor').forEach(el => el.remove());
+    document.querySelectorAll('.remote-cursor').forEach((el) => el.remove());
 
     // Add current cursors
     this.cursorPositions.forEach((cursor, userId) => {
@@ -605,7 +608,7 @@ class CollaborationManager {
    */
   highlightRemoteSelection(rowId, fieldName, color) {
     const cell = document.querySelector(`[data-row-id="${rowId}"] [data-field="${fieldName}"]`);
-    if (!cell) return;
+    if (!cell) {return;}
 
     // Add highlight
     cell.style.boxShadow = `0 0 0 2px ${color}`;
@@ -652,7 +655,7 @@ class CollaborationManager {
     const colors = {
       info: '#3498db',
       success: '#2ecc71',
-      error: '#e74c3c'
+      error: '#e74c3c',
     };
 
     const notification = document.createElement('div');
@@ -697,10 +700,10 @@ class CollaborationManager {
         const row = target.closest('tr');
         const rowId = row?.dataset?.rowId;
         const fieldName = target.dataset?.field;
-        
+
         if (rowId && fieldName) {
           this.trackChange('update', rowId, {
-            [fieldName]: target.value
+            [fieldName]: target.value,
           });
         }
       }
@@ -718,14 +721,14 @@ class CollaborationManager {
    * Sync with localStorage
    */
   syncWithLocalStorage() {
-    if (!this.roomId) return;
+    if (!this.roomId) {return;}
 
     try {
       const key = `collab-${this.roomId}`;
       const data = JSON.parse(localStorage.getItem(key) || '{"messages": []}');
-      
+
       // Process unprocessed messages
-      data.messages.forEach(message => {
+      data.messages.forEach((message) => {
         if (!this.processedMessages?.has(message.timestamp)) {
           this.handleMessage(message);
           if (!this.processedMessages) {
@@ -755,11 +758,12 @@ class CollaborationManager {
 
     this.syncInterval = setInterval(() => {
       this.syncWithLocalStorage();
-      
+
       // Clean up stale users
       const now = Date.now();
       this.onlineUsers.forEach((user, userId) => {
-        if (now - user.lastSeen > 60000) { // 1 minute timeout
+        if (now - user.lastSeen > 60000) {
+          // 1 minute timeout
           this.onlineUsers.delete(userId);
           this.updatePresenceIndicators();
         }
@@ -814,8 +818,14 @@ class CollaborationManager {
    */
   generateUserColor() {
     const colors = [
-      '#e74c3c', '#3498db', '#2ecc71', '#f39c12', 
-      '#9b59b6', '#1abc9c', '#e67e22', '#34495e'
+      '#e74c3c',
+      '#3498db',
+      '#2ecc71',
+      '#f39c12',
+      '#9b59b6',
+      '#1abc9c',
+      '#e67e22',
+      '#34495e',
     ];
     let userColor = localStorage.getItem('collaboration-user-color');
     if (!userColor) {

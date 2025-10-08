@@ -8,9 +8,18 @@ class AdvancedChartsManager {
     this.charts = new Map();
     this.chartInstances = new Map();
     this.defaultColors = [
-      '#667eea', '#764ba2', '#f093fb', '#4facfe',
-      '#43e97b', '#38f9d7', '#fa709a', '#fee140',
-      '#30cfd0', '#330867', '#a8edea', '#fed6e3'
+      '#667eea',
+      '#764ba2',
+      '#f093fb',
+      '#4facfe',
+      '#43e97b',
+      '#38f9d7',
+      '#fa709a',
+      '#fee140',
+      '#30cfd0',
+      '#330867',
+      '#a8edea',
+      '#fed6e3',
     ];
     this.chartTypes = ['pie', 'doughnut', 'bar', 'line', 'polarArea', 'radar'];
 
@@ -61,17 +70,19 @@ class AdvancedChartsManager {
    */
   createAllocationChart(data, containerId = 'allocationChart') {
     const categoryData = this.aggregateByCategory(data);
-    
+
     const config = {
       type: 'pie',
       data: {
         labels: categoryData.labels,
-        datasets: [{
-          data: categoryData.values,
-          backgroundColor: this.defaultColors,
-          borderWidth: 2,
-          borderColor: '#ffffff'
-        }]
+        datasets: [
+          {
+            data: categoryData.values,
+            backgroundColor: this.defaultColors,
+            borderWidth: 2,
+            borderColor: '#ffffff',
+          },
+        ],
       },
       options: {
         responsive: true,
@@ -80,7 +91,7 @@ class AdvancedChartsManager {
           title: {
             display: true,
             text: 'Alokace portfolia podle kategorií',
-            font: { size: 18, weight: 'bold' }
+            font: { size: 18, weight: 'bold' },
           },
           legend: {
             position: 'right',
@@ -91,10 +102,10 @@ class AdvancedChartsManager {
                   text: `${label}: ${this.formatCurrency(data.datasets[0].data[i])}`,
                   fillStyle: data.datasets[0].backgroundColor[i],
                   hidden: false,
-                  index: i
+                  index: i,
                 }));
-              }
-            }
+              },
+            },
           },
           tooltip: {
             callbacks: {
@@ -104,11 +115,11 @@ class AdvancedChartsManager {
                 const total = context.dataset.data.reduce((a, b) => a + b, 0);
                 const percentage = ((value / total) * 100).toFixed(2);
                 return `${label}: ${this.formatCurrency(value)} (${percentage}%)`;
-              }
-            }
-          }
-        }
-      }
+              },
+            },
+          },
+        },
+      },
     };
 
     return this.renderChart(containerId, config);
@@ -128,72 +139,74 @@ class AdvancedChartsManager {
       type: 'line',
       data: {
         labels: historicalData.dates,
-        datasets: [{
-          label: 'Hodnota portfolia',
-          data: historicalData.values,
-          borderColor: '#667eea',
-          backgroundColor: 'rgba(102, 126, 234, 0.1)',
-          fill: true,
-          tension: 0.4,
-          borderWidth: 3,
-          pointRadius: 4,
-          pointHoverRadius: 6
-        }]
+        datasets: [
+          {
+            label: 'Hodnota portfolia',
+            data: historicalData.values,
+            borderColor: '#667eea',
+            backgroundColor: 'rgba(102, 126, 234, 0.1)',
+            fill: true,
+            tension: 0.4,
+            borderWidth: 3,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+          },
+        ],
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
         interaction: {
           intersect: false,
-          mode: 'index'
+          mode: 'index',
         },
         plugins: {
           title: {
             display: true,
             text: 'Vývoj hodnoty portfolia',
-            font: { size: 18, weight: 'bold' }
+            font: { size: 18, weight: 'bold' },
           },
           legend: {
             display: true,
-            position: 'top'
+            position: 'top',
           },
           tooltip: {
             callbacks: {
               label: (context) => {
                 return `Hodnota: ${this.formatCurrency(context.parsed.y)}`;
-              }
-            }
+              },
+            },
           },
           zoom: {
             zoom: {
               wheel: {
-                enabled: true
+                enabled: true,
               },
               pinch: {
-                enabled: true
+                enabled: true,
               },
-              mode: 'x'
+              mode: 'x',
             },
             pan: {
               enabled: true,
-              mode: 'x'
-            }
-          }
+              mode: 'x',
+            },
+          },
         },
         scales: {
           y: {
             beginAtZero: false,
             ticks: {
-              callback: (value) => this.formatCurrency(value)
-            }
+              callback: (value) => this.formatCurrency(value),
+            },
           },
           x: {
             grid: {
-              display: false
-            }
-          }
-        }
-      }
+              display: false,
+            },
+          },
+        },
+      },
     };
 
     return this.renderChart(containerId, config);
@@ -214,13 +227,15 @@ class AdvancedChartsManager {
     const config = {
       type: 'bar',
       data: {
-        labels: sortedData.map(item => item.fond),
-        datasets: [{
-          label: 'Aktuální hodnota',
-          data: sortedData.map(item => parseFloat(item.aktuálníHodnota)),
-          backgroundColor: this.defaultColors[0],
-          borderWidth: 0
-        }]
+        labels: sortedData.map((item) => item.fond),
+        datasets: [
+          {
+            label: 'Aktuální hodnota',
+            data: sortedData.map((item) => parseFloat(item.aktuálníHodnota)),
+            backgroundColor: this.defaultColors[0],
+            borderWidth: 0,
+          },
+        ],
       },
       options: {
         responsive: true,
@@ -230,27 +245,27 @@ class AdvancedChartsManager {
           title: {
             display: true,
             text: 'Top 10 největších pozic',
-            font: { size: 18, weight: 'bold' }
+            font: { size: 18, weight: 'bold' },
           },
           legend: {
-            display: false
+            display: false,
           },
           tooltip: {
             callbacks: {
               label: (context) => {
                 return `Hodnota: ${this.formatCurrency(context.parsed.x)}`;
-              }
-            }
-          }
+              },
+            },
+          },
         },
         scales: {
           x: {
             ticks: {
-              callback: (value) => this.formatCurrency(value)
-            }
-          }
-        }
-      }
+              callback: (value) => this.formatCurrency(value),
+            },
+          },
+        },
+      },
     };
 
     return this.renderChart(containerId, config);
@@ -263,27 +278,31 @@ class AdvancedChartsManager {
    * @returns {Chart} - Chart instance
    */
   createProfitLossChart(data, containerId = 'profitLossChart') {
-    const profitLossData = data.map(item => {
-      const current = parseFloat(item.aktuálníHodnota);
-      const original = parseFloat(item.nákupníCena) * parseFloat(item.počet);
-      return {
-        fond: item.fond,
-        profitLoss: current - original
-      };
-    }).sort((a, b) => b.profitLoss - a.profitLoss);
+    const profitLossData = data
+      .map((item) => {
+        const current = parseFloat(item.aktuálníHodnota);
+        const original = parseFloat(item.nákupníCena) * parseFloat(item.počet);
+        return {
+          fond: item.fond,
+          profitLoss: current - original,
+        };
+      })
+      .sort((a, b) => b.profitLoss - a.profitLoss);
 
     const config = {
       type: 'bar',
       data: {
-        labels: profitLossData.map(item => item.fond),
-        datasets: [{
-          label: 'Zisk/Ztráta',
-          data: profitLossData.map(item => item.profitLoss),
-          backgroundColor: profitLossData.map(item => 
-            item.profitLoss >= 0 ? '#4caf50' : '#f44336'
-          ),
-          borderWidth: 0
-        }]
+        labels: profitLossData.map((item) => item.fond),
+        datasets: [
+          {
+            label: 'Zisk/Ztráta',
+            data: profitLossData.map((item) => item.profitLoss),
+            backgroundColor: profitLossData.map((item) =>
+              item.profitLoss >= 0 ? '#4caf50' : '#f44336'
+            ),
+            borderWidth: 0,
+          },
+        ],
       },
       options: {
         responsive: true,
@@ -292,28 +311,28 @@ class AdvancedChartsManager {
           title: {
             display: true,
             text: 'Zisk/Ztráta podle pozic',
-            font: { size: 18, weight: 'bold' }
+            font: { size: 18, weight: 'bold' },
           },
           legend: {
-            display: false
+            display: false,
           },
           tooltip: {
             callbacks: {
               label: (context) => {
                 const value = context.parsed.y;
                 return `${value >= 0 ? 'Zisk' : 'Ztráta'}: ${this.formatCurrency(Math.abs(value))}`;
-              }
-            }
-          }
+              },
+            },
+          },
         },
         scales: {
           y: {
             ticks: {
-              callback: (value) => this.formatCurrency(value)
-            }
-          }
-        }
-      }
+              callback: (value) => this.formatCurrency(value),
+            },
+          },
+        },
+      },
     };
 
     return this.renderChart(containerId, config);
@@ -401,7 +420,7 @@ class AdvancedChartsManager {
    */
   exportAllCharts() {
     const timestamp = new Date().toISOString().split('T')[0];
-    
+
     this.chartInstances.forEach((chart, containerId) => {
       this.exportChartAsPNG(containerId, `${containerId}-${timestamp}.png`);
     });
@@ -417,10 +436,10 @@ class AdvancedChartsManager {
   aggregateByCategory(data) {
     const categoryMap = new Map();
 
-    data.forEach(item => {
+    data.forEach((item) => {
       const category = item.kategorie || 'Ostatní';
       const value = parseFloat(item.aktuálníHodnota) || 0;
-      
+
       if (categoryMap.has(category)) {
         categoryMap.set(category, categoryMap.get(category) + value);
       } else {
@@ -430,7 +449,7 @@ class AdvancedChartsManager {
 
     return {
       labels: Array.from(categoryMap.keys()),
-      values: Array.from(categoryMap.values())
+      values: Array.from(categoryMap.values()),
     };
   }
 
@@ -449,7 +468,7 @@ class AdvancedChartsManager {
       const date = new Date();
       date.setMonth(date.getMonth() - i);
       dates.push(date.toLocaleDateString('cs-CZ', { month: 'short', year: 'numeric' }));
-      
+
       // Simulate historical values with some randomness
       const volatility = 0.15; // 15% volatility
       const trend = 1 + (months - i) * 0.02; // 2% monthly growth
@@ -470,7 +489,7 @@ class AdvancedChartsManager {
       style: 'currency',
       currency: 'CZK',
       minimumFractionDigits: 0,
-      maximumFractionDigits: 0
+      maximumFractionDigits: 0,
     }).format(value);
   }
 
@@ -533,7 +552,7 @@ class AdvancedChartsManager {
    */
   showChartsPanel(data) {
     const panel = document.getElementById('charts-panel');
-    if (!panel) return;
+    if (!panel) {return;}
 
     panel.classList.remove('hidden');
 
@@ -572,14 +591,14 @@ if (document.readyState === 'loading') {
 
 function addChartsButton() {
   const portfolioCard = document.getElementById('portfolioCard');
-  if (!portfolioCard) return;
+  if (!portfolioCard) {return;}
 
   // Find button container
   const headerDiv = portfolioCard.querySelector('div[style*="justify-content: space-between"]');
-  if (!headerDiv) return;
+  if (!headerDiv) {return;}
 
   const buttonContainer = headerDiv.querySelector('div[style*="gap"]');
-  if (!buttonContainer) return;
+  if (!buttonContainer) {return;}
 
   // Add charts button
   const chartsBtn = document.createElement('button');
@@ -587,7 +606,8 @@ function addChartsButton() {
   chartsBtn.className = 'btn-icon';
   chartsBtn.title = 'Otevřít grafy a analýzy';
   chartsBtn.setAttribute('aria-label', 'Otevřít grafy');
-  chartsBtn.style.cssText = 'font-size: 1.5rem; padding: 8px 16px; background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; border: none; border-radius: 8px; cursor: pointer; transition: all 0.2s ease;';
+  chartsBtn.style.cssText =
+    'font-size: 1.5rem; padding: 8px 16px; background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; border: none; border-radius: 8px; cursor: pointer; transition: all 0.2s ease;';
   chartsBtn.textContent = '📊 Grafy';
 
   chartsBtn.addEventListener('click', () => {

@@ -10,7 +10,7 @@ class PDFExportManager {
     this.pageHeight = 297; // A4 height in mm
     this.margin = 20;
     this.currentY = this.margin;
-    
+
     this.init();
   }
 
@@ -50,7 +50,7 @@ class PDFExportManager {
       this.addSummarySection(data);
       this.addMetricsSection(data);
       this.addHoldingsTable(data);
-      
+
       if (options.includeCharts) {
         await this.addChartsSection(data);
       }
@@ -64,7 +64,6 @@ class PDFExportManager {
 
       console.log('✅ PDF report generated:', filename);
       return filename;
-
     } catch (error) {
       console.error('❌ PDF generation failed:', error);
       throw error;
@@ -84,10 +83,11 @@ class PDFExportManager {
       script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
       script.onload = () => {
         console.log('✅ jsPDF loaded');
-        
+
         // Load jsPDF-AutoTable plugin
         const autoTableScript = document.createElement('script');
-        autoTableScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js';
+        autoTableScript.src =
+          'https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js';
         autoTableScript.onload = () => {
           console.log('✅ jsPDF-AutoTable loaded');
           resolve();
@@ -108,7 +108,7 @@ class PDFExportManager {
     // Logo area (placeholder)
     this.doc.setFillColor(26, 35, 126); // Primary blue
     this.doc.rect(this.margin, this.margin, 50, 15, 'F');
-    
+
     this.doc.setTextColor(255, 255, 255);
     this.doc.setFontSize(16);
     this.doc.setFont('helvetica', 'bold');
@@ -126,9 +126,11 @@ class PDFExportManager {
     const date = new Date().toLocaleDateString('cs-CZ', {
       year: 'numeric',
       month: 'long',
-      day: 'numeric'
+      day: 'numeric',
     });
-    this.doc.text(`Vygenerováno: ${date}`, this.pageWidth - this.margin, this.margin + 10, { align: 'right' });
+    this.doc.text(`Vygenerováno: ${date}`, this.pageWidth - this.margin, this.margin + 10, {
+      align: 'right',
+    });
 
     // Separator line
     this.doc.setDrawColor(26, 35, 126);
@@ -144,14 +146,24 @@ class PDFExportManager {
    */
   addSummarySection(data) {
     const totalValue = data.reduce((sum, item) => sum + parseFloat(item.aktuálníHodnota || 0), 0);
-    const totalCost = data.reduce((sum, item) => 
-      sum + (parseFloat(item.nákupníCena) * parseFloat(item.počet)), 0);
+    const totalCost = data.reduce(
+      (sum, item) => sum + parseFloat(item.nákupníCena) * parseFloat(item.počet),
+      0
+    );
     const gainLoss = totalValue - totalCost;
-    const roi = totalCost > 0 ? ((gainLoss / totalCost) * 100) : 0;
+    const roi = totalCost > 0 ? (gainLoss / totalCost) * 100 : 0;
 
     // Summary box
     this.doc.setFillColor(240, 248, 255);
-    this.doc.roundedRect(this.margin, this.currentY, this.pageWidth - 2 * this.margin, 40, 3, 3, 'F');
+    this.doc.roundedRect(
+      this.margin,
+      this.currentY,
+      this.pageWidth - 2 * this.margin,
+      40,
+      3,
+      3,
+      'F'
+    );
 
     this.doc.setFontSize(12);
     this.doc.setFont('helvetica', 'bold');
@@ -161,7 +173,7 @@ class PDFExportManager {
     // Summary values in 2x2 grid
     const boxWidth = (this.pageWidth - 2 * this.margin - 10) / 2;
     const boxHeight = 12;
-    
+
     // Total Value
     this.doc.setFontSize(9);
     this.doc.setFont('helvetica', 'normal');
@@ -199,7 +211,11 @@ class PDFExportManager {
     this.doc.text('Zisk/Ztráta:', this.margin + boxWidth + 10, this.currentY + 32);
     this.doc.setFontSize(11);
     this.doc.setFont('helvetica', 'normal');
-    this.doc.setTextColor(gainLoss >= 0 ? 34 : 220, gainLoss >= 0 ? 197 : 53, gainLoss >= 0 ? 94 : 69);
+    this.doc.setTextColor(
+      gainLoss >= 0 ? 34 : 220,
+      gainLoss >= 0 ? 197 : 53,
+      gainLoss >= 0 ? 94 : 69
+    );
     this.doc.text(this.formatCurrency(gainLoss), this.margin + boxWidth + 10, this.currentY + 37);
 
     this.currentY += 50;
@@ -225,14 +241,14 @@ class PDFExportManager {
 
     // Metrics in 3-column layout
     const colWidth = (this.pageWidth - 2 * this.margin) / 3;
-    
+
     const metricsData = [
       { label: 'CAGR', value: `${metrics.cagr.toFixed(2)}%` },
       { label: 'Sharpe Ratio', value: metrics.sharpeRatio.toFixed(2) },
       { label: 'Volatilita', value: `${metrics.volatility.toFixed(2)}%` },
       { label: 'Beta', value: metrics.beta.toFixed(2) },
       { label: 'Max Drawdown', value: `${metrics.maxDrawdown.toFixed(2)}%` },
-      { label: 'Počet pozic', value: data.length.toString() }
+      { label: 'Počet pozic', value: data.length.toString() },
     ];
 
     let col = 0;
@@ -244,7 +260,7 @@ class PDFExportManager {
       this.doc.setFontSize(9);
       this.doc.setFont('helvetica', 'normal');
       this.doc.setTextColor(100, 100, 100);
-      this.doc.text(metric.label + ':', x, y);
+      this.doc.text(`${metric.label }:`, x, y);
 
       this.doc.setFontSize(11);
       this.doc.setFont('helvetica', 'bold');
@@ -273,10 +289,10 @@ class PDFExportManager {
 
     this.currentY += 8;
 
-    const tableData = data.map(item => {
+    const tableData = data.map((item) => {
       const cost = parseFloat(item.nákupníCena) * parseFloat(item.počet);
       const current = parseFloat(item.aktuálníHodnota || 0);
-      const roi = cost > 0 ? ((current - cost) / cost * 100) : 0;
+      const roi = cost > 0 ? ((current - cost) / cost) * 100 : 0;
 
       return [
         item.fond || '-',
@@ -284,7 +300,7 @@ class PDFExportManager {
         parseFloat(item.počet).toFixed(2),
         this.formatCurrency(parseFloat(item.nákupníCena)),
         this.formatCurrency(current),
-        `${roi.toFixed(2)}%`
+        `${roi.toFixed(2)}%`,
       ];
     });
 
@@ -298,11 +314,11 @@ class PDFExportManager {
         textColor: 255,
         fontSize: 10,
         fontStyle: 'bold',
-        halign: 'center'
+        halign: 'center',
       },
       bodyStyles: {
         fontSize: 9,
-        textColor: [44, 62, 80]
+        textColor: [44, 62, 80],
       },
       columnStyles: {
         0: { cellWidth: 'auto' },
@@ -310,12 +326,12 @@ class PDFExportManager {
         2: { cellWidth: 20, halign: 'right' },
         3: { cellWidth: 28, halign: 'right' },
         4: { cellWidth: 28, halign: 'right' },
-        5: { cellWidth: 20, halign: 'right' }
+        5: { cellWidth: 20, halign: 'right' },
       },
       alternateRowStyles: {
-        fillColor: [245, 247, 250]
+        fillColor: [245, 247, 250],
       },
-      margin: { left: this.margin, right: this.margin }
+      margin: { left: this.margin, right: this.margin },
     });
 
     this.currentY = this.doc.lastAutoTable.finalY + 10;
@@ -347,27 +363,29 @@ class PDFExportManager {
       type: 'bar',
       data: {
         labels: Object.keys(categoryData),
-        datasets: [{
-          label: 'Hodnota podle kategorie',
-          data: Object.values(categoryData),
-          backgroundColor: [
-            'rgba(102, 126, 234, 0.8)',
-            'rgba(118, 75, 162, 0.8)',
-            'rgba(237, 100, 166, 0.8)',
-            'rgba(255, 154, 158, 0.8)'
-          ]
-        }]
+        datasets: [
+          {
+            label: 'Hodnota podle kategorie',
+            data: Object.values(categoryData),
+            backgroundColor: [
+              'rgba(102, 126, 234, 0.8)',
+              'rgba(118, 75, 162, 0.8)',
+              'rgba(237, 100, 166, 0.8)',
+              'rgba(255, 154, 158, 0.8)',
+            ],
+          },
+        ],
       },
       options: {
         responsive: false,
         plugins: {
-          legend: { display: false }
-        }
-      }
+          legend: { display: false },
+        },
+      },
     });
 
     // Wait for chart to render
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
     // Add chart to PDF
     const imgData = canvas.toDataURL('image/png');
@@ -470,27 +488,17 @@ class PDFExportManager {
       this.doc.setFontSize(8);
       this.doc.setTextColor(127, 140, 141);
       this.doc.setFont('helvetica', 'normal');
-      this.doc.text(
-        `Strana ${i} z ${pageCount}`,
-        this.pageWidth / 2,
-        this.pageHeight - 10,
-        { align: 'center' }
-      );
+      this.doc.text(`Strana ${i} z ${pageCount}`, this.pageWidth / 2, this.pageHeight - 10, {
+        align: 'center',
+      });
 
       // Copyright
-      this.doc.text(
-        '© 2024 Portfolio Manager',
-        this.margin,
-        this.pageHeight - 10
-      );
+      this.doc.text('© 2024 Portfolio Manager', this.margin, this.pageHeight - 10);
 
       // Disclaimer
-      this.doc.text(
-        'Důvěrné',
-        this.pageWidth - this.margin,
-        this.pageHeight - 10,
-        { align: 'right' }
-      );
+      this.doc.text('Důvěrné', this.pageWidth - this.margin, this.pageHeight - 10, {
+        align: 'right',
+      });
     }
   }
 
@@ -513,7 +521,7 @@ class PDFExportManager {
   aggregateByCategory(data) {
     const categoryTotals = {};
 
-    data.forEach(item => {
+    data.forEach((item) => {
       const category = item.kategorie || 'Ostatní';
       const value = parseFloat(item.aktuálníHodnota || 0);
 
@@ -532,10 +540,12 @@ class PDFExportManager {
    * @returns {string} - Formatted currency
    */
   formatCurrency(value) {
-    return new Intl.NumberFormat('cs-CZ', {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(value) + ' Kč';
+    return (
+      `${new Intl.NumberFormat('cs-CZ', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).format(value) } Kč`
+    );
   }
 }
 
@@ -545,21 +555,22 @@ window.pdfExportManager = new PDFExportManager();
 // Add PDF export button
 window.addEventListener('DOMContentLoaded', () => {
   const portfolioCard = document.getElementById('portfolioCard');
-  if (!portfolioCard) return;
+  if (!portfolioCard) {return;}
 
   const headerDiv = portfolioCard.querySelector('div[style*="justify-content: space-between"]');
-  if (!headerDiv) return;
+  if (!headerDiv) {return;}
 
   const buttonContainer = headerDiv.querySelector('div[style*="gap"]');
-  if (!buttonContainer) return;
+  if (!buttonContainer) {return;}
 
   const pdfBtn = document.createElement('button');
   pdfBtn.id = 'exportPDFReport';
   pdfBtn.className = 'btn-icon';
   pdfBtn.title = 'Exportovat do PDF';
-  pdfBtn.style.cssText = 'font-size: 1.5rem; padding: 8px 16px; background: linear-gradient(135deg, #dc2626 0%, #ea580c 100%); color: white; border: none; border-radius: 8px; cursor: pointer;';
+  pdfBtn.style.cssText =
+    'font-size: 1.5rem; padding: 8px 16px; background: linear-gradient(135deg, #dc2626 0%, #ea580c 100%); color: white; border: none; border-radius: 8px; cursor: pointer;';
   pdfBtn.textContent = '📄 PDF';
-  
+
   pdfBtn.addEventListener('click', async () => {
     const data = window.getFondyData ? window.getFondyData() : [];
     if (!data || data.length === 0) {
@@ -573,15 +584,15 @@ window.addEventListener('DOMContentLoaded', () => {
     try {
       await window.pdfExportManager.generatePortfolioReport(data, {
         clientName: 'Portfolio Report',
-        includeCharts: true
+        includeCharts: true,
       });
-      
+
       if (typeof showToast === 'function') {
         showToast('success', 'Export dokončen', 'PDF report byl úspěšně vygenerován');
       }
     } catch (error) {
       console.error('PDF export failed:', error);
-      alert('Chyba při generování PDF: ' + error.message);
+      alert(`Chyba při generování PDF: ${ error.message}`);
     } finally {
       pdfBtn.disabled = false;
       pdfBtn.textContent = '📄 PDF';

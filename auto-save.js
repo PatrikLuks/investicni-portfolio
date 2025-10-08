@@ -58,7 +58,7 @@ class SmartAutoSaveManager {
    * @param {Object} data - Data to save
    */
   markDirty(data) {
-    if (!this.enabled) return;
+    if (!this.enabled) {return;}
 
     this.isDirty = true;
 
@@ -116,7 +116,7 @@ class SmartAutoSaveManager {
         this.lastSavedTime = new Date().toISOString();
         this.addToSaveHistory(data);
         this.updateSaveIndicator('success');
-        
+
         if (this.onSaveCallback) {
           this.onSaveCallback(data);
         }
@@ -129,7 +129,7 @@ class SmartAutoSaveManager {
     } catch (error) {
       console.error('❌ Save error:', error);
       this.updateSaveIndicator('error');
-      
+
       // Add to offline queue as fallback
       this.addToOfflineQueue(data);
 
@@ -166,7 +166,7 @@ class SmartAutoSaveManager {
     try {
       // Use localStorage as primary storage
       localStorage.setItem('portfolio_data', JSON.stringify(data));
-      
+
       // Also save to IndexedDB for larger data
       if (window.indexedDB) {
         await this.saveToIndexedDB(data);
@@ -194,11 +194,11 @@ class SmartAutoSaveManager {
         const db = request.result;
         const transaction = db.transaction(['portfolios'], 'readwrite');
         const store = transaction.objectStore('portfolios');
-        
+
         const saveRequest = store.put({
           id: 'current',
           data: data,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         });
 
         saveRequest.onsuccess = () => resolve();
@@ -252,12 +252,12 @@ class SmartAutoSaveManager {
    * @returns {Promise<boolean>} - Has conflict
    */
   async checkForConflicts(currentData) {
-    if (!this.lastSavedData) return false;
+    if (!this.lastSavedData) {return false;}
 
     try {
       // Load latest data from storage
       const latestData = JSON.parse(localStorage.getItem('portfolio_data') || 'null');
-      if (!latestData) return false;
+      if (!latestData) {return false;}
 
       // Compare timestamps or data content
       const currentHash = this.hashData(currentData);
@@ -295,8 +295,8 @@ class SmartAutoSaveManager {
       // Default: Prompt user
       const choice = confirm(
         'Data byla změněna externě. Chcete přepsat uložená data?\n\n' +
-        'OK = Použít aktuální verzi\n' +
-        'Cancel = Ponechat uloženou verzi'
+          'OK = Použít aktuální verzi\n' +
+          'Cancel = Ponechat uloženou verzi'
       );
 
       if (!choice) {
@@ -323,7 +323,7 @@ class SmartAutoSaveManager {
     return JSON.stringify(data)
       .split('')
       .reduce((hash, char) => {
-        hash = ((hash << 5) - hash) + char.charCodeAt(0);
+        hash = (hash << 5) - hash + char.charCodeAt(0);
         return hash & hash;
       }, 0)
       .toString(36);
@@ -336,7 +336,7 @@ class SmartAutoSaveManager {
   addToOfflineQueue(data) {
     this.offlineQueue.push({
       data: JSON.parse(JSON.stringify(data)), // Deep clone
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
 
     this.persistOfflineQueue();
@@ -390,7 +390,7 @@ class SmartAutoSaveManager {
     this.saveHistory.unshift({
       data: JSON.parse(JSON.stringify(data)),
       timestamp: new Date().toISOString(),
-      hash: this.hashData(data)
+      hash: this.hashData(data),
     });
 
     // Limit history size
@@ -404,9 +404,9 @@ class SmartAutoSaveManager {
    * @returns {Array} - Save history
    */
   getSaveHistory() {
-    return this.saveHistory.map(h => ({
+    return this.saveHistory.map((h) => ({
       timestamp: h.timestamp,
-      hash: h.hash
+      hash: h.hash,
     }));
   }
 
@@ -429,8 +429,8 @@ class SmartAutoSaveManager {
   updateSaveIndicator(status) {
     const indicator = document.getElementById('lastSaveIndicator');
     const timeEl = document.getElementById('lastSaveTime');
-    
-    if (!indicator || !timeEl) return;
+
+    if (!indicator || !timeEl) {return;}
 
     indicator.style.opacity = '1';
 
@@ -468,7 +468,7 @@ class SmartAutoSaveManager {
     window.addEventListener('online', async () => {
       console.log('🌐 Back online - processing offline queue');
       const processed = await this.processOfflineQueue();
-      
+
       if (processed > 0 && typeof showToast === 'function') {
         showToast('success', 'Synchronizace', `Synchronizováno ${processed} změn`);
       }
@@ -495,7 +495,7 @@ class SmartAutoSaveManager {
     try {
       const stored = localStorage.getItem('auto_save_offline_queue');
       this.offlineQueue = stored ? JSON.parse(stored) : [];
-      
+
       if (this.offlineQueue.length > 0) {
         console.log('📦 Loaded offline queue:', this.offlineQueue.length, 'items');
       }
@@ -564,7 +564,7 @@ class SmartAutoSaveManager {
       lastSavedTime: this.lastSavedTime,
       offlineQueueSize: this.offlineQueue.length,
       saveHistorySize: this.saveHistory.length,
-      saveDelay: this.saveDelay
+      saveDelay: this.saveDelay,
     };
   }
 }
@@ -588,11 +588,11 @@ function initSmartAutoSave() {
   }
 
   // Add global save trigger helper
-  window.triggerAutoSave = function(data) {
+  window.triggerAutoSave = function (data) {
     window.smartAutoSaveManager.markDirty(data);
   };
 
-  window.forceSave = async function(data) {
+  window.forceSave = async function (data) {
     return await window.smartAutoSaveManager.forceSave(data);
   };
 }

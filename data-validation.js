@@ -38,8 +38,8 @@ class DataValidationManager {
           required: 'Název fondu je povinný',
           minLength: 'Název fondu nesmí být prázdný',
           maxLength: 'Název fondu je příliš dlouhý (max 200 znaků)',
-          pattern: 'Název fondu obsahuje nepovolené znaky'
-        }
+          pattern: 'Název fondu obsahuje nepovolené znaky',
+        },
       },
       kategorie: {
         type: 'string',
@@ -47,8 +47,8 @@ class DataValidationManager {
         enum: ['Akcie', 'Dluhopisy', 'Komodity', 'Nemovitosti', 'Hotovost', 'Jiné'],
         messages: {
           required: 'Kategorie je povinná',
-          enum: 'Neplatná kategorie'
-        }
+          enum: 'Neplatná kategorie',
+        },
       },
       ticker: {
         type: 'string',
@@ -58,8 +58,8 @@ class DataValidationManager {
         pattern: /^[A-Z0-9\.\-]+$/,
         messages: {
           maxLength: 'Ticker je příliš dlouhý (max 20 znaků)',
-          pattern: 'Ticker musí obsahovat pouze velká písmena, čísla, tečky a pomlčky'
-        }
+          pattern: 'Ticker musí obsahovat pouze velká písmena, čísla, tečky a pomlčky',
+        },
       },
       aktuálníCena: {
         type: 'number',
@@ -71,8 +71,8 @@ class DataValidationManager {
           required: 'Aktuální cena je povinná',
           type: 'Cena musí být číslo',
           min: 'Cena nesmí být záporná',
-          max: 'Cena je příliš vysoká'
-        }
+          max: 'Cena je příliš vysoká',
+        },
       },
       počet: {
         type: 'number',
@@ -83,8 +83,8 @@ class DataValidationManager {
           required: 'Počet je povinný',
           type: 'Počet musí být číslo',
           min: 'Počet musí být kladný',
-          max: 'Počet je příliš vysoký'
-        }
+          max: 'Počet je příliš vysoký',
+        },
       },
       nákupníCena: {
         type: 'number',
@@ -96,8 +96,8 @@ class DataValidationManager {
           required: 'Nákupní cena je povinná',
           type: 'Cena musí být číslo',
           min: 'Cena nesmí být záporná',
-          max: 'Cena je příliš vysoká'
-        }
+          max: 'Cena je příliš vysoká',
+        },
       },
       aktuálníHodnota: {
         type: 'number',
@@ -107,8 +107,8 @@ class DataValidationManager {
         messages: {
           required: 'Aktuální hodnota je povinná',
           type: 'Hodnota musí být číslo',
-          min: 'Hodnota nesmí být záporná'
-        }
+          min: 'Hodnota nesmí být záporná',
+        },
       },
       změnaProcenta: {
         type: 'number',
@@ -120,8 +120,8 @@ class DataValidationManager {
         messages: {
           type: 'Změna musí být číslo',
           min: 'Změna je příliš nízká',
-          max: 'Změna je příliš vysoká'
-        }
+          max: 'Změna je příliš vysoká',
+        },
       },
       měna: {
         type: 'string',
@@ -130,8 +130,8 @@ class DataValidationManager {
         default: 'CZK',
         messages: {
           required: 'Měna je povinná',
-          enum: 'Neplatná měna'
-        }
+          enum: 'Neplatná měna',
+        },
       },
       datumNákupu: {
         type: 'date',
@@ -139,25 +139,25 @@ class DataValidationManager {
         maxDate: 'today',
         messages: {
           type: 'Neplatné datum',
-          maxDate: 'Datum nákupu nemůže být v budoucnosti'
-        }
+          maxDate: 'Datum nákupu nemůže být v budoucnosti',
+        },
       },
       poznámka: {
         type: 'string',
         required: false,
         maxLength: 500,
         messages: {
-          maxLength: 'Poznámka je příliš dlouhá (max 500 znaků)'
-        }
+          maxLength: 'Poznámka je příliš dlouhá (max 500 znaků)',
+        },
       },
       správce: {
         type: 'string',
         required: false,
         maxLength: 100,
         messages: {
-          maxLength: 'Název správce je příliš dlouhý (max 100 znaků)'
-        }
-      }
+          maxLength: 'Název správce je příliš dlouhý (max 100 znaků)',
+        },
+      },
     };
   }
 
@@ -197,23 +197,29 @@ class DataValidationManager {
     // String validations
     if (fieldSchema.type === 'string') {
       if (fieldSchema.minLength && value.length < fieldSchema.minLength) {
-        errors.push(fieldSchema.messages.minLength || `Minimální délka je ${fieldSchema.minLength}`);
+        errors.push(
+          fieldSchema.messages.minLength || `Minimální délka je ${fieldSchema.minLength}`
+        );
       }
       if (fieldSchema.maxLength && value.length > fieldSchema.maxLength) {
-        errors.push(fieldSchema.messages.maxLength || `Maximální délka je ${fieldSchema.maxLength}`);
+        errors.push(
+          fieldSchema.messages.maxLength || `Maximální délka je ${fieldSchema.maxLength}`
+        );
       }
       if (fieldSchema.pattern && !fieldSchema.pattern.test(value)) {
         errors.push(fieldSchema.messages.pattern || 'Neplatný formát');
       }
       if (fieldSchema.enum && !fieldSchema.enum.includes(value)) {
-        errors.push(fieldSchema.messages.enum || `Povolené hodnoty: ${fieldSchema.enum.join(', ')}`);
+        errors.push(
+          fieldSchema.messages.enum || `Povolené hodnoty: ${fieldSchema.enum.join(', ')}`
+        );
       }
     }
 
     // Number validations
     if (fieldSchema.type === 'number') {
       const numValue = parseFloat(value);
-      
+
       if (isNaN(numValue)) {
         errors.push(fieldSchema.messages.type || 'Musí být číslo');
         return { valid: false, errors };
@@ -257,7 +263,7 @@ class DataValidationManager {
 
     return {
       valid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
@@ -274,7 +280,7 @@ class DataValidationManager {
     for (const [fieldName, fieldSchema] of Object.entries(this.schema)) {
       const value = record[fieldName];
       const result = this.validateField(fieldName, value, record);
-      
+
       if (!result.valid) {
         errors[fieldName] = result.errors;
         isValid = false;
@@ -291,7 +297,7 @@ class DataValidationManager {
     return {
       valid: isValid,
       errors,
-      record
+      record,
     };
   }
 
@@ -307,7 +313,7 @@ class DataValidationManager {
     if (record.aktuálníCena && record.počet && record.aktuálníHodnota) {
       const computed = record.aktuálníCena * record.počet;
       const actual = parseFloat(record.aktuálníHodnota);
-      
+
       // Allow 1% tolerance for rounding
       if (Math.abs(computed - actual) > computed * 0.01) {
         errors.push('Aktuální hodnota neodpovídá výpočtu (cena × počet)');
@@ -318,7 +324,7 @@ class DataValidationManager {
     if (record.nákupníCena && record.aktuálníCena && record.změnaProcenta !== undefined) {
       const computed = ((record.aktuálníCena - record.nákupníCena) / record.nákupníCena) * 100;
       const actual = parseFloat(record.změnaProcenta);
-      
+
       // Allow 0.1% tolerance
       if (Math.abs(computed - actual) > 0.1) {
         errors.push('Změna procent neodpovídá výpočtu');
@@ -336,16 +342,16 @@ class DataValidationManager {
   validateAll(records) {
     const results = records.map((record, index) => ({
       index,
-      ...this.validateRecord(record)
+      ...this.validateRecord(record),
     }));
 
-    const allValid = results.every(r => r.valid);
-    const errorCount = results.filter(r => !r.valid).length;
+    const allValid = results.every((r) => r.valid);
+    const errorCount = results.filter((r) => !r.valid).length;
 
     return {
       valid: allValid,
       errorCount,
-      results
+      results,
     };
   }
 
@@ -373,9 +379,9 @@ class DataValidationManager {
    * @returns {string} - Type name
    */
   getType(value) {
-    if (value === null) return 'null';
-    if (value === undefined) return 'undefined';
-    if (typeof value === 'number' && !isNaN(value)) return 'number';
+    if (value === null) {return 'null';}
+    if (value === undefined) {return 'undefined';}
+    if (typeof value === 'number' && !isNaN(value)) {return 'number';}
     if (typeof value === 'string') {
       // Check if it's a date string
       const date = new Date(value);
@@ -384,9 +390,9 @@ class DataValidationManager {
       }
       return 'string';
     }
-    if (typeof value === 'boolean') return 'boolean';
-    if (Array.isArray(value)) return 'array';
-    if (typeof value === 'object') return 'object';
+    if (typeof value === 'boolean') {return 'boolean';}
+    if (Array.isArray(value)) {return 'array';}
+    if (typeof value === 'object') {return 'object';}
     return typeof value;
   }
 
@@ -394,11 +400,11 @@ class DataValidationManager {
    * Setup real-time validation on form inputs
    */
   setupRealTimeValidation() {
-    if (!this.realTimeValidation) return;
+    if (!this.realTimeValidation) {return;}
 
     document.addEventListener('input', (e) => {
       const input = e.target;
-      if (!input.dataset.fieldName) return;
+      if (!input.dataset.fieldName) {return;}
 
       const fieldName = input.dataset.fieldName;
       let value = input.value;
@@ -453,7 +459,7 @@ class DataValidationManager {
    */
   sanitize(fieldName, value) {
     const fieldSchema = this.schema[fieldName];
-    if (!fieldSchema) return value;
+    if (!fieldSchema) {return value;}
 
     // String sanitization
     if (fieldSchema.type === 'string' && typeof value === 'string') {
@@ -516,13 +522,13 @@ class DataValidationManager {
    */
   getValidationSummary(records) {
     const result = this.validateAll(records);
-    
+
     return {
       totalRecords: records.length,
       validRecords: records.length - result.errorCount,
       invalidRecords: result.errorCount,
       isValid: result.valid,
-      errors: result.results.filter(r => !r.valid)
+      errors: result.results.filter((r) => !r.valid),
     };
   }
 
@@ -550,13 +556,13 @@ window.dataValidationManager = new DataValidationManager();
 window.dataValidationManager.addCustomRule('ticker', (value, context) => {
   // Example: Check if ticker is unique
   const errors = [];
-  
+
   // This would need access to all records to check uniqueness
   // For now, just validate format
-  
+
   return {
     valid: errors.length === 0,
-    errors
+    errors,
   };
 });
 

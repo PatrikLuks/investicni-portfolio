@@ -5,15 +5,15 @@ let clientNameCard, portfolioCard, fondListCard, clientNameDisplay, dashboard;
 
 // Initialize DOM references when DOM is ready
 function initializeDOMReferences() {
-    clientForm = document.getElementById('clientForm');
-    portfolioForm = document.getElementById('portfolioForm');
-    generateReportBtn = document.getElementById('generateReport');
-    fondList = document.getElementById('fondList');
-    clientNameCard = document.getElementById('clientNameCard');
-    portfolioCard = document.getElementById('portfolioCard');
-    fondListCard = document.getElementById('fondListCard');
-    clientNameDisplay = document.getElementById('clientNameDisplay');
-    dashboard = document.getElementById('dashboard');
+  clientForm = document.getElementById('clientForm');
+  portfolioForm = document.getElementById('portfolioForm');
+  generateReportBtn = document.getElementById('generateReport');
+  fondList = document.getElementById('fondList');
+  clientNameCard = document.getElementById('clientNameCard');
+  portfolioCard = document.getElementById('portfolioCard');
+  fondListCard = document.getElementById('fondListCard');
+  clientNameDisplay = document.getElementById('clientNameDisplay');
+  dashboard = document.getElementById('dashboard');
 }
 
 // Add these variables at the top with other declarations
@@ -24,116 +24,115 @@ let currentSortColumn = null;
 let currentSortDirection = 'asc';
 let searchQuery = '';
 
-
 // ==================== STORAGE & PERSISTENCE ====================
 class PortfolioStorage {
-    constructor() {
-        this.storageKey = 'portfolioData_v2';
-        this.clientKey = 'portfolioClient_v2';
-        this.lastSaveKey = 'portfolioLastSave_v2';
-        this.autosaveInterval = null;
+  constructor() {
+    this.storageKey = 'portfolioData_v2';
+    this.clientKey = 'portfolioClient_v2';
+    this.lastSaveKey = 'portfolioLastSave_v2';
+    this.autosaveInterval = null;
+  }
+
+  saveData(data) {
+    try {
+      localStorage.setItem(this.storageKey, JSON.stringify(data));
+      const now = new Date().toISOString();
+      localStorage.setItem(this.lastSaveKey, now);
+      this.updateLastSaveDisplay(now);
+      return true;
+    } catch (e) {
+      console.error('Save failed:', e);
+      showToast('error', 'Chyba uložení', 'Nepodařilo se uložit data do localStorage');
+      return false;
     }
-    
-    saveData(data) {
-        try {
-            localStorage.setItem(this.storageKey, JSON.stringify(data));
-            const now = new Date().toISOString();
-            localStorage.setItem(this.lastSaveKey, now);
-            this.updateLastSaveDisplay(now);
-            return true;
-        } catch (e) {
-            console.error('Save failed:', e);
-            showToast('error', 'Chyba uložení', 'Nepodařilo se uložit data do localStorage');
-            return false;
-        }
+  }
+
+  loadData() {
+    try {
+      const data = localStorage.getItem(this.storageKey);
+      return data ? JSON.parse(data) : [];
+    } catch (e) {
+      console.error('Load failed:', e);
+      return [];
     }
-    
-    loadData() {
-        try {
-            const data = localStorage.getItem(this.storageKey);
-            return data ? JSON.parse(data) : [];
-        } catch (e) {
-            console.error('Load failed:', e);
-            return [];
-        }
+  }
+
+  saveClient(client) {
+    try {
+      localStorage.setItem(this.clientKey, JSON.stringify(client));
+      return true;
+    } catch (e) {
+      console.error('Client save failed:', e);
+      return false;
     }
-    
-    saveClient(client) {
-        try {
-            localStorage.setItem(this.clientKey, JSON.stringify(client));
-            return true;
-        } catch (e) {
-            console.error('Client save failed:', e);
-            return false;
-        }
+  }
+
+  loadClient() {
+    try {
+      const client = localStorage.getItem(this.clientKey);
+      return client ? JSON.parse(client) : null;
+    } catch (e) {
+      console.error('Client load failed:', e);
+      return null;
     }
-    
-    loadClient() {
-        try {
-            const client = localStorage.getItem(this.clientKey);
-            return client ? JSON.parse(client) : null;
-        } catch (e) {
-            console.error('Client load failed:', e);
-            return null;
-        }
+  }
+
+  clearAll() {
+    try {
+      localStorage.removeItem(this.storageKey);
+      localStorage.removeItem(this.clientKey);
+      localStorage.removeItem(this.lastSaveKey);
+      showToast('info', 'Data smazána', 'Všechna data byla vymazána');
+      return true;
+    } catch (e) {
+      console.error('Clear failed:', e);
+      return false;
     }
-    
-    clearAll() {
-        try {
-            localStorage.removeItem(this.storageKey);
-            localStorage.removeItem(this.clientKey);
-            localStorage.removeItem(this.lastSaveKey);
-            showToast('info', 'Data smazána', 'Všechna data byla vymazána');
-            return true;
-        } catch (e) {
-            console.error('Clear failed:', e);
-            return false;
-        }
+  }
+
+  startAutosave(callback) {
+    if (this.autosaveInterval) {
+      clearInterval(this.autosaveInterval);
     }
-    
-    startAutosave(callback) {
-        if (this.autosaveInterval) {
-            clearInterval(this.autosaveInterval);
-        }
-        this.autosaveInterval = setInterval(() => {
-            if (callback) callback();
-        }, 30000); // 30 sekund
+    this.autosaveInterval = setInterval(() => {
+      if (callback) callback();
+    }, 30000); // 30 sekund
+  }
+
+  stopAutosave() {
+    if (this.autosaveInterval) {
+      clearInterval(this.autosaveInterval);
+      this.autosaveInterval = null;
     }
-    
-    stopAutosave() {
-        if (this.autosaveInterval) {
-            clearInterval(this.autosaveInterval);
-            this.autosaveInterval = null;
-        }
+  }
+
+  updateLastSaveDisplay(isoString) {
+    const date = new Date(isoString);
+    const timeStr = date.toLocaleTimeString('cs-CZ', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    });
+    const indicator = document.getElementById('lastSaveIndicator');
+    const timeElement = document.getElementById('lastSaveTime');
+
+    if (indicator && timeElement) {
+      timeElement.textContent = `Uloženo ${timeStr}`;
+      indicator.style.opacity = '1';
+
+      // Pulse animation
+      indicator.style.animation = 'pulse 0.5s ease-in-out';
+      setTimeout(() => {
+        indicator.style.animation = '';
+        indicator.style.opacity = '0.7';
+      }, 2000);
     }
-    
-    updateLastSaveDisplay(isoString) {
-        const date = new Date(isoString);
-        const timeStr = date.toLocaleTimeString('cs-CZ', { 
-            hour: '2-digit', 
-            minute: '2-digit',
-            second: '2-digit'
-        });
-        const indicator = document.getElementById('lastSaveIndicator');
-        const timeElement = document.getElementById('lastSaveTime');
-        
-        if (indicator && timeElement) {
-            timeElement.textContent = `Uloženo ${timeStr}`;
-            indicator.style.opacity = '1';
-            
-            // Pulse animation
-            indicator.style.animation = 'pulse 0.5s ease-in-out';
-            setTimeout(() => {
-                indicator.style.animation = '';
-                indicator.style.opacity = '0.7';
-            }, 2000);
-        }
-    }
-    
-    getLastSaveTime() {
-        const lastSave = localStorage.getItem(this.lastSaveKey);
-        return lastSave ? new Date(lastSave) : null;
-    }
+  }
+
+  getLastSaveTime() {
+    const lastSave = localStorage.getItem(this.lastSaveKey);
+    return lastSave ? new Date(lastSave) : null;
+  }
 }
 
 const storage = new PortfolioStorage();
@@ -141,56 +140,57 @@ const storage = new PortfolioStorage();
 // ==================== UTILITY FUNCTIONS ====================
 // Debounce function for performance optimization
 function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
     };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
 }
 
 // Safe number parsing with validation
 function parseSafeNumber(value, defaultValue = 0) {
-    if (value === null || value === undefined || value === '') {
-        return defaultValue;
-    }
-    const parsed = typeof value === 'string' ? parseFloat(value.replace(/\s/g, '')) : parseFloat(value);
-    return isNaN(parsed) ? defaultValue : parsed;
+  if (value === null || value === undefined || value === '') {
+    return defaultValue;
+  }
+  const parsed =
+    typeof value === 'string' ? parseFloat(value.replace(/\s/g, '')) : parseFloat(value);
+  return isNaN(parsed) ? defaultValue : parsed;
 }
 
 // Validate form data
 function validateFondData(data) {
-    const errors = [];
-    
-    if (!data.name || data.name.trim() === '') {
-        errors.push('Název fondu je povinný');
-    }
-    
-    if (!data.producer || data.producer.trim() === '') {
-        errors.push('Správce je povinný');
-    }
-    
-    const investment = parseSafeNumber(data.investment);
-    if (investment <= 0) {
-        errors.push('Investice musí být kladné číslo');
-    }
-    
-    const value = parseSafeNumber(data.value);
-    if (value < 0) {
-        errors.push('Hodnota nemůže být záporná');
-    }
-    
-    return errors;
+  const errors = [];
+
+  if (!data.name || data.name.trim() === '') {
+    errors.push('Název fondu je povinný');
+  }
+
+  if (!data.producer || data.producer.trim() === '') {
+    errors.push('Správce je povinný');
+  }
+
+  const investment = parseSafeNumber(data.investment);
+  if (investment <= 0) {
+    errors.push('Investice musí být kladné číslo');
+  }
+
+  const value = parseSafeNumber(data.value);
+  if (value < 0) {
+    errors.push('Hodnota nemůže být záporná');
+  }
+
+  return errors;
 }
 
 // Confirmation dialog with custom styling
 function showConfirmDialog(title, message, onConfirm, onCancel) {
-    const overlay = document.createElement('div');
-    overlay.className = 'confirm-overlay';
-    overlay.style.cssText = `
+  const overlay = document.createElement('div');
+  overlay.className = 'confirm-overlay';
+  overlay.style.cssText = `
         position: fixed;
         top: 0;
         left: 0;
@@ -203,9 +203,9 @@ function showConfirmDialog(title, message, onConfirm, onCancel) {
         z-index: 10000;
         animation: fadeIn 0.2s ease-in-out;
     `;
-    
-    const dialog = document.createElement('div');
-    dialog.style.cssText = `
+
+  const dialog = document.createElement('div');
+  dialog.style.cssText = `
         background: white;
         padding: 2rem;
         border-radius: 8px;
@@ -213,8 +213,8 @@ function showConfirmDialog(title, message, onConfirm, onCancel) {
         max-width: 400px;
         animation: slideInDown 0.3s ease-in-out;
     `;
-    
-    dialog.innerHTML = `
+
+  dialog.innerHTML = `
         <h3 style="margin: 0 0 1rem 0; color: #333;">${title}</h3>
         <p style="margin: 0 0 1.5rem 0; color: #666;">${message}</p>
         <div style="display: flex; gap: 1rem; justify-content: flex-end;">
@@ -222,174 +222,174 @@ function showConfirmDialog(title, message, onConfirm, onCancel) {
             <button id="confirmBtn" class="btn btn-danger" style="background: #dc3545; color: white;">Potvrdit</button>
         </div>
     `;
-    
-    overlay.appendChild(dialog);
-    document.body.appendChild(overlay);
-    
-    const confirmBtn = dialog.querySelector('#confirmBtn');
-    const cancelBtn = dialog.querySelector('#cancelBtn');
-    
-    const cleanup = () => {
-        overlay.style.animation = 'fadeOut 0.2s ease-in-out';
-        setTimeout(() => document.body.removeChild(overlay), 200);
-    };
-    
-    confirmBtn.onclick = () => {
-        cleanup();
-        if (onConfirm) onConfirm();
-    };
-    
-    cancelBtn.onclick = () => {
-        cleanup();
-        if (onCancel) onCancel();
-    };
-    
-    overlay.onclick = (e) => {
-        if (e.target === overlay) {
-            cleanup();
-            if (onCancel) onCancel();
-        }
-    };
+
+  overlay.appendChild(dialog);
+  document.body.appendChild(overlay);
+
+  const confirmBtn = dialog.querySelector('#confirmBtn');
+  const cancelBtn = dialog.querySelector('#cancelBtn');
+
+  const cleanup = () => {
+    overlay.style.animation = 'fadeOut 0.2s ease-in-out';
+    setTimeout(() => document.body.removeChild(overlay), 200);
+  };
+
+  confirmBtn.onclick = () => {
+    cleanup();
+    if (onConfirm) onConfirm();
+  };
+
+  cancelBtn.onclick = () => {
+    cleanup();
+    if (onCancel) onCancel();
+  };
+
+  overlay.onclick = (e) => {
+    if (e.target === overlay) {
+      cleanup();
+      if (onCancel) onCancel();
+    }
+  };
 }
 
 // Export chart as PNG
 function exportChartAsPNG(chartElement, filename = 'chart.png') {
-    try {
-        const canvas = chartElement.querySelector('canvas');
-        if (canvas) {
-            const url = canvas.toDataURL('image/png');
-            const link = document.createElement('a');
-            link.download = filename;
-            link.href = url;
-            link.click();
-            showToast('success', 'Export úspěšný', `Graf byl exportován jako ${filename}`);
-        }
-    } catch (e) {
-        console.error('Chart export failed:', e);
-        showToast('error', 'Export selhal', 'Nepodařilo se exportovat graf');
+  try {
+    const canvas = chartElement.querySelector('canvas');
+    if (canvas) {
+      const url = canvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.download = filename;
+      link.href = url;
+      link.click();
+      showToast('success', 'Export úspěšný', `Graf byl exportován jako ${filename}`);
     }
+  } catch (e) {
+    console.error('Chart export failed:', e);
+    showToast('error', 'Export selhal', 'Nepodařilo se exportovat graf');
+  }
 }
 
 // Loading overlay
 function showLoading() {
-    const overlay = document.createElement('div');
-    overlay.className = 'loading-overlay';
-    overlay.id = 'loadingOverlay';
-    overlay.innerHTML = '<div class="loading-spinner"></div>';
-    document.body.appendChild(overlay);
+  const overlay = document.createElement('div');
+  overlay.className = 'loading-overlay';
+  overlay.id = 'loadingOverlay';
+  overlay.innerHTML = '<div class="loading-spinner"></div>';
+  document.body.appendChild(overlay);
 }
 
 function hideLoading() {
-    const overlay = document.getElementById('loadingOverlay');
-    if (overlay) {
-        overlay.remove();
-    }
+  const overlay = document.getElementById('loadingOverlay');
+  if (overlay) {
+    overlay.remove();
+  }
 }
 
 // Empty state management
 function toggleEmptyState(show) {
-    const emptyState = document.getElementById('emptyState');
-    const table = document.getElementById('fondTable');
-    
-    if (emptyState && table) {
-        if (show) {
-            emptyState.style.display = 'block';
-            table.style.display = 'none';
-        } else {
-            emptyState.style.display = 'none';
-            table.style.display = 'table';
-        }
+  const emptyState = document.getElementById('emptyState');
+  const table = document.getElementById('fondTable');
+
+  if (emptyState && table) {
+    if (show) {
+      emptyState.style.display = 'block';
+      table.style.display = 'none';
+    } else {
+      emptyState.style.display = 'none';
+      table.style.display = 'table';
     }
+  }
 }
 
 // Bulk selection state
 let selectedRows = new Set();
 
 function updateBulkActionsBar() {
-    const bar = document.getElementById('bulkActionsBar');
-    const count = document.getElementById('selectedCount');
-    
-    if (bar && count) {
-        count.textContent = selectedRows.size;
-        if (selectedRows.size > 0) {
-            bar.classList.add('active');
-        } else {
-            bar.classList.remove('active');
-        }
+  const bar = document.getElementById('bulkActionsBar');
+  const count = document.getElementById('selectedCount');
+
+  if (bar && count) {
+    count.textContent = selectedRows.size;
+    if (selectedRows.size > 0) {
+      bar.classList.add('active');
+    } else {
+      bar.classList.remove('active');
     }
+  }
 }
 
 function toggleRowSelection(index, checked) {
-    if (checked) {
-        selectedRows.add(index);
-    } else {
-        selectedRows.delete(index);
-    }
-    updateBulkActionsBar();
+  if (checked) {
+    selectedRows.add(index);
+  } else {
+    selectedRows.delete(index);
+  }
+  updateBulkActionsBar();
 }
 
 function selectAllRows(checked) {
-    if (checked) {
-        portfolioData.forEach((_, index) => selectedRows.add(index));
-    } else {
-        selectedRows.clear();
-    }
-    updateBulkActionsBar();
-    updateFondTable();
+  if (checked) {
+    portfolioData.forEach((_, index) => selectedRows.add(index));
+  } else {
+    selectedRows.clear();
+  }
+  updateBulkActionsBar();
+  updateFondTable();
 }
 
 function bulkDeleteSelected() {
-    if (selectedRows.size === 0) return;
-    
-    showConfirmDialog(
-        'Smazat vybrané fondy?',
-        `Opravdu chcete smazat ${selectedRows.size} vybraných fondů? Tato akce je nevratná.`,
-        () => {
-            // Sort indices in descending order to avoid index shifting
-            const indices = Array.from(selectedRows).sort((a, b) => b - a);
-            indices.forEach(index => {
-                portfolioData.splice(index, 1);
-            });
-            
-            selectedRows.clear();
-            updateBulkActionsBar();
-            updateFondTable();
-            updateDashboard();
-            storage.saveData(portfolioData);
-            
-            showToast('success', 'Fondy smazány', `${indices.length} fondů bylo úspěšně odstraněno`);
-            
-            // Check if portfolio is empty
-            if (portfolioData.length === 0) {
-                document.getElementById('fondListCard').style.display = 'none';
-                dashboard.style.display = 'none';
-            }
-        }
-    );
+  if (selectedRows.size === 0) return;
+
+  showConfirmDialog(
+    'Smazat vybrané fondy?',
+    `Opravdu chcete smazat ${selectedRows.size} vybraných fondů? Tato akce je nevratná.`,
+    () => {
+      // Sort indices in descending order to avoid index shifting
+      const indices = Array.from(selectedRows).sort((a, b) => b - a);
+      indices.forEach((index) => {
+        portfolioData.splice(index, 1);
+      });
+
+      selectedRows.clear();
+      updateBulkActionsBar();
+      updateFondTable();
+      updateDashboard();
+      storage.saveData(portfolioData);
+
+      showToast('success', 'Fondy smazány', `${indices.length} fondů bylo úspěšně odstraněno`);
+
+      // Check if portfolio is empty
+      if (portfolioData.length === 0) {
+        document.getElementById('fondListCard').style.display = 'none';
+        dashboard.style.display = 'none';
+      }
+    }
+  );
 }
 
 function bulkExportSelected() {
-    if (selectedRows.size === 0) return;
-    
-    const selected = portfolioData.filter((_, index) => selectedRows.has(index));
-    generateCSV(selected);
-    showToast('success', 'Export dokončen', `${selected.length} fondů bylo exportováno`);
+  if (selectedRows.size === 0) return;
+
+  const selected = portfolioData.filter((_, index) => selectedRows.has(index));
+  generateCSV(selected);
+  showToast('success', 'Export dokončen', `${selected.length} fondů bylo exportováno`);
 }
 
 // ==================== TOAST NOTIFICATIONS ====================
 function showToast(type, title, message, duration = 4000) {
-    const container = document.getElementById('toastContainer');
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    
-    const icons = {
-        success: '✓',
-        error: '✗',
-        warning: '⚠',
-        info: 'ℹ'
-    };
-    
-    toast.innerHTML = `
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+
+  const icons = {
+    success: '✓',
+    error: '✗',
+    warning: '⚠',
+    info: 'ℹ',
+  };
+
+  toast.innerHTML = `
         <div class="toast-icon">${icons[type]}</div>
         <div class="toast-content">
             <div class="toast-title">${title}</div>
@@ -397,105 +397,104 @@ function showToast(type, title, message, duration = 4000) {
         </div>
         <button class="toast-close" onclick="this.parentElement.remove()">×</button>
     `;
-    
-    container.appendChild(toast);
-    
-    // Auto remove after duration
-    setTimeout(() => {
-        toast.classList.add('removing');
-        setTimeout(() => toast.remove(), 300);
-    }, duration);
+
+  container.appendChild(toast);
+
+  // Auto remove after duration
+  setTimeout(() => {
+    toast.classList.add('removing');
+    setTimeout(() => toast.remove(), 300);
+  }, duration);
 }
 
 // ==================== DASHBOARD KPI FUNCTIONS ====================
 function updateDashboard() {
-    if (portfolioData.length === 0) {
-        dashboard.style.display = 'none';
-        return;
+  if (portfolioData.length === 0) {
+    dashboard.style.display = 'none';
+    return;
+  }
+
+  dashboard.style.display = 'grid';
+
+  // Calculate metrics
+  const totalInvestment = portfolioData.reduce((sum, item) => sum + Number(item.investment), 0);
+  const totalValue = portfolioData.reduce((sum, item) => sum + Number(item.value), 0);
+  const totalProfit = totalValue - totalInvestment;
+  const totalYield = totalInvestment !== 0 ? (totalProfit / totalInvestment) * 100 : 0;
+
+  // Find best performing fund
+  let bestFund = null;
+  let bestYield = -Infinity;
+  portfolioData.forEach((item) => {
+    const fundYield = ((item.value - item.investment) / item.investment) * 100;
+    if (fundYield > bestYield) {
+      bestYield = fundYield;
+      bestFund = item;
     }
-    
-    dashboard.style.display = 'grid';
-    
-    // Calculate metrics
-    const totalInvestment = portfolioData.reduce((sum, item) => sum + Number(item.investment), 0);
-    const totalValue = portfolioData.reduce((sum, item) => sum + Number(item.value), 0);
-    const totalProfit = totalValue - totalInvestment;
-    const totalYield = totalInvestment !== 0 ? ((totalProfit / totalInvestment) * 100) : 0;
-    
-    // Find best performing fund
-    let bestFund = null;
-    let bestYield = -Infinity;
-    portfolioData.forEach(item => {
-        const fundYield = ((item.value - item.investment) / item.investment) * 100;
-        if (fundYield > bestYield) {
-            bestYield = fundYield;
-            bestFund = item;
-        }
-    });
-    
-    // Animate numbers with count-up effect
-    animateValue('kpiValueInvestment', 0, totalInvestment, 1000, true);
-    animateValue('kpiValueCurrent', 0, totalValue, 1000, true);
-    animateValue('kpiValueYield', 0, totalYield, 1000, false);
-    
-    // Update profit amount
-    document.getElementById('kpiProfitAmount').textContent = 
-        (totalProfit >= 0 ? '+' : '') + totalProfit.toLocaleString('cs-CZ') + ' Kč';
-    
-    // Update yield card styling
-    const yieldCard = document.getElementById('kpiTotalYield');
-    const yieldChange = document.getElementById('kpiChangeYield');
-    if (totalYield >= 0) {
-        yieldCard.classList.remove('negative');
-        yieldCard.classList.add('positive');
-        yieldChange.classList.remove('negative');
-        yieldChange.classList.add('positive');
-        yieldChange.querySelector('span:first-child').textContent = '↑';
-    } else {
-        yieldCard.classList.remove('positive');
-        yieldCard.classList.add('negative');
-        yieldChange.classList.remove('positive');
-        yieldChange.classList.add('negative');
-        yieldChange.querySelector('span:first-child').textContent = '↓';
-    }
-    
-    // Update best fund
-    if (bestFund) {
-        const shortName = bestFund.name.length > 50 
-            ? bestFund.name.substring(0, 50) + '...' 
-            : bestFund.name;
-        document.getElementById('kpiValueBestFund').textContent = shortName;
-        document.getElementById('kpiBestFundYield').textContent = 
-            `Nejvyšší výnos: ${bestYield.toFixed(2)}%`;
-    }
+  });
+
+  // Animate numbers with count-up effect
+  animateValue('kpiValueInvestment', 0, totalInvestment, 1000, true);
+  animateValue('kpiValueCurrent', 0, totalValue, 1000, true);
+  animateValue('kpiValueYield', 0, totalYield, 1000, false);
+
+  // Update profit amount
+  document.getElementById('kpiProfitAmount').textContent =
+    (totalProfit >= 0 ? '+' : '') + totalProfit.toLocaleString('cs-CZ') + ' Kč';
+
+  // Update yield card styling
+  const yieldCard = document.getElementById('kpiTotalYield');
+  const yieldChange = document.getElementById('kpiChangeYield');
+  if (totalYield >= 0) {
+    yieldCard.classList.remove('negative');
+    yieldCard.classList.add('positive');
+    yieldChange.classList.remove('negative');
+    yieldChange.classList.add('positive');
+    yieldChange.querySelector('span:first-child').textContent = '↑';
+  } else {
+    yieldCard.classList.remove('positive');
+    yieldCard.classList.add('negative');
+    yieldChange.classList.remove('positive');
+    yieldChange.classList.add('negative');
+    yieldChange.querySelector('span:first-child').textContent = '↓';
+  }
+
+  // Update best fund
+  if (bestFund) {
+    const shortName =
+      bestFund.name.length > 50 ? bestFund.name.substring(0, 50) + '...' : bestFund.name;
+    document.getElementById('kpiValueBestFund').textContent = shortName;
+    document.getElementById('kpiBestFundYield').textContent =
+      `Nejvyšší výnos: ${bestYield.toFixed(2)}%`;
+  }
 }
 
 // Animate number count-up effect
 function animateValue(elementId, start, end, duration, isCurrency = false) {
-    const element = document.getElementById(elementId);
-    const range = end - start;
-    const increment = range / (duration / 16); // 60fps
-    let current = start;
-    
-    const timer = setInterval(() => {
-        current += increment;
-        if ((increment > 0 && current >= end) || (increment < 0 && current <= end)) {
-            current = end;
-            clearInterval(timer);
-        }
-        
-        if (isCurrency) {
-            element.textContent = Math.round(current).toLocaleString('cs-CZ') + ' Kč';
-        } else {
-            const prefix = current >= 0 ? '+' : '';
-            element.textContent = prefix + current.toFixed(2) + '%';
-        }
-    }, 16);
+  const element = document.getElementById(elementId);
+  const range = end - start;
+  const increment = range / (duration / 16); // 60fps
+  let current = start;
+
+  const timer = setInterval(() => {
+    current += increment;
+    if ((increment > 0 && current >= end) || (increment < 0 && current <= end)) {
+      current = end;
+      clearInterval(timer);
+    }
+
+    if (isCurrency) {
+      element.textContent = Math.round(current).toLocaleString('cs-CZ') + ' Kč';
+    } else {
+      const prefix = current >= 0 ? '+' : '';
+      element.textContent = prefix + current.toFixed(2) + '%';
+    }
+  }, 16);
 }
 
 // Funkce pro aktualizaci seznamu fondů
 function updateFondList() {
-    fondList.innerHTML = `
+  fondList.innerHTML = `
         <table class="fond-table">
             <thead>
                 <tr>
@@ -507,7 +506,9 @@ function updateFondList() {
                 </tr>
             </thead>
             <tbody>
-                ${portfolioData.map((item, index) => `
+                ${portfolioData
+                  .map(
+                    (item, index) => `
                     <tr>
                         <td><input type="text" class="inline-edit" value="${item.name}" onchange="updateFondData(${index}, 'name', this.value)"></td>
                         <td><input type="text" class="inline-edit" value="${item.producer}" onchange="updateFondData(${index}, 'producer', this.value)"></td>
@@ -517,7 +518,9 @@ function updateFondList() {
                             <button class="delete-btn" onclick="deleteFond(${index})">Smazat</button>
                         </td>
                     </tr>
-                `).join('')}
+                `
+                  )
+                  .join('')}
             </tbody>
         </table>
     `;
@@ -525,38 +528,38 @@ function updateFondList() {
 
 // Přidat tyto nové funkce
 function updateFondData(index, field, value) {
-    if (field === 'investment' || field === 'value') {
-        value = parseFloat(value) || 0;
-    }
-    portfolioData[index][field] = value;
-    
-    // Save to localStorage
-    storage.saveData(portfolioData);
+  if (field === 'investment' || field === 'value') {
+    value = parseFloat(value) || 0;
+  }
+  portfolioData[index][field] = value;
+
+  // Save to localStorage
+  storage.saveData(portfolioData);
 }
 
 function deleteFond(index) {
-    portfolioData.splice(index, 1);
-    updateFondList();
+  portfolioData.splice(index, 1);
+  updateFondList();
 }
 
 // ==================== APP INITIALIZATION ====================
 // Initialize app when DOM is ready
 function initializeApp() {
-    // Initialize DOM references
-    initializeDOMReferences();
-    
-    // Only proceed if critical elements exist
-    if (!clientForm) {
-        console.warn('⚠️ App initialization delayed - DOM not ready');
-        return setTimeout(initializeApp, 100);
-    }
+  // Initialize DOM references
+  initializeDOMReferences();
 
-    // Event listener pro formulář se jménem klienta
-    clientForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        clientName = document.getElementById('clientName').value;
-        advisorName = document.getElementById('advisorName').value;
-        advisorEmail = document.getElementById('advisorEmail').value;
+  // Only proceed if critical elements exist
+  if (!clientForm) {
+    console.warn('⚠️ App initialization delayed - DOM not ready');
+    return setTimeout(initializeApp, 100);
+  }
+
+  // Event listener pro formulář se jménem klienta
+  clientForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    clientName = document.getElementById('clientName').value;
+    advisorName = document.getElementById('advisorName').value;
+    advisorEmail = document.getElementById('advisorEmail').value;
 
     // Save client info
     storage.saveClient({ clientName, advisorName, advisorEmail });
@@ -566,122 +569,122 @@ function initializeApp() {
     document.getElementById('portfolioCard').style.display = 'block';
     document.getElementById('fondListCard').style.display = 'block';
     document.getElementById('clientNameDisplay').textContent = clientName;
-    
+
     // Show dashboard if data exists
     if (portfolioData.length > 0) {
-        dashboard.style.display = 'grid';
-        updateDashboard();
+      dashboard.style.display = 'grid';
+      updateDashboard();
     }
 
     // Initialize color picker after showing the portfolio card
     initializeColorPicker();
-    
+
     // Start autosave
     storage.startAutosave(() => {
-        storage.saveData(portfolioData);
-        const display = document.getElementById('lastSaveDisplay');
-        if (display) {
-            display.style.animation = 'pulse 0.5s ease-in-out';
-            setTimeout(() => {
-                if (display) display.style.animation = '';
-            }, 500);
-        }
+      storage.saveData(portfolioData);
+      const display = document.getElementById('lastSaveDisplay');
+      if (display) {
+        display.style.animation = 'pulse 0.5s ease-in-out';
+        setTimeout(() => {
+          if (display) display.style.animation = '';
+        }, 500);
+      }
     });
-    
-    showToast('success', 'Vítejte!', `Portfolio pro ${clientName} je připraveno`);
-});
 
-function initializeColorPicker() {
+    showToast('success', 'Vítejte!', `Portfolio pro ${clientName} je připraveno`);
+  });
+
+  function initializeColorPicker() {
     const buttons = document.querySelectorAll('.scheme-button');
-    
-    buttons.forEach(button => {
-        button.addEventListener('click', function() {
-            // Remove active class from all buttons
-            buttons.forEach(btn => btn.classList.remove('active'));
-            
-            // Add active class to clicked button
-            this.classList.add('active');
-            
-            // Set the color scheme based on the clicked button
-            if (this.classList.contains('blue-scheme')) window.selectedColorScheme = 'blue';
-            if (this.classList.contains('red-scheme')) window.selectedColorScheme = 'red';
-            if (this.classList.contains('green-scheme')) window.selectedColorScheme = 'green';
-            if (this.classList.contains('yellow-scheme')) window.selectedColorScheme = 'yellow';
-            
-            console.log('Selected new color scheme:', window.selectedColorScheme);
-        });
+
+    buttons.forEach((button) => {
+      button.addEventListener('click', function () {
+        // Remove active class from all buttons
+        buttons.forEach((btn) => btn.classList.remove('active'));
+
+        // Add active class to clicked button
+        this.classList.add('active');
+
+        // Set the color scheme based on the clicked button
+        if (this.classList.contains('blue-scheme')) window.selectedColorScheme = 'blue';
+        if (this.classList.contains('red-scheme')) window.selectedColorScheme = 'red';
+        if (this.classList.contains('green-scheme')) window.selectedColorScheme = 'green';
+        if (this.classList.contains('yellow-scheme')) window.selectedColorScheme = 'yellow';
+
+        console.log('Selected new color scheme:', window.selectedColorScheme);
+      });
     });
-    
+
     // Set default color scheme
     const blueButton = document.querySelector('.blue-scheme');
     if (blueButton) {
-        blueButton.classList.add('active');
-        window.selectedColorScheme = 'blue';
+      blueButton.classList.add('active');
+      window.selectedColorScheme = 'blue';
     }
-}
+  }
 
-// Event listener pro formulář
-portfolioForm.addEventListener('submit', function(e) {
+  // Event listener pro formulář
+  portfolioForm.addEventListener('submit', function (e) {
     e.preventDefault();
-    
+
     const fondData = {
-        name: document.getElementById('fondName').value.trim(),
-        producer: document.getElementById('producer').value.trim(),
-        investment: parseSafeNumber(document.getElementById('investment').value),
-        investmentDate: document.getElementById('investmentDate').value,
-        value: parseSafeNumber(document.getElementById('value').value)
+      name: document.getElementById('fondName').value.trim(),
+      producer: document.getElementById('producer').value.trim(),
+      investment: parseSafeNumber(document.getElementById('investment').value),
+      investmentDate: document.getElementById('investmentDate').value,
+      value: parseSafeNumber(document.getElementById('value').value),
     };
 
     // Validate data with improved validation
     const errors = validateFondData(fondData);
     if (errors.length > 0) {
-        showToast('error', 'Validační chyba', errors.join('<br>'));
-        return;
+      showToast('error', 'Validační chyba', errors.join('<br>'));
+      return;
     }
 
     try {
-        // Přidáme nový fond do pole
-        portfolioData.push(fondData);
-        
-        // Přidáme fond do localStorage, pokud tam ještě není
-        addNewFund(fondData.name);
-        
-        // Aktualizujeme tabulku a dashboard
+      // Přidáme nový fond do pole
+      portfolioData.push(fondData);
+
+      // Přidáme fond do localStorage, pokud tam ještě není
+      addNewFund(fondData.name);
+
+      // Aktualizujeme tabulku a dashboard
+      updateFondTable();
+      updateDashboard();
+
+      // Save to localStorage
+      if (!storage.saveData(portfolioData)) {
+        // If save failed, remove the added item
+        portfolioData.pop();
         updateFondTable();
         updateDashboard();
-        
-        // Save to localStorage
-        if (!storage.saveData(portfolioData)) {
-            // If save failed, remove the added item
-            portfolioData.pop();
-            updateFondTable();
-            updateDashboard();
-            return;
-        }
-        
-        // Vyčistíme formulář
-        document.getElementById('portfolioForm').reset();
-        
-        // Zobrazíme kartu se seznamem fondů
-        document.getElementById('fondListCard').style.display = 'block';
-        
-        // Show success toast
-        showToast('success', 'Fond přidán', `${fondData.name} byl úspěšně přidán do portfolia`);
-    } catch (error) {
-        console.error('Error adding fond:', error);
-        showToast('error', 'Chyba', 'Nepodařilo se přidat fond. Zkuste to prosím znovu.');
-    }
-});
+        return;
+      }
 
-function updateFondTable() {
+      // Vyčistíme formulář
+      document.getElementById('portfolioForm').reset();
+
+      // Zobrazíme kartu se seznamem fondů
+      document.getElementById('fondListCard').style.display = 'block';
+
+      // Show success toast
+      showToast('success', 'Fond přidán', `${fondData.name} byl úspěšně přidán do portfolia`);
+    } catch (error) {
+      console.error('Error adding fond:', error);
+      showToast('error', 'Chyba', 'Nepodařilo se přidat fond. Zkuste to prosím znovu.');
+    }
+  });
+
+  function updateFondTable() {
     const tbody = document.getElementById('fondTableBody');
     const thead = document.getElementById('fondTableHead');
     tbody.innerHTML = '';
-    
+
     if (viewMode === 'funds') {
-        // Hlavička pro fondy
-        if (thead) {
-            thead.innerHTML = `<tr>
+      // Hlavička pro fondy
+      if (thead) {
+        thead.innerHTML = `<tr>
                 <th class="sortable" data-column="name">Název fondu</th>
                 <th class="sortable" data-column="producer">Producent</th>
                 <th class="sortable" data-column="investmentDate">Datum investice</th>
@@ -689,27 +692,27 @@ function updateFondTable() {
                 <th class="sortable" data-column="value">Aktuální hodnota</th>
                 <th>Akce</th>
             </tr>`;
-        }
-        
-        // Apply filters and sorting
-        const filteredData = filterAndSortData(portfolioData);
-        
-        // Show message if no results
-        if (filteredData.length === 0) {
-            const row = document.createElement('tr');
-            row.innerHTML = `<td colspan="6" style="text-align: center; padding: 40px; color: var(--text-secondary);">
+      }
+
+      // Apply filters and sorting
+      const filteredData = filterAndSortData(portfolioData);
+
+      // Show message if no results
+      if (filteredData.length === 0) {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td colspan="6" style="text-align: center; padding: 40px; color: var(--text-secondary);">
                 ${searchQuery ? '🔍 Žádné výsledky pro "' + searchQuery + '"' : 'Žádné fondy'}
             </td>`;
-            tbody.appendChild(row);
-            return;
-        }
-        
-        // Render filtered and sorted data
-        filteredData.forEach((fond) => {
-            // Find original index for operations
-            const originalIndex = portfolioData.indexOf(fond);
-            const row = document.createElement('tr');
-            row.innerHTML = `
+        tbody.appendChild(row);
+        return;
+      }
+
+      // Render filtered and sorted data
+      filteredData.forEach((fond) => {
+        // Find original index for operations
+        const originalIndex = portfolioData.indexOf(fond);
+        const row = document.createElement('tr');
+        row.innerHTML = `
                 <td><input type="text" class="inline-edit" value="${fond.name}" data-index="${originalIndex}" data-field="name"></td>
                 <td><input type="text" class="inline-edit" value="${fond.producer}" data-index="${originalIndex}" data-field="producer"></td>
                 <td><input type="date" class="inline-edit" value="${fond.investmentDate && fond.investmentDate !== '1970-01-01' ? fond.investmentDate : ''}" data-index="${originalIndex}" data-field="investmentDate"></td>
@@ -717,173 +720,254 @@ function updateFondTable() {
                 <td><input type="number" class="inline-edit" value="${fond.value}" data-index="${originalIndex}" data-field="value"></td>
                 <td><button class="delete-btn" onclick="deleteFond(${originalIndex})">Smazat</button></td>
             `;
-            tbody.appendChild(row);
+        tbody.appendChild(row);
+      });
+
+      // Přidáme event listener pro změny v inputech
+      document.querySelectorAll('.inline-edit').forEach((input) => {
+        input.addEventListener('change', function () {
+          const index = parseInt(this.dataset.index);
+          const field = this.dataset.field;
+          let value;
+
+          if (field === 'name' || field === 'producer') {
+            value = this.value;
+          } else if (field === 'investmentDate') {
+            // Pro datum input - už je ve správném formátu yyyy-mm-dd
+            value = this.value;
+          } else {
+            value = parseFloat(this.value);
+          }
+
+          portfolioData[index][field] = value;
+          updateDashboard(); // Update dashboard when data changes
+          showToast('info', 'Změna uložena', 'Data byla aktualizována');
         });
-        
-        // Přidáme event listener pro změny v inputech
-        document.querySelectorAll('.inline-edit').forEach(input => {
-            input.addEventListener('change', function() {
-                const index = parseInt(this.dataset.index);
-                const field = this.dataset.field;
-                let value;
-                
-                if (field === 'name' || field === 'producer') {
-                    value = this.value;
-                } else if (field === 'investmentDate') {
-                    // Pro datum input - už je ve správném formátu yyyy-mm-dd
-                    value = this.value;
-                } else {
-                    value = parseFloat(this.value);
-                }
-                
-                portfolioData[index][field] = value;
-                updateDashboard(); // Update dashboard when data changes
-                showToast('info', 'Změna uložena', 'Data byla aktualizována');
-            });
-        });
+      });
     } else if (viewMode === 'producers') {
-        // Hlavička pro producenty
-        if (thead) {
-            thead.innerHTML = `<tr>
+      // Hlavička pro producenty
+      if (thead) {
+        thead.innerHTML = `<tr>
                 <th>Producent</th>
                 <th>Čistá investice</th>
                 <th>Aktuální hodnota</th>
                 <th>Zisk/Ztráta</th>
                 <th>Výnos %</th>
             </tr>`;
+      }
+      // Agregace podle producenta
+      const producerMap = {};
+      portfolioData.forEach((item) => {
+        if (!producerMap[item.producer]) {
+          producerMap[item.producer] = { investment: 0, value: 0 };
         }
-        // Agregace podle producenta
-        const producerMap = {};
-        portfolioData.forEach(item => {
-            if (!producerMap[item.producer]) {
-                producerMap[item.producer] = { investment: 0, value: 0 };
-            }
-            producerMap[item.producer].investment += Number(item.investment);
-            producerMap[item.producer].value += Number(item.value);
-        });
-        const rows = Object.entries(producerMap).map(([producer, data]) => {
-            const profit = data.value - data.investment;
-            const yieldPercent = data.investment !== 0 ? ((profit / data.investment) * 100).toFixed(2) : '0.00';
-            return {
-                producer,
-                investment: data.investment,
-                value: data.value,
-                profit,
-                yieldPercent
-            };
-        });
-        rows.forEach(rowData => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
+        producerMap[item.producer].investment += Number(item.investment);
+        producerMap[item.producer].value += Number(item.value);
+      });
+      const rows = Object.entries(producerMap).map(([producer, data]) => {
+        const profit = data.value - data.investment;
+        const yieldPercent =
+          data.investment !== 0 ? ((profit / data.investment) * 100).toFixed(2) : '0.00';
+        return {
+          producer,
+          investment: data.investment,
+          value: data.value,
+          profit,
+          yieldPercent,
+        };
+      });
+      rows.forEach((rowData) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
                 <td>${rowData.producer}</td>
                 <td>${rowData.investment.toLocaleString('cs-CZ')} Kč</td>
                 <td>${rowData.value.toLocaleString('cs-CZ')} Kč</td>
                 <td class="${rowData.profit >= 0 ? 'positive' : 'negative'}">${rowData.profit.toLocaleString('cs-CZ')} Kč</td>
                 <td class="${rowData.yieldPercent >= 0 ? 'positive' : 'negative'}">${rowData.yieldPercent}%</td>
             `;
-            tbody.appendChild(row);
-        });
+        tbody.appendChild(row);
+      });
     }
-}
+  }
 
-function deleteFond(index) {
+  function deleteFond(index) {
     const fondName = portfolioData[index].name;
-    
-    showConfirmDialog(
-        'Odstranit fond?',
-        `Opravdu chcete odstranit fond "${fondName}"? Tato akce je nevratná.`,
-        () => {
-            // Confirmed - delete the fund
-            portfolioData.splice(index, 1);
-            updateFondTable();
-            updateDashboard();
-            
-            // Save to localStorage
-            storage.saveData(portfolioData);
-            
-            // Skryjeme tabulku a dashboard, pokud není žádný fond
-            if (portfolioData.length === 0) {
-                document.getElementById('fondListCard').style.display = 'none';
-                dashboard.style.display = 'none';
-            }
-            
-            // Show toast
-            showToast('info', 'Fond odebrán', `${fondName.substring(0, 40)} byl odstraněn z portfolia`);
-        }
-    );
-}
 
-// Event listener pro generování reportu
-generateReportBtn.addEventListener('click', function() {
+    showConfirmDialog(
+      'Odstranit fond?',
+      `Opravdu chcete odstranit fond "${fondName}"? Tato akce je nevratná.`,
+      () => {
+        // Confirmed - delete the fund
+        portfolioData.splice(index, 1);
+        updateFondTable();
+        updateDashboard();
+
+        // Save to localStorage
+        storage.saveData(portfolioData);
+
+        // Skryjeme tabulku a dashboard, pokud není žádný fond
+        if (portfolioData.length === 0) {
+          document.getElementById('fondListCard').style.display = 'none';
+          dashboard.style.display = 'none';
+        }
+
+        // Show toast
+        showToast('info', 'Fond odebrán', `${fondName.substring(0, 40)} byl odstraněn z portfolia`);
+      }
+    );
+  }
+
+  // Event listener pro generování reportu
+  generateReportBtn.addEventListener('click', function () {
     if (portfolioData.length === 0) {
-        showToast('warning', 'Žádná data', 'Nejprve přidejte nějaké fondy do portfolia.');
-        return;
+      showToast('warning', 'Žádná data', 'Nejprve přidejte nějaké fondy do portfolia.');
+      return;
     }
-    
+
     // Generování HTML reportu
     generatePortfolioHTML(portfolioData);
-    
+
     // Generování CSV
     generateCSV(portfolioData);
-    
+
     // Show success toast
     showToast('success', 'Report vygenerován', 'HTML a CSV soubory byly úspěšně vytvořeny');
-});
+  });
 
-// Excel export button listener
-const exportExcelBtn = document.getElementById('exportExcel');
-if (exportExcelBtn) {
-    exportExcelBtn.addEventListener('click', function() {
-        if (portfolioData.length === 0) {
-            showToast('warning', 'Žádná data', 'Nejprve přidejte nějaké fondy do portfolia.');
-            return;
-        }
-        
-        // Export as CSV (can be opened in Excel)
-        generateCSV(portfolioData);
-        showToast('success', 'Export dokončen', 'Data byla exportována do CSV souboru');
+  // Excel export button listener
+  const exportExcelBtn = document.getElementById('exportExcel');
+  if (exportExcelBtn) {
+    exportExcelBtn.addEventListener('click', function () {
+      if (portfolioData.length === 0) {
+        showToast('warning', 'Žádná data', 'Nejprve přidejte nějaké fondy do portfolia.');
+        return;
+      }
+
+      // Export as CSV (can be opened in Excel)
+      generateCSV(portfolioData);
+      showToast('success', 'Export dokončen', 'Data byla exportována do CSV souboru');
     });
-}
+  }
 
-function generatePortfolioHTML(portfolioData) {
+  function generatePortfolioHTML(portfolioData) {
     // Get the currently selected color scheme
     const selectedColor = window.selectedColorScheme || 'blue';
-    
+
     // Check if currency switch is enabled
     const currencySwitch = document.getElementById('currencySwitch');
     const useEuros = currencySwitch ? currencySwitch.checked : false;
     const currencySymbol = useEuros ? '€' : 'Kč';
-    
+
     // Define color schemes for different elements
     const colorSchemes = {
-        blue: {
-            primary: '#0d1b2a',
-            colors: ['#1e3a8a', '#3b82f6', '#60a5fa', '#93c5fd', '#dbeafe',
-                    '#1e40af', '#2563eb', '#3b82f6', '#60a5fa', '#93c5fd'],
-            negativeColors: ['#c62828', '#d32f2f', '#e53935', '#f44336', '#ef5350',
-                    '#e57373', '#ef9a9a', '#ffcdd2', '#ff8a80', '#ff5252']
-        },
-        red: {
-            primary: '#c0392b',
-            colors: ['#c0392b', '#cd6155', '#d98880', '#e6b0aa', '#f2d7d5',
-                    '#943126', '#8c2d1c', '#7b241c', '#641e16', '#5c1916'],
-            negativeColors: ['#c0392b', '#cd6155', '#d98880', '#e6b0aa', '#f2d7d5',
-                    '#943126', '#8c2d1c', '#7b241c', '#641e16', '#5c1916']
-        },
-        green: {
-            primary: '#27ae60',
-            colors: ['#27ae60', '#2ecc71', '#58d68d', '#82e0aa', '#abebc6',
-                    '#196f3d', '#145a32', '#186a3b', '#0b5345', '#145a32'],
-            negativeColors: ['#c0392b', '#cd6155', '#d98880', '#e6b0aa', '#f2d7d5',
-                    '#943126', '#8c2d1c', '#7b241c', '#641e16', '#5c1916']
-        },
-        yellow: {
-            primary: '#f39c12',
-            colors: ['#f39c12', '#f5b041', '#f8c471', '#fad7a0', '#fdebd0',
-                    '#b9770e', '#9c640c', '#7e5109', '#634205', '#493303'],
-            negativeColors: ['#c0392b', '#cd6155', '#d98880', '#e6b0aa', '#f2d7d5',
-                    '#943126', '#8c2d1c', '#7b241c', '#641e16', '#5c1916']
-        }
+      blue: {
+        primary: '#0d1b2a',
+        colors: [
+          '#1e3a8a',
+          '#3b82f6',
+          '#60a5fa',
+          '#93c5fd',
+          '#dbeafe',
+          '#1e40af',
+          '#2563eb',
+          '#3b82f6',
+          '#60a5fa',
+          '#93c5fd',
+        ],
+        negativeColors: [
+          '#c62828',
+          '#d32f2f',
+          '#e53935',
+          '#f44336',
+          '#ef5350',
+          '#e57373',
+          '#ef9a9a',
+          '#ffcdd2',
+          '#ff8a80',
+          '#ff5252',
+        ],
+      },
+      red: {
+        primary: '#c0392b',
+        colors: [
+          '#c0392b',
+          '#cd6155',
+          '#d98880',
+          '#e6b0aa',
+          '#f2d7d5',
+          '#943126',
+          '#8c2d1c',
+          '#7b241c',
+          '#641e16',
+          '#5c1916',
+        ],
+        negativeColors: [
+          '#c0392b',
+          '#cd6155',
+          '#d98880',
+          '#e6b0aa',
+          '#f2d7d5',
+          '#943126',
+          '#8c2d1c',
+          '#7b241c',
+          '#641e16',
+          '#5c1916',
+        ],
+      },
+      green: {
+        primary: '#27ae60',
+        colors: [
+          '#27ae60',
+          '#2ecc71',
+          '#58d68d',
+          '#82e0aa',
+          '#abebc6',
+          '#196f3d',
+          '#145a32',
+          '#186a3b',
+          '#0b5345',
+          '#145a32',
+        ],
+        negativeColors: [
+          '#c0392b',
+          '#cd6155',
+          '#d98880',
+          '#e6b0aa',
+          '#f2d7d5',
+          '#943126',
+          '#8c2d1c',
+          '#7b241c',
+          '#641e16',
+          '#5c1916',
+        ],
+      },
+      yellow: {
+        primary: '#f39c12',
+        colors: [
+          '#f39c12',
+          '#f5b041',
+          '#f8c471',
+          '#fad7a0',
+          '#fdebd0',
+          '#b9770e',
+          '#9c640c',
+          '#7e5109',
+          '#634205',
+          '#493303',
+        ],
+        negativeColors: [
+          '#c0392b',
+          '#cd6155',
+          '#d98880',
+          '#e6b0aa',
+          '#f2d7d5',
+          '#943126',
+          '#8c2d1c',
+          '#7b241c',
+          '#641e16',
+          '#5c1916',
+        ],
+      },
     };
 
     const selectedScheme = colorSchemes[selectedColor];
@@ -899,67 +983,70 @@ function generatePortfolioHTML(portfolioData) {
     let totalProfit = 0;
     let totalYield = 0;
     if (viewMode === 'producers') {
-        // Agregace podle producenta
-        const producerMap = {};
-        portfolioData.forEach(item => {
-            if (!producerMap[item.producer]) {
-                producerMap[item.producer] = { investment: 0, value: 0 };
-            }
-            producerMap[item.producer].investment += Number(item.investment);
-            producerMap[item.producer].value += Number(item.value);
-        });
-        const rows = Object.entries(producerMap).map(([producer, data]) => {
-            const profit = data.value - data.investment;
-            const yieldPercent = data.investment !== 0 ? ((profit / data.investment) * 100).toFixed(2) : '0.00';
-            return {
-                producer,
-                investment: data.investment,
-                value: data.value,
-                profit,
-                yieldPercent
-            };
-        });
-        tableHeader = `<tr>
+      // Agregace podle producenta
+      const producerMap = {};
+      portfolioData.forEach((item) => {
+        if (!producerMap[item.producer]) {
+          producerMap[item.producer] = { investment: 0, value: 0 };
+        }
+        producerMap[item.producer].investment += Number(item.investment);
+        producerMap[item.producer].value += Number(item.value);
+      });
+      const rows = Object.entries(producerMap).map(([producer, data]) => {
+        const profit = data.value - data.investment;
+        const yieldPercent =
+          data.investment !== 0 ? ((profit / data.investment) * 100).toFixed(2) : '0.00';
+        return {
+          producer,
+          investment: data.investment,
+          value: data.value,
+          profit,
+          yieldPercent,
+        };
+      });
+      tableHeader = `<tr>
             <th>Producent</th>
             <th>Čistá investice</th>
             <th>Aktuální hodnota</th>
             <th>Zisk/Ztráta</th>
             <th>Výnos %</th>
         </tr>`;
-        // Agregace podle producenta
-        const producerMapForReport = {};
-        portfolioData.forEach(item => {
-            if (!producerMapForReport[item.producer]) {
-                producerMapForReport[item.producer] = { investment: 0, value: 0 };
-            }
-            producerMapForReport[item.producer].investment += Number(item.investment);
-            producerMapForReport[item.producer].value += Number(item.value);
-        });
-        const producerRows = Object.entries(producerMapForReport).map(([producer, data]) => {
-            const profit = data.value - data.investment;
-            const yieldPercent = data.investment !== 0 ? ((profit / data.investment) * 100).toFixed(2) : '0.00';
-            return {
-                producer,
-                investment: data.investment,
-                value: data.value,
-                profit,
-                yieldPercent
-            };
-        });
-        producerRows.forEach(rowData => {
-            tableRows += `<tr>
+      // Agregace podle producenta
+      const producerMapForReport = {};
+      portfolioData.forEach((item) => {
+        if (!producerMapForReport[item.producer]) {
+          producerMapForReport[item.producer] = { investment: 0, value: 0 };
+        }
+        producerMapForReport[item.producer].investment += Number(item.investment);
+        producerMapForReport[item.producer].value += Number(item.value);
+      });
+      const producerRows = Object.entries(producerMapForReport).map(([producer, data]) => {
+        const profit = data.value - data.investment;
+        const yieldPercent =
+          data.investment !== 0 ? ((profit / data.investment) * 100).toFixed(2) : '0.00';
+        return {
+          producer,
+          investment: data.investment,
+          value: data.value,
+          profit,
+          yieldPercent,
+        };
+      });
+      producerRows.forEach((rowData) => {
+        tableRows += `<tr>
                 <td>${rowData.producer}</td>
                 <td>${rowData.investment.toLocaleString('cs-CZ')} ${currencySymbol}</td>
                 <td>${rowData.value.toLocaleString('cs-CZ')} ${currencySymbol}</td>
                 <td class="${rowData.profit >= 0 ? 'positive' : 'negative'}">${rowData.profit.toLocaleString('cs-CZ')} ${currencySymbol}</td>
                 <td class="${rowData.yieldPercent >= 0 ? 'positive' : 'negative'}">${rowData.yieldPercent}%</td>
             </tr>`;
-            totalInvestment += rowData.investment;
-            totalValue += rowData.value;
-            totalProfit += rowData.profit;
-        });
-        totalYield = totalInvestment !== 0 ? ((totalProfit / totalInvestment) * 100).toFixed(2) : '0.00';
-        tableRows += `<tr class="total-row">
+        totalInvestment += rowData.investment;
+        totalValue += rowData.value;
+        totalProfit += rowData.profit;
+      });
+      totalYield =
+        totalInvestment !== 0 ? ((totalProfit / totalInvestment) * 100).toFixed(2) : '0.00';
+      tableRows += `<tr class="total-row">
             <td>CELKEM</td>
             <td>${totalInvestment.toLocaleString('cs-CZ')} ${currencySymbol}</td>
             <td>${totalValue.toLocaleString('cs-CZ')} ${currencySymbol}</td>
@@ -967,8 +1054,8 @@ function generatePortfolioHTML(portfolioData) {
             <td class="positive">${totalYield}%</td>
         </tr>`;
     } else {
-        // Původní tabulka podle fondů
-        tableHeader = `<tr>
+      // Původní tabulka podle fondů
+      tableHeader = `<tr>
             <th>Fond</th>
             <th>Producent</th>
             <th>Datum</th>
@@ -978,57 +1065,69 @@ function generatePortfolioHTML(portfolioData) {
             <th>Výnos %</th>
             <th>Výnos % p.a.</th>
         </tr>`;
-        portfolioData.forEach(item => {
-            const investment = Number(item.investment);
-            const value = Number(item.value);
-            const profit = value - investment;
-            const yield = investment !== 0 ? ((profit / investment) * 100).toFixed(2) : '0.00';
-            const currentDate = new Date().toLocaleDateString('cs-CZ');
-            
-            // Výpočet výnosu p.a. na základě doby držení
-            let yieldPA = '0.00';
-            if (item.investmentDate && item.investmentDate !== '' && item.investmentDate !== '1970-01-01' && investment !== 0) {
-                try {
-                    const investmentDate = new Date(item.investmentDate);
-                    const currentDateObj = new Date();
-                    
-                    // Kontrola, že datum je platné
-                    if (investmentDate.getTime() && investmentDate < currentDateObj) {
-                        const daysHeld = Math.max(1, Math.floor((currentDateObj - investmentDate) / (1000 * 60 * 60 * 24)));
-                        const yearsHeld = daysHeld / 365;
-                        
-                        if (yearsHeld > 0) {
-                            const annualizedReturn = Math.pow(value / investment, 1 / yearsHeld) - 1;
-                            yieldPA = (annualizedReturn * 100).toFixed(2);
-                        } else {
-                            yieldPA = yield; // Pokud je investice mladší než rok, použijeme běžný výnos
-                        }
-                    } else {
-                        yieldPA = yield; // Neplatné datum
-                    }
-                } catch (e) {
-                    yieldPA = yield; // Chyba při parsování data
-                }
+      portfolioData.forEach((item) => {
+        const investment = Number(item.investment);
+        const value = Number(item.value);
+        const profit = value - investment;
+        const yieldPercent = investment !== 0 ? ((profit / investment) * 100).toFixed(2) : '0.00';
+        const currentDate = new Date().toLocaleDateString('cs-CZ');
+
+        // Výpočet výnosu p.a. na základě doby držení
+        let yieldPA = '0.00';
+        if (
+          item.investmentDate &&
+          item.investmentDate !== '' &&
+          item.investmentDate !== '1970-01-01' &&
+          investment !== 0
+        ) {
+          try {
+            const investmentDate = new Date(item.investmentDate);
+            const currentDateObj = new Date();
+
+            // Kontrola, že datum je platné
+            if (investmentDate.getTime() && investmentDate < currentDateObj) {
+              const daysHeld = Math.max(
+                1,
+                Math.floor((currentDateObj - investmentDate) / (1000 * 60 * 60 * 24))
+              );
+              const yearsHeld = daysHeld / 365;
+
+              if (yearsHeld > 0) {
+                const annualizedReturn = Math.pow(value / investment, 1 / yearsHeld) - 1;
+                yieldPA = (annualizedReturn * 100).toFixed(2);
+              } else {
+                yieldPA = yield; // Pokud je investice mladší než rok, použijeme běžný výnos
+              }
             } else {
-                yieldPA = yield; // Fallback na běžný výnos
+              yieldPA = yield; // Neplatné datum
             }
-            let displayDate;
-            if (item.investmentDate && item.investmentDate !== '' && item.investmentDate !== '1970-01-01') {
-                try {
-                    // Konverze z ISO formátu (yyyy-mm-dd) na český formát
-                    const dateObj = new Date(item.investmentDate + 'T00:00:00'); // Přidáme čas, aby se předešlo problémům s časovými pásmy
-                    if (dateObj.getTime() && !isNaN(dateObj.getTime())) {
-                        displayDate = dateObj.toLocaleDateString('cs-CZ');
-                    } else {
-                        displayDate = currentDate;
-                    }
-                } catch (e) {
-                    displayDate = currentDate;
-                }
+          } catch (e) {
+            yieldPA = yield; // Chyba při parsování data
+          }
+        } else {
+          yieldPA = yield; // Fallback na běžný výnos
+        }
+        let displayDate;
+        if (
+          item.investmentDate &&
+          item.investmentDate !== '' &&
+          item.investmentDate !== '1970-01-01'
+        ) {
+          try {
+            // Konverze z ISO formátu (yyyy-mm-dd) na český formát
+            const dateObj = new Date(item.investmentDate + 'T00:00:00'); // Přidáme čas, aby se předešlo problémům s časovými pásmy
+            if (dateObj.getTime() && !isNaN(dateObj.getTime())) {
+              displayDate = dateObj.toLocaleDateString('cs-CZ');
             } else {
-                displayDate = currentDate;
+              displayDate = currentDate;
             }
-            tableRows += `<tr>
+          } catch (e) {
+            displayDate = currentDate;
+          }
+        } else {
+          displayDate = currentDate;
+        }
+        tableRows += `<tr>
                 <td>${item.name}</td>
                 <td>${item.producer}</td>
                 <td>${displayDate}</td>
@@ -1038,12 +1137,13 @@ function generatePortfolioHTML(portfolioData) {
                 <td data-value="${yield}" class="${yield >= 0 ? 'positive' : 'negative'}">${yield}%</td>
                 <td data-value="${yieldPA}" class="${yieldPA >= 0 ? 'positive' : 'negative'}">${yieldPA}%</td>
             </tr>`;
-            totalInvestment += investment;
-            totalValue += value;
-            totalProfit += profit;
-        });
-        totalYield = totalInvestment !== 0 ? ((totalProfit / totalInvestment) * 100).toFixed(2) : '0.00';
-        tableRows += `<tr class="total-row">
+        totalInvestment += investment;
+        totalValue += value;
+        totalProfit += profit;
+      });
+      totalYield =
+        totalInvestment !== 0 ? ((totalProfit / totalInvestment) * 100).toFixed(2) : '0.00';
+      tableRows += `<tr class="total-row">
             <td>CELKEM</td>
             <td>-</td>
             <td>-</td>
@@ -2269,17 +2369,17 @@ function generatePortfolioHTML(portfolioData) {
     a.download = 'portfolio-report.html';
     a.click();
     window.URL.revokeObjectURL(url);
-}
+  }
 
-// Make sure the color picker is initialized with a default selection
-document.addEventListener('DOMContentLoaded', function() {
+  // Make sure the color picker is initialized with a default selection
+  document.addEventListener('DOMContentLoaded', function () {
     // Select blue as default
     const defaultColor = document.querySelector('.color-option[data-color="blue"]');
     defaultColor.classList.add('selected');
-});
+  });
 
-// Add this HTML to the portfolioCard div through JavaScript
-const csvImportHTML = `
+  // Add this HTML to the portfolioCard div through JavaScript
+  const csvImportHTML = `
     <div class="form-group csv-import-section">
         <h4>Import dat z CSV</h4>
         <div class="csv-format-info">
@@ -2294,150 +2394,157 @@ const csvImportHTML = `
     </div>
 `;
 
-// Insert the CSV import section before the existing form
-portfolioForm.insertAdjacentHTML('beforebegin', csvImportHTML);
+  // Insert the CSV import section before the existing form
+  portfolioForm.insertAdjacentHTML('beforebegin', csvImportHTML);
 
-// Add event listener for the process CSV button
-document.getElementById('processCSV').addEventListener('click', function() {
+  // Add event listener for the process CSV button
+  document.getElementById('processCSV').addEventListener('click', function () {
     const fileInput = document.getElementById('csvFile');
     const file = fileInput.files[0];
-    
+
     if (!file) {
-        showToast('warning', 'Žádný soubor', 'Prosím, nejdříve vyberte CSV soubor');
-        return;
+      showToast('warning', 'Žádný soubor', 'Prosím, nejdříve vyberte CSV soubor');
+      return;
     }
 
     const reader = new FileReader();
-    
-    reader.onload = function(e) {
-        const text = e.target.result;
-        const rows = text.split('\n').filter(row => row.trim());
-        
-        // Skip header row if it exists
-        const startIndex = rows[0].toLowerCase().includes('název fondu') ? 1 : 0;
-        
-        let importedCount = 0;
-        let errorCount = 0;
-        
-        // Process each row
-        for (let i = startIndex; i < rows.length; i++) {
-            const row = rows[i];
-            
-            // Parse CSV row properly handling quoted fields
-            const columns = [];
-            let currentColumn = '';
-            let insideQuotes = false;
-            
-            for (let j = 0; j < row.length; j++) {
-                const char = row[j];
-                
-                if (char === '"') {
-                    insideQuotes = !insideQuotes;
-                } else if (char === ',' && !insideQuotes) {
-                    columns.push(currentColumn.trim());
-                    currentColumn = '';
-                } else {
-                    currentColumn += char;
-                }
-            }
-            columns.push(currentColumn.trim()); // Add the last column
-            
-            if (columns.length >= 5) {
-                const [name, producer, investmentDate, investment, value] = columns.map(col => col.replace(/^"|"$/g, ''));
-                const investmentNum = parseFloat(investment.replace(/\s/g, ''));
-                const valueNum = parseFloat(value.replace(/\s/g, ''));
-                
-                if (!isNaN(investmentNum) && !isNaN(valueNum)) {
-                    // Konverze data z různých formátů na ISO formát (yyyy-mm-dd)
-                    let formattedDate = '';
-                    if (investmentDate && investmentDate.trim() !== '') {
-                        try {
-                            // Zkusíme různé formáty data
-                            let dateObj;
-                            
-                            // Formát mm/dd/yyyy nebo mm-dd-yyyy
-                            if (investmentDate.includes('/') || investmentDate.includes('-')) {
-                                dateObj = new Date(investmentDate);
-                            } else {
-                                // Jiné formáty
-                                dateObj = new Date(investmentDate);
-                            }
-                            
-                            // Kontrola, že datum je platné
-                            if (dateObj.getTime() && !isNaN(dateObj.getTime())) {
-                                formattedDate = dateObj.toISOString().split('T')[0]; // yyyy-mm-dd
-                            }
-                        } catch (e) {
-                            console.warn(`Invalid date format: ${investmentDate}`);
-                        }
-                    }
-                    
-                    portfolioData.push({
-                        name: name,
-                        producer: producer,
-                        investmentDate: formattedDate,
-                        investment: investmentNum,
-                        value: valueNum
-                    });
-                    importedCount++;
-                } else {
-                    console.warn(`Skipping row ${i + 1}: Invalid numbers in investment or value`);
-                    errorCount++;
-                }
-            } else if (columns.length >= 4) {
-                // Fallback pro starý formát bez data investice
-                const [name, producer, investment, value] = columns.map(col => col.replace(/^"|"$/g, ''));
-                const investmentNum = parseFloat(investment.replace(/\s/g, ''));
-                const valueNum = parseFloat(value.replace(/\s/g, ''));
-                
-                if (!isNaN(investmentNum) && !isNaN(valueNum)) {
-                    portfolioData.push({
-                        name: name,
-                        producer: producer,
-                        investmentDate: '', // Prázdné datum pro starý formát
-                        investment: investmentNum,
-                        value: valueNum
-                    });
-                    importedCount++;
-                } else {
-                    console.warn(`Skipping row ${i + 1}: Invalid numbers in investment or value`);
-                    errorCount++;
-                }
-            } else {
-                console.warn(`Skipping row ${i + 1}: Invalid number of columns`);
-                errorCount++;
-            }
-        }
-        
-        // Update the table, dashboard and show it
-        updateFondTable();
-        updateDashboard();
-        document.getElementById('fondListCard').style.display = 'block';
-        
-        // Save imported data to localStorage
-        storage.saveData(portfolioData);
-        
-        // Clear the file input
-        fileInput.value = '';
-        
-        // Show success or warning message
-        if (importedCount > 0) {
-            showToast('success', 'Import dokončen', 
-                `Importováno ${importedCount} fondů${errorCount > 0 ? `, ${errorCount} řádků přeskočeno` : ''}`);
-        } else {
-            showToast('error', 'Import selhal', 'Nepodařilo se importovat žádná data');
-        }
-    };
-    
-    reader.onerror = function() {
-        showToast('error', 'Chyba čtení', 'Chyba při čtení souboru');
-    };
-    
-    reader.readAsText(file, 'UTF-8');
-});
 
-// Add these styles to your CSS
-const styles = `
+    reader.onload = function (e) {
+      const text = e.target.result;
+      const rows = text.split('\n').filter((row) => row.trim());
+
+      // Skip header row if it exists
+      const startIndex = rows[0].toLowerCase().includes('název fondu') ? 1 : 0;
+
+      let importedCount = 0;
+      let errorCount = 0;
+
+      // Process each row
+      for (let i = startIndex; i < rows.length; i++) {
+        const row = rows[i];
+
+        // Parse CSV row properly handling quoted fields
+        const columns = [];
+        let currentColumn = '';
+        let insideQuotes = false;
+
+        for (let j = 0; j < row.length; j++) {
+          const char = row[j];
+
+          if (char === '"') {
+            insideQuotes = !insideQuotes;
+          } else if (char === ',' && !insideQuotes) {
+            columns.push(currentColumn.trim());
+            currentColumn = '';
+          } else {
+            currentColumn += char;
+          }
+        }
+        columns.push(currentColumn.trim()); // Add the last column
+
+        if (columns.length >= 5) {
+          const [name, producer, investmentDate, investment, value] = columns.map((col) =>
+            col.replace(/^"|"$/g, '')
+          );
+          const investmentNum = parseFloat(investment.replace(/\s/g, ''));
+          const valueNum = parseFloat(value.replace(/\s/g, ''));
+
+          if (!isNaN(investmentNum) && !isNaN(valueNum)) {
+            // Konverze data z různých formátů na ISO formát (yyyy-mm-dd)
+            let formattedDate = '';
+            if (investmentDate && investmentDate.trim() !== '') {
+              try {
+                // Zkusíme různé formáty data
+                let dateObj;
+
+                // Formát mm/dd/yyyy nebo mm-dd-yyyy
+                if (investmentDate.includes('/') || investmentDate.includes('-')) {
+                  dateObj = new Date(investmentDate);
+                } else {
+                  // Jiné formáty
+                  dateObj = new Date(investmentDate);
+                }
+
+                // Kontrola, že datum je platné
+                if (dateObj.getTime() && !isNaN(dateObj.getTime())) {
+                  formattedDate = dateObj.toISOString().split('T')[0]; // yyyy-mm-dd
+                }
+              } catch (e) {
+                console.warn(`Invalid date format: ${investmentDate}`);
+              }
+            }
+
+            portfolioData.push({
+              name: name,
+              producer: producer,
+              investmentDate: formattedDate,
+              investment: investmentNum,
+              value: valueNum,
+            });
+            importedCount++;
+          } else {
+            console.warn(`Skipping row ${i + 1}: Invalid numbers in investment or value`);
+            errorCount++;
+          }
+        } else if (columns.length >= 4) {
+          // Fallback pro starý formát bez data investice
+          const [name, producer, investment, value] = columns.map((col) =>
+            col.replace(/^"|"$/g, '')
+          );
+          const investmentNum = parseFloat(investment.replace(/\s/g, ''));
+          const valueNum = parseFloat(value.replace(/\s/g, ''));
+
+          if (!isNaN(investmentNum) && !isNaN(valueNum)) {
+            portfolioData.push({
+              name: name,
+              producer: producer,
+              investmentDate: '', // Prázdné datum pro starý formát
+              investment: investmentNum,
+              value: valueNum,
+            });
+            importedCount++;
+          } else {
+            console.warn(`Skipping row ${i + 1}: Invalid numbers in investment or value`);
+            errorCount++;
+          }
+        } else {
+          console.warn(`Skipping row ${i + 1}: Invalid number of columns`);
+          errorCount++;
+        }
+      }
+
+      // Update the table, dashboard and show it
+      updateFondTable();
+      updateDashboard();
+      document.getElementById('fondListCard').style.display = 'block';
+
+      // Save imported data to localStorage
+      storage.saveData(portfolioData);
+
+      // Clear the file input
+      fileInput.value = '';
+
+      // Show success or warning message
+      if (importedCount > 0) {
+        showToast(
+          'success',
+          'Import dokončen',
+          `Importováno ${importedCount} fondů${errorCount > 0 ? `, ${errorCount} řádků přeskočeno` : ''}`
+        );
+      } else {
+        showToast('error', 'Import selhal', 'Nepodařilo se importovat žádná data');
+      }
+    };
+
+    reader.onerror = function () {
+      showToast('error', 'Chyba čtení', 'Chyba při čtení souboru');
+    };
+
+    reader.readAsText(file, 'UTF-8');
+  });
+
+  // Add these styles to your CSS
+  const styles = `
     .csv-import-section {
         background: #f8f9fa;
         padding: 20px;
@@ -2470,40 +2577,42 @@ const styles = `
     }
 `;
 
-// Add styles to document
-const styleSheet = document.createElement("style");
-styleSheet.innerText = styles;
-document.head.appendChild(styleSheet);
+  // Add styles to document
+  const styleSheet = document.createElement('style');
+  styleSheet.innerText = styles;
+  document.head.appendChild(styleSheet);
 
-// Ensure portfolioData is initialized if it doesn't exist
-if (typeof portfolioData === 'undefined') {
+  // Ensure portfolioData is initialized if it doesn't exist
+  if (typeof portfolioData === 'undefined') {
     window.portfolioData = [];
-}
+  }
 
-// Úprava generateCSV - vždy exportuje ve formátu fondů
-function generateCSV(data) {
+  // Úprava generateCSV - vždy exportuje ve formátu fondů
+  function generateCSV(data) {
     // Check if currency switch is enabled
     const currencySwitch = document.getElementById('currencySwitch');
     const useEuros = currencySwitch ? currencySwitch.checked : false;
     const currencySymbol = useEuros ? '€' : 'Kč';
-    
+
     // Vždy exportujeme ve formátu fondů, bez ohledu na viewMode
-    const csvRows = [`Název fondu,Producent,Datum investice,Čistá investice (${currencySymbol}),Aktuální hodnota (${currencySymbol})`];
-    data.forEach(item => {
-        const row = [
-            '"' + item.name + '"',
-            '"' + item.producer + '"',
-            item.investmentDate || '',
-            item.investment,
-            item.value
-        ];
-        csvRows.push(row.join(','));
+    const csvRows = [
+      `Název fondu,Producent,Datum investice,Čistá investice (${currencySymbol}),Aktuální hodnota (${currencySymbol})`,
+    ];
+    data.forEach((item) => {
+      const row = [
+        '"' + item.name + '"',
+        '"' + item.producer + '"',
+        item.investmentDate || '',
+        item.investment,
+        item.value,
+      ];
+      csvRows.push(row.join(','));
     });
     const csvContent = csvRows.join('\n');
     const BOM = '\uFEFF';
     const csvContentWithBOM = BOM + csvContent;
-    const blob = new Blob([csvContentWithBOM], { 
-        type: 'text/csv;charset=utf-8'
+    const blob = new Blob([csvContentWithBOM], {
+      type: 'text/csv;charset=utf-8',
     });
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -2515,230 +2624,230 @@ function generateCSV(data) {
     link.click();
     document.body.removeChild(link);
     window.URL.revokeObjectURL(url);
-}
+  }
 
-// Přidám event listenery na přepínače
-document.addEventListener('DOMContentLoaded', function() {
+  // Přidám event listenery na přepínače
+  document.addEventListener('DOMContentLoaded', function () {
     // ⚡ CRITICAL: Initialize DOM references first!
     initializeDOMReferences();
-    
+
     // Load saved data from localStorage
     const savedData = storage.loadData();
     if (savedData && savedData.length > 0) {
-        portfolioData = savedData;
-        updateFondTable();
-        updateDashboard();
-        document.getElementById('fondListCard').style.display = 'block';
-        const dashboard = document.querySelector('.dashboard');
-        if (dashboard) {
-            dashboard.style.display = 'grid';
-        }
-        showToast('info', 'Data načtena', `Obnoveno ${savedData.length} fondů z předchozí session`);
+      portfolioData = savedData;
+      updateFondTable();
+      updateDashboard();
+      document.getElementById('fondListCard').style.display = 'block';
+      const dashboard = document.querySelector('.dashboard');
+      if (dashboard) {
+        dashboard.style.display = 'grid';
+      }
+      showToast('info', 'Data načtena', `Obnoveno ${savedData.length} fondů z předchozí session`);
     }
-    
+
     // Load saved client info
     const savedClient = storage.loadClient();
     if (savedClient) {
-        document.getElementById('clientName').value = savedClient.name || '';
-        document.getElementById('clientICO').value = savedClient.ico || '';
+      document.getElementById('clientName').value = savedClient.name || '';
+      document.getElementById('clientICO').value = savedClient.ico || '';
     }
-    
+
     const switchFunds = document.getElementById('switchFunds');
     const switchProducers = document.getElementById('switchProducers');
     if (switchFunds && switchProducers) {
-        switchFunds.addEventListener('click', function() {
-            viewMode = 'funds';
-            switchFunds.classList.add('active');
-            switchProducers.classList.remove('active');
-            updateFondTable();
-        });
-        switchProducers.addEventListener('click', function() {
-            viewMode = 'producers';
-            switchProducers.classList.add('active');
-            switchFunds.classList.remove('active');
-            updateFondTable();
-        });
+      switchFunds.addEventListener('click', function () {
+        viewMode = 'funds';
+        switchFunds.classList.add('active');
+        switchProducers.classList.remove('active');
+        updateFondTable();
+      });
+      switchProducers.addEventListener('click', function () {
+        viewMode = 'producers';
+        switchProducers.classList.add('active');
+        switchFunds.classList.remove('active');
+        updateFondTable();
+      });
     }
-    
+
     // Search functionality
     const searchInput = document.getElementById('tableSearch');
     const clearSearchBtn = document.getElementById('clearSearch');
-    
+
     if (searchInput) {
-        searchInput.addEventListener('input', function(e) {
-            const query = e.target.value;
-            clearSearchBtn.style.display = query ? 'block' : 'none';
-            debouncedSearch(query);
-        });
+      searchInput.addEventListener('input', function (e) {
+        const query = e.target.value;
+        clearSearchBtn.style.display = query ? 'block' : 'none';
+        debouncedSearch(query);
+      });
     }
-    
+
     if (clearSearchBtn) {
-        clearSearchBtn.addEventListener('click', function() {
-            searchInput.value = '';
-            searchQuery = '';
-            clearSearchBtn.style.display = 'none';
-            updateFondTable();
-        });
+      clearSearchBtn.addEventListener('click', function () {
+        searchInput.value = '';
+        searchQuery = '';
+        clearSearchBtn.style.display = 'none';
+        updateFondTable();
+      });
     }
-    
+
     // Bulk actions event listeners
     const bulkDelete = document.getElementById('bulkDelete');
     const bulkExport = document.getElementById('bulkExport');
     const bulkDeselect = document.getElementById('bulkDeselect');
-    
-    if (bulkDelete) {
-        bulkDelete.addEventListener('click', bulkDeleteSelected);
-    }
-    
-    if (bulkExport) {
-        bulkExport.addEventListener('click', bulkExportSelected);
-    }
-    
-    if (bulkDeselect) {
-        bulkDeselect.addEventListener('click', function() {
-            selectedRows.clear();
-            updateBulkActionsBar();
-            updateFondTable();
-        });
-    }
-    
-    // Sorting functionality
-    document.addEventListener('click', function(e) {
-        if (e.target.classList.contains('sortable')) {
-            const column = e.target.dataset.column;
-            
-            // Toggle sort direction
-            if (currentSortColumn === column) {
-                currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
-            } else {
-                currentSortColumn = column;
-                currentSortDirection = 'asc';
-            }
-            
-            // Update header styles
-            document.querySelectorAll('.sortable').forEach(th => {
-                th.classList.remove('sort-asc', 'sort-desc');
-            });
-            e.target.classList.add(`sort-${currentSortDirection}`);
-            
-            updateFondTable();
-        }
-    });
-});
 
-// ==================== FILTER AND SORT FUNCTIONS ====================
-function filterAndSortData(data) {
+    if (bulkDelete) {
+      bulkDelete.addEventListener('click', bulkDeleteSelected);
+    }
+
+    if (bulkExport) {
+      bulkExport.addEventListener('click', bulkExportSelected);
+    }
+
+    if (bulkDeselect) {
+      bulkDeselect.addEventListener('click', function () {
+        selectedRows.clear();
+        updateBulkActionsBar();
+        updateFondTable();
+      });
+    }
+
+    // Sorting functionality
+    document.addEventListener('click', function (e) {
+      if (e.target.classList.contains('sortable')) {
+        const column = e.target.dataset.column;
+
+        // Toggle sort direction
+        if (currentSortColumn === column) {
+          currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+          currentSortColumn = column;
+          currentSortDirection = 'asc';
+        }
+
+        // Update header styles
+        document.querySelectorAll('.sortable').forEach((th) => {
+          th.classList.remove('sort-asc', 'sort-desc');
+        });
+        e.target.classList.add(`sort-${currentSortDirection}`);
+
+        updateFondTable();
+      }
+    });
+  });
+
+  // ==================== FILTER AND SORT FUNCTIONS ====================
+  function filterAndSortData(data) {
     let filtered = [...data];
-    
+
     // Apply search filter
     if (searchQuery) {
-        filtered = filtered.filter(item => 
-            item.name.toLowerCase().includes(searchQuery) ||
-            item.producer.toLowerCase().includes(searchQuery)
-        );
+      filtered = filtered.filter(
+        (item) =>
+          item.name.toLowerCase().includes(searchQuery) ||
+          item.producer.toLowerCase().includes(searchQuery)
+      );
     }
-    
+
     // Apply sorting
     if (currentSortColumn) {
-        filtered.sort((a, b) => {
-            let valA = a[currentSortColumn];
-            let valB = b[currentSortColumn];
-            
-            // Handle numeric columns
-            if (currentSortColumn === 'investment' || currentSortColumn === 'value') {
-                valA = Number(valA);
-                valB = Number(valB);
-            }
-            
-            // Handle date column
-            if (currentSortColumn === 'investmentDate') {
-                valA = new Date(valA || '1970-01-01');
-                valB = new Date(valB || '1970-01-01');
-            }
-            
-            // Handle string columns
-            if (typeof valA === 'string') {
-                valA = valA.toLowerCase();
-                valB = valB.toLowerCase();
-            }
-            
-            if (currentSortDirection === 'asc') {
-                return valA > valB ? 1 : valA < valB ? -1 : 0;
-            } else {
-                return valA < valB ? 1 : valA > valB ? -1 : 0;
-            }
-        });
-    }
-    
-    return filtered;
-}
+      filtered.sort((a, b) => {
+        let valA = a[currentSortColumn];
+        let valB = b[currentSortColumn];
 
-// ==================== KEYBOARD SHORTCUTS ====================
-document.addEventListener('keydown', function(e) {
+        // Handle numeric columns
+        if (currentSortColumn === 'investment' || currentSortColumn === 'value') {
+          valA = Number(valA);
+          valB = Number(valB);
+        }
+
+        // Handle date column
+        if (currentSortColumn === 'investmentDate') {
+          valA = new Date(valA || '1970-01-01');
+          valB = new Date(valB || '1970-01-01');
+        }
+
+        // Handle string columns
+        if (typeof valA === 'string') {
+          valA = valA.toLowerCase();
+          valB = valB.toLowerCase();
+        }
+
+        if (currentSortDirection === 'asc') {
+          return valA > valB ? 1 : valA < valB ? -1 : 0;
+        } else {
+          return valA < valB ? 1 : valA > valB ? -1 : 0;
+        }
+      });
+    }
+
+    return filtered;
+  }
+
+  // ==================== KEYBOARD SHORTCUTS ====================
+  document.addEventListener('keydown', function (e) {
     // Ctrl/Cmd + S: Manual save
     if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-        e.preventDefault();
-        if (portfolioData.length > 0) {
-            storage.saveData(portfolioData);
-            showToast('success', 'Manuální uložení', 'Data byla úspěšně uložena');
-        }
+      e.preventDefault();
+      if (portfolioData.length > 0) {
+        storage.saveData(portfolioData);
+        showToast('success', 'Manuální uložení', 'Data byla úspěšně uložena');
+      }
     }
-    
+
     // Escape: Close toasts or dialogs
     if (e.key === 'Escape') {
-        // Close all toasts
-        const toasts = document.querySelectorAll('.toast');
-        toasts.forEach(toast => {
-            toast.style.animation = 'slideOutRight 0.3s ease-in-out';
-            setTimeout(() => toast.remove(), 300);
-        });
-        
-        // Close confirmation dialogs
-        const overlays = document.querySelectorAll('.confirm-overlay');
-        overlays.forEach(overlay => overlay.remove());
+      // Close all toasts
+      const toasts = document.querySelectorAll('.toast');
+      toasts.forEach((toast) => {
+        toast.style.animation = 'slideOutRight 0.3s ease-in-out';
+        setTimeout(() => toast.remove(), 300);
+      });
+
+      // Close confirmation dialogs
+      const overlays = document.querySelectorAll('.confirm-overlay');
+      overlays.forEach((overlay) => overlay.remove());
     }
-    
+
     // Ctrl/Cmd + E: Export current view
     if ((e.ctrlKey || e.metaKey) && e.key === 'e') {
-        e.preventDefault();
-        const generateBtn = document.getElementById('generateReport');
-        if (generateBtn && portfolioData.length > 0) {
-            generateBtn.click();
-        }
+      e.preventDefault();
+      const generateBtn = document.getElementById('generateReport');
+      if (generateBtn && portfolioData.length > 0) {
+        generateBtn.click();
+      }
     }
-});
+  });
 
-// ==================== DEBOUNCED SEARCH ====================
-// Replace the search input listener with debounced version
-const debouncedSearch = debounce(function(query) {
+  // ==================== DEBOUNCED SEARCH ====================
+  // Replace the search input listener with debounced version
+  const debouncedSearch = debounce(function (query) {
     searchQuery = query.toLowerCase();
     updateFondTable();
-}, 300);
+  }, 300);
 
-// ==================== DARK MODE ====================
-const darkModeToggle = document.getElementById('darkModeToggle');
-const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+  // ==================== DARK MODE ====================
+  const darkModeToggle = document.getElementById('darkModeToggle');
+  const savedDarkMode = localStorage.getItem('darkMode') === 'true';
 
-if (savedDarkMode) {
+  if (savedDarkMode) {
     document.body.classList.add('dark-mode');
     darkModeToggle.textContent = '☀️';
-}
+  }
 
-darkModeToggle.addEventListener('click', function() {
+  darkModeToggle.addEventListener('click', function () {
     document.body.classList.toggle('dark-mode');
     const isDark = document.body.classList.contains('dark-mode');
     localStorage.setItem('darkMode', isDark);
     darkModeToggle.textContent = isDark ? '☀️' : '🌙';
     showToast('info', 'Vzhled změněn', `Přepnuto na ${isDark ? 'tmavý' : 'světlý'} režim`);
-});
-
+  });
 } // End of initializeApp function
 
 // ==================== START THE APP ====================
 // Try to initialize immediately, then fall back to DOMContentLoaded
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeApp);
+  document.addEventListener('DOMContentLoaded', initializeApp);
 } else {
-    // DOM already loaded
-    initializeApp();
+  // DOM already loaded
+  initializeApp();
 }

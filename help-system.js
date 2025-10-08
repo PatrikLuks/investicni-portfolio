@@ -11,7 +11,7 @@ class HelpSystem {
     this.shortcuts = new Map();
     this.tooltips = new Map();
     this.hasCompletedTour = false;
-    
+
     this.init();
   }
 
@@ -26,7 +26,7 @@ class HelpSystem {
       this.createHelpUI();
       this.setupTooltips();
       this.checkFirstTimeUser();
-      
+
       console.log('✅ Help System initialized');
     } catch (error) {
       console.error('❌ Help System initialization failed:', error);
@@ -75,7 +75,7 @@ class HelpSystem {
         <div style="background: #e8f5e9; padding: 12px; border-radius: 8px; margin-top: 16px;">
           <strong>💡 Tip:</strong> Zkuste kliknout na <strong>"🎓 Nápověda"</strong> tlačítko pro detailní průvodce!
         </div>
-      `
+      `,
     });
 
     // Features Overview
@@ -127,7 +127,7 @@ class HelpSystem {
             </ul>
           </div>
         </div>
-      `
+      `,
     });
 
     // Keyboard Shortcuts
@@ -184,7 +184,7 @@ class HelpSystem {
         <div style="background: #fff3cd; padding: 12px; border-radius: 8px; margin-top: 16px;">
           <strong>⚡ Pro tip:</strong> Klávesové zkratky výrazně zvyšují produktivitu!
         </div>
-      `
+      `,
     });
 
     // Optimization Guide
@@ -229,7 +229,7 @@ class HelpSystem {
         <div style="background: #f3e5f5; padding: 12px; border-radius: 8px; margin-top: 16px;">
           <strong>📚 Technické detaily:</strong> Používáme gradient ascent algoritmus pro optimalizaci váh portfolia na základě kovariační matice a očekávaných výnosů.
         </div>
-      `
+      `,
     });
 
     // Analytics Guide
@@ -288,7 +288,7 @@ class HelpSystem {
           <li><strong>DIA</strong> - Dow Jones (30 blue-chip firem)</li>
           <li><strong>IWM</strong> - Russell 2000 (malé firmy)</li>
         </ul>
-      `
+      `,
     });
 
     // Mobile Guide
@@ -335,7 +335,7 @@ class HelpSystem {
             <li>Push notifikace</li>
           </ul>
         </div>
-      `
+      `,
     });
 
     // Troubleshooting
@@ -397,7 +397,7 @@ class HelpSystem {
             <li>Aktualizujte prohlížeč na nejnovější verzi</li>
           </ul>
         </div>
-      `
+      `,
     });
 
     // FAQ
@@ -447,7 +447,7 @@ class HelpSystem {
           <summary style="cursor: pointer; font-weight: 600;">Mohu importovat data z jiné aplikace?</summary>
           <p style="margin-top: 8px;">Můžete importovat Excel (.xlsx) soubory. Ujistěte se, že obsahují sloupce: název, počet, nákupní cena, aktuální cena.</p>
         </details>
-      `
+      `,
     });
   }
 
@@ -479,20 +479,21 @@ class HelpSystem {
   createHelpUI() {
     // Add help button to header
     const portfolioCard = document.getElementById('portfolioCard');
-    if (!portfolioCard) return;
+    if (!portfolioCard) {return;}
 
     const headerDiv = portfolioCard.querySelector('div[style*="justify-content: space-between"]');
-    if (!headerDiv) return;
+    if (!headerDiv) {return;}
 
     const buttonContainer = headerDiv.querySelector('div[style*="gap"]');
-    if (!buttonContainer) return;
+    if (!buttonContainer) {return;}
 
     const helpBtn = document.createElement('button');
     helpBtn.id = 'helpBtn';
     helpBtn.className = 'btn-icon';
     helpBtn.title = 'Nápověda & Průvodce (F1)';
     helpBtn.setAttribute('aria-label', 'Nápověda');
-    helpBtn.style.cssText = 'font-size: 1.5rem; padding: 8px 16px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border: none; border-radius: 8px; cursor: pointer; animation: pulse 2s infinite;';
+    helpBtn.style.cssText =
+      'font-size: 1.5rem; padding: 8px 16px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border: none; border-radius: 8px; cursor: pointer; animation: pulse 2s infinite;';
     helpBtn.textContent = '🎓';
 
     helpBtn.addEventListener('click', () => this.showHelp());
@@ -530,7 +531,7 @@ class HelpSystem {
     this.tooltips.set('optimizeBtn', 'Portfolio optimalizace (MPT)');
     this.tooltips.set('socialBtn', 'Sociální funkce a sdílení');
     this.tooltips.set('advancedAnalyticsBtn', 'Pokročilá analytika');
-    
+
     // Add tooltips to buttons
     this.tooltips.forEach((text, btnId) => {
       const btn = document.getElementById(btnId);
@@ -644,45 +645,49 @@ class HelpSystem {
       {
         target: '#pridatFond',
         title: '1. Přidání Aktiva',
-        content: 'Klikněte zde pro přidání nového aktiva do portfolia. Vyplňte název, počet kusů a ceny.',
-        position: 'bottom'
+        content:
+          'Klikněte zde pro přidání nového aktiva do portfolia. Vyplňte název, počet kusů a ceny.',
+        position: 'bottom',
       },
       {
         target: '#portfolioTable',
         title: '2. Portfolio Tabulka',
-        content: 'Zde vidíte všechna vaše aktiva. Klikněte na řádek pro editaci, nebo na ✕ pro smazání.',
-        position: 'top'
+        content:
+          'Zde vidíte všechna vaše aktiva. Klikněte na řádek pro editaci, nebo na ✕ pro smazání.',
+        position: 'top',
       },
       {
         target: '#chartsBtn',
         title: '3. Grafy & Analytika',
-        content: 'Vizualizujte vaše portfolio pomocí 4 typů interaktivních grafů (donut, bar, line, radar).',
-        position: 'bottom'
+        content:
+          'Vizualizujte vaše portfolio pomocí 4 typů interaktivních grafů (donut, bar, line, radar).',
+        position: 'bottom',
       },
       {
         target: '#pdfBtn',
         title: '4. PDF Export',
         content: 'Exportujte profesionální 6-stránkové reporty s grafy a metrikami.',
-        position: 'bottom'
+        position: 'bottom',
       },
       {
         target: '#optimizeBtn',
         title: '5. Portfolio Optimalizace',
-        content: 'Použijte Modern Portfolio Theory k optimalizaci vašeho portfolia pro maximální výnos.',
-        position: 'bottom'
+        content:
+          'Použijte Modern Portfolio Theory k optimalizaci vašeho portfolia pro maximální výnos.',
+        position: 'bottom',
       },
       {
         target: '#aiBtn',
         title: '6. AI Doporučení',
         content: 'Získejte AI-powered predikce cen, doporučení a identifikaci rizik.',
-        position: 'bottom'
+        position: 'bottom',
       },
       {
         target: '#helpBtn',
         title: '7. Nápověda (F1)',
         content: 'Kdykoliv klikněte sem nebo zmáčkněte F1 pro detailní nápovědu a dokumentaci.',
-        position: 'bottom'
-      }
+        position: 'bottom',
+      },
     ];
 
     if (stepIndex >= steps.length) {
@@ -720,7 +725,7 @@ class HelpSystem {
     const target = document.querySelector(step.target);
     if (target) {
       const rect = target.getBoundingClientRect();
-      
+
       // Create spotlight
       const spotlight = document.createElement('div');
       spotlight.style.cssText = `
@@ -740,9 +745,9 @@ class HelpSystem {
       // Create tooltip
       const tooltip = document.createElement('div');
       tooltip.id = 'tourTooltip';
-      
+
       const tooltipY = step.position === 'top' ? rect.top - 200 : rect.bottom + 20;
-      
+
       tooltip.style.cssText = `
         position: fixed;
         top: ${tooltipY}px;
@@ -766,14 +771,18 @@ class HelpSystem {
           <p style="color: #666; margin-bottom: 20px;">${step.content}</p>
           
           <div style="display: flex; gap: 12px;">
-            ${stepIndex > 0 ? `
+            ${
+  stepIndex > 0
+    ? `
               <button 
                 onclick="window.helpSystem.showTourStep(${stepIndex - 1})"
                 style="padding: 10px 20px; background: #e9ecef; color: #495057; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;"
               >
                 ← Zpět
               </button>
-            ` : ''}
+            `
+    : ''
+}
             <button 
               onclick="window.helpSystem.skipTour()"
               style="padding: 10px 20px; background: #e9ecef; color: #495057; border: none; border-radius: 6px; cursor: pointer;"
@@ -810,8 +819,8 @@ class HelpSystem {
   skipTour() {
     document.getElementById('tourOverlay')?.remove();
     document.getElementById('tourTooltip')?.remove();
-    document.querySelectorAll('[style*="box-shadow: 0 0 0 9999px"]').forEach(el => el.remove());
-    
+    document.querySelectorAll('[style*="box-shadow: 0 0 0 9999px"]').forEach((el) => el.remove());
+
     this.tourActive = false;
     this.markTourCompleted();
   }
@@ -821,7 +830,7 @@ class HelpSystem {
    */
   completeTour() {
     this.skipTour();
-    
+
     // Show completion message
     if (window.notificationSystem) {
       window.notificationSystem.showInAppNotification(
@@ -930,14 +939,17 @@ class HelpSystem {
    * Render help articles
    */
   renderHelpArticles(category) {
-    const articles = Array.from(this.helpArticles.values())
-      .filter(article => category === 'all' || article.category === category);
+    const articles = Array.from(this.helpArticles.values()).filter(
+      (article) => category === 'all' || article.category === category
+    );
 
     if (articles.length === 0) {
       return '<div style="text-align: center; padding: 40px; color: #999;">Žádné články nenalezeny</div>';
     }
 
-    return articles.map(article => `
+    return articles
+      .map(
+        (article) => `
       <div class="help-article" style="margin-bottom: 16px; padding: 16px; background: #f8f9fa; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onclick="window.helpSystem.showArticle('${Array.from(this.helpArticles.entries()).find(([, v]) => v === article)[0]}')">
         <div style="display: flex; align-items: center; gap: 12px;">
           <span style="font-size: 2rem;">${article.icon}</span>
@@ -946,7 +958,9 @@ class HelpSystem {
           </div>
         </div>
       </div>
-    `).join('');
+    `
+      )
+      .join('');
   }
 
   /**
@@ -954,10 +968,10 @@ class HelpSystem {
    */
   showArticle(articleId) {
     const article = this.helpArticles.get(articleId);
-    if (!article) return;
+    if (!article) {return;}
 
     const content = document.getElementById('helpContent');
-    if (!content) return;
+    if (!content) {return;}
 
     content.innerHTML = `
       <button 
@@ -987,18 +1001,18 @@ class HelpSystem {
     });
 
     // Tab switching
-    document.querySelectorAll('.help-tab').forEach(tab => {
+    document.querySelectorAll('.help-tab').forEach((tab) => {
       tab.addEventListener('click', () => {
-        document.querySelectorAll('.help-tab').forEach(t => {
+        document.querySelectorAll('.help-tab').forEach((t) => {
           t.style.borderBottom = '3px solid transparent';
           t.style.fontWeight = 'normal';
           t.classList.remove('active');
         });
-        
+
         tab.style.borderBottom = '3px solid #667eea';
         tab.style.fontWeight = '600';
         tab.classList.add('active');
-        
+
         const category = tab.dataset.category;
         const content = document.getElementById('helpContent');
         if (content) {
@@ -1017,12 +1031,12 @@ class HelpSystem {
     }
 
     // Hover effect on articles
-    document.querySelectorAll('.help-article').forEach(article => {
-      article.addEventListener('mouseenter', function() {
+    document.querySelectorAll('.help-article').forEach((article) => {
+      article.addEventListener('mouseenter', function () {
         this.style.background = '#e9ecef';
         this.style.transform = 'translateX(4px)';
       });
-      article.addEventListener('mouseleave', function() {
+      article.addEventListener('mouseleave', function () {
         this.style.background = '#f8f9fa';
         this.style.transform = 'translateX(0)';
       });
@@ -1043,14 +1057,14 @@ class HelpSystem {
       return;
     }
 
-    const results = Array.from(this.helpArticles.entries())
-      .filter(([, article]) => {
-        return article.title.toLowerCase().includes(query) ||
-               article.content.toLowerCase().includes(query);
-      });
+    const results = Array.from(this.helpArticles.entries()).filter(([, article]) => {
+      return (
+        article.title.toLowerCase().includes(query) || article.content.toLowerCase().includes(query)
+      );
+    });
 
     const content = document.getElementById('helpContent');
-    if (!content) return;
+    if (!content) {return;}
 
     if (results.length === 0) {
       content.innerHTML = `
@@ -1062,7 +1076,9 @@ class HelpSystem {
       return;
     }
 
-    content.innerHTML = results.map(([id, article]) => `
+    content.innerHTML = results
+      .map(
+        ([id, article]) => `
       <div class="help-article" style="margin-bottom: 16px; padding: 16px; background: #f8f9fa; border-radius: 8px; cursor: pointer;" onclick="window.helpSystem.showArticle('${id}')">
         <div style="display: flex; align-items: center; gap: 12px;">
           <span style="font-size: 2rem;">${article.icon}</span>
@@ -1071,7 +1087,9 @@ class HelpSystem {
           </div>
         </div>
       </div>
-    `).join('');
+    `
+      )
+      .join('');
   }
 
   /**
@@ -1079,10 +1097,13 @@ class HelpSystem {
    */
   saveProgress() {
     try {
-      localStorage.setItem('helpSystemProgress', JSON.stringify({
-        hasCompletedTour: this.hasCompletedTour,
-        currentStep: this.currentStep
-      }));
+      localStorage.setItem(
+        'helpSystemProgress',
+        JSON.stringify({
+          hasCompletedTour: this.hasCompletedTour,
+          currentStep: this.currentStep,
+        })
+      );
     } catch (error) {
       console.error('Failed to save help progress:', error);
     }

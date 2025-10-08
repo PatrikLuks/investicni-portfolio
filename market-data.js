@@ -13,7 +13,7 @@ class MarketDataFeed {
     this.priceData = new Map();
     this.updateCallbacks = [];
     this.simulationInterval = null;
-    
+
     this.init();
   }
 
@@ -23,13 +23,13 @@ class MarketDataFeed {
   async init() {
     try {
       console.log('📡 Initializing Market Data Feed...');
-      
+
       // Create UI
       this.createMarketDataUI();
-      
+
       // Start simulated feed (in production, use real WebSocket)
       this.startSimulatedFeed();
-      
+
       console.log('✅ Market Data Feed initialized');
     } catch (error) {
       console.error('❌ Market Data Feed initialization failed:', error);
@@ -58,11 +58,11 @@ class MarketDataFeed {
   startSimulatedFeed() {
     // Simulate real-time price updates
     this.simulationInterval = setInterval(() => {
-      this.subscriptions.forEach(symbol => {
+      this.subscriptions.forEach((symbol) => {
         const currentPrice = this.priceData.get(symbol)?.price || this.generateInitialPrice();
         const change = (Math.random() - 0.5) * 2; // -1% to +1%
         const newPrice = currentPrice * (1 + change / 100);
-        
+
         const priceUpdate = {
           symbol,
           price: newPrice,
@@ -74,9 +74,9 @@ class MarketDataFeed {
           ask: newPrice * 1.001,
           high: newPrice * 1.02,
           low: newPrice * 0.98,
-          open: newPrice * 0.99
+          open: newPrice * 0.99,
         };
-        
+
         this.priceData.set(symbol, priceUpdate);
         this.notifySubscribers(symbol, priceUpdate);
       });
@@ -98,10 +98,10 @@ class MarketDataFeed {
    * @param {Function} callback - Update callback
    */
   subscribe(symbol, callback) {
-    if (!symbol) return;
+    if (!symbol) {return;}
 
     this.subscriptions.add(symbol.toUpperCase());
-    
+
     if (callback) {
       this.updateCallbacks.push({ symbol, callback });
     }
@@ -118,7 +118,7 @@ class MarketDataFeed {
    */
   unsubscribe(symbol) {
     this.subscriptions.delete(symbol.toUpperCase());
-    this.updateCallbacks = this.updateCallbacks.filter(cb => cb.symbol !== symbol);
+    this.updateCallbacks = this.updateCallbacks.filter((cb) => cb.symbol !== symbol);
     console.log('📡 Unsubscribed from:', symbol);
   }
 
@@ -126,17 +126,17 @@ class MarketDataFeed {
    * Notify subscribers of price updates
    */
   notifySubscribers(symbol, data) {
-    this.updateCallbacks
-      .filter(cb => cb.symbol === symbol)
-      .forEach(cb => cb.callback(data));
+    this.updateCallbacks.filter((cb) => cb.symbol === symbol).forEach((cb) => cb.callback(data));
 
     // Update UI
     this.updatePriceInUI(symbol, data);
 
     // Trigger event
-    window.dispatchEvent(new CustomEvent('market-data-update', {
-      detail: { symbol, data }
-    }));
+    window.dispatchEvent(
+      new CustomEvent('market-data-update', {
+        detail: { symbol, data },
+      })
+    );
   }
 
   /**
@@ -144,9 +144,9 @@ class MarketDataFeed {
    */
   onConnected() {
     console.log('✅ Connected to market data feed');
-    
+
     // Resubscribe to all symbols
-    this.subscriptions.forEach(symbol => {
+    this.subscriptions.forEach((symbol) => {
       console.log('📡 Resubscribing to:', symbol);
     });
   }
@@ -162,9 +162,9 @@ class MarketDataFeed {
    * Get multiple prices
    */
   getPrices(symbols) {
-    return symbols.map(symbol => ({
+    return symbols.map((symbol) => ({
       symbol,
-      data: this.getPrice(symbol)
+      data: this.getPrice(symbol),
     }));
   }
 
@@ -174,21 +174,23 @@ class MarketDataFeed {
   createMarketDataUI() {
     // Add market data button
     const portfolioCard = document.getElementById('portfolioCard');
-    if (!portfolioCard) return;
+    if (!portfolioCard) {return;}
 
     const headerDiv = portfolioCard.querySelector('div[style*="justify-content: space-between"]');
-    if (!headerDiv) return;
+    if (!headerDiv) {return;}
 
     const buttonContainer = headerDiv.querySelector('div[style*="gap"]');
-    if (!buttonContainer) return;
+    if (!buttonContainer) {return;}
 
     const marketBtn = document.createElement('button');
     marketBtn.id = 'marketDataBtn';
     marketBtn.className = 'btn-icon';
     marketBtn.title = 'Live Market Data';
     marketBtn.setAttribute('aria-label', 'Živá data trhu');
-    marketBtn.style.cssText = 'font-size: 1.5rem; padding: 8px 16px; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; border: none; border-radius: 8px; cursor: pointer; position: relative;';
-    marketBtn.innerHTML = '📡 <span id="liveIndicator" style="position: absolute; top: 8px; right: 8px; width: 8px; height: 8px; background: #2ecc71; border-radius: 50%; animation: pulse 2s infinite;"></span>';
+    marketBtn.style.cssText =
+      'font-size: 1.5rem; padding: 8px 16px; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; border: none; border-radius: 8px; cursor: pointer; position: relative;';
+    marketBtn.innerHTML =
+      '📡 <span id="liveIndicator" style="position: absolute; top: 8px; right: 8px; width: 8px; height: 8px; background: #2ecc71; border-radius: 50%; animation: pulse 2s infinite;"></span>';
 
     marketBtn.addEventListener('click', () => this.toggleMarketPanel());
 
@@ -301,9 +303,9 @@ class MarketDataFeed {
   toggleMarketPanel() {
     const panel = document.getElementById('marketDataPanel');
     const isVisible = panel.style.display !== 'none';
-    
+
     panel.style.display = isVisible ? 'none' : 'block';
-    
+
     if (!isVisible) {
       this.loadPortfolioSymbols();
     }
@@ -314,8 +316,8 @@ class MarketDataFeed {
    */
   loadPortfolioSymbols() {
     const data = window.getFondyData ? window.getFondyData() : [];
-    
-    data.forEach(item => {
+
+    data.forEach((item) => {
       const symbol = this.extractSymbol(item.název);
       if (symbol) {
         this.subscribe(symbol, (priceData) => {
@@ -344,9 +346,17 @@ class MarketDataFeed {
   searchSymbol(query) {
     // Simulate search results
     const suggestions = [
-      'AAPL', 'GOOGL', 'MSFT', 'AMZN', 'TSLA',
-      'META', 'NVDA', 'BRK.B', 'JNJ', 'V'
-    ].filter(symbol => symbol.includes(query));
+      'AAPL',
+      'GOOGL',
+      'MSFT',
+      'AMZN',
+      'TSLA',
+      'META',
+      'NVDA',
+      'BRK.B',
+      'JNJ',
+      'V',
+    ].filter((symbol) => symbol.includes(query));
 
     this.renderSearchResults(suggestions);
   }
@@ -356,7 +366,7 @@ class MarketDataFeed {
    */
   renderSearchResults(suggestions) {
     const list = document.getElementById('marketDataList');
-    if (!list) return;
+    if (!list) {return;}
 
     if (suggestions.length === 0) {
       list.innerHTML = `
@@ -367,7 +377,9 @@ class MarketDataFeed {
       return;
     }
 
-    list.innerHTML = suggestions.map(symbol => `
+    list.innerHTML = suggestions
+      .map(
+        (symbol) => `
       <div 
         onclick="window.marketDataFeed.addSymbolToWatch('${symbol}')"
         style="
@@ -384,7 +396,9 @@ class MarketDataFeed {
         <div style="font-weight: 600; color: #333;">${symbol}</div>
         <div style="font-size: 0.85rem; color: #666;">Click to add to watchlist</div>
       </div>
-    `).join('');
+    `
+      )
+      .join('');
   }
 
   /**
@@ -393,12 +407,9 @@ class MarketDataFeed {
   addSymbolToWatch(symbol) {
     this.subscribe(symbol);
     this.renderWatchlist();
-    
+
     if (window.notificationSystem) {
-      window.notificationSystem.showInAppNotification(
-        `Added ${symbol} to watchlist`,
-        'success'
-      );
+      window.notificationSystem.showInAppNotification(`Added ${symbol} to watchlist`, 'success');
     }
   }
 
@@ -407,7 +418,7 @@ class MarketDataFeed {
    */
   renderWatchlist() {
     const list = document.getElementById('marketDataList');
-    if (!list) return;
+    if (!list) {return;}
 
     if (this.subscriptions.size === 0) {
       list.innerHTML = `
@@ -420,7 +431,7 @@ class MarketDataFeed {
     }
 
     list.innerHTML = Array.from(this.subscriptions)
-      .map(symbol => this.renderPriceCard(symbol))
+      .map((symbol) => this.renderPriceCard(symbol))
       .join('');
   }
 
@@ -432,7 +443,7 @@ class MarketDataFeed {
       price: this.generateInitialPrice(),
       change: 0,
       changePercent: 0,
-      volume: 0
+      volume: 0,
     };
 
     const isPositive = priceData.change >= 0;
@@ -493,7 +504,7 @@ class MarketDataFeed {
    */
   updatePriceInUI(symbol, data) {
     const card = document.getElementById(`price-${symbol}`);
-    if (!card) return;
+    if (!card) {return;}
 
     const isPositive = data.change >= 0;
     const color = isPositive ? '#2ecc71' : '#e74c3c';
@@ -506,7 +517,7 @@ class MarketDataFeed {
 
     // Update values
     card.querySelector('[style*="font-size: 1.3rem"]').textContent = `$${data.price.toFixed(2)}`;
-    
+
     const changeEl = card.querySelector(`[style*="color: ${color}"]`);
     if (changeEl) {
       changeEl.textContent = `${isPositive ? '+' : ''}${data.changePercent.toFixed(2)}%`;
@@ -521,11 +532,11 @@ class MarketDataFeed {
     // Update item's current price
     if (item.aktuálníCena !== undefined) {
       item.aktuálníCena = priceData.price;
-      
+
       // Recalculate current value
       const pocet = parseFloat(item.počet || 0);
       item.aktuálníHodnota = pocet * priceData.price;
-      
+
       // Trigger portfolio update
       if (window.aktualizovatTabulku) {
         window.aktualizovatTabulku();
@@ -551,9 +562,9 @@ class MarketDataFeed {
    */
   formatVolume(volume) {
     if (volume >= 1000000) {
-      return (volume / 1000000).toFixed(1) + 'M';
+      return `${(volume / 1000000).toFixed(1) }M`;
     } else if (volume >= 1000) {
-      return (volume / 1000).toFixed(1) + 'K';
+      return `${(volume / 1000).toFixed(1) }K`;
     }
     return volume.toString();
   }

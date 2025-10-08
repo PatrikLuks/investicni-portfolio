@@ -9,7 +9,7 @@ class DashboardBuilder {
     this.layout = [];
     this.gridSize = 12; // 12-column grid
     this.widgetTypes = this.initializeWidgetTypes();
-    
+
     this.init();
   }
 
@@ -30,56 +30,56 @@ class DashboardBuilder {
         name: 'Portfolio Summary',
         icon: '💰',
         defaultSize: { w: 6, h: 2 },
-        render: this.renderPortfolioSummary.bind(this)
+        render: this.renderPortfolioSummary.bind(this),
       },
       'performance-chart': {
         name: 'Performance Chart',
         icon: '📈',
         defaultSize: { w: 6, h: 3 },
-        render: this.renderPerformanceChart.bind(this)
+        render: this.renderPerformanceChart.bind(this),
       },
       'top-performers': {
         name: 'Top Performers',
         icon: '🏆',
         defaultSize: { w: 4, h: 3 },
-        render: this.renderTopPerformers.bind(this)
+        render: this.renderTopPerformers.bind(this),
       },
       'category-breakdown': {
         name: 'Category Breakdown',
         icon: '📊',
         defaultSize: { w: 4, h: 3 },
-        render: this.renderCategoryBreakdown.bind(this)
+        render: this.renderCategoryBreakdown.bind(this),
       },
       'metrics-panel': {
         name: 'Key Metrics',
         icon: '📉',
         defaultSize: { w: 4, h: 3 },
-        render: this.renderMetricsPanel.bind(this)
+        render: this.renderMetricsPanel.bind(this),
       },
       'recent-activity': {
         name: 'Recent Activity',
         icon: '🕐',
         defaultSize: { w: 6, h: 2 },
-        render: this.renderRecentActivity.bind(this)
+        render: this.renderRecentActivity.bind(this),
       },
-      'notes': {
+      notes: {
         name: 'Notes',
         icon: '📝',
         defaultSize: { w: 6, h: 2 },
-        render: this.renderNotes.bind(this)
+        render: this.renderNotes.bind(this),
       },
-      'alerts': {
+      alerts: {
         name: 'Alerts & Notifications',
         icon: '🔔',
         defaultSize: { w: 4, h: 2 },
-        render: this.renderAlerts.bind(this)
+        render: this.renderAlerts.bind(this),
       },
       'market-overview': {
         name: 'Market Overview',
         icon: '🌍',
         defaultSize: { w: 8, h: 2 },
-        render: this.renderMarketOverview.bind(this)
-      }
+        render: this.renderMarketOverview.bind(this),
+      },
     };
   }
 
@@ -173,7 +173,7 @@ class DashboardBuilder {
    */
   renderDashboard() {
     const grid = document.getElementById('dashboard-grid');
-    if (!grid) return;
+    if (!grid) {return;}
 
     grid.innerHTML = '';
 
@@ -188,7 +188,7 @@ class DashboardBuilder {
       return;
     }
 
-    this.layout.forEach(widgetConfig => {
+    this.layout.forEach((widgetConfig) => {
       const widget = this.createWidget(widgetConfig);
       grid.appendChild(widget);
     });
@@ -201,7 +201,7 @@ class DashboardBuilder {
    */
   createWidget(config) {
     const widgetType = this.widgetTypes[config.type];
-    if (!widgetType) return null;
+    if (!widgetType) {return null;}
 
     const widget = document.createElement('div');
     widget.className = 'dashboard-widget';
@@ -275,14 +275,14 @@ class DashboardBuilder {
    */
   addWidget(type) {
     const widgetType = this.widgetTypes[type];
-    if (!widgetType) return;
+    if (!widgetType) {return;}
 
     const config = {
       id: Date.now(),
       type: type,
       w: widgetType.defaultSize.w,
       h: widgetType.defaultSize.h,
-      settings: {}
+      settings: {},
     };
 
     this.layout.push(config);
@@ -297,7 +297,7 @@ class DashboardBuilder {
    * @param {number} widgetId - Widget ID
    */
   removeWidget(widgetId) {
-    this.layout = this.layout.filter(w => w.id !== widgetId);
+    this.layout = this.layout.filter((w) => w.id !== widgetId);
     this.saveLayout();
     this.renderDashboard();
 
@@ -309,8 +309,8 @@ class DashboardBuilder {
    * @param {number} widgetId - Widget ID
    */
   refreshWidget(widgetId) {
-    const config = this.layout.find(w => w.id === widgetId);
-    if (!config) return;
+    const config = this.layout.find((w) => w.id === widgetId);
+    if (!config) {return;}
 
     const widgetType = this.widgetTypes[config.type];
     if (widgetType) {
@@ -338,7 +338,7 @@ class DashboardBuilder {
       { id: 2, type: 'performance-chart', w: 6, h: 3 },
       { id: 3, type: 'top-performers', w: 4, h: 3 },
       { id: 4, type: 'category-breakdown', w: 4, h: 3 },
-      { id: 5, type: 'metrics-panel', w: 4, h: 3 }
+      { id: 5, type: 'metrics-panel', w: 4, h: 3 },
     ];
   }
 
@@ -378,13 +378,15 @@ class DashboardBuilder {
   renderPortfolioSummary(widgetId) {
     const data = window.getFondyData ? window.getFondyData() : [];
     const content = document.getElementById(`widget-content-${widgetId}`);
-    if (!content) return;
+    if (!content) {return;}
 
     const totalValue = data.reduce((sum, item) => sum + parseFloat(item.aktuálníHodnota || 0), 0);
-    const totalCost = data.reduce((sum, item) => 
-      sum + (parseFloat(item.nákupníCena) * parseFloat(item.počet)), 0);
+    const totalCost = data.reduce(
+      (sum, item) => sum + parseFloat(item.nákupníCena) * parseFloat(item.počet),
+      0
+    );
     const gainLoss = totalValue - totalCost;
-    const roi = totalCost > 0 ? (gainLoss / totalCost * 100) : 0;
+    const roi = totalCost > 0 ? (gainLoss / totalCost) * 100 : 0;
 
     content.innerHTML = `
       <div class="summary-grid">
@@ -417,37 +419,39 @@ class DashboardBuilder {
    */
   renderPerformanceChart(widgetId) {
     const content = document.getElementById(`widget-content-${widgetId}`);
-    if (!content) return;
+    if (!content) {return;}
 
     content.innerHTML = `
       <canvas id="widget-chart-${widgetId}" style="max-height: 200px;"></canvas>
     `;
 
     const data = window.getFondyData ? window.getFondyData() : [];
-    const chartData = data.slice(0, 10).map(item => ({
+    const chartData = data.slice(0, 10).map((item) => ({
       name: item.fond || 'N/A',
-      value: parseFloat(item.aktuálníHodnota || 0)
+      value: parseFloat(item.aktuálníHodnota || 0),
     }));
 
     setTimeout(() => {
       const canvas = document.getElementById(`widget-chart-${widgetId}`);
-      if (!canvas) return;
+      if (!canvas) {return;}
 
       new Chart(canvas, {
         type: 'bar',
         data: {
-          labels: chartData.map(d => d.name.substring(0, 15) + '...'),
-          datasets: [{
-            label: 'Hodnota',
-            data: chartData.map(d => d.value),
-            backgroundColor: 'rgba(102, 126, 234, 0.8)'
-          }]
+          labels: chartData.map((d) => `${d.name.substring(0, 15) }...`),
+          datasets: [
+            {
+              label: 'Hodnota',
+              data: chartData.map((d) => d.value),
+              backgroundColor: 'rgba(102, 126, 234, 0.8)',
+            },
+          ],
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          plugins: { legend: { display: false } }
-        }
+          plugins: { legend: { display: false } },
+        },
       });
     }, 100);
   }
@@ -457,25 +461,32 @@ class DashboardBuilder {
    */
   renderTopPerformers(widgetId) {
     const content = document.getElementById(`widget-content-${widgetId}`);
-    if (!content) return;
+    if (!content) {return;}
 
     const data = window.getFondyData ? window.getFondyData() : [];
-    const performers = data.map(item => {
-      const cost = parseFloat(item.nákupníCena) * parseFloat(item.počet);
-      const current = parseFloat(item.aktuálníHodnota || 0);
-      const roi = cost > 0 ? ((current - cost) / cost * 100) : 0;
-      return { fond: item.fond, roi };
-    }).sort((a, b) => b.roi - a.roi).slice(0, 5);
+    const performers = data
+      .map((item) => {
+        const cost = parseFloat(item.nákupníCena) * parseFloat(item.počet);
+        const current = parseFloat(item.aktuálníHodnota || 0);
+        const roi = cost > 0 ? ((current - cost) / cost) * 100 : 0;
+        return { fond: item.fond, roi };
+      })
+      .sort((a, b) => b.roi - a.roi)
+      .slice(0, 5);
 
     content.innerHTML = `
       <div class="performers-list">
-        ${performers.map((p, i) => `
+        ${performers
+    .map(
+      (p, i) => `
           <div class="performer-item">
             <span class="performer-rank">${i + 1}</span>
             <span class="performer-name">${p.fond || 'N/A'}</span>
             <span class="performer-roi positive">${p.roi.toFixed(2)}%</span>
           </div>
-        `).join('')}
+        `
+    )
+    .join('')}
       </div>
     `;
   }
@@ -485,12 +496,12 @@ class DashboardBuilder {
    */
   renderCategoryBreakdown(widgetId) {
     const content = document.getElementById(`widget-content-${widgetId}`);
-    if (!content) return;
+    if (!content) {return;}
 
     const data = window.getFondyData ? window.getFondyData() : [];
     const categories = {};
 
-    data.forEach(item => {
+    data.forEach((item) => {
       const cat = item.kategorie || 'Ostatní';
       categories[cat] = (categories[cat] || 0) + parseFloat(item.aktuálníHodnota || 0);
     });
@@ -499,15 +510,19 @@ class DashboardBuilder {
 
     content.innerHTML = `
       <div class="category-list">
-        ${Object.entries(categories).map(([cat, val]) => `
+        ${Object.entries(categories)
+    .map(
+      ([cat, val]) => `
           <div class="category-item">
             <div class="category-name">${cat}</div>
             <div class="category-bar-container">
-              <div class="category-bar" style="width: ${(val/total*100).toFixed(1)}%"></div>
+              <div class="category-bar" style="width: ${((val / total) * 100).toFixed(1)}%"></div>
             </div>
-            <div class="category-value">${(val/total*100).toFixed(1)}%</div>
+            <div class="category-value">${((val / total) * 100).toFixed(1)}%</div>
           </div>
-        `).join('')}
+        `
+    )
+    .join('')}
       </div>
     `;
   }
@@ -517,10 +532,10 @@ class DashboardBuilder {
    */
   renderMetricsPanel(widgetId) {
     const content = document.getElementById(`widget-content-${widgetId}`);
-    if (!content) return;
+    if (!content) {return;}
 
     const data = window.getFondyData ? window.getFondyData() : [];
-    
+
     if (!window.calculationsEngine) {
       content.innerHTML = '<p>Metrics engine not available</p>';
       return;
@@ -559,7 +574,7 @@ class DashboardBuilder {
    */
   renderRecentActivity(widgetId) {
     const content = document.getElementById(`widget-content-${widgetId}`);
-    if (!content) return;
+    if (!content) {return;}
 
     content.innerHTML = `
       <div class="activity-list">
@@ -587,7 +602,7 @@ class DashboardBuilder {
    */
   renderNotes(widgetId) {
     const content = document.getElementById(`widget-content-${widgetId}`);
-    if (!content) return;
+    if (!content) {return;}
 
     const savedNotes = localStorage.getItem(`widget-notes-${widgetId}`) || '';
 
@@ -610,7 +625,7 @@ class DashboardBuilder {
    */
   renderAlerts(widgetId) {
     const content = document.getElementById(`widget-content-${widgetId}`);
-    if (!content) return;
+    if (!content) {return;}
 
     content.innerHTML = `
       <div class="alerts-list">
@@ -631,7 +646,7 @@ class DashboardBuilder {
    */
   renderMarketOverview(widgetId) {
     const content = document.getElementById(`widget-content-${widgetId}`);
-    if (!content) return;
+    if (!content) {return;}
 
     content.innerHTML = `
       <div class="market-overview">
@@ -663,7 +678,7 @@ class DashboardBuilder {
       style: 'currency',
       currency: 'CZK',
       minimumFractionDigits: 0,
-      maximumFractionDigits: 0
+      maximumFractionDigits: 0,
     }).format(value);
   }
 }
@@ -674,19 +689,20 @@ window.dashboardBuilder = new DashboardBuilder();
 // Add dashboard button
 window.addEventListener('DOMContentLoaded', () => {
   const portfolioCard = document.getElementById('portfolioCard');
-  if (!portfolioCard) return;
+  if (!portfolioCard) {return;}
 
   const headerDiv = portfolioCard.querySelector('div[style*="justify-content: space-between"]');
-  if (!headerDiv) return;
+  if (!headerDiv) {return;}
 
   const buttonContainer = headerDiv.querySelector('div[style*="gap"]');
-  if (!buttonContainer) return;
+  if (!buttonContainer) {return;}
 
   const dashboardBtn = document.createElement('button');
   dashboardBtn.id = 'openDashboard';
   dashboardBtn.className = 'btn-icon';
   dashboardBtn.title = 'Custom Dashboard';
-  dashboardBtn.style.cssText = 'font-size: 1.5rem; padding: 8px 16px; background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%); color: white; border: none; border-radius: 8px; cursor: pointer;';
+  dashboardBtn.style.cssText =
+    'font-size: 1.5rem; padding: 8px 16px; background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%); color: white; border: none; border-radius: 8px; cursor: pointer;';
   dashboardBtn.textContent = '📊 Dashboard';
   dashboardBtn.addEventListener('click', () => {
     window.dashboardBuilder.showDashboard();

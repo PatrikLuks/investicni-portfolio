@@ -11,7 +11,7 @@ class NotificationSystem {
     this.preferences = this.loadPreferences();
     this.unreadCount = 0;
     this.serviceWorkerRegistration = null;
-    
+
     this.init();
   }
 
@@ -100,7 +100,7 @@ class NotificationSystem {
       tag: 'portfolio-notification',
       requireInteraction: false,
       silent: false,
-      ...options
+      ...options,
     };
 
     // Check preferences
@@ -114,7 +114,7 @@ class NotificationSystem {
       title,
       ...defaultOptions,
       timestamp: new Date(),
-      read: false
+      read: false,
     };
 
     this.notifications.unshift(notification);
@@ -152,7 +152,7 @@ class NotificationSystem {
       } else {
         // Fallback to regular notification
         const notification = new Notification(title, options);
-        
+
         notification.onclick = () => {
           window.focus();
           notification.close();
@@ -169,7 +169,7 @@ class NotificationSystem {
   showInAppNotification(title, category = 'info', body = '') {
     const toast = document.createElement('div');
     toast.className = 'notification-toast';
-    
+
     const icons = {
       info: 'ℹ️',
       success: '✅',
@@ -177,7 +177,7 @@ class NotificationSystem {
       error: '❌',
       portfolio: '💼',
       trade: '📊',
-      alert: '🔔'
+      alert: '🔔',
     };
 
     const colors = {
@@ -187,7 +187,7 @@ class NotificationSystem {
       error: '#e74c3c',
       portfolio: '#667eea',
       trade: '#764ba2',
-      alert: '#e74c3c'
+      alert: '#e74c3c',
     };
 
     toast.style.cssText = `
@@ -239,21 +239,23 @@ class NotificationSystem {
   createNotificationUI() {
     // Add notification bell button
     const portfolioCard = document.getElementById('portfolioCard');
-    if (!portfolioCard) return;
+    if (!portfolioCard) {return;}
 
     const headerDiv = portfolioCard.querySelector('div[style*="justify-content: space-between"]');
-    if (!headerDiv) return;
+    if (!headerDiv) {return;}
 
     const buttonContainer = headerDiv.querySelector('div[style*="gap"]');
-    if (!buttonContainer) return;
+    if (!buttonContainer) {return;}
 
     const notifBtn = document.createElement('button');
     notifBtn.id = 'notificationBtn';
     notifBtn.className = 'btn-icon';
     notifBtn.title = 'Notifications';
     notifBtn.setAttribute('aria-label', 'Notifikace');
-    notifBtn.style.cssText = 'font-size: 1.5rem; padding: 8px 16px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border: none; border-radius: 8px; cursor: pointer; position: relative;';
-    notifBtn.innerHTML = '🔔 <span id="notificationBadge" style="display: none; position: absolute; top: -8px; right: -8px; background: #e74c3c; color: white; border-radius: 50%; min-width: 20px; height: 20px; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; padding: 0 4px;"></span>';
+    notifBtn.style.cssText =
+      'font-size: 1.5rem; padding: 8px 16px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border: none; border-radius: 8px; cursor: pointer; position: relative;';
+    notifBtn.innerHTML =
+      '🔔 <span id="notificationBadge" style="display: none; position: absolute; top: -8px; right: -8px; background: #e74c3c; color: white; border-radius: 50%; min-width: 20px; height: 20px; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; padding: 0 4px;"></span>';
 
     notifBtn.addEventListener('click', () => this.toggleNotificationPanel());
 
@@ -379,9 +381,9 @@ class NotificationSystem {
   toggleNotificationPanel() {
     const panel = document.getElementById('notificationPanel');
     const isVisible = panel.style.display !== 'none';
-    
+
     panel.style.display = isVisible ? 'none' : 'block';
-    
+
     if (!isVisible) {
       this.renderNotifications();
       // Hide settings if open
@@ -395,7 +397,7 @@ class NotificationSystem {
   toggleSettings() {
     const settings = document.getElementById('notificationSettings');
     const list = document.getElementById('notificationsList');
-    
+
     const isVisible = settings.style.display !== 'none';
     settings.style.display = isVisible ? 'none' : 'block';
     list.style.display = isVisible ? 'block' : 'none';
@@ -406,7 +408,7 @@ class NotificationSystem {
    */
   renderNotifications() {
     const container = document.getElementById('notificationsList');
-    if (!container) return;
+    if (!container) {return;}
 
     if (this.notifications.length === 0) {
       container.innerHTML = `
@@ -418,7 +420,9 @@ class NotificationSystem {
       return;
     }
 
-    container.innerHTML = this.notifications.map(notif => `
+    container.innerHTML = this.notifications
+      .map(
+        (notif) => `
       <div class="notification-item" data-id="${notif.id}" style="
         padding: 16px;
         border-bottom: 1px solid #f0f0f0;
@@ -438,10 +442,12 @@ class NotificationSystem {
           <button onclick="event.stopPropagation(); window.notificationSystem.deleteNotification(${notif.id})" style="background: none; border: none; color: #999; cursor: pointer; font-size: 1rem; padding: 0;">×</button>
         </div>
       </div>
-    `).join('');
+    `
+      )
+      .join('');
 
     // Add click handlers to mark as read
-    container.querySelectorAll('.notification-item').forEach(item => {
+    container.querySelectorAll('.notification-item').forEach((item) => {
       item.addEventListener('click', () => {
         const id = parseInt(item.dataset.id);
         this.markAsRead(id);
@@ -453,7 +459,7 @@ class NotificationSystem {
    * Mark notification as read
    */
   markAsRead(id) {
-    const notif = this.notifications.find(n => n.id === id);
+    const notif = this.notifications.find((n) => n.id === id);
     if (notif && !notif.read) {
       notif.read = true;
       this.unreadCount = Math.max(0, this.unreadCount - 1);
@@ -467,7 +473,7 @@ class NotificationSystem {
    * Mark all as read
    */
   markAllAsRead() {
-    this.notifications.forEach(notif => notif.read = true);
+    this.notifications.forEach((notif) => (notif.read = true));
     this.unreadCount = 0;
     this.updateUnreadBadge();
     this.saveNotifications();
@@ -478,7 +484,7 @@ class NotificationSystem {
    * Delete notification
    */
   deleteNotification(id) {
-    const index = this.notifications.findIndex(n => n.id === id);
+    const index = this.notifications.findIndex((n) => n.id === id);
     if (index !== -1) {
       if (!this.notifications[index].read) {
         this.unreadCount = Math.max(0, this.unreadCount - 1);
@@ -506,7 +512,7 @@ class NotificationSystem {
    */
   updateUnreadBadge() {
     const badge = document.getElementById('notificationBadge');
-    if (!badge) return;
+    if (!badge) {return;}
 
     if (this.unreadCount > 0) {
       badge.textContent = this.unreadCount > 99 ? '99+' : this.unreadCount;
@@ -525,7 +531,7 @@ class NotificationSystem {
       portfolio: document.getElementById('notifPortfolio')?.checked || false,
       trade: document.getElementById('notifTrade')?.checked || false,
       alert: document.getElementById('notifAlert')?.checked || false,
-      collaboration: document.getElementById('notifCollab')?.checked || false
+      collaboration: document.getElementById('notifCollab')?.checked || false,
     };
 
     localStorage.setItem('notification-preferences', JSON.stringify(this.preferences));
@@ -539,20 +545,22 @@ class NotificationSystem {
   loadPreferences() {
     try {
       const saved = localStorage.getItem('notification-preferences');
-      return saved ? JSON.parse(saved) : {
-        browser: false,
-        portfolio: true,
-        trade: true,
-        alert: true,
-        collaboration: true
-      };
+      return saved
+        ? JSON.parse(saved)
+        : {
+          browser: false,
+          portfolio: true,
+          trade: true,
+          alert: true,
+          collaboration: true,
+        };
     } catch (error) {
       return {
         browser: false,
         portfolio: true,
         trade: true,
         alert: true,
-        collaboration: true
+        collaboration: true,
       };
     }
   }
@@ -561,7 +569,7 @@ class NotificationSystem {
    * Check if should show notification based on preferences
    */
   shouldShowNotification(category) {
-    if (!category) return true;
+    if (!category) {return true;}
     return this.preferences[category] !== false;
   }
 
@@ -570,7 +578,10 @@ class NotificationSystem {
    */
   saveNotifications() {
     try {
-      localStorage.setItem('notifications', JSON.stringify(this.notifications.slice(0, this.maxNotifications)));
+      localStorage.setItem(
+        'notifications',
+        JSON.stringify(this.notifications.slice(0, this.maxNotifications))
+      );
     } catch (error) {
       console.error('Failed to save notifications:', error);
     }
@@ -583,11 +594,11 @@ class NotificationSystem {
     try {
       const saved = localStorage.getItem('notifications');
       if (saved) {
-        this.notifications = JSON.parse(saved).map(n => ({
+        this.notifications = JSON.parse(saved).map((n) => ({
           ...n,
-          timestamp: new Date(n.timestamp)
+          timestamp: new Date(n.timestamp),
         }));
-        this.unreadCount = this.notifications.filter(n => !n.read).length;
+        this.unreadCount = this.notifications.filter((n) => !n.read).length;
         this.updateUnreadBadge();
       }
     } catch (error) {
@@ -603,7 +614,7 @@ class NotificationSystem {
     window.addEventListener('portfolio-updated', () => {
       this.showNotification('Portfolio Updated', {
         body: 'Your portfolio data has been updated',
-        category: 'portfolio'
+        category: 'portfolio',
       });
     });
 
@@ -611,7 +622,7 @@ class NotificationSystem {
     window.addEventListener('trade-executed', (e) => {
       this.showNotification('Trade Executed', {
         body: `${e.detail.type}: ${e.detail.asset}`,
-        category: 'trade'
+        category: 'trade',
       });
     });
 
@@ -619,7 +630,7 @@ class NotificationSystem {
     window.addEventListener('user-joined', (e) => {
       this.showNotification('User Joined', {
         body: `${e.detail.userName} joined the session`,
-        category: 'collaboration'
+        category: 'collaboration',
       });
     });
   }
@@ -630,12 +641,12 @@ class NotificationSystem {
   formatTimestamp(timestamp) {
     const now = new Date();
     const diff = now - timestamp;
-    
-    if (diff < 60000) return 'Just now';
-    if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;
-    if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;
-    if (diff < 604800000) return `${Math.floor(diff / 86400000)}d ago`;
-    
+
+    if (diff < 60000) {return 'Just now';}
+    if (diff < 3600000) {return `${Math.floor(diff / 60000)}m ago`;}
+    if (diff < 86400000) {return `${Math.floor(diff / 3600000)}h ago`;}
+    if (diff < 604800000) {return `${Math.floor(diff / 86400000)}d ago`;}
+
     return timestamp.toLocaleDateString('cs-CZ');
   }
 }

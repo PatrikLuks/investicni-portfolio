@@ -10,9 +10,9 @@ class ActivityLogger {
     this.filters = {
       type: 'all',
       user: 'all',
-      dateRange: 'all'
+      dateRange: 'all',
     };
-    
+
     this.init();
   }
 
@@ -23,7 +23,7 @@ class ActivityLogger {
     this.loadActivities();
     this.setupEventListeners();
     this.createActivityUI();
-    
+
     console.log('✅ Activity Logger initialized');
   }
 
@@ -43,7 +43,7 @@ class ActivityLogger {
       userId: window.collaborationManager?.userId || 'local-user',
       userName: window.collaborationManager?.userName || 'You',
       ip: 'local', // In production, get from server
-      sessionId: this.getSessionId()
+      sessionId: this.getSessionId(),
     };
 
     this.activities.unshift(activity);
@@ -66,20 +66,21 @@ class ActivityLogger {
   createActivityUI() {
     // Add activity log button
     const portfolioCard = document.getElementById('portfolioCard');
-    if (!portfolioCard) return;
+    if (!portfolioCard) {return;}
 
     const headerDiv = portfolioCard.querySelector('div[style*="justify-content: space-between"]');
-    if (!headerDiv) return;
+    if (!headerDiv) {return;}
 
     const buttonContainer = headerDiv.querySelector('div[style*="gap"]');
-    if (!buttonContainer) return;
+    if (!buttonContainer) {return;}
 
     const activityBtn = document.createElement('button');
     activityBtn.id = 'activityLogBtn';
     activityBtn.className = 'btn-icon';
     activityBtn.title = 'Activity Log';
     activityBtn.setAttribute('aria-label', 'Historie aktivit');
-    activityBtn.style.cssText = 'font-size: 1.5rem; padding: 8px 16px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; border: none; border-radius: 8px; cursor: pointer;';
+    activityBtn.style.cssText =
+      'font-size: 1.5rem; padding: 8px 16px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; border: none; border-radius: 8px; cursor: pointer;';
     activityBtn.textContent = '📋';
 
     activityBtn.addEventListener('click', () => this.toggleActivityPanel());
@@ -201,9 +202,9 @@ class ActivityLogger {
   toggleActivityPanel() {
     const panel = document.getElementById('activityPanel');
     const isVisible = panel.style.display !== 'none';
-    
+
     panel.style.display = isVisible ? 'none' : 'block';
-    
+
     if (!isVisible) {
       this.updateActivityFeed();
       this.updateUserFilter();
@@ -215,7 +216,7 @@ class ActivityLogger {
    */
   updateActivityFeed() {
     const feed = document.getElementById('activityFeed');
-    if (!feed) return;
+    if (!feed) {return;}
 
     const filtered = this.filterActivities();
 
@@ -232,14 +233,18 @@ class ActivityLogger {
     // Group by date
     const grouped = this.groupByDate(filtered);
 
-    feed.innerHTML = Object.entries(grouped).map(([date, activities]) => `
+    feed.innerHTML = Object.entries(grouped)
+      .map(
+        ([date, activities]) => `
       <div style="margin-bottom: 24px;">
         <div style="position: sticky; top: 0; background: white; padding: 8px 0; font-weight: 600; color: #667eea; font-size: 0.9rem; border-bottom: 2px solid #f0f0f0; margin-bottom: 8px;">
           ${date}
         </div>
-        ${activities.map(activity => this.renderActivity(activity)).join('')}
+        ${activities.map((activity) => this.renderActivity(activity)).join('')}
       </div>
-    `).join('');
+    `
+      )
+      .join('');
 
     // Update count
     document.getElementById('activityCount').textContent = filtered.length;
@@ -256,7 +261,7 @@ class ActivityLogger {
       export: '📤',
       import: '📥',
       system: '⚙️',
-      collaboration: '👥'
+      collaboration: '👥',
     };
 
     const colors = {
@@ -266,7 +271,7 @@ class ActivityLogger {
       export: '#f39c12',
       import: '#9b59b6',
       system: '#95a5a6',
-      collaboration: '#667eea'
+      collaboration: '#667eea',
     };
 
     return `
@@ -284,11 +289,15 @@ class ActivityLogger {
           <div style="font-weight: 600; color: #333; margin-bottom: 4px;">
             ${activity.action}
           </div>
-          ${activity.details && Object.keys(activity.details).length > 0 ? `
+          ${
+  activity.details && Object.keys(activity.details).length > 0
+    ? `
             <div style="font-size: 0.85rem; color: #666; margin-bottom: 6px;">
               ${this.formatDetails(activity.details)}
             </div>
-          ` : ''}
+          `
+    : ''
+}
           <div style="display: flex; gap: 12px; font-size: 0.8rem; color: #999;">
             <span>${activity.userName}</span>
             <span>•</span>
@@ -307,12 +316,12 @@ class ActivityLogger {
 
     // Filter by type
     if (this.filters.type !== 'all') {
-      filtered = filtered.filter(a => a.type === this.filters.type);
+      filtered = filtered.filter((a) => a.type === this.filters.type);
     }
 
     // Filter by user
     if (this.filters.user !== 'all') {
-      filtered = filtered.filter(a => a.userId === this.filters.user);
+      filtered = filtered.filter((a) => a.userId === this.filters.user);
     }
 
     // Filter by date range
@@ -333,7 +342,7 @@ class ActivityLogger {
       }
 
       if (cutoff) {
-        filtered = filtered.filter(a => new Date(a.timestamp) >= cutoff);
+        filtered = filtered.filter((a) => new Date(a.timestamp) >= cutoff);
       }
     }
 
@@ -349,7 +358,7 @@ class ActivityLogger {
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const yesterday = new Date(today.getTime() - 86400000);
 
-    activities.forEach(activity => {
+    activities.forEach((activity) => {
       const date = new Date(activity.timestamp);
       const dateKey = new Date(date.getFullYear(), date.getMonth(), date.getDate());
 
@@ -359,11 +368,11 @@ class ActivityLogger {
       } else if (dateKey.getTime() === yesterday.getTime()) {
         label = 'Yesterday';
       } else {
-        label = date.toLocaleDateString('cs-CZ', { 
-          weekday: 'long', 
-          year: 'numeric', 
-          month: 'long', 
-          day: 'numeric' 
+        label = date.toLocaleDateString('cs-CZ', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
         });
       }
 
@@ -381,17 +390,17 @@ class ActivityLogger {
    */
   updateUserFilter() {
     const select = document.getElementById('activityUserFilter');
-    if (!select) return;
+    if (!select) {return;}
 
     const users = new Set();
-    this.activities.forEach(a => {
+    this.activities.forEach((a) => {
       if (a.userId && a.userName) {
         users.add(JSON.stringify({ id: a.userId, name: a.userName }));
       }
     });
 
     const options = ['<option value="all">All Users</option>'];
-    users.forEach(userStr => {
+    users.forEach((userStr) => {
       const user = JSON.parse(userStr);
       options.push(`<option value="${user.id}">${user.name}</option>`);
     });
@@ -418,9 +427,9 @@ class ActivityLogger {
    */
   formatTime(timestamp) {
     const date = new Date(timestamp);
-    return date.toLocaleTimeString('cs-CZ', { 
-      hour: '2-digit', 
-      minute: '2-digit' 
+    return date.toLocaleTimeString('cs-CZ', {
+      hour: '2-digit',
+      minute: '2-digit',
     });
   }
 
@@ -429,17 +438,19 @@ class ActivityLogger {
    */
   exportActivities() {
     const filtered = this.filterActivities();
-    
+
     const csv = [
       ['Timestamp', 'Type', 'Action', 'User', 'Details'],
-      ...filtered.map(a => [
+      ...filtered.map((a) => [
         new Date(a.timestamp).toISOString(),
         a.type,
         a.action,
         a.userName,
-        JSON.stringify(a.details)
-      ])
-    ].map(row => row.join(',')).join('\n');
+        JSON.stringify(a.details),
+      ]),
+    ]
+      .map((row) => row.join(','))
+      .join('\n');
 
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
@@ -467,7 +478,10 @@ class ActivityLogger {
    */
   saveActivities() {
     try {
-      localStorage.setItem('activity-log', JSON.stringify(this.activities.slice(0, this.maxActivities)));
+      localStorage.setItem(
+        'activity-log',
+        JSON.stringify(this.activities.slice(0, this.maxActivities))
+      );
     } catch (error) {
       console.error('Failed to save activities:', error);
     }
@@ -480,9 +494,9 @@ class ActivityLogger {
     try {
       const saved = localStorage.getItem('activity-log');
       if (saved) {
-        this.activities = JSON.parse(saved).map(a => ({
+        this.activities = JSON.parse(saved).map((a) => ({
           ...a,
-          timestamp: new Date(a.timestamp)
+          timestamp: new Date(a.timestamp),
         }));
       }
     } catch (error) {

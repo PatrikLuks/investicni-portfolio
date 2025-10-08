@@ -9,7 +9,7 @@ class PortfolioOptimizer {
     this.covariance = [];
     this.weights = [];
     this.riskFreeRate = 0.02; // 2% annual
-    
+
     this.init();
   }
 
@@ -62,7 +62,7 @@ class PortfolioOptimizer {
    * Calculate expected returns
    */
   calculateReturns(data) {
-    this.returns = data.map(item => {
+    this.returns = data.map((item) => {
       const currentValue = parseFloat(item.aktuálníHodnota || 0);
       const investedValue = parseFloat(item.investováno || 1);
       return (currentValue - investedValue) / investedValue;
@@ -74,7 +74,9 @@ class PortfolioOptimizer {
    */
   calculateCovariance(data) {
     const n = data.length;
-    this.covariance = Array(n).fill(0).map(() => Array(n).fill(0));
+    this.covariance = Array(n)
+      .fill(0)
+      .map(() => Array(n).fill(0));
 
     // Simplified covariance (in production, use historical price data)
     for (let i = 0; i < n; i++) {
@@ -85,9 +87,8 @@ class PortfolioOptimizer {
         } else {
           // Correlation between assets (simplified)
           const correlation = 0.3; // Assume 30% correlation
-          this.covariance[i][j] = correlation * 
-            Math.sqrt(this.covariance[i][i]) * 
-            Math.sqrt(this.covariance[j][j]);
+          this.covariance[i][j] =
+            correlation * Math.sqrt(this.covariance[i][i]) * Math.sqrt(this.covariance[j][j]);
         }
       }
     }
@@ -171,7 +172,7 @@ class PortfolioOptimizer {
   calculateSharpeRatio(weights) {
     const portfolioReturn = this.calculatePortfolioReturn(weights);
     const portfolioVolatility = this.calculatePortfolioVolatility(weights);
-    
+
     return (portfolioReturn - this.riskFreeRate) / portfolioVolatility;
   }
 
@@ -187,13 +188,13 @@ class PortfolioOptimizer {
    */
   calculatePortfolioVolatility(weights) {
     let variance = 0;
-    
+
     for (let i = 0; i < weights.length; i++) {
       for (let j = 0; j < weights.length; j++) {
         variance += weights[i] * weights[j] * this.covariance[i][j];
       }
     }
-    
+
     return Math.sqrt(Math.abs(variance));
   }
 
@@ -215,7 +216,7 @@ class PortfolioOptimizer {
       this.normalizeWeights(weightsMinus);
 
       let valuePlus, valueMinus;
-      
+
       if (objective === 'sharpe') {
         valuePlus = this.calculateSharpeRatio(weightsPlus);
         valueMinus = this.calculateSharpeRatio(weightsMinus);
@@ -245,25 +246,25 @@ class PortfolioOptimizer {
    */
   generateEfficientFrontier(data, points = 50) {
     const frontier = [];
-    
+
     for (let i = 0; i < points; i++) {
       const targetReturn = (i / points) * 0.3; // 0% to 30% return
-      
+
       // Find weights that achieve target return with minimum volatility
       const weights = this.minimizeVolatilityWithTargetReturn(data, targetReturn);
-      
+
       const portfolioReturn = this.calculatePortfolioReturn(weights);
       const portfolioVolatility = this.calculatePortfolioVolatility(weights);
       const sharpeRatio = this.calculateSharpeRatio(weights);
-      
+
       frontier.push({
         return: portfolioReturn,
         volatility: portfolioVolatility,
         sharpe: sharpeRatio,
-        weights: weights
+        weights: weights,
       });
     }
-    
+
     return frontier;
   }
 
@@ -273,30 +274,30 @@ class PortfolioOptimizer {
   minimizeVolatilityWithTargetReturn(data, targetReturn) {
     const n = data.length;
     const weights = Array(n).fill(1 / n);
-    
+
     const learningRate = 0.005;
     const iterations = 50;
-    
+
     for (let iter = 0; iter < iterations; iter++) {
       // Calculate current return and volatility
       const currentReturn = this.calculatePortfolioReturn(weights);
       const returnError = targetReturn - currentReturn;
-      
+
       // Gradient for volatility minimization
       const volGradient = this.calculateGradient(weights, 'volatility');
-      
+
       // Update weights
       for (let i = 0; i < n; i++) {
         // Move toward minimum volatility
         weights[i] -= learningRate * volGradient[i];
-        
+
         // Adjust for target return
         weights[i] += learningRate * returnError * this.returns[i];
       }
-      
+
       this.normalizeWeights(weights);
     }
-    
+
     return weights;
   }
 
@@ -307,21 +308,26 @@ class PortfolioOptimizer {
     const portfolioReturn = this.calculatePortfolioReturn(weights);
     const portfolioVolatility = this.calculatePortfolioVolatility(weights);
     const sharpeRatio = this.calculateSharpeRatio(weights);
-    
+
     const allocations = data.map((item, i) => ({
       asset: item.název,
-      currentWeight: parseFloat(item.aktuálníHodnota || 0) / data.reduce((sum, d) => sum + parseFloat(d.aktuálníHodnota || 0), 0),
+      currentWeight:
+        parseFloat(item.aktuálníHodnota || 0) /
+        data.reduce((sum, d) => sum + parseFloat(d.aktuálníHodnota || 0), 0),
       optimalWeight: weights[i],
-      difference: weights[i] - (parseFloat(item.aktuálníHodnota || 0) / data.reduce((sum, d) => sum + parseFloat(d.aktuálníHodnota || 0), 0)),
-      expectedReturn: this.returns[i]
+      difference:
+        weights[i] -
+        parseFloat(item.aktuálníHodnota || 0) /
+          data.reduce((sum, d) => sum + parseFloat(d.aktuálníHodnota || 0), 0),
+      expectedReturn: this.returns[i],
     }));
-    
+
     return {
       objective,
       portfolioReturn: portfolioReturn * 100,
       portfolioVolatility: portfolioVolatility * 100,
       sharpeRatio,
-      allocations: allocations.sort((a, b) => b.optimalWeight - a.optimalWeight)
+      allocations: allocations.sort((a, b) => b.optimalWeight - a.optimalWeight),
     };
   }
 
@@ -330,20 +336,21 @@ class PortfolioOptimizer {
    */
   createOptimizerUI() {
     const portfolioCard = document.getElementById('portfolioCard');
-    if (!portfolioCard) return;
+    if (!portfolioCard) {return;}
 
     const headerDiv = portfolioCard.querySelector('div[style*="justify-content: space-between"]');
-    if (!headerDiv) return;
+    if (!headerDiv) {return;}
 
     const buttonContainer = headerDiv.querySelector('div[style*="gap"]');
-    if (!buttonContainer) return;
+    if (!buttonContainer) {return;}
 
     const optimizeBtn = document.createElement('button');
     optimizeBtn.id = 'optimizeBtn';
     optimizeBtn.className = 'btn-icon';
     optimizeBtn.title = 'Portfolio Optimization';
     optimizeBtn.setAttribute('aria-label', 'Optimalizace portfolia');
-    optimizeBtn.style.cssText = 'font-size: 1.5rem; padding: 8px 16px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border: none; border-radius: 8px; cursor: pointer;';
+    optimizeBtn.style.cssText =
+      'font-size: 1.5rem; padding: 8px 16px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border: none; border-radius: 8px; cursor: pointer;';
     optimizeBtn.textContent = '🎯';
 
     optimizeBtn.addEventListener('click', () => this.showOptimizationPanel());
@@ -356,7 +363,7 @@ class PortfolioOptimizer {
    */
   showOptimizationPanel() {
     const data = window.getFondyData ? window.getFondyData() : [];
-    
+
     if (data.length === 0) {
       alert('No data to optimize');
       return;
@@ -422,10 +429,10 @@ class PortfolioOptimizer {
   runOptimization(objective) {
     // Close selection panel
     document.getElementById('optimizationPanel')?.remove();
-    
+
     const data = window.getFondyData();
     const result = this.optimize(data, objective);
-    
+
     this.showOptimizationResults(result);
   }
 
@@ -450,9 +457,9 @@ class PortfolioOptimizer {
     `;
 
     const objectiveNames = {
-      'max_sharpe': 'Maximum Sharpe Ratio',
-      'min_volatility': 'Minimum Volatility',
-      'max_return': 'Maximum Return'
+      max_sharpe: 'Maximum Sharpe Ratio',
+      min_volatility: 'Minimum Volatility',
+      max_return: 'Maximum Return',
     };
 
     panel.innerHTML = `
@@ -490,7 +497,9 @@ class PortfolioOptimizer {
         <h3 style="margin: 20px 0 12px 0;">Recommended Allocation:</h3>
         
         <div style="background: #f8f9fa; border-radius: 8px; padding: 16px;">
-          ${result.allocations.map(alloc => `
+          ${result.allocations
+    .map(
+      (alloc) => `
             <div style="margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid #dee2e6;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                 <div style="font-weight: 600; color: #333;">${alloc.asset}</div>
@@ -508,7 +517,9 @@ class PortfolioOptimizer {
                 <div style="height: 100%; width: ${alloc.optimalWeight * 100}%; background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); transition: width 0.3s;"></div>
               </div>
             </div>
-          `).join('')}
+          `
+    )
+    .join('')}
         </div>
         
         <button onclick="document.getElementById('optimizationResults').remove()" style="width: 100%; margin-top: 20px; padding: 14px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 600;">
@@ -518,12 +529,9 @@ class PortfolioOptimizer {
     `;
 
     document.body.appendChild(panel);
-    
+
     if (window.notificationSystem) {
-      window.notificationSystem.showInAppNotification(
-        'Portfolio optimization complete',
-        'success'
-      );
+      window.notificationSystem.showInAppNotification('Portfolio optimization complete', 'success');
     }
   }
 }

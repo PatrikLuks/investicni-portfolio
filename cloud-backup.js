@@ -11,13 +11,13 @@ class CloudBackupManager {
         clientId: null,
         accessToken: null,
         folderId: null,
-        lastSync: null
+        lastSync: null,
       },
       dropbox: {
         enabled: false,
         accessToken: null,
-        lastSync: null
-      }
+        lastSync: null,
+      },
     };
 
     this.autoBackupInterval = null;
@@ -61,7 +61,7 @@ class CloudBackupManager {
             await gapi.client.init({
               clientId: clientId,
               scope: 'https://www.googleapis.com/auth/drive.file',
-              discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest']
+              discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
             });
 
             // Sign in
@@ -118,7 +118,7 @@ class CloudBackupManager {
       const response = await gapi.client.drive.files.list({
         q: "name='Portfolio Manager Backups' and mimeType='application/vnd.google-apps.folder' and trashed=false",
         spaces: 'drive',
-        fields: 'files(id, name)'
+        fields: 'files(id, name)',
       });
 
       if (response.result.files.length > 0) {
@@ -129,12 +129,12 @@ class CloudBackupManager {
       // Create new folder
       const fileMetadata = {
         name: 'Portfolio Manager Backups',
-        mimeType: 'application/vnd.google-apps.folder'
+        mimeType: 'application/vnd.google-apps.folder',
       };
 
       const folder = await gapi.client.drive.files.create({
         resource: fileMetadata,
-        fields: 'id'
+        fields: 'id',
       });
 
       this.providers.googleDrive.folderId = folder.result.id;
@@ -163,21 +163,27 @@ class CloudBackupManager {
       const metadata = {
         name: fileName,
         mimeType: 'application/json',
-        parents: [this.providers.googleDrive.folderId]
+        parents: [this.providers.googleDrive.folderId],
       };
 
       const blob = new Blob([content], { type: 'application/json' });
       const formData = new FormData();
-      formData.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+      formData.append(
+        'metadata',
+        new Blob([JSON.stringify(metadata)], { type: 'application/json' })
+      );
       formData.append('file', blob);
 
-      const response = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${this.providers.googleDrive.accessToken}`
-        },
-        body: formData
-      });
+      const response = await fetch(
+        'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${this.providers.googleDrive.accessToken}`,
+          },
+          body: formData,
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`Upload failed: ${response.statusText}`);
@@ -210,7 +216,7 @@ class CloudBackupManager {
     try {
       const response = await gapi.client.drive.files.get({
         fileId: fileId,
-        alt: 'media'
+        alt: 'media',
       });
 
       console.log('✅ Restored from Google Drive:', fileId);
@@ -234,7 +240,7 @@ class CloudBackupManager {
       const response = await gapi.client.drive.files.list({
         q: `'${this.providers.googleDrive.folderId}' in parents and mimeType='application/json' and trashed=false`,
         orderBy: 'createdTime desc',
-        fields: 'files(id, name, createdTime, size)'
+        fields: 'files(id, name, createdTime, size)',
       });
 
       return response.result.files || [];
@@ -260,7 +266,7 @@ class CloudBackupManager {
       clientId: null,
       accessToken: null,
       folderId: null,
-      lastSync: null
+      lastSync: null,
     };
 
     this.saveProviderSettings();
@@ -281,8 +287,8 @@ class CloudBackupManager {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
       });
 
       if (!response.ok) {
@@ -316,12 +322,12 @@ class CloudBackupManager {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${this.providers.dropbox.accessToken}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           path: '/Portfolio Manager Backups',
-          autorename: false
-        })
+          autorename: false,
+        }),
       });
       // Folder created or already exists
     } catch (error) {
@@ -353,10 +359,10 @@ class CloudBackupManager {
             path: `/Portfolio Manager Backups/${fileName}`,
             mode: 'add',
             autorename: true,
-            mute: false
-          })
+            mute: false,
+          }),
         },
-        body: content
+        body: content,
       });
 
       if (!response.ok) {
@@ -392,8 +398,8 @@ class CloudBackupManager {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${this.providers.dropbox.accessToken}`,
-          'Dropbox-API-Arg': JSON.stringify({ path })
-        }
+          'Dropbox-API-Arg': JSON.stringify({ path }),
+        },
       });
 
       if (!response.ok) {
@@ -423,12 +429,12 @@ class CloudBackupManager {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${this.providers.dropbox.accessToken}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           path: '/Portfolio Manager Backups',
-          recursive: false
-        })
+          recursive: false,
+        }),
       });
 
       if (!response.ok) {
@@ -450,7 +456,7 @@ class CloudBackupManager {
     this.providers.dropbox = {
       enabled: false,
       accessToken: null,
-      lastSync: null
+      lastSync: null,
     };
 
     this.saveProviderSettings();
@@ -517,7 +523,7 @@ class CloudBackupManager {
 
       if (results.length > 0) {
         console.log(`✅ Auto-backup completed: ${results.length} provider(s)`);
-        
+
         // Show toast notification
         if (typeof showToast === 'function') {
           showToast('success', 'Záloha', `Data zálohována do ${results.length} úložišť`);
@@ -585,7 +591,7 @@ class CloudBackupManager {
       fileName,
       fileId,
       size,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
 
     // Limit history
@@ -639,12 +645,12 @@ class CloudBackupManager {
         autoBackupFrequency: this.autoBackupFrequency,
         googleDrive: {
           enabled: this.providers.googleDrive.enabled,
-          lastSync: this.providers.googleDrive.lastSync
+          lastSync: this.providers.googleDrive.lastSync,
         },
         dropbox: {
           enabled: this.providers.dropbox.enabled,
-          lastSync: this.providers.dropbox.lastSync
-        }
+          lastSync: this.providers.dropbox.lastSync,
+        },
       };
       localStorage.setItem('cloud_backup_settings', JSON.stringify(settings));
     } catch (error) {
@@ -777,7 +783,7 @@ function attachCloudBackupListeners() {
         updateCloudBackupUI();
         alert('✅ Google Drive připojeno');
       } catch (error) {
-        alert('❌ Chyba připojení Google Drive: ' + error.message);
+        alert(`❌ Chyba připojení Google Drive: ${ error.message}`);
       }
     }
   });
@@ -791,7 +797,7 @@ function attachCloudBackupListeners() {
         updateCloudBackupUI();
         alert('✅ Dropbox připojeno');
       } catch (error) {
-        alert('❌ Chyba připojení Dropbox: ' + error.message);
+        alert(`❌ Chyba připojení Dropbox: ${ error.message}`);
       }
     }
   });
@@ -809,7 +815,7 @@ function attachCloudBackupListeners() {
       alert(`✅ Záloha dokončena: ${results.length} úložišť`);
       updateCloudBackupUI();
     } catch (error) {
-      alert('❌ Chyba zálohování: ' + error.message);
+      alert(`❌ Chyba zálohování: ${ error.message}`);
     }
   });
 
@@ -850,11 +856,17 @@ function updateCloudBackupUI() {
   // Update history
   const historyEl = document.getElementById('backup-history-list');
   const history = window.cloudBackupManager.getBackupHistory();
-  historyEl.innerHTML = history.slice(0, 10).map(h => `
+  historyEl.innerHTML =
+    history
+      .slice(0, 10)
+      .map(
+        (h) => `
     <div class="history-item">
       <span class="provider-badge">${h.provider}</span>
       <span class="file-name">${h.fileName}</span>
       <span class="timestamp">${new Date(h.timestamp).toLocaleString('cs-CZ')}</span>
     </div>
-  `).join('') || '<p>Žádná historie</p>';
+  `
+      )
+      .join('') || '<p>Žádná historie</p>';
 }

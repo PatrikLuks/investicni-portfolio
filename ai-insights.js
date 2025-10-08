@@ -10,7 +10,7 @@ class AIInsights {
     this.isLoading = false;
     this.insights = [];
     this.predictions = {};
-    
+
     this.init();
   }
 
@@ -20,13 +20,13 @@ class AIInsights {
   async init() {
     try {
       console.log('🤖 Initializing AI Insights...');
-      
+
       // Load TensorFlow.js (simulated - in production, load actual library)
       await this.loadTensorFlow();
-      
+
       // Create UI
       this.createAIInsightsUI();
-      
+
       console.log('✅ AI Insights initialized');
     } catch (error) {
       console.error('❌ AI Insights initialization failed:', error);
@@ -39,11 +39,11 @@ class AIInsights {
   async loadTensorFlow() {
     // In production, dynamically load TensorFlow.js
     // For demo, simulate with mock predictions
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       setTimeout(() => {
         this.tf = {
           ready: () => Promise.resolve(),
-          version: '4.0.0'
+          version: '4.0.0',
         };
         resolve();
       }, 100);
@@ -55,36 +55,31 @@ class AIInsights {
    * @param {Array} data - Portfolio data
    */
   async generateInsights(data) {
-    if (this.isLoading) return;
-    
+    if (this.isLoading) {return;}
+
     this.isLoading = true;
     this.updateLoadingState(true);
 
     try {
       // Analyze portfolio
       const analysis = await this.analyzePortfolio(data);
-      
+
       // Generate predictions
       const predictions = await this.generatePredictions(data);
-      
+
       // Generate recommendations
       const recommendations = await this.generateRecommendations(data, analysis);
-      
+
       // Risk assessment
       const risks = await this.assessRisks(data);
-      
+
       // Opportunities
       const opportunities = await this.identifyOpportunities(data);
 
-      this.insights = [
-        ...predictions,
-        ...recommendations,
-        ...risks,
-        ...opportunities
-      ];
+      this.insights = [...predictions, ...recommendations, ...risks, ...opportunities];
 
       this.renderInsights();
-      
+
       console.log('✅ Generated', this.insights.length, 'AI insights');
     } catch (error) {
       console.error('Failed to generate insights:', error);
@@ -105,14 +100,14 @@ class AIInsights {
     const totalInvested = data.reduce((sum, item) => {
       const pocet = parseFloat(item.počet || 0);
       const cena = parseFloat(item.nákupníCena || 0);
-      return sum + (pocet * cena);
+      return sum + pocet * cena;
     }, 0);
 
     const performance = ((totalValue - totalInvested) / totalInvested) * 100;
 
     // Analyze diversification
     const types = {};
-    data.forEach(item => {
+    data.forEach((item) => {
       const type = item.typ || 'Other';
       types[type] = (types[type] || 0) + parseFloat(item.aktuálníHodnota || 0);
     });
@@ -126,7 +121,7 @@ class AIInsights {
       performance,
       diversificationScore: Math.min(diversificationScore, 100),
       concentrationRisk,
-      assetTypes: types
+      assetTypes: types,
     };
   }
 
@@ -143,12 +138,12 @@ class AIInsights {
       .sort((a, b) => parseFloat(b.aktuálníHodnota || 0) - parseFloat(a.aktuálníHodnota || 0))
       .slice(0, 3);
 
-    topHoldings.forEach(holding => {
+    topHoldings.forEach((holding) => {
       const currentValue = parseFloat(holding.aktuálníHodnota || 0);
-      
+
       // Simulate prediction (random walk with trend)
       const trend = Math.random() > 0.5 ? 1 : -1;
-      const prediction = currentValue * (1 + trend * (0.05 + Math.random() * 0.10));
+      const prediction = currentValue * (1 + trend * (0.05 + Math.random() * 0.1));
       const confidence = 60 + Math.random() * 30;
 
       predictions.push({
@@ -158,7 +153,7 @@ class AIInsights {
         description: `Expected ${trend > 0 ? 'growth' : 'decline'} to ${this.formatCurrency(prediction)} (${confidence.toFixed(0)}% confidence)`,
         confidence: confidence,
         action: 'View Details',
-        icon: '🔮'
+        icon: '🔮',
       });
 
       // Store prediction
@@ -167,7 +162,7 @@ class AIInsights {
         predicted: prediction,
         change: ((prediction - currentValue) / currentValue) * 100,
         confidence,
-        timestamp: new Date()
+        timestamp: new Date(),
       };
     });
 
@@ -191,7 +186,7 @@ class AIInsights {
         description: `Your portfolio diversity score is ${analysis.diversificationScore.toFixed(0)}%. Consider adding different asset classes.`,
         confidence: 85,
         action: 'View Suggestions',
-        icon: '🎯'
+        icon: '🎯',
       });
     }
 
@@ -204,7 +199,7 @@ class AIInsights {
         description: `${(analysis.concentrationRisk * 100).toFixed(0)}% of portfolio in single asset. Consider rebalancing.`,
         confidence: 90,
         action: 'Rebalance',
-        icon: '⚠️'
+        icon: '⚠️',
       });
     }
 
@@ -217,7 +212,7 @@ class AIInsights {
         description: `Current return: ${analysis.performance.toFixed(2)}%. Review holdings and consider adjustments.`,
         confidence: 75,
         action: 'Analyze',
-        icon: '📉'
+        icon: '📉',
       });
     } else if (analysis.performance > 20) {
       recommendations.push({
@@ -227,7 +222,7 @@ class AIInsights {
         description: `Excellent return of ${analysis.performance.toFixed(2)}%. Consider taking profits on winners.`,
         confidence: 80,
         action: 'Review',
-        icon: '📈'
+        icon: '📈',
       });
     }
 
@@ -252,7 +247,7 @@ class AIInsights {
         description: 'AI models detect increased market volatility. Consider hedging strategies.',
         confidence: 72,
         action: 'View Protection',
-        icon: '🚨'
+        icon: '🚨',
       });
     }
 
@@ -266,7 +261,7 @@ class AIInsights {
         description: 'Many holdings are highly correlated. Portfolio may not be truly diversified.',
         confidence: 68,
         action: 'Analyze Correlation',
-        icon: '🔗'
+        icon: '🔗',
       });
     }
 
@@ -280,7 +275,7 @@ class AIInsights {
         description: 'Portfolio volatility trending upward. May experience larger swings.',
         confidence: 74,
         action: 'Reduce Volatility',
-        icon: '📊'
+        icon: '📊',
       });
     }
 
@@ -303,7 +298,7 @@ class AIInsights {
       description: 'AI identified 3 holdings trading below predicted fair value.',
       confidence: 65,
       action: 'View Assets',
-      icon: '💎'
+      icon: '💎',
     });
 
     // Sector rotation
@@ -315,7 +310,7 @@ class AIInsights {
         description: 'Technology sector showing strong momentum. Consider increasing allocation.',
         confidence: 70,
         action: 'View Sectors',
-        icon: '🔄'
+        icon: '🔄',
       });
     }
 
@@ -328,7 +323,7 @@ class AIInsights {
         description: 'Portfolio drift detected. Rebalancing could improve risk-adjusted returns.',
         confidence: 78,
         action: 'Auto-Rebalance',
-        icon: '⚖️'
+        icon: '⚖️',
       });
     }
 
@@ -341,20 +336,21 @@ class AIInsights {
   createAIInsightsUI() {
     // Add AI button
     const portfolioCard = document.getElementById('portfolioCard');
-    if (!portfolioCard) return;
+    if (!portfolioCard) {return;}
 
     const headerDiv = portfolioCard.querySelector('div[style*="justify-content: space-between"]');
-    if (!headerDiv) return;
+    if (!headerDiv) {return;}
 
     const buttonContainer = headerDiv.querySelector('div[style*="gap"]');
-    if (!buttonContainer) return;
+    if (!buttonContainer) {return;}
 
     const aiBtn = document.createElement('button');
     aiBtn.id = 'aiInsightsBtn';
     aiBtn.className = 'btn-icon';
     aiBtn.title = 'AI Insights';
     aiBtn.setAttribute('aria-label', 'AI analýza');
-    aiBtn.style.cssText = 'font-size: 1.5rem; padding: 8px 16px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border: none; border-radius: 8px; cursor: pointer;';
+    aiBtn.style.cssText =
+      'font-size: 1.5rem; padding: 8px 16px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border: none; border-radius: 8px; cursor: pointer;';
     aiBtn.innerHTML = '🤖 AI';
 
     aiBtn.addEventListener('click', () => this.toggleAIPanel());
@@ -434,9 +430,9 @@ class AIInsights {
   toggleAIPanel() {
     const panel = document.getElementById('aiInsightsPanel');
     const isVisible = panel.style.display !== 'none';
-    
+
     panel.style.display = isVisible ? 'none' : 'block';
-    
+
     if (!isVisible && this.insights.length === 0) {
       // Auto-generate insights on first open
       const data = window.getFondyData ? window.getFondyData() : [];
@@ -450,7 +446,7 @@ class AIInsights {
   updateLoadingState(isLoading) {
     const indicator = document.getElementById('aiLoadingIndicator');
     const list = document.getElementById('aiInsightsList');
-    
+
     if (indicator && list) {
       indicator.style.display = isLoading ? 'block' : 'none';
       list.style.display = isLoading ? 'none' : 'block';
@@ -462,7 +458,7 @@ class AIInsights {
    */
   renderInsights() {
     const list = document.getElementById('aiInsightsList');
-    if (!list) return;
+    if (!list) {return;}
 
     if (this.insights.length === 0) {
       list.innerHTML = `
@@ -479,10 +475,10 @@ class AIInsights {
       prediction: [],
       recommendation: [],
       risk: [],
-      opportunity: []
+      opportunity: [],
     };
 
-    this.insights.forEach(insight => {
+    this.insights.forEach((insight) => {
       if (grouped[insight.type]) {
         grouped[insight.type].push(insight);
       }
@@ -492,19 +488,22 @@ class AIInsights {
       { key: 'prediction', title: '🔮 Predictions', color: '#667eea' },
       { key: 'recommendation', title: '🎯 Recommendations', color: '#3498db' },
       { key: 'risk', title: '🚨 Risks', color: '#e74c3c' },
-      { key: 'opportunity', title: '💎 Opportunities', color: '#2ecc71' }
+      { key: 'opportunity', title: '💎 Opportunities', color: '#2ecc71' },
     ];
 
     list.innerHTML = sections
-      .filter(section => grouped[section.key].length > 0)
-      .map(section => `
+      .filter((section) => grouped[section.key].length > 0)
+      .map(
+        (section) => `
         <div style="margin-bottom: 20px;">
           <div style="font-weight: 600; color: ${section.color}; padding: 12px 8px 8px 8px; font-size: 1rem;">
             ${section.title}
           </div>
-          ${grouped[section.key].map(insight => this.renderInsight(insight)).join('')}
+          ${grouped[section.key].map((insight) => this.renderInsight(insight)).join('')}
         </div>
-      `).join('');
+      `
+      )
+      .join('');
   }
 
   /**
@@ -515,14 +514,14 @@ class AIInsights {
       success: '#2ecc71',
       info: '#3498db',
       warning: '#f39c12',
-      error: '#e74c3c'
+      error: '#e74c3c',
     };
 
     const bgColors = {
       success: '#e8f5e9',
       info: '#e3f2fd',
       warning: '#fff8e1',
-      error: '#ffebee'
+      error: '#ffebee',
     };
 
     return `
@@ -581,7 +580,7 @@ class AIInsights {
       style: 'currency',
       currency: 'CZK',
       minimumFractionDigits: 0,
-      maximumFractionDigits: 0
+      maximumFractionDigits: 0,
     }).format(value);
   }
 
@@ -589,7 +588,7 @@ class AIInsights {
    * Delay helper
    */
   delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }
 

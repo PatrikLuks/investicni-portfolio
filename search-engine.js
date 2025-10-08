@@ -25,14 +25,14 @@ class SearchEngine {
         { name: 'kategorie', weight: 0.2 },
         { name: 'poznámka', weight: 0.2 },
         { name: 'ticker', weight: 0.15 },
-        { name: 'správce', weight: 0.15 }
+        { name: 'správce', weight: 0.15 },
       ],
       threshold: 0.4, // 0 = perfect match, 1 = match anything
       distance: 100,
       minMatchCharLength: 2,
       includeScore: true,
       includeMatches: true,
-      ignoreLocation: true
+      ignoreLocation: true,
     };
 
     // Check if Fuse.js is available
@@ -55,7 +55,7 @@ class SearchEngine {
         item,
         score: 1,
         matches: [],
-        refIndex: index
+        refIndex: index,
       }));
     }
 
@@ -88,19 +88,17 @@ class SearchEngine {
         item.kategorie || '',
         item.poznámka || '',
         item.ticker || '',
-        item.správce || ''
+        item.správce || '',
       ];
 
-      const matches = searchFields.some(field => 
-        field.toLowerCase().includes(lowerQuery)
-      );
+      const matches = searchFields.some((field) => field.toLowerCase().includes(lowerQuery));
 
       if (matches) {
         results.push({
           item,
           score: 0.5,
           matches: [],
-          refIndex: index
+          refIndex: index,
         });
       }
     });
@@ -121,19 +119,17 @@ class SearchEngine {
     // Text search filter
     if (filters.searchQuery) {
       const searchResults = this.fuzzySearch(filters.searchQuery, results);
-      results = searchResults.map(r => r.item);
+      results = searchResults.map((r) => r.item);
     }
 
     // Category filter
     if (filters.kategorie && filters.kategorie.length > 0) {
-      results = results.filter(item => 
-        filters.kategorie.includes(item.kategorie)
-      );
+      results = results.filter((item) => filters.kategorie.includes(item.kategorie));
     }
 
     // Price range filter
     if (filters.minPrice !== undefined || filters.maxPrice !== undefined) {
-      results = results.filter(item => {
+      results = results.filter((item) => {
         const price = parseFloat(item.aktuálníCena) || 0;
         const min = filters.minPrice !== undefined ? parseFloat(filters.minPrice) : -Infinity;
         const max = filters.maxPrice !== undefined ? parseFloat(filters.maxPrice) : Infinity;
@@ -143,7 +139,7 @@ class SearchEngine {
 
     // Percentage change filter
     if (filters.minChange !== undefined || filters.maxChange !== undefined) {
-      results = results.filter(item => {
+      results = results.filter((item) => {
         const change = parseFloat(item.změnaProcenta) || 0;
         const min = filters.minChange !== undefined ? parseFloat(filters.minChange) : -Infinity;
         const max = filters.maxChange !== undefined ? parseFloat(filters.maxChange) : Infinity;
@@ -153,7 +149,7 @@ class SearchEngine {
 
     // Value range filter (position size)
     if (filters.minValue !== undefined || filters.maxValue !== undefined) {
-      results = results.filter(item => {
+      results = results.filter((item) => {
         const value = parseFloat(item.aktuálníHodnota) || 0;
         const min = filters.minValue !== undefined ? parseFloat(filters.minValue) : -Infinity;
         const max = filters.maxValue !== undefined ? parseFloat(filters.maxValue) : Infinity;
@@ -163,15 +159,13 @@ class SearchEngine {
 
     // Manager filter
     if (filters.správce && filters.správce.length > 0) {
-      results = results.filter(item => 
-        filters.správce.includes(item.správce)
-      );
+      results = results.filter((item) => filters.správce.includes(item.správce));
     }
 
     // Custom date range filter
     if (filters.startDate || filters.endDate) {
-      results = results.filter(item => {
-        if (!item.datumNákupu) return false;
+      results = results.filter((item) => {
+        if (!item.datumNákupu) {return false;}
         const itemDate = new Date(item.datumNákupu);
         const start = filters.startDate ? new Date(filters.startDate) : new Date('1900-01-01');
         const end = filters.endDate ? new Date(filters.endDate) : new Date('2100-12-31');
@@ -181,7 +175,7 @@ class SearchEngine {
 
     // Has notes filter
     if (filters.hasNotes === true) {
-      results = results.filter(item => item.poznámka && item.poznámka.trim().length > 0);
+      results = results.filter((item) => item.poznámka && item.poznámka.trim().length > 0);
     }
 
     this.searchResults = results;
@@ -201,20 +195,20 @@ class SearchEngine {
     }
 
     // Check if already exists
-    const existingIndex = this.savedSearches.findIndex(s => s.name === name);
-    
+    const existingIndex = this.savedSearches.findIndex((s) => s.name === name);
+
     const savedSearch = {
       name: name.trim(),
       filters: { ...filters },
       createdAt: new Date().toISOString(),
-      usageCount: existingIndex >= 0 ? this.savedSearches[existingIndex].usageCount + 1 : 1
+      usageCount: existingIndex >= 0 ? this.savedSearches[existingIndex].usageCount + 1 : 1,
     };
 
     if (existingIndex >= 0) {
       this.savedSearches[existingIndex] = savedSearch;
     } else {
       this.savedSearches.unshift(savedSearch);
-      
+
       // Limit saved searches
       if (this.savedSearches.length > this.maxSavedSearches) {
         this.savedSearches.pop();
@@ -231,7 +225,7 @@ class SearchEngine {
    * @returns {Object|null} - Filter configuration
    */
   loadSearch(name) {
-    const search = this.savedSearches.find(s => s.name === name);
+    const search = this.savedSearches.find((s) => s.name === name);
     if (search) {
       search.usageCount++;
       search.lastUsed = new Date().toISOString();
@@ -248,7 +242,7 @@ class SearchEngine {
    * @returns {boolean} - Success status
    */
   deleteSearch(name) {
-    const index = this.savedSearches.findIndex(s => s.name === name);
+    const index = this.savedSearches.findIndex((s) => s.name === name);
     if (index >= 0) {
       this.savedSearches.splice(index, 1);
       this.persistSavedSearches();
@@ -271,15 +265,15 @@ class SearchEngine {
    */
   addToHistory(query) {
     const trimmed = query.trim();
-    if (!trimmed || trimmed.length < 2) return;
+    if (!trimmed || trimmed.length < 2) {return;}
 
     // Remove duplicates
-    this.searchHistory = this.searchHistory.filter(h => h.query !== trimmed);
-    
+    this.searchHistory = this.searchHistory.filter((h) => h.query !== trimmed);
+
     // Add to beginning
     this.searchHistory.unshift({
       query: trimmed,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
 
     // Limit history
@@ -313,7 +307,7 @@ class SearchEngine {
    */
   getPopularSearches(limit = 5) {
     const frequency = {};
-    this.searchHistory.forEach(h => {
+    this.searchHistory.forEach((h) => {
       frequency[h.query] = (frequency[h.query] || 0) + 1;
     });
 
@@ -336,10 +330,10 @@ class SearchEngine {
    * @returns {number} - Number of active filters
    */
   getActiveFilterCount() {
-    return Object.keys(this.currentFilters).filter(key => {
+    return Object.keys(this.currentFilters).filter((key) => {
       const value = this.currentFilters[key];
-      if (Array.isArray(value)) return value.length > 0;
-      if (typeof value === 'string') return value.trim().length > 0;
+      if (Array.isArray(value)) {return value.length > 0;}
+      if (typeof value === 'string') {return value.trim().length > 0;}
       return value !== undefined && value !== null;
     }).length;
   }
@@ -350,21 +344,28 @@ class SearchEngine {
    * @returns {string} - CSV content
    */
   exportToCSV(results = this.searchResults) {
-    if (!results || results.length === 0) return '';
+    if (!results || results.length === 0) {return '';}
 
-    const headers = ['Fond', 'Kategorie', 'Aktuální cena', 'Změna %', 'Aktuální hodnota', 'Poznámka'];
-    const rows = results.map(item => [
+    const headers = [
+      'Fond',
+      'Kategorie',
+      'Aktuální cena',
+      'Změna %',
+      'Aktuální hodnota',
+      'Poznámka',
+    ];
+    const rows = results.map((item) => [
       item.fond || '',
       item.kategorie || '',
       item.aktuálníCena || '',
       item.změnaProcenta || '',
       item.aktuálníHodnota || '',
-      (item.poznámka || '').replace(/"/g, '""')
+      (item.poznámka || '').replace(/"/g, '""'),
     ]);
 
     const csv = [
       headers.join(','),
-      ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+      ...rows.map((row) => row.map((cell) => `"${cell}"`).join(',')),
     ].join('\n');
 
     return csv;
@@ -427,22 +428,22 @@ class SearchEngine {
    * @returns {Array} - Suggested search terms
    */
   getSuggestions(input, data) {
-    if (!input || input.length < 2) return [];
+    if (!input || input.length < 2) {return [];}
 
     const lowerInput = input.toLowerCase();
     const suggestions = new Set();
 
     // Add from search history
-    this.searchHistory.forEach(h => {
+    this.searchHistory.forEach((h) => {
       if (h.query.toLowerCase().includes(lowerInput)) {
         suggestions.add(h.query);
       }
     });
 
     // Add from data
-    data.forEach(item => {
+    data.forEach((item) => {
       const fields = [item.fond, item.kategorie, item.ticker, item.správce];
-      fields.forEach(field => {
+      fields.forEach((field) => {
         if (field && field.toLowerCase().includes(lowerInput)) {
           suggestions.add(field);
         }
@@ -475,7 +476,7 @@ function initSearchUI() {
  */
 function createAdvancedSearchPanel() {
   const existingPanel = document.getElementById('advanced-search-panel');
-  if (existingPanel) return;
+  if (existingPanel) {return;}
 
   const panel = document.createElement('div');
   panel.id = 'advanced-search-panel';
@@ -565,7 +566,7 @@ function createAdvancedSearchPanel() {
  */
 function createSavedSearchesPanel() {
   const existingPanel = document.getElementById('saved-searches-panel');
-  if (existingPanel) return;
+  if (existingPanel) {return;}
 
   const panel = document.createElement('div');
   panel.id = 'saved-searches-panel';
@@ -664,14 +665,14 @@ function toggleSearchPanel() {
 function performSearch() {
   const filters = collectFilters();
   const portfolioData = window.getFondyData ? window.getFondyData() : [];
-  
+
   const results = window.searchEngine.applyFilters(portfolioData, filters);
-  
+
   // Update UI with results
   if (typeof window.renderTable === 'function') {
     window.renderTable(results);
   }
-  
+
   updateResultsSummary(results.length);
 }
 
@@ -682,14 +683,16 @@ function performSearch() {
 function collectFilters() {
   return {
     searchQuery: document.getElementById('main-search-input')?.value || '',
-    kategorie: Array.from(document.querySelectorAll('#category-filters input:checked')).map(cb => cb.value),
+    kategorie: Array.from(document.querySelectorAll('#category-filters input:checked')).map(
+      (cb) => cb.value
+    ),
     minPrice: document.getElementById('min-price')?.value || undefined,
     maxPrice: document.getElementById('max-price')?.value || undefined,
     minChange: document.getElementById('min-change')?.value || undefined,
     maxChange: document.getElementById('max-change')?.value || undefined,
     startDate: document.getElementById('start-date')?.value || undefined,
     endDate: document.getElementById('end-date')?.value || undefined,
-    hasNotes: document.getElementById('has-notes-filter')?.checked || false
+    hasNotes: document.getElementById('has-notes-filter')?.checked || false,
   };
 }
 
@@ -698,10 +701,10 @@ function collectFilters() {
  */
 function clearAllFilters() {
   window.searchEngine.clearFilters();
-  
+
   // Reset UI elements
   document.getElementById('main-search-input').value = '';
-  document.querySelectorAll('#category-filters input').forEach(cb => cb.checked = false);
+  document.querySelectorAll('#category-filters input').forEach((cb) => (cb.checked = false));
   document.getElementById('min-price').value = '';
   document.getElementById('max-price').value = '';
   document.getElementById('min-change').value = '';
@@ -709,13 +712,13 @@ function clearAllFilters() {
   document.getElementById('start-date').value = '';
   document.getElementById('end-date').value = '';
   document.getElementById('has-notes-filter').checked = false;
-  
+
   // Rerender full table
   if (typeof window.renderTable === 'function') {
     const portfolioData = window.getFondyData ? window.getFondyData() : [];
     window.renderTable(portfolioData);
   }
-  
+
   updateResultsSummary(0);
 }
 
@@ -724,17 +727,21 @@ function clearAllFilters() {
  */
 function updateCategoryFilters() {
   const container = document.getElementById('category-filters');
-  if (!container) return;
+  if (!container) {return;}
 
   const portfolioData = window.getFondyData ? window.getFondyData() : [];
-  const categories = [...new Set(portfolioData.map(item => item.kategorie).filter(Boolean))];
+  const categories = [...new Set(portfolioData.map((item) => item.kategorie).filter(Boolean))];
 
-  container.innerHTML = categories.map(cat => `
+  container.innerHTML = categories
+    .map(
+      (cat) => `
     <label>
       <input type="checkbox" value="${cat}" />
       ${cat}
     </label>
-  `).join('');
+  `
+    )
+    .join('');
 }
 
 /**
@@ -745,11 +752,11 @@ function updateResultsSummary(count) {
   const summary = document.getElementById('search-results-summary');
   const countEl = document.getElementById('results-count');
   const filtersEl = document.getElementById('active-filters-count');
-  
+
   if (summary && countEl) {
     countEl.textContent = count;
     summary.classList.remove('hidden');
-    
+
     const activeCount = window.searchEngine.getActiveFilterCount();
     if (filtersEl) {
       filtersEl.textContent = `${activeCount} filtrů`;
@@ -777,16 +784,18 @@ function promptSaveSearch() {
  */
 function updateSavedSearchesList() {
   const listEl = document.getElementById('saved-searches-list');
-  if (!listEl) return;
+  if (!listEl) {return;}
 
   const searches = window.searchEngine.getSavedSearches();
-  
+
   if (searches.length === 0) {
     listEl.innerHTML = '<p class="empty-message">Žádná uložená hledání</p>';
     return;
   }
 
-  listEl.innerHTML = searches.map(search => `
+  listEl.innerHTML = searches
+    .map(
+      (search) => `
     <div class="saved-search-item">
       <div class="search-info">
         <strong>${search.name}</strong>
@@ -797,14 +806,16 @@ function updateSavedSearchesList() {
         <button onclick="deleteSavedSearch('${search.name}')" class="btn-small btn-danger">Smazat</button>
       </div>
     </div>
-  `).join('');
+  `
+    )
+    .join('');
 }
 
 /**
  * Load saved search by name
  * @param {string} name - Search name
  */
-window.loadSavedSearch = function(name) {
+window.loadSavedSearch = function (name) {
   const filters = window.searchEngine.loadSearch(name);
   if (filters) {
     applyFiltersToUI(filters);
@@ -816,7 +827,7 @@ window.loadSavedSearch = function(name) {
  * Delete saved search
  * @param {string} name - Search name
  */
-window.deleteSavedSearch = function(name) {
+window.deleteSavedSearch = function (name) {
   if (confirm(`Opravdu smazat hledání "${name}"?`)) {
     window.searchEngine.deleteSearch(name);
     updateSavedSearchesList();
@@ -829,13 +840,13 @@ window.deleteSavedSearch = function(name) {
  */
 function applyFiltersToUI(filters) {
   document.getElementById('main-search-input').value = filters.searchQuery || '';
-  
+
   if (filters.kategorie) {
-    document.querySelectorAll('#category-filters input').forEach(cb => {
+    document.querySelectorAll('#category-filters input').forEach((cb) => {
       cb.checked = filters.kategorie.includes(cb.value);
     });
   }
-  
+
   document.getElementById('min-price').value = filters.minPrice || '';
   document.getElementById('max-price').value = filters.maxPrice || '';
   document.getElementById('min-change').value = filters.minChange || '';
@@ -868,7 +879,7 @@ function exportSearchResults() {
  */
 function updateSuggestions(input) {
   const suggestionsEl = document.getElementById('search-suggestions');
-  if (!suggestionsEl) return;
+  if (!suggestionsEl) {return;}
 
   if (!input || input.length < 2) {
     suggestionsEl.classList.add('hidden');
@@ -883,14 +894,14 @@ function updateSuggestions(input) {
     return;
   }
 
-  suggestionsEl.innerHTML = suggestions.map(s => 
-    `<div class="suggestion-item" data-value="${s}">${s}</div>`
-  ).join('');
-  
+  suggestionsEl.innerHTML = suggestions
+    .map((s) => `<div class="suggestion-item" data-value="${s}">${s}</div>`)
+    .join('');
+
   suggestionsEl.classList.remove('hidden');
 
   // Click handler for suggestions
-  suggestionsEl.querySelectorAll('.suggestion-item').forEach(item => {
+  suggestionsEl.querySelectorAll('.suggestion-item').forEach((item) => {
     item.addEventListener('click', () => {
       document.getElementById('main-search-input').value = item.dataset.value;
       suggestionsEl.classList.add('hidden');
@@ -905,7 +916,7 @@ function updateSuggestions(input) {
  */
 function handleSuggestionNavigation(e) {
   const suggestionsEl = document.getElementById('search-suggestions');
-  if (!suggestionsEl || suggestionsEl.classList.contains('hidden')) return;
+  if (!suggestionsEl || suggestionsEl.classList.contains('hidden')) {return;}
 
   const items = suggestionsEl.querySelectorAll('.suggestion-item');
   const activeItem = suggestionsEl.querySelector('.suggestion-item.active');
@@ -928,6 +939,6 @@ function handleSuggestionNavigation(e) {
     return;
   }
 
-  items.forEach(item => item.classList.remove('active'));
+  items.forEach((item) => item.classList.remove('active'));
   items[activeIndex]?.classList.add('active');
 }

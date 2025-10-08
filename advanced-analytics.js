@@ -6,15 +6,15 @@
 class AdvancedAnalyticsDashboard {
   constructor() {
     this.benchmarks = {
-      'SPY': { name: 'S&P 500', ytdReturn: 0.18 },
-      'QQQ': { name: 'Nasdaq 100', ytdReturn: 0.22 },
-      'DIA': { name: 'Dow Jones', ytdReturn: 0.15 },
-      'IWM': { name: 'Russell 2000', ytdReturn: 0.12 }
+      SPY: { name: 'S&P 500', ytdReturn: 0.18 },
+      QQQ: { name: 'Nasdaq 100', ytdReturn: 0.22 },
+      DIA: { name: 'Dow Jones', ytdReturn: 0.15 },
+      IWM: { name: 'Russell 2000', ytdReturn: 0.12 },
     };
-    
+
     this.customMetrics = new Map();
     this.dashboardWidgets = [];
-    
+
     this.init();
   }
 
@@ -25,7 +25,7 @@ class AdvancedAnalyticsDashboard {
     try {
       this.loadCustomMetrics();
       this.createAnalyticsUI();
-      
+
       console.log('✅ Advanced Analytics Dashboard initialized');
     } catch (error) {
       console.error('❌ Advanced Analytics Dashboard initialization failed:', error);
@@ -51,31 +51,35 @@ class AdvancedAnalyticsDashboard {
       totalInvested,
       totalReturn,
       totalGainLoss: totalValue - totalInvested,
-      
+
       // Asset allocation
       topHoldings: this.getTopHoldings(data, 5),
       concentrationRisk: this.calculateConcentrationRisk(data),
       diversificationScore: this.calculateDiversificationScore(data),
-      
+
       // Performance metrics
       bestPerformer: this.getBestPerformer(data),
       worstPerformer: this.getWorstPerformer(data),
-      averageReturn: data.reduce((sum, item) => {
-        const ret = ((parseFloat(item.aktuálníHodnota || 0) - parseFloat(item.investováno || 0)) / parseFloat(item.investováno || 1)) * 100;
-        return sum + ret;
-      }, 0) / data.length,
-      
+      averageReturn:
+        data.reduce((sum, item) => {
+          const ret =
+            ((parseFloat(item.aktuálníHodnota || 0) - parseFloat(item.investováno || 0)) /
+              parseFloat(item.investováno || 1)) *
+            100;
+          return sum + ret;
+        }, 0) / data.length,
+
       // Risk metrics
       volatility: this.calculateVolatility(data),
       downsideRisk: this.calculateDownsideRisk(data),
       valueAtRisk: this.calculateValueAtRisk(data, 0.95),
-      
+
       // Benchmark comparison
       benchmarkComparison: this.compareToBenchmarks(totalReturn),
       alpha: this.calculateAlpha(totalReturn, 'SPY'),
-      
+
       // Custom metrics
-      customMetrics: this.evaluateCustomMetrics(data)
+      customMetrics: this.evaluateCustomMetrics(data),
     };
 
     return metrics;
@@ -86,14 +90,14 @@ class AdvancedAnalyticsDashboard {
    */
   getTopHoldings(data, count) {
     return data
-      .map(item => ({
+      .map((item) => ({
         name: item.název,
         value: parseFloat(item.aktuálníHodnota || 0),
-        percentage: 0
+        percentage: 0,
       }))
       .sort((a, b) => b.value - a.value)
       .slice(0, count)
-      .map(item => {
+      .map((item) => {
         const total = data.reduce((sum, d) => sum + parseFloat(d.aktuálníHodnota || 0), 0);
         item.percentage = (item.value / total) * 100;
         return item;
@@ -105,13 +109,13 @@ class AdvancedAnalyticsDashboard {
    */
   calculateConcentrationRisk(data) {
     const totalValue = data.reduce((sum, item) => sum + parseFloat(item.aktuálníHodnota || 0), 0);
-    const topHolding = Math.max(...data.map(item => parseFloat(item.aktuálníHodnota || 0)));
+    const topHolding = Math.max(...data.map((item) => parseFloat(item.aktuálníHodnota || 0)));
     const concentration = (topHolding / totalValue) * 100;
-    
+
     return {
       percentage: concentration,
       level: concentration > 30 ? 'High' : concentration > 20 ? 'Medium' : 'Low',
-      color: concentration > 30 ? '#e74c3c' : concentration > 20 ? '#f39c12' : '#2ecc71'
+      color: concentration > 30 ? '#e74c3c' : concentration > 20 ? '#f39c12' : '#2ecc71',
     };
   }
 
@@ -123,16 +127,16 @@ class AdvancedAnalyticsDashboard {
     const totalValue = data.reduce((sum, item) => sum + parseFloat(item.aktuálníHodnota || 0), 0);
     const herfindahl = data.reduce((sum, item) => {
       const weight = parseFloat(item.aktuálníHodnota || 0) / totalValue;
-      return sum + (weight * weight);
+      return sum + weight * weight;
     }, 0);
-    
+
     // Convert to 0-100 scale (lower Herfindahl = higher diversification)
     const score = (1 - herfindahl) * 100;
-    
+
     return {
       score: score,
       level: score > 70 ? 'Excellent' : score > 50 ? 'Good' : score > 30 ? 'Fair' : 'Poor',
-      color: score > 70 ? '#2ecc71' : score > 50 ? '#3498db' : score > 30 ? '#f39c12' : '#e74c3c'
+      color: score > 70 ? '#2ecc71' : score > 50 ? '#3498db' : score > 30 ? '#f39c12' : '#e74c3c',
     };
   }
 
@@ -142,18 +146,21 @@ class AdvancedAnalyticsDashboard {
   getBestPerformer(data) {
     let best = data[0];
     let bestReturn = -Infinity;
-    
-    data.forEach(item => {
-      const ret = ((parseFloat(item.aktuálníHodnota || 0) - parseFloat(item.investováno || 0)) / parseFloat(item.investováno || 1)) * 100;
+
+    data.forEach((item) => {
+      const ret =
+        ((parseFloat(item.aktuálníHodnota || 0) - parseFloat(item.investováno || 0)) /
+          parseFloat(item.investováno || 1)) *
+        100;
       if (ret > bestReturn) {
         bestReturn = ret;
         best = item;
       }
     });
-    
+
     return {
       name: best.název,
-      return: bestReturn
+      return: bestReturn,
     };
   }
 
@@ -163,18 +170,21 @@ class AdvancedAnalyticsDashboard {
   getWorstPerformer(data) {
     let worst = data[0];
     let worstReturn = Infinity;
-    
-    data.forEach(item => {
-      const ret = ((parseFloat(item.aktuálníHodnota || 0) - parseFloat(item.investováno || 0)) / parseFloat(item.investováno || 1)) * 100;
+
+    data.forEach((item) => {
+      const ret =
+        ((parseFloat(item.aktuálníHodnota || 0) - parseFloat(item.investováno || 0)) /
+          parseFloat(item.investováno || 1)) *
+        100;
       if (ret < worstReturn) {
         worstReturn = ret;
         worst = item;
       }
     });
-    
+
     return {
       name: worst.název,
-      return: worstReturn
+      return: worstReturn,
     };
   }
 
@@ -182,17 +192,21 @@ class AdvancedAnalyticsDashboard {
    * Calculate volatility (simplified)
    */
   calculateVolatility(data) {
-    const returns = data.map(item => 
-      ((parseFloat(item.aktuálníHodnota || 0) - parseFloat(item.investováno || 0)) / parseFloat(item.investováno || 1)) * 100
+    const returns = data.map(
+      (item) =>
+        ((parseFloat(item.aktuálníHodnota || 0) - parseFloat(item.investováno || 0)) /
+          parseFloat(item.investováno || 1)) *
+        100
     );
-    
+
     const avgReturn = returns.reduce((sum, r) => sum + r, 0) / returns.length;
-    const variance = returns.reduce((sum, r) => sum + Math.pow(r - avgReturn, 2), 0) / returns.length;
+    const variance =
+      returns.reduce((sum, r) => sum + Math.pow(r - avgReturn, 2), 0) / returns.length;
     const volatility = Math.sqrt(variance);
-    
+
     return {
       value: volatility,
-      level: volatility > 20 ? 'High' : volatility > 10 ? 'Medium' : 'Low'
+      level: volatility > 20 ? 'High' : volatility > 10 ? 'Medium' : 'Low',
     };
   }
 
@@ -200,23 +214,27 @@ class AdvancedAnalyticsDashboard {
    * Calculate downside risk
    */
   calculateDownsideRisk(data) {
-    const returns = data.map(item => 
-      ((parseFloat(item.aktuálníHodnota || 0) - parseFloat(item.investováno || 0)) / parseFloat(item.investováno || 1)) * 100
+    const returns = data.map(
+      (item) =>
+        ((parseFloat(item.aktuálníHodnota || 0) - parseFloat(item.investováno || 0)) /
+          parseFloat(item.investováno || 1)) *
+        100
     );
-    
-    const negativeReturns = returns.filter(r => r < 0);
-    
+
+    const negativeReturns = returns.filter((r) => r < 0);
+
     if (negativeReturns.length === 0) {
       return { value: 0, level: 'Low' };
     }
-    
+
     const avgNegative = negativeReturns.reduce((sum, r) => sum + r, 0) / negativeReturns.length;
-    const downsideVariance = negativeReturns.reduce((sum, r) => sum + Math.pow(r, 2), 0) / negativeReturns.length;
+    const downsideVariance =
+      negativeReturns.reduce((sum, r) => sum + Math.pow(r, 2), 0) / negativeReturns.length;
     const downsideRisk = Math.sqrt(downsideVariance);
-    
+
     return {
       value: downsideRisk,
-      level: downsideRisk > 15 ? 'High' : downsideRisk > 7 ? 'Medium' : 'Low'
+      level: downsideRisk > 15 ? 'High' : downsideRisk > 7 ? 'Medium' : 'Low',
     };
   }
 
@@ -225,24 +243,27 @@ class AdvancedAnalyticsDashboard {
    */
   calculateValueAtRisk(data, confidenceLevel) {
     const totalValue = data.reduce((sum, item) => sum + parseFloat(item.aktuálníHodnota || 0), 0);
-    
-    const returns = data.map(item => 
-      ((parseFloat(item.aktuálníHodnota || 0) - parseFloat(item.investováno || 0)) / parseFloat(item.investováno || 1))
+
+    const returns = data.map(
+      (item) =>
+        (parseFloat(item.aktuálníHodnota || 0) - parseFloat(item.investováno || 0)) /
+        parseFloat(item.investováno || 1)
     );
-    
+
     // Simplified VaR using normal distribution assumption
     const avgReturn = returns.reduce((sum, r) => sum + r, 0) / returns.length;
-    const variance = returns.reduce((sum, r) => sum + Math.pow(r - avgReturn, 2), 0) / returns.length;
+    const variance =
+      returns.reduce((sum, r) => sum + Math.pow(r - avgReturn, 2), 0) / returns.length;
     const stdDev = Math.sqrt(variance);
-    
+
     // Z-score for 95% confidence
     const zScore = 1.645;
     const var95 = totalValue * (zScore * stdDev);
-    
+
     return {
       value: var95,
       percentage: (var95 / totalValue) * 100,
-      confidenceLevel: confidenceLevel * 100
+      confidenceLevel: confidenceLevel * 100,
     };
   }
 
@@ -251,19 +272,19 @@ class AdvancedAnalyticsDashboard {
    */
   compareToBenchmarks(portfolioReturn) {
     const comparisons = {};
-    
+
     for (const [symbol, benchmark] of Object.entries(this.benchmarks)) {
       const benchmarkReturn = benchmark.ytdReturn * 100;
       const outperformance = portfolioReturn - benchmarkReturn;
-      
+
       comparisons[symbol] = {
         name: benchmark.name,
         return: benchmarkReturn,
         outperformance: outperformance,
-        outperforming: outperformance > 0
+        outperforming: outperformance > 0,
       };
     }
-    
+
     return comparisons;
   }
 
@@ -272,11 +293,11 @@ class AdvancedAnalyticsDashboard {
    */
   calculateAlpha(portfolioReturn, benchmarkSymbol) {
     const benchmark = this.benchmarks[benchmarkSymbol];
-    if (!benchmark) return 0;
-    
+    if (!benchmark) {return 0;}
+
     const benchmarkReturn = benchmark.ytdReturn * 100;
     const alpha = portfolioReturn - benchmarkReturn;
-    
+
     return alpha;
   }
 
@@ -287,9 +308,9 @@ class AdvancedAnalyticsDashboard {
     this.customMetrics.set(name, {
       formula: formula,
       description: description,
-      created: new Date()
+      created: new Date(),
     });
-    
+
     this.saveCustomMetrics();
   }
 
@@ -298,23 +319,23 @@ class AdvancedAnalyticsDashboard {
    */
   evaluateCustomMetrics(data) {
     const results = {};
-    
+
     this.customMetrics.forEach((metric, name) => {
       try {
         // Safely evaluate formula (simplified)
         // In production, use a proper expression parser
         results[name] = {
           value: 0, // Placeholder
-          description: metric.description
+          description: metric.description,
         };
       } catch (error) {
         results[name] = {
           value: 'Error',
-          description: metric.description
+          description: metric.description,
         };
       }
     });
-    
+
     return results;
   }
 
@@ -323,20 +344,21 @@ class AdvancedAnalyticsDashboard {
    */
   createAnalyticsUI() {
     const portfolioCard = document.getElementById('portfolioCard');
-    if (!portfolioCard) return;
+    if (!portfolioCard) {return;}
 
     const headerDiv = portfolioCard.querySelector('div[style*="justify-content: space-between"]');
-    if (!headerDiv) return;
+    if (!headerDiv) {return;}
 
     const buttonContainer = headerDiv.querySelector('div[style*="gap"]');
-    if (!buttonContainer) return;
+    if (!buttonContainer) {return;}
 
     const analyticsBtn = document.createElement('button');
     analyticsBtn.id = 'advancedAnalyticsBtn';
     analyticsBtn.className = 'btn-icon';
     analyticsBtn.title = 'Advanced Analytics';
     analyticsBtn.setAttribute('aria-label', 'Pokročilá analytika');
-    analyticsBtn.style.cssText = 'font-size: 1.5rem; padding: 8px 16px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; border: none; border-radius: 8px; cursor: pointer;';
+    analyticsBtn.style.cssText =
+      'font-size: 1.5rem; padding: 8px 16px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; border: none; border-radius: 8px; cursor: pointer;';
     analyticsBtn.textContent = '📊';
 
     analyticsBtn.addEventListener('click', () => this.showAnalyticsDashboard());
@@ -349,14 +371,14 @@ class AdvancedAnalyticsDashboard {
    */
   showAnalyticsDashboard() {
     const data = window.getFondyData ? window.getFondyData() : [];
-    
+
     if (data.length === 0) {
       alert('No portfolio data available');
       return;
     }
 
     const metrics = this.calculateAdvancedMetrics(data);
-    
+
     // Create full-screen dashboard
     const dashboard = document.createElement('div');
     dashboard.id = 'advancedAnalyticsDashboard';
@@ -422,7 +444,9 @@ class AdvancedAnalyticsDashboard {
         <div style="background: white; padding: 24px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 24px;">
           <h3 style="margin: 0 0 16px 0;">Benchmark Comparison</h3>
           <div style="display: grid; gap: 12px;">
-            ${Object.entries(metrics.benchmarkComparison).map(([symbol, comp]) => `
+            ${Object.entries(metrics.benchmarkComparison)
+    .map(
+      ([symbol, comp]) => `
               <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: ${comp.outperforming ? '#e8f5e9' : '#ffebee'}; border-radius: 8px;">
                 <div>
                   <div style="font-weight: 600; color: #333;">${comp.name}</div>
@@ -435,7 +459,9 @@ class AdvancedAnalyticsDashboard {
                   <div style="font-size: 0.85rem; color: #666;">${comp.outperforming ? 'Outperforming' : 'Underperforming'}</div>
                 </div>
               </div>
-            `).join('')}
+            `
+    )
+    .join('')}
           </div>
         </div>
         
@@ -485,12 +511,9 @@ class AdvancedAnalyticsDashboard {
     `;
 
     document.body.appendChild(dashboard);
-    
+
     if (window.notificationSystem) {
-      window.notificationSystem.showInAppNotification(
-        'Advanced analytics loaded',
-        'success'
-      );
+      window.notificationSystem.showInAppNotification('Advanced analytics loaded', 'success');
     }
   }
 
@@ -499,7 +522,10 @@ class AdvancedAnalyticsDashboard {
    */
   saveCustomMetrics() {
     try {
-      localStorage.setItem('customMetrics', JSON.stringify(Array.from(this.customMetrics.entries())));
+      localStorage.setItem(
+        'customMetrics',
+        JSON.stringify(Array.from(this.customMetrics.entries()))
+      );
     } catch (error) {
       console.error('Failed to save custom metrics:', error);
     }

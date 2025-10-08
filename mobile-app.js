@@ -12,7 +12,7 @@ class MobileAppEnhancement {
     this.touchEndX = 0;
     this.touchEndY = 0;
     this.swipeThreshold = 50;
-    
+
     this.init();
   }
 
@@ -26,7 +26,7 @@ class MobileAppEnhancement {
       this.optimizeForMobile();
       this.setupPullToRefresh();
       this.preventDoubleTapZoom();
-      
+
       console.log('✅ Mobile App Enhancement initialized');
     }
   }
@@ -35,31 +35,43 @@ class MobileAppEnhancement {
    * Detect mobile device
    */
   detectMobile() {
-    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-           window.innerWidth <= 768;
+    return (
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+      window.innerWidth <= 768
+    );
   }
 
   /**
    * Check if running in standalone mode (installed PWA)
    */
   isStandaloneMode() {
-    return window.matchMedia('(display-mode: standalone)').matches ||
-           window.navigator.standalone === true;
+    return (
+      window.matchMedia('(display-mode: standalone)').matches ||
+      window.navigator.standalone === true
+    );
   }
 
   /**
    * Setup touch gestures
    */
   setupTouchGestures() {
-    document.addEventListener('touchstart', (e) => {
-      this.touchStartX = e.touches[0].clientX;
-      this.touchStartY = e.touches[0].clientY;
-    }, { passive: true });
+    document.addEventListener(
+      'touchstart',
+      (e) => {
+        this.touchStartX = e.touches[0].clientX;
+        this.touchStartY = e.touches[0].clientY;
+      },
+      { passive: true }
+    );
 
-    document.addEventListener('touchmove', (e) => {
-      this.touchEndX = e.touches[0].clientX;
-      this.touchEndY = e.touches[0].clientY;
-    }, { passive: true });
+    document.addEventListener(
+      'touchmove',
+      (e) => {
+        this.touchEndX = e.touches[0].clientX;
+        this.touchEndY = e.touches[0].clientY;
+      },
+      { passive: true }
+    );
 
     document.addEventListener('touchend', () => {
       this.handleSwipe();
@@ -147,13 +159,13 @@ class MobileAppEnhancement {
   setupMobileUI() {
     // Add mobile menu
     this.createMobileMenu();
-    
+
     // Add bottom navigation
     this.createBottomNavigation();
-    
+
     // Optimize table for mobile
     this.optimizeTableForMobile();
-    
+
     // Add mobile-specific styles
     this.injectMobileStyles();
   }
@@ -243,18 +255,18 @@ class MobileAppEnhancement {
    */
   navigateTo(section) {
     this.toggleMenu();
-    
+
     // Smooth scroll to section
     const sections = {
-      'portfolio': 'portfolioCard',
-      'dashboard': 'dashboardContainer',
-      'analytics': 'chartsSection',
-      'settings': 'settingsSection'
+      portfolio: 'portfolioCard',
+      dashboard: 'dashboardContainer',
+      analytics: 'chartsSection',
+      settings: 'settingsSection',
     };
 
     const elementId = sections[section];
     const element = document.getElementById(elementId);
-    
+
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
@@ -285,11 +297,15 @@ class MobileAppEnhancement {
       { icon: '💼', label: 'Portfolio', action: () => this.navigateTo('portfolio') },
       { icon: '📊', label: 'Dashboard', action: () => this.navigateTo('dashboard') },
       { icon: '➕', label: 'Add', action: () => window.pridatFond?.() },
-      { icon: '🔔', label: 'Alerts', action: () => window.notificationSystem?.toggleNotificationPanel() },
-      { icon: '⚙️', label: 'More', action: () => this.toggleMenu() }
+      {
+        icon: '🔔',
+        label: 'Alerts',
+        action: () => window.notificationSystem?.toggleNotificationPanel(),
+      },
+      { icon: '⚙️', label: 'More', action: () => this.toggleMenu() },
     ];
 
-    buttons.forEach(btn => {
+    buttons.forEach((btn) => {
       const button = document.createElement('button');
       button.style.cssText = `
         display: flex;
@@ -307,14 +323,14 @@ class MobileAppEnhancement {
         <span style="font-size: 0.7rem; margin-top: 2px;">${btn.label}</span>
       `;
       button.onclick = btn.action;
-      
-      button.addEventListener('touchstart', function() {
+
+      button.addEventListener('touchstart', function () {
         this.style.transform = 'scale(0.95)';
       });
-      button.addEventListener('touchend', function() {
+      button.addEventListener('touchend', function () {
         this.style.transform = 'scale(1)';
       });
-      
+
       nav.appendChild(button);
     });
 
@@ -325,7 +341,7 @@ class MobileAppEnhancement {
    * Optimize table for mobile
    */
   optimizeTableForMobile() {
-    if (!this.isMobile) return;
+    if (!this.isMobile) {return;}
 
     const style = document.createElement('style');
     style.textContent = `
@@ -363,40 +379,48 @@ class MobileAppEnhancement {
     let currentY = 0;
     let pulling = false;
 
-    document.addEventListener('touchstart', (e) => {
-      if (window.scrollY === 0) {
-        startY = e.touches[0].clientY;
-        pulling = true;
-      }
-    }, { passive: true });
-
-    document.addEventListener('touchmove', (e) => {
-      if (!pulling) return;
-      
-      currentY = e.touches[0].clientY;
-      const distance = currentY - startY;
-
-      if (distance > 0) {
-        if (!ptrElement) {
-          ptrElement = this.createPullToRefreshIndicator();
+    document.addEventListener(
+      'touchstart',
+      (e) => {
+        if (window.scrollY === 0) {
+          startY = e.touches[0].clientY;
+          pulling = true;
         }
-        
-        ptrElement.style.transform = `translateY(${Math.min(distance, 80)}px)`;
-        ptrElement.style.opacity = Math.min(distance / 80, 1);
-      }
-    }, { passive: true });
+      },
+      { passive: true }
+    );
+
+    document.addEventListener(
+      'touchmove',
+      (e) => {
+        if (!pulling) {return;}
+
+        currentY = e.touches[0].clientY;
+        const distance = currentY - startY;
+
+        if (distance > 0) {
+          if (!ptrElement) {
+            ptrElement = this.createPullToRefreshIndicator();
+          }
+
+          ptrElement.style.transform = `translateY(${Math.min(distance, 80)}px)`;
+          ptrElement.style.opacity = Math.min(distance / 80, 1);
+        }
+      },
+      { passive: true }
+    );
 
     document.addEventListener('touchend', async () => {
       if (pulling) {
         const distance = currentY - startY;
-        
+
         if (distance > 80) {
           if (ptrElement) {
             ptrElement.textContent = '🔄 Refreshing...';
           }
           await this.refreshData();
         }
-        
+
         if (ptrElement) {
           ptrElement.style.transform = 'translateY(-100px)';
           setTimeout(() => {
@@ -404,7 +428,7 @@ class MobileAppEnhancement {
             ptrElement = null;
           }, 300);
         }
-        
+
         pulling = false;
         startY = 0;
         currentY = 0;
@@ -444,7 +468,7 @@ class MobileAppEnhancement {
       if (window.aktualizovatTabulku) {
         await window.aktualizovatTabulku();
       }
-      
+
       // Show success
       this.showToast('✅ Data refreshed');
     } catch (error) {
@@ -458,13 +482,17 @@ class MobileAppEnhancement {
    */
   preventDoubleTapZoom() {
     let lastTouchEnd = 0;
-    document.addEventListener('touchend', (e) => {
-      const now = Date.now();
-      if (now - lastTouchEnd <= 300) {
-        e.preventDefault();
-      }
-      lastTouchEnd = now;
-    }, { passive: false });
+    document.addEventListener(
+      'touchend',
+      (e) => {
+        const now = Date.now();
+        if (now - lastTouchEnd <= 300) {
+          e.preventDefault();
+        }
+        lastTouchEnd = now;
+      },
+      { passive: false }
+    );
   }
 
   /**
@@ -532,7 +560,7 @@ class MobileAppEnhancement {
    * Optimize images for mobile
    */
   optimizeImages() {
-    document.querySelectorAll('img').forEach(img => {
+    document.querySelectorAll('img').forEach((img) => {
       img.loading = 'lazy';
       img.style.maxWidth = '100%';
       img.style.height = 'auto';

@@ -10,7 +10,7 @@ class I18nManager {
     this.supportedLanguages = ['cs', 'en', 'de', 'fr', 'es'];
     this.translations = {};
     this.rtlLanguages = ['ar', 'he', 'fa'];
-    
+
     this.init();
   }
 
@@ -21,16 +21,16 @@ class I18nManager {
     try {
       // Load translations
       await this.loadTranslations();
-      
+
       // Detect user language
       this.detectLanguage();
-      
+
       // Create language switcher UI
       this.createLanguageSwitcher();
-      
+
       // Apply translations
       this.applyTranslations();
-      
+
       console.log('✅ I18n Manager initialized with language:', this.currentLang);
     } catch (error) {
       console.error('❌ I18n initialization failed:', error);
@@ -48,7 +48,7 @@ class I18nManager {
       'nav.portfolio': 'Portfolio',
       'nav.dashboard': 'Dashboard',
       'nav.settings': 'Nastavení',
-      
+
       // Portfolio
       'portfolio.title': 'Investiční Portfolio',
       'portfolio.add': 'Přidat investici',
@@ -56,7 +56,7 @@ class I18nManager {
       'portfolio.filter': 'Filtrovat',
       'portfolio.export': 'Exportovat',
       'portfolio.import': 'Importovat',
-      
+
       // Columns
       'column.name': 'Název',
       'column.type': 'Typ',
@@ -65,7 +65,7 @@ class I18nManager {
       'column.currentPrice': 'Aktuální cena',
       'column.value': 'Hodnota',
       'column.return': 'Výnos',
-      
+
       // Actions
       'action.edit': 'Upravit',
       'action.delete': 'Smazat',
@@ -73,7 +73,7 @@ class I18nManager {
       'action.cancel': 'Zrušit',
       'action.confirm': 'Potvrdit',
       'action.close': 'Zavřít',
-      
+
       // Metrics
       'metrics.total': 'Celkem',
       'metrics.invested': 'Investováno',
@@ -81,33 +81,33 @@ class I18nManager {
       'metrics.gain': 'Zisk',
       'metrics.loss': 'Ztráta',
       'metrics.return': 'Výnos',
-      
+
       // Dashboard
       'dashboard.title': 'Dashboard',
       'dashboard.summary': 'Přehled portfolia',
       'dashboard.performance': 'Výkon',
       'dashboard.allocation': 'Alokace',
       'dashboard.topHoldings': 'Top pozice',
-      
+
       // Notifications
       'notif.welcome': 'Vítejte v Portfolio Manageru',
       'notif.saved': 'Změny uloženy',
       'notif.deleted': 'Smazáno',
       'notif.error': 'Nastala chyba',
-      
+
       // Time
       'time.now': 'Nyní',
       'time.today': 'Dnes',
       'time.yesterday': 'Včera',
       'time.week': 'Tento týden',
       'time.month': 'Tento měsíc',
-      
+
       // Messages
       'msg.confirmDelete': 'Opravdu chcete smazat tuto položku?',
       'msg.noData': 'Žádná data k zobrazení',
       'msg.loading': 'Načítání...',
       'msg.saveSuccess': 'Úspěšně uloženo',
-      'msg.saveError': 'Chyba při ukládání'
+      'msg.saveError': 'Chyba při ukládání',
     };
 
     // English
@@ -116,14 +116,14 @@ class I18nManager {
       'nav.portfolio': 'Portfolio',
       'nav.dashboard': 'Dashboard',
       'nav.settings': 'Settings',
-      
+
       'portfolio.title': 'Investment Portfolio',
       'portfolio.add': 'Add Investment',
       'portfolio.search': 'Search',
       'portfolio.filter': 'Filter',
       'portfolio.export': 'Export',
       'portfolio.import': 'Import',
-      
+
       'column.name': 'Name',
       'column.type': 'Type',
       'column.shares': 'Shares',
@@ -131,43 +131,43 @@ class I18nManager {
       'column.currentPrice': 'Current Price',
       'column.value': 'Value',
       'column.return': 'Return',
-      
+
       'action.edit': 'Edit',
       'action.delete': 'Delete',
       'action.save': 'Save',
       'action.cancel': 'Cancel',
       'action.confirm': 'Confirm',
       'action.close': 'Close',
-      
+
       'metrics.total': 'Total',
       'metrics.invested': 'Invested',
       'metrics.current': 'Current Value',
       'metrics.gain': 'Gain',
       'metrics.loss': 'Loss',
       'metrics.return': 'Return',
-      
+
       'dashboard.title': 'Dashboard',
       'dashboard.summary': 'Portfolio Summary',
       'dashboard.performance': 'Performance',
       'dashboard.allocation': 'Allocation',
       'dashboard.topHoldings': 'Top Holdings',
-      
+
       'notif.welcome': 'Welcome to Portfolio Manager',
       'notif.saved': 'Changes saved',
       'notif.deleted': 'Deleted',
       'notif.error': 'An error occurred',
-      
+
       'time.now': 'Now',
       'time.today': 'Today',
       'time.yesterday': 'Yesterday',
       'time.week': 'This week',
       'time.month': 'This month',
-      
+
       'msg.confirmDelete': 'Are you sure you want to delete this item?',
       'msg.noData': 'No data to display',
       'msg.loading': 'Loading...',
       'msg.saveSuccess': 'Successfully saved',
-      'msg.saveError': 'Error saving'
+      'msg.saveError': 'Error saving',
     };
 
     // German
@@ -176,14 +176,14 @@ class I18nManager {
       'nav.portfolio': 'Portfolio',
       'nav.dashboard': 'Dashboard',
       'nav.settings': 'Einstellungen',
-      
+
       'portfolio.title': 'Anlageportfolio',
       'portfolio.add': 'Investition hinzufügen',
       'portfolio.search': 'Suchen',
       'portfolio.filter': 'Filtern',
       'portfolio.export': 'Exportieren',
       'portfolio.import': 'Importieren',
-      
+
       'column.name': 'Name',
       'column.type': 'Typ',
       'column.shares': 'Anteile',
@@ -191,43 +191,43 @@ class I18nManager {
       'column.currentPrice': 'Aktueller Preis',
       'column.value': 'Wert',
       'column.return': 'Rendite',
-      
+
       'action.edit': 'Bearbeiten',
       'action.delete': 'Löschen',
       'action.save': 'Speichern',
       'action.cancel': 'Abbrechen',
       'action.confirm': 'Bestätigen',
       'action.close': 'Schließen',
-      
+
       'metrics.total': 'Gesamt',
       'metrics.invested': 'Investiert',
       'metrics.current': 'Aktueller Wert',
       'metrics.gain': 'Gewinn',
       'metrics.loss': 'Verlust',
       'metrics.return': 'Rendite',
-      
+
       'dashboard.title': 'Dashboard',
       'dashboard.summary': 'Portfolio-Übersicht',
       'dashboard.performance': 'Leistung',
       'dashboard.allocation': 'Allokation',
       'dashboard.topHoldings': 'Top-Positionen',
-      
+
       'notif.welcome': 'Willkommen bei Portfolio Manager',
       'notif.saved': 'Änderungen gespeichert',
       'notif.deleted': 'Gelöscht',
       'notif.error': 'Ein Fehler ist aufgetreten',
-      
+
       'time.now': 'Jetzt',
       'time.today': 'Heute',
       'time.yesterday': 'Gestern',
       'time.week': 'Diese Woche',
       'time.month': 'Dieser Monat',
-      
+
       'msg.confirmDelete': 'Möchten Sie dieses Element wirklich löschen?',
       'msg.noData': 'Keine Daten anzuzeigen',
       'msg.loading': 'Laden...',
       'msg.saveSuccess': 'Erfolgreich gespeichert',
-      'msg.saveError': 'Fehler beim Speichern'
+      'msg.saveError': 'Fehler beim Speichern',
     };
 
     // French
@@ -236,58 +236,58 @@ class I18nManager {
       'nav.portfolio': 'Portfolio',
       'nav.dashboard': 'Tableau de bord',
       'nav.settings': 'Paramètres',
-      
-      'portfolio.title': 'Portfolio d\'investissement',
+
+      'portfolio.title': "Portfolio d'investissement",
       'portfolio.add': 'Ajouter un investissement',
       'portfolio.search': 'Rechercher',
       'portfolio.filter': 'Filtrer',
       'portfolio.export': 'Exporter',
       'portfolio.import': 'Importer',
-      
+
       'column.name': 'Nom',
       'column.type': 'Type',
       'column.shares': 'Actions',
-      'column.buyPrice': 'Prix d\'achat',
+      'column.buyPrice': "Prix d'achat",
       'column.currentPrice': 'Prix actuel',
       'column.value': 'Valeur',
       'column.return': 'Rendement',
-      
+
       'action.edit': 'Modifier',
       'action.delete': 'Supprimer',
       'action.save': 'Enregistrer',
       'action.cancel': 'Annuler',
       'action.confirm': 'Confirmer',
       'action.close': 'Fermer',
-      
+
       'metrics.total': 'Total',
       'metrics.invested': 'Investi',
       'metrics.current': 'Valeur actuelle',
       'metrics.gain': 'Gain',
       'metrics.loss': 'Perte',
       'metrics.return': 'Rendement',
-      
+
       'dashboard.title': 'Tableau de bord',
       'dashboard.summary': 'Résumé du portfolio',
       'dashboard.performance': 'Performance',
       'dashboard.allocation': 'Allocation',
       'dashboard.topHoldings': 'Principales positions',
-      
+
       'notif.welcome': 'Bienvenue dans Portfolio Manager',
       'notif.saved': 'Changements enregistrés',
       'notif.deleted': 'Supprimé',
-      'notif.error': 'Une erreur s\'est produite',
-      
+      'notif.error': "Une erreur s'est produite",
+
       'time.now': 'Maintenant',
-      'time.today': 'Aujourd\'hui',
+      'time.today': "Aujourd'hui",
       'time.yesterday': 'Hier',
       'time.week': 'Cette semaine',
       'time.month': 'Ce mois',
-      
+
       'msg.confirmDelete': 'Voulez-vous vraiment supprimer cet élément ?',
       'msg.noData': 'Aucune donnée à afficher',
       'msg.loading': 'Chargement...',
       'msg.saveSuccess': 'Enregistré avec succès',
-      'msg.saveError': 'Erreur d\'enregistrement'
+      'msg.saveError': "Erreur d'enregistrement",
     };
 
     // Spanish
@@ -296,14 +296,14 @@ class I18nManager {
       'nav.portfolio': 'Portafolio',
       'nav.dashboard': 'Panel',
       'nav.settings': 'Configuración',
-      
+
       'portfolio.title': 'Portafolio de Inversión',
       'portfolio.add': 'Agregar inversión',
       'portfolio.search': 'Buscar',
       'portfolio.filter': 'Filtrar',
       'portfolio.export': 'Exportar',
       'portfolio.import': 'Importar',
-      
+
       'column.name': 'Nombre',
       'column.type': 'Tipo',
       'column.shares': 'Acciones',
@@ -311,43 +311,43 @@ class I18nManager {
       'column.currentPrice': 'Precio actual',
       'column.value': 'Valor',
       'column.return': 'Rendimiento',
-      
+
       'action.edit': 'Editar',
       'action.delete': 'Eliminar',
       'action.save': 'Guardar',
       'action.cancel': 'Cancelar',
       'action.confirm': 'Confirmar',
       'action.close': 'Cerrar',
-      
+
       'metrics.total': 'Total',
       'metrics.invested': 'Invertido',
       'metrics.current': 'Valor actual',
       'metrics.gain': 'Ganancia',
       'metrics.loss': 'Pérdida',
       'metrics.return': 'Rendimiento',
-      
+
       'dashboard.title': 'Panel',
       'dashboard.summary': 'Resumen del portafolio',
       'dashboard.performance': 'Rendimiento',
       'dashboard.allocation': 'Asignación',
       'dashboard.topHoldings': 'Principales posiciones',
-      
+
       'notif.welcome': 'Bienvenido a Portfolio Manager',
       'notif.saved': 'Cambios guardados',
       'notif.deleted': 'Eliminado',
       'notif.error': 'Ocurrió un error',
-      
+
       'time.now': 'Ahora',
       'time.today': 'Hoy',
       'time.yesterday': 'Ayer',
       'time.week': 'Esta semana',
       'time.month': 'Este mes',
-      
+
       'msg.confirmDelete': '¿Está seguro de que desea eliminar este elemento?',
       'msg.noData': 'No hay datos para mostrar',
       'msg.loading': 'Cargando...',
       'msg.saveSuccess': 'Guardado exitosamente',
-      'msg.saveError': 'Error al guardar'
+      'msg.saveError': 'Error al guardar',
     };
   }
 
@@ -375,9 +375,10 @@ class I18nManager {
    * @param {Object} params - Parameters for interpolation
    */
   t(key, params = {}) {
-    let translation = this.translations[this.currentLang]?.[key] || 
-                     this.translations[this.fallbackLang]?.[key] || 
-                     key;
+    let translation =
+      this.translations[this.currentLang]?.[key] ||
+      this.translations[this.fallbackLang]?.[key] ||
+      key;
 
     // Interpolate parameters
     Object.entries(params).forEach(([param, value]) => {
@@ -420,19 +421,19 @@ class I18nManager {
    */
   applyTranslations() {
     // Translate elements with data-i18n attribute
-    document.querySelectorAll('[data-i18n]').forEach(el => {
+    document.querySelectorAll('[data-i18n]').forEach((el) => {
       const key = el.getAttribute('data-i18n');
       el.textContent = this.t(key);
     });
 
     // Translate placeholders
-    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
       const key = el.getAttribute('data-i18n-placeholder');
       el.placeholder = this.t(key);
     });
 
     // Translate titles
-    document.querySelectorAll('[data-i18n-title]').forEach(el => {
+    document.querySelectorAll('[data-i18n-title]').forEach((el) => {
       const key = el.getAttribute('data-i18n-title');
       el.title = this.t(key);
     });
@@ -443,19 +444,20 @@ class I18nManager {
    */
   createLanguageSwitcher() {
     const portfolioCard = document.getElementById('portfolioCard');
-    if (!portfolioCard) return;
+    if (!portfolioCard) {return;}
 
     const headerDiv = portfolioCard.querySelector('div[style*="justify-content: space-between"]');
-    if (!headerDiv) return;
+    if (!headerDiv) {return;}
 
     const buttonContainer = headerDiv.querySelector('div[style*="gap"]');
-    if (!buttonContainer) return;
+    if (!buttonContainer) {return;}
 
     const langBtn = document.createElement('button');
     langBtn.id = 'languageBtn';
     langBtn.className = 'btn-icon';
     langBtn.title = 'Language';
-    langBtn.style.cssText = 'font-size: 1.5rem; padding: 8px 16px; background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; border: none; border-radius: 8px; cursor: pointer;';
+    langBtn.style.cssText =
+      'font-size: 1.5rem; padding: 8px 16px; background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; border: none; border-radius: 8px; cursor: pointer;';
     langBtn.textContent = this.getLanguageFlag(this.currentLang);
 
     langBtn.addEventListener('click', () => this.toggleLanguageMenu());
@@ -489,10 +491,12 @@ class I18nManager {
       { code: 'en', name: 'English', flag: '🇬🇧' },
       { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
       { code: 'fr', name: 'Français', flag: '🇫🇷' },
-      { code: 'es', name: 'Español', flag: '🇪🇸' }
+      { code: 'es', name: 'Español', flag: '🇪🇸' },
     ];
 
-    menu.innerHTML = languages.map(lang => `
+    menu.innerHTML = languages
+      .map(
+        (lang) => `
       <button 
         onclick="window.i18nManager.selectLanguage('${lang.code}')"
         style="
@@ -515,7 +519,9 @@ class I18nManager {
         <span>${lang.name}</span>
         ${lang.code === this.currentLang ? '<span style="margin-left: auto; color: #4caf50;">✓</span>' : ''}
       </button>
-    `).join('');
+    `
+      )
+      .join('');
 
     document.body.appendChild(menu);
 
@@ -542,7 +548,7 @@ class I18nManager {
     this.changeLanguage(lang);
     document.getElementById('languageBtn').textContent = this.getLanguageFlag(lang);
     document.getElementById('languageMenu').style.display = 'none';
-    
+
     // Recreate menu to update checkmarks
     document.getElementById('languageMenu').remove();
     this.createLanguageMenu();
@@ -553,11 +559,11 @@ class I18nManager {
    */
   getLanguageFlag(lang) {
     const flags = {
-      'cs': '🇨🇿',
-      'en': '🇬🇧',
-      'de': '🇩🇪',
-      'fr': '🇫🇷',
-      'es': '🇪🇸'
+      cs: '🇨🇿',
+      en: '🇬🇧',
+      de: '🇩🇪',
+      fr: '🇫🇷',
+      es: '🇪🇸',
     };
     return flags[lang] || '🌐';
   }
@@ -569,11 +575,11 @@ class I18nManager {
    */
   formatNumber(number, options = {}) {
     const locales = {
-      'cs': 'cs-CZ',
-      'en': 'en-US',
-      'de': 'de-DE',
-      'fr': 'fr-FR',
-      'es': 'es-ES'
+      cs: 'cs-CZ',
+      en: 'en-US',
+      de: 'de-DE',
+      fr: 'fr-FR',
+      es: 'es-ES',
     };
 
     return new Intl.NumberFormat(locales[this.currentLang] || 'en-US', options).format(number);
@@ -586,24 +592,24 @@ class I18nManager {
    */
   formatCurrency(amount, currency = 'CZK') {
     const currencies = {
-      'cs': 'CZK',
-      'en': 'USD',
-      'de': 'EUR',
-      'fr': 'EUR',
-      'es': 'EUR'
+      cs: 'CZK',
+      en: 'USD',
+      de: 'EUR',
+      fr: 'EUR',
+      es: 'EUR',
     };
 
     const locales = {
-      'cs': 'cs-CZ',
-      'en': 'en-US',
-      'de': 'de-DE',
-      'fr': 'fr-FR',
-      'es': 'es-ES'
+      cs: 'cs-CZ',
+      en: 'en-US',
+      de: 'de-DE',
+      fr: 'fr-FR',
+      es: 'es-ES',
     };
 
     return new Intl.NumberFormat(locales[this.currentLang] || 'en-US', {
       style: 'currency',
-      currency: currencies[this.currentLang] || currency
+      currency: currencies[this.currentLang] || currency,
     }).format(amount);
   }
 
@@ -614,21 +620,23 @@ class I18nManager {
    */
   formatDate(date, options = {}) {
     const locales = {
-      'cs': 'cs-CZ',
-      'en': 'en-US',
-      'de': 'de-DE',
-      'fr': 'fr-FR',
-      'es': 'es-ES'
+      cs: 'cs-CZ',
+      en: 'en-US',
+      de: 'de-DE',
+      fr: 'fr-FR',
+      es: 'es-ES',
     };
 
     const defaultOptions = {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
-      ...options
+      ...options,
     };
 
-    return new Intl.DateTimeFormat(locales[this.currentLang] || 'en-US', defaultOptions).format(date);
+    return new Intl.DateTimeFormat(locales[this.currentLang] || 'en-US', defaultOptions).format(
+      date
+    );
   }
 
   /**

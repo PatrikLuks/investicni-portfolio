@@ -7,7 +7,7 @@ class ExcelExportManager {
   constructor() {
     this.workbook = null;
     this.sheetJSLoaded = false;
-    
+
     this.init();
   }
 
@@ -70,21 +70,20 @@ class ExcelExportManager {
       this.addSummarySheet(wb, data);
       this.addMetricsSheet(wb, data);
       this.addCategoryBreakdownSheet(wb, data);
-      
+
       if (options.includeHistory) {
         this.addHistorySheet(wb, data);
       }
 
       // Generate filename
-      const filename = options.filename || 
-        `portfolio-${new Date().toISOString().split('T')[0]}.xlsx`;
+      const filename =
+        options.filename || `portfolio-${new Date().toISOString().split('T')[0]}.xlsx`;
 
       // Write file
       XLSX.writeFile(wb, filename);
 
       console.log('✅ Excel file exported:', filename);
       return filename;
-
     } catch (error) {
       console.error('❌ Excel export failed:', error);
       throw error;
@@ -110,13 +109,12 @@ class ExcelExportManager {
         'Zisk/Ztráta',
         'ROI (%)',
         'Podíl (%)',
-        'Datum nákupu'
-      ]
+        'Datum nákupu',
+      ],
     ];
 
     // Calculate total value for percentage
-    const totalValue = data.reduce((sum, item) => 
-      sum + parseFloat(item.aktuálníHodnota || 0), 0);
+    const totalValue = data.reduce((sum, item) => sum + parseFloat(item.aktuálníHodnota || 0), 0);
 
     // Data rows
     data.forEach((item, index) => {
@@ -139,7 +137,7 @@ class ExcelExportManager {
         { f: `G${index + 2}-F${index + 2}` }, // Formula: Aktuální - Investice
         { f: `H${index + 2}/F${index + 2}*100` }, // Formula: (Zisk/Ztráta) / Investice * 100
         { f: `G${index + 2}/${totalValue}*100` }, // Formula: Aktuální / Total * 100
-        item.datumNákupu || ''
+        item.datumNákupu || '',
       ]);
     });
 
@@ -156,7 +154,7 @@ class ExcelExportManager {
       { f: `SUM(H2:H${lastRow - 1})` },
       { f: `G${lastRow}/F${lastRow}*100` },
       100,
-      ''
+      '',
     ]);
 
     // Create worksheet
@@ -174,7 +172,7 @@ class ExcelExportManager {
       { wch: 12 }, // Zisk/Ztráta
       { wch: 10 }, // ROI
       { wch: 10 }, // Podíl
-      { wch: 12 }  // Datum
+      { wch: 12 }, // Datum
     ];
 
     // Apply formatting
@@ -189,10 +187,11 @@ class ExcelExportManager {
    * @param {Array} data - Portfolio data
    */
   addSummarySheet(wb, data) {
-    const totalValue = data.reduce((sum, item) => 
-      sum + parseFloat(item.aktuálníHodnota || 0), 0);
-    const totalCost = data.reduce((sum, item) => 
-      sum + (parseFloat(item.nákupníCena) * parseFloat(item.počet)), 0);
+    const totalValue = data.reduce((sum, item) => sum + parseFloat(item.aktuálníHodnota || 0), 0);
+    const totalCost = data.reduce(
+      (sum, item) => sum + parseFloat(item.nákupníCena) * parseFloat(item.počet),
+      0
+    );
     const gainLoss = totalValue - totalCost;
     const roi = totalCost > 0 ? (gainLoss / totalCost) * 100 : 0;
 
@@ -206,20 +205,17 @@ class ExcelExportManager {
       ['ROI (%)', roi],
       [''],
       ['Počet pozic', data.length],
-      ['Nejvyšší pozice', Math.max(...data.map(d => parseFloat(d.aktuálníHodnota || 0)))],
+      ['Nejvyšší pozice', Math.max(...data.map((d) => parseFloat(d.aktuálníHodnota || 0)))],
       ['Průměrná pozice', totalValue / data.length],
       [''],
       ['Datum exportu', new Date().toLocaleDateString('cs-CZ')],
-      ['Čas exportu', new Date().toLocaleTimeString('cs-CZ')]
+      ['Čas exportu', new Date().toLocaleTimeString('cs-CZ')],
     ];
 
     const ws = XLSX.utils.aoa_to_sheet(wsData);
 
     // Column widths
-    ws['!cols'] = [
-      { wch: 30 },
-      { wch: 20 }
-    ];
+    ws['!cols'] = [{ wch: 30 }, { wch: 20 }];
 
     // Merge title cell
     ws['!merges'] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: 1 } }];
@@ -253,7 +249,7 @@ class ExcelExportManager {
       ['Current Drawdown', metrics.currentDrawdown, 'Current Loss from Peak'],
       [''],
       ['🏆 TOP PERFORMERS', '', ''],
-      ['Pozice', 'Fond', 'ROI (%)']
+      ['Pozice', 'Fond', 'ROI (%)'],
     ];
 
     // Add top performers
@@ -273,17 +269,13 @@ class ExcelExportManager {
     const ws = XLSX.utils.aoa_to_sheet(wsData);
 
     // Column widths
-    ws['!cols'] = [
-      { wch: 20 },
-      { wch: 30 },
-      { wch: 35 }
-    ];
+    ws['!cols'] = [{ wch: 20 }, { wch: 30 }, { wch: 35 }];
 
     // Merge title cells
     ws['!merges'] = [
       { s: { r: 0, c: 0 }, e: { r: 0, c: 2 } },
       { s: { r: 11, c: 0 }, e: { r: 11, c: 2 } },
-      { s: { r: 18, c: 0 }, e: { r: 18, c: 2 } }
+      { s: { r: 18, c: 0 }, e: { r: 18, c: 2 } },
     ];
 
     this.applyMetricsFormatting(ws);
@@ -299,13 +291,13 @@ class ExcelExportManager {
   addCategoryBreakdownSheet(wb, data) {
     const categoryData = {};
 
-    data.forEach(item => {
+    data.forEach((item) => {
       const category = item.kategorie || 'Ostatní';
       if (!categoryData[category]) {
         categoryData[category] = {
           count: 0,
           totalValue: 0,
-          totalCost: 0
+          totalCost: 0,
         };
       }
 
@@ -317,7 +309,7 @@ class ExcelExportManager {
     const wsData = [
       ['📂 CATEGORY BREAKDOWN', '', '', '', ''],
       [''],
-      ['Kategorie', 'Počet pozic', 'Celková hodnota', 'Investice', 'Zisk/Ztráta', 'ROI (%)']
+      ['Kategorie', 'Počet pozic', 'Celková hodnota', 'Investice', 'Zisk/Ztráta', 'ROI (%)'],
     ];
 
     const totalValue = Object.values(categoryData).reduce((sum, cat) => sum + cat.totalValue, 0);
@@ -326,14 +318,7 @@ class ExcelExportManager {
       const gainLoss = stats.totalValue - stats.totalCost;
       const roi = stats.totalCost > 0 ? (gainLoss / stats.totalCost) * 100 : 0;
 
-      wsData.push([
-        category,
-        stats.count,
-        stats.totalValue,
-        stats.totalCost,
-        gainLoss,
-        roi
-      ]);
+      wsData.push([category, stats.count, stats.totalValue, stats.totalCost, gainLoss, roi]);
     });
 
     // Add totals
@@ -344,20 +329,13 @@ class ExcelExportManager {
       { f: `SUM(C4:C${lastRow - 1})` },
       { f: `SUM(D4:D${lastRow - 1})` },
       { f: `SUM(E4:E${lastRow - 1})` },
-      { f: `E${lastRow}/D${lastRow}*100` }
+      { f: `E${lastRow}/D${lastRow}*100` },
     ]);
 
     const ws = XLSX.utils.aoa_to_sheet(wsData);
 
     // Column widths
-    ws['!cols'] = [
-      { wch: 20 },
-      { wch: 12 },
-      { wch: 15 },
-      { wch: 15 },
-      { wch: 15 },
-      { wch: 10 }
-    ];
+    ws['!cols'] = [{ wch: 20 }, { wch: 12 }, { wch: 15 }, { wch: 15 }, { wch: 15 }, { wch: 10 }];
 
     // Merge title
     ws['!merges'] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: 5 } }];
@@ -377,19 +355,12 @@ class ExcelExportManager {
       ['📅 TRANSACTION HISTORY', '', '', ''],
       [''],
       ['Datum', 'Fond', 'Typ', 'Počet', 'Cena', 'Hodnota'],
-      ['Coming soon...', '', '', '', '', '']
+      ['Coming soon...', '', '', '', '', ''],
     ];
 
     const ws = XLSX.utils.aoa_to_sheet(wsData);
 
-    ws['!cols'] = [
-      { wch: 12 },
-      { wch: 30 },
-      { wch: 10 },
-      { wch: 10 },
-      { wch: 12 },
-      { wch: 15 }
-    ];
+    ws['!cols'] = [{ wch: 12 }, { wch: 30 }, { wch: 10 }, { wch: 10 }, { wch: 12 }, { wch: 15 }];
 
     ws['!merges'] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: 5 } }];
 
@@ -407,19 +378,19 @@ class ExcelExportManager {
     // Header row
     for (let C = range.s.c; C <= range.e.c; C++) {
       const cell = ws[XLSX.utils.encode_cell({ r: 0, c: C })];
-      if (!cell) continue;
-      
+      if (!cell) {continue;}
+
       cell.s = {
-        font: { bold: true, color: { rgb: "FFFFFF" } },
-        fill: { fgColor: { rgb: "1A237E" } },
-        alignment: { horizontal: "center", vertical: "center" }
+        font: { bold: true, color: { rgb: 'FFFFFF' } },
+        fill: { fgColor: { rgb: '1A237E' } },
+        alignment: { horizontal: 'center', vertical: 'center' },
       };
     }
 
     // Number formatting for currency columns
     const currencyCols = [4, 5, 6, 7]; // E, F, G, H (0-indexed)
     for (let R = 1; R <= dataRows + 1; R++) {
-      currencyCols.forEach(C => {
+      currencyCols.forEach((C) => {
         const cell = ws[XLSX.utils.encode_cell({ r: R, c: C })];
         if (cell && typeof cell.v === 'number') {
           cell.z = '#,##0 "Kč"';
@@ -430,7 +401,7 @@ class ExcelExportManager {
     // Percentage formatting
     const percentCols = [8, 9]; // I, J
     for (let R = 1; R <= dataRows + 1; R++) {
-      percentCols.forEach(C => {
+      percentCols.forEach((C) => {
         const cell = ws[XLSX.utils.encode_cell({ r: R, c: C })];
         if (cell) {
           cell.z = '0.00"%"';
@@ -445,7 +416,7 @@ class ExcelExportManager {
       if (cell) {
         cell.s = {
           font: { bold: true },
-          fill: { fgColor: { rgb: "E8EAF6" } }
+          fill: { fgColor: { rgb: 'E8EAF6' } },
         };
       }
     }
@@ -460,31 +431,31 @@ class ExcelExportManager {
     const titleCell = ws['A1'];
     if (titleCell) {
       titleCell.s = {
-        font: { bold: true, sz: 16, color: { rgb: "1A237E" } },
-        alignment: { horizontal: "center", vertical: "center" }
+        font: { bold: true, sz: 16, color: { rgb: '1A237E' } },
+        alignment: { horizontal: 'center', vertical: 'center' },
       };
     }
 
     // Header row
-    ['A3', 'B3'].forEach(addr => {
+    ['A3', 'B3'].forEach((addr) => {
       const cell = ws[addr];
       if (cell) {
         cell.s = {
           font: { bold: true },
-          fill: { fgColor: { rgb: "E8EAF6" } }
+          fill: { fgColor: { rgb: 'E8EAF6' } },
         };
       }
     });
 
     // Number formatting
-    ['B4', 'B5', 'B6', 'B10'].forEach(addr => {
+    ['B4', 'B5', 'B6', 'B10'].forEach((addr) => {
       const cell = ws[addr];
       if (cell && typeof cell.v === 'number') {
         cell.z = '#,##0 "Kč"';
       }
     });
 
-    ['B7'].forEach(addr => {
+    ['B7'].forEach((addr) => {
       const cell = ws[addr];
       if (cell && typeof cell.v === 'number') {
         cell.z = '0.00"%"';
@@ -498,23 +469,23 @@ class ExcelExportManager {
    */
   applyMetricsFormatting(ws) {
     // Title cells
-    ['A1', 'A12', 'A19'].forEach(addr => {
+    ['A1', 'A12', 'A19'].forEach((addr) => {
       const cell = ws[addr];
       if (cell) {
         cell.s = {
           font: { bold: true, sz: 14 },
-          alignment: { horizontal: "center" }
+          alignment: { horizontal: 'center' },
         };
       }
     });
 
     // Header rows
-    ['A3', 'B3', 'C3', 'A13', 'B13', 'C13', 'A20', 'B20', 'C20'].forEach(addr => {
+    ['A3', 'B3', 'C3', 'A13', 'B13', 'C13', 'A20', 'B20', 'C20'].forEach((addr) => {
       const cell = ws[addr];
       if (cell) {
         cell.s = {
           font: { bold: true },
-          fill: { fgColor: { rgb: "E8EAF6" } }
+          fill: { fgColor: { rgb: 'E8EAF6' } },
         };
       }
     });
@@ -531,7 +502,7 @@ class ExcelExportManager {
     if (titleCell) {
       titleCell.s = {
         font: { bold: true, sz: 14 },
-        alignment: { horizontal: "center" }
+        alignment: { horizontal: 'center' },
       };
     }
 
@@ -541,7 +512,7 @@ class ExcelExportManager {
       if (cell) {
         cell.s = {
           font: { bold: true },
-          fill: { fgColor: { rgb: "E8EAF6" } }
+          fill: { fgColor: { rgb: 'E8EAF6' } },
         };
       }
     }
@@ -553,7 +524,7 @@ class ExcelExportManager {
       if (cell) {
         cell.s = {
           font: { bold: true },
-          fill: { fgColor: { rgb: "C5CAE9" } }
+          fill: { fgColor: { rgb: 'C5CAE9' } },
         };
       }
     }
@@ -566,21 +537,22 @@ window.excelExportManager = new ExcelExportManager();
 // Add Excel export button
 window.addEventListener('DOMContentLoaded', () => {
   const portfolioCard = document.getElementById('portfolioCard');
-  if (!portfolioCard) return;
+  if (!portfolioCard) {return;}
 
   const headerDiv = portfolioCard.querySelector('div[style*="justify-content: space-between"]');
-  if (!headerDiv) return;
+  if (!headerDiv) {return;}
 
   const buttonContainer = headerDiv.querySelector('div[style*="gap"]');
-  if (!buttonContainer) return;
+  if (!buttonContainer) {return;}
 
   const excelBtn = document.createElement('button');
   excelBtn.id = 'exportExcel';
   excelBtn.className = 'btn-icon';
   excelBtn.title = 'Exportovat do Excel';
-  excelBtn.style.cssText = 'font-size: 1.5rem; padding: 8px 16px; background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: white; border: none; border-radius: 8px; cursor: pointer;';
+  excelBtn.style.cssText =
+    'font-size: 1.5rem; padding: 8px 16px; background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: white; border: none; border-radius: 8px; cursor: pointer;';
   excelBtn.textContent = '📊 Excel';
-  
+
   excelBtn.addEventListener('click', async () => {
     const data = window.getFondyData ? window.getFondyData() : [];
     if (!data || data.length === 0) {
@@ -593,15 +565,15 @@ window.addEventListener('DOMContentLoaded', () => {
 
     try {
       await window.excelExportManager.exportToExcel(data, {
-        includeHistory: false
+        includeHistory: false,
       });
-      
+
       if (typeof showToast === 'function') {
         showToast('success', 'Export dokončen', 'Excel soubor byl úspěšně vygenerován');
       }
     } catch (error) {
       console.error('Excel export failed:', error);
-      alert('Chyba při exportu do Excelu: ' + error.message);
+      alert(`Chyba při exportu do Excelu: ${ error.message}`);
     } finally {
       excelBtn.disabled = false;
       excelBtn.textContent = '📊 Excel';
