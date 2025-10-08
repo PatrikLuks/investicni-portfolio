@@ -272,8 +272,14 @@ function initializeApp() {
   setupClientFormHandler(storage, updateDashboard, showToast, initializeColorPicker);
   setupPortfolioFormHandler(storage, validateFundData, parseSafeNumber, updateFundList, updateDashboard, showToast);
   setupBulkActionsHandlers(bulkDeleteSelected, bulkExportSelected);
-  setupViewModeToggle();
-  setupSearchHandler(updateFundList, debounce);
+  setupViewModeToggle((newMode) => {
+    viewMode = newMode;
+    updateFundList();
+  });
+  setupSearchHandler((query) => {
+    searchQuery = query.toLowerCase();
+    updateFundList();
+  }, debounce);
 
   // Setup keyboard shortcuts
   setupKeyboardShortcuts();

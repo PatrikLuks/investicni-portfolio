@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ES6 Module Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-result {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 ES6 Module Integration Test</h1>
+    <div id="test-results"></div>
+
+    <script type="module">
+        const resultsContainer = document.getElementById('test-results');
+
+        function logResult(message, isSuccess) {
+            const div = document.createElement('div');
+            div.className = `test-result ${isSuccess ? 'success' : 'error'}`;
+            div.textContent = isSuccess ? `✅ ${message}` : `❌ ${message}`;
+            resultsContainer.appendChild(div);
+        }
+
+        function logInfo(message) {
+            const div = document.createElement('div');
+            div.className = 'test-result info';
+            div.textContent = `ℹ️ ${message}`;
+            resultsContainer.appendChild(div);
+        }
+
+        // Test 1: Import utilities module
+        try {
+            const { generateCSV, formatCurrency, formatPercentage } = await import('./modules/utilities.js');
+            logResult('utilities.js loaded successfully', true);
+            
+            // Test formatCurrency
+            const formatted = formatCurrency(123456.78);
+            logInfo(`formatCurrency(123456.78) = ${formatted}`);
+            logResult('formatCurrency works', formatted.includes('123'));
+            
+            // Test formatPercentage
+            const percent = formatPercentage(15.5);
+            logInfo(`formatPercentage(15.5) = ${percent}`);
+            logResult('formatPercentage works', percent === '15.50%');
+            
+        } catch (error) {
+            logResult(`utilities.js failed: ${error.message}`, false);
+            console.error(error);
+        }
+
+        // Test 2: Import data-manager module
+        try {
+            const { PortfolioStorage, parseSafeNumber, validateFundData } = await import('./modules/data-manager.js');
+            logResult('data-manager.js loaded successfully', true);
+            
+            // Test parseSafeNumber
+            const num = parseSafeNumber('1 234,56');
+            logInfo(`parseSafeNumber('1 234,56') = ${num}`);
+            logResult('parseSafeNumber works', num === 1234.56);
+            
+            // Test validateFundData
+            const errors = validateFundData({
+                name: 'Test Fund',
+                producer: 'Test Producer',
+                investment: 10000,
+                investmentDate: '2025-01-01',
+                value: 11000
+            });
+            logResult('validateFundData works (valid data)', errors.length === 0);
+            
+            const errors2 = validateFundData({
+                name: '',
+                producer: '',
+                investment: -100,
+                investmentDate: '',
+                value: -50
+            });
+            logResult('validateFundData works (invalid data)', errors2.length > 0);
+            
+        } catch (error) {
+            logResult(`data-manager.js failed: ${error.message}`, false);
+            console.error(error);
+        }
+
+        // Test 3: Import portfolio-calculator module
+        try {
+            const { calculatePortfolioMetrics, calculateFundYield } = await import('./modules/portfolio-calculator.js');
+            logResult('portfolio-calculator.js loaded successfully', true);
+            
+            // Test calculateFundYield
+            const yield1 = calculateFundYield({ investment: 10000, value: 11000 });
+            logInfo(`calculateFundYield({investment: 10000, value: 11000}) = ${yield1}%`);
+            logResult('calculateFundYield works', yield1 === 10);
+            
+        } catch (error) {
+            logResult(`portfolio-calculator.js failed: ${error.message}`, false);
+            console.error(error);
+        }
+
+        // Test 4: Import ui-manager module
+        try {
+            const { animateValue } = await import('./modules/ui-manager.js');
+            logResult('ui-manager.js loaded successfully', true);
+            
+        } catch (error) {
+            logResult(`ui-manager.js failed: ${error.message}`, false);
+            console.error(error);
+        }
+
+        // Test 5: Import event-handlers module
+        try {
+            const { initializeDOMReferences } = await import('./modules/event-handlers.js');
+            logResult('event-handlers.js loaded successfully', true);
+            
+        } catch (error) {
+            logResult(`event-handlers.js failed: ${error.message}`, false);
+            console.error(error);
+        }
+
+        // Test 6: Import app-core module
+        try {
+            const { initializeApp } = await import('./modules/app-core.js');
+            logResult('app-core.js loaded successfully', true);
+            logInfo('initializeApp function available: ' + (typeof initializeApp === 'function'));
+            
+        } catch (error) {
+            logResult(`app-core.js failed: ${error.message}`, false);
+            console.error(error);
+        }
+
+        // Test 7: Import main.js
+        try {
+            await import('./main.js');
+            logResult('main.js loaded successfully', true);
+            
+        } catch (error) {
+            logResult(`main.js failed: ${error.message}`, false);
+            console.error(error);
+        }
+
+        logInfo('All module tests completed!');
+    </script>
+</body>
+</html>

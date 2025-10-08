@@ -146,29 +146,29 @@ function setupBulkActionsHandlers(bulkDeleteSelected, bulkExportSelected) {
 }
 
 // ==================== VIEW MODE TOGGLE ====================
-function setupViewModeToggle() {
+function setupViewModeToggle(onViewModeChange) {
   const viewModeRadios = document.querySelectorAll('input[name="viewMode"]');
   
   viewModeRadios.forEach((radio) => {
     radio.addEventListener('change', (e) => {
-      window.viewMode = e.target.value;
-      if (typeof updateFundList === 'function') {
-        updateFundList();
+      if (onViewModeChange) {
+        onViewModeChange(e.target.value);
       }
     });
   });
 }
 
 // ==================== SEARCH HANDLER ====================
-function setupSearchHandler(updateFundList, debounce) {
+function setupSearchHandler(onSearch, debounce) {
   const searchInput = document.getElementById('searchInput');
   if (!searchInput) return;
 
   searchInput.addEventListener(
     'input',
     debounce((e) => {
-      window.searchQuery = e.target.value;
-      updateFundList();
+      if (onSearch) {
+        onSearch(e.target.value);
+      }
     }, 300)
   );
 }
