@@ -62,10 +62,6 @@
     
     <!-- ✨ v3.1.0 Premium Styles -->
     <link rel="stylesheet" href="styles-v3.1.css" />
-    
-    <!-- ⚡ REFACTORED MODULAR STYLES (replaces inline styles) -->
-    <link rel="stylesheet" href="modules/refactored-styles.css" />
-    
     <style>
       :root {
         --primary-blue: #1a237e;
@@ -1774,30 +1770,60 @@
       });
     </script>
 
-    <!-- 🚀 ES6 MODULE ARCHITECTURE: Clean, modular, production-ready -->
+    <!-- 🚀 ULTRA-OPTIMIZED LOADING: Critical modules only, rest load on-demand -->
     <script src="error-handler.js" defer></script>
-    
-    <!-- Critical dependencies (loaded first) -->
-    <script src="library-loader.js" defer></script>
-    <script src="accessibility.js" defer></script>
-    <script src="notification-system.js" defer></script>
-    <script src="command-stack.js" defer></script>
-    <script src="data-validation.js" defer></script>
-    <script src="calculations-engine.js" defer></script>
-    
-    <!-- ✨ v3.1.0 Premium Features -->
-    <script src="theme-manager.js" defer></script>
-    <script src="auto-save.js" defer></script>
-    <script src="keyboard-shortcuts-overlay.js" defer></script>
-    <script src="market-data-service.js" defer></script>
-    <script src="market-data-ui.js" defer></script>
-    <script src="multi-portfolio.js" defer></script>
-    <script src="advanced-charts.js" defer></script>
-    <script src="charts-manager.js" defer></script>
-    
-    <!-- 🎯 MAIN APPLICATION: ES6 Module Entry Point (load last) -->
-    <script type="module" src="main.js"></script>
+    <script>
+      // Load non-critical modules progressively after page load
+      window.addEventListener('load', () => {
+        const modules = [
+          'library-loader.js',
+          'accessibility.js',
+          'notification-system.js',
+          'command-stack.js',
+          'data-validation.js',
+          'calculations-engine.js',
+          // ✨ v3.1.0 Premium Features
+          'theme-manager.js',              // 🌓 Dark mode
+          'auto-save.js',                  // 💾 Auto-save functionality
+          'keyboard-shortcuts-overlay.js', // ⌨️ Keyboard shortcuts
+          'market-data-service.js',        // 📊 Real-time market data
+          'market-data-ui.js',             // 📈 Market data UI
+          'multi-portfolio.js',            // 📁 Multiple portfolios
+          'advanced-charts.js',            // 📊 Advanced charts
+          'charts-manager.js',             // 🎛️ Chart controls
+          'app.js',                        // 🚀 Main application (load last)
+        ];
 
-    <!-- ✅ Clean ES6 architecture - No CPU overload, fast loading -->
+        // Load modules one by one with delay to prevent CPU overload
+        let index = 0;
+        function loadNextModule() {
+          if (index >= modules.length) return;
+
+          const script = document.createElement('script');
+          script.src = modules[index];
+          script.async = true;
+
+          script.onload = () => {
+            console.log(`✅ Loaded: ${modules[index]}`);
+            index++;
+            // Wait 200ms before loading next module (prevents CPU spike)
+            setTimeout(loadNextModule, 200);
+          };
+
+          script.onerror = () => {
+            console.error(`❌ Failed: ${modules[index]}`);
+            index++;
+            setTimeout(loadNextModule, 200);
+          };
+
+          document.body.appendChild(script);
+        }
+
+        // Start loading after 500ms delay (let page render first)
+        setTimeout(loadNextModule, 500);
+      });
+    </script>
+
+    <!-- ✅ Fast loading - Heavy libraries load on-demand only -->
   </body>
 </html>

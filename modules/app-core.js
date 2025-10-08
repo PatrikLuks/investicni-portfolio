@@ -37,6 +37,12 @@ import {
   getPortfolioData,
   getClientInfo,
 } from './event-handlers.js';
+import {
+  generateCSV,
+  formatCurrency,
+  formatPercentage,
+  truncateText,
+} from './utilities.js';
 
 // ==================== GLOBAL STATE ====================
 let portfolioData = [];
@@ -80,11 +86,7 @@ function updateDashboard() {
   // Update profit amount
   const profitElement = document.getElementById('kpiProfitAmount');
   if (profitElement) {
-    profitElement.textContent = new Intl.NumberFormat('cs-CZ', {
-      style: 'currency',
-      currency: 'CZK',
-      minimumFractionDigits: 0,
-    }).format(metrics.totalProfit);
+    profitElement.textContent = formatCurrency(metrics.totalProfit);
   }
 
   // Update yield card styling
@@ -113,14 +115,10 @@ function updateDashboard() {
     const bestFundElement = document.getElementById('kpiValueBestFund');
     const bestYieldElement = document.getElementById('kpiBestFundYield');
     if (bestFundElement) {
-      const shortName =
-        metrics.bestFund.name.length > 50
-          ? metrics.bestFund.name.substring(0, 50) + '...'
-          : metrics.bestFund.name;
-      bestFundElement.textContent = shortName;
+      bestFundElement.textContent = truncateText(metrics.bestFund.name, 50);
     }
     if (bestYieldElement) {
-      bestYieldElement.textContent = `Nejvyšší výnos: ${metrics.bestFund.yield.toFixed(2)}%`;
+      bestYieldElement.textContent = `Nejvyšší výnos: ${formatPercentage(metrics.bestFund.yield)}`;
     }
   }
 }
@@ -241,11 +239,10 @@ function bulkExportSelected() {
   if (selectedIndexes.length === 0) return;
 
   const selectedFunds = selectedIndexes.map((i) => portfolioData[i]);
-  // Call existing CSV export function
-  if (typeof generateCSV === 'function') {
-    generateCSV(selectedFunds);
-    showToast('success', 'Export dokončen', `${selectedFunds.length} fondů bylo exportováno`);
-  }
+  const { clientName: client } = getClientInfo();
+  
+  generateCSV(selectedFunds, client || 'client');
+  showToast('success', 'Export dokončen', `${selectedFunds.length} fondů bylo exportováno`);
 }
 
 // ==================== INITIALIZATION ====================
@@ -338,13 +335,6 @@ function setupDarkMode() {
   });
 }
 
-// ==================== START THE APP ====================
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initializeApp);
-} else {
-  initializeApp();
-}
-
 // ==================== PUBLIC API ====================
 export {
   initializeApp,
@@ -354,6 +344,4 @@ export {
   deleteFund,
   bulkDeleteSelected,
   bulkExportSelected,
-  portfolioData,
-  storage,
 };
