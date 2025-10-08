@@ -22,7 +22,7 @@
     <!-- Security Headers -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://cdn.sheetjs.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self';"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://cdn.sheetjs.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://query1.finance.yahoo.com https://www.alphavantage.co https://finnhub.io;"
     />
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
     <!-- X-Frame-Options removed - only works in HTTP headers, not meta tags -->
@@ -48,6 +48,7 @@
     <!-- - Fuse.js, Chart.js, Chart.js Zoom, jsPDF, SheetJS -->
     <!-- Will load on-demand when needed via library-loader.js -->
 
+    <!-- Core Styles -->
     <link rel="stylesheet" href="accessibility.css" />
     <link rel="stylesheet" href="module-loader.css" />
     <link rel="stylesheet" href="search-styles.css" />
@@ -58,6 +59,9 @@
     <link rel="stylesheet" href="quick-reference.css" />
     <link rel="stylesheet" href="calculations-styles.css" />
     <link rel="stylesheet" href="dashboard-styles.css" />
+    
+    <!-- ✨ v3.1.0 Premium Styles -->
+    <link rel="stylesheet" href="styles-v3.1.css" />
     <style>
       :root {
         --primary-blue: #1a237e;
@@ -1778,7 +1782,16 @@
           'command-stack.js',
           'data-validation.js',
           'calculations-engine.js',
-          'app.js',
+          // ✨ v3.1.0 Premium Features
+          'theme-manager.js',              // 🌓 Dark mode
+          'auto-save.js',                  // 💾 Auto-save functionality
+          'keyboard-shortcuts-overlay.js', // ⌨️ Keyboard shortcuts
+          'market-data-service.js',        // 📊 Real-time market data
+          'market-data-ui.js',             // 📈 Market data UI
+          'multi-portfolio.js',            // 📁 Multiple portfolios
+          'advanced-charts.js',            // 📊 Advanced charts
+          'charts-manager.js',             // 🎛️ Chart controls
+          'app.js',                        // 🚀 Main application (load last)
         ];
 
         // Load modules one by one with delay to prevent CPU overload
