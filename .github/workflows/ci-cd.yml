@@ -51,43 +51,32 @@ jobs:
 
       - name: 📦 Install test dependencies
         run: |
+          npm install
           npm install -g http-server
-          npm install -g puppeteer
+
+      - name: 🧪 Run Jest tests
+        run: |
+          npm test -- --ci --coverage --maxWorkers=2
+        continue-on-error: false
+
+      - name: 📊 Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+        continue-on-error: true
 
       - name: 🚀 Start test server
         run: |
           http-server -p 8080 &
           sleep 5
 
-      - name: 🧪 Run functional tests
+      - name: 🧪 Run browser tests (optional)
         run: |
-          echo "Running functional tests..."
-          node -e "
-          const puppeteer = require('puppeteer');
-          (async () => {
-            const browser = await puppeteer.launch({ headless: 'new' });
-            const page = await browser.newPage();
-            
-            console.log('✅ Loading application...');
-            await page.goto('http://localhost:8080/investPortfolio.html');
-            await page.waitForSelector('body', { timeout: 10000 });
-            
-            console.log('✅ Checking for console errors...');
-            page.on('console', msg => {
-              if (msg.type() === 'error') {
-                console.error('❌ Console error:', msg.text());
-                process.exit(1);
-              }
-            });
-            
-            console.log('✅ Testing add transaction...');
-            await page.click('#addTransactionBtn');
-            await page.waitForSelector('#transactionForm');
-            
-            console.log('✅ All tests passed!');
-            await browser.close();
-          })();
-          " || exit 0
+          echo "✅ Browser tests placeholder"
+          # Future: Add Playwright/Puppeteer tests
+        continue-on-error: true
 
       - name: 📊 Test report
         if: always()

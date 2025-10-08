@@ -8,7 +8,27 @@
     "deploy": "bash DEPLOY.sh",
     "validate": "bash VALIDATE.sh",
     "benchmark": "bash enterprise-benchmark.sh",
-    "test": "echo 'No tests configured yet' && exit 0"
+    "test": "jest --coverage",
+    "test:watch": "jest --watch",
+    "test:unit": "jest --testPathPattern=tests/.*\\.test\\.js",
+    "test:integration": "jest --testPathPattern=tests/integration\\.test\\.js",
+    "test:ci": "jest --ci --coverage --maxWorkers=2",
+    "lint": "eslint *.js --max-warnings 0",
+    "lint:fix": "eslint *.js --fix",
+    "format": "prettier --write \"*.js\" \"*.css\" \"*.html\"",
+    "format:check": "prettier --check \"*.js\" \"*.css\" \"*.html\"",
+    "security:audit": "npm audit --audit-level=moderate",
+    "docker:build": "docker build -t portfolio-manager-pro:latest .",
+    "docker:run": "docker run -p 8080:80 portfolio-manager-pro:latest",
+    "docker:compose": "docker-compose up -d",
+    "docker:compose:down": "docker-compose down"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.0",
+    "eslint": "^8.50.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "prettier": "^3.0.3"
   },
   "repository": {
     "type": "git",
