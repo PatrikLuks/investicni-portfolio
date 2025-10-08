@@ -439,8 +439,8 @@ if (document.readyState === 'loading') {
 }
 
 // Add history item styles
-const style = document.createElement('style');
-style.textContent = `
+const commandStackStyle = document.createElement('style');
+commandStackStyle.textContent = `
     .history-item {
         display: flex;
         gap: 12px;
@@ -489,7 +489,7 @@ style.textContent = `
         color: #6b7280;
     }
 `;
-document.head.appendChild(style);
+document.head.appendChild(commandStackStyle);
 
 console.log('✅ Undo/Redo system loaded');
 console.log('💡 Ctrl+Z (Undo), Ctrl+Y (Redo), Ctrl+H (History)');

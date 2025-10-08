@@ -8,9 +8,11 @@ class ErrorHandler {
     constructor() {
         this.errors = [];
         this.maxErrors = 100;
-        this.errorCountThreshold = 50; // Zvýšeno z 10 na 50 pro Safari startup
-        this.timeWindow = 60000; // 1 minute
+        this.errorCountThreshold = 200; // Zvýšeno z 50 na 200 pro startup
+        this.timeWindow = 10000; // 10 sekund místo 1 minuty
         this.recentErrors = [];
+        this.lastErrorTime = 0;
+        this.errorDebounceMs = 100; // Debounce pro duplikátní chyby
         
         this.init();
     }
@@ -52,6 +54,13 @@ class ErrorHandler {
     }
 
     handleError(errorInfo) {
+        // Debounce duplicate errors
+        const now = Date.now();
+        if (now - this.lastErrorTime < this.errorDebounceMs) {
+            return; // Skip if error came too quickly (likely duplicate)
+        }
+        this.lastErrorTime = now;
+
         const errorEntry = {
             ...errorInfo,
             timestamp: new Date().toISOString(),
@@ -67,13 +76,15 @@ class ErrorHandler {
         }
 
         // Track recent errors for rate limiting
-        this.recentErrors.push(Date.now());
+        this.recentErrors.push(now);
         this.recentErrors = this.recentErrors.filter(
-            time => Date.now() - time < this.timeWindow
+            time => now - time < this.timeWindow
         );
 
-        // Log to localStorage
-        this.logToStorage(errorEntry);
+        // Log to localStorage (but not too frequently)
+        if (this.recentErrors.length % 10 === 0) {
+            this.logToStorage(errorEntry);
+        }
 
         // Check if we should show error to user
         if (this.shouldNotifyUser(errorInfo)) {
@@ -85,10 +96,15 @@ class ErrorHandler {
             this.handleErrorStorm();
         }
 
-        // Send to analytics (if configured)
-        this.sendToAnalytics(errorEntry);
+        // Send to analytics (if configured) - but not for every error
+        if (this.recentErrors.length % 5 === 0) {
+            this.sendToAnalytics(errorEntry);
+        }
 
-        console.error('🔴 Error caught:', errorEntry);
+        // Only log every 5th error to console to reduce overhead
+        if (this.recentErrors.length % 5 === 0) {
+            console.error('🔴 Error caught:', errorEntry);
+        }
     }
 
     generateErrorId() {
@@ -385,8 +401,8 @@ function safeSyncFunction(fn, errorMessage = 'Operation failed') {
 window.errorHandler = new ErrorHandler();
 
 // Add animation for error notifications
-const style = document.createElement('style');
-style.textContent = `
+const errorHandlerStyle = document.createElement('style');
+errorHandlerStyle.textContent = `
     @keyframes slideInRight {
         from {
             transform: translateX(400px);
@@ -409,6 +425,6 @@ style.textContent = `
         }
     }
 `;
-document.head.appendChild(style);
+document.head.appendChild(errorHandlerStyle);
 
 console.log('✅ Error Handler module loaded');

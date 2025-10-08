@@ -644,8 +644,8 @@ class NotificationSystem {
 window.notificationSystem = new NotificationSystem();
 
 // Add animation styles
-const style = document.createElement('style');
-style.textContent = `
+const notificationStyle = document.createElement('style');
+notificationStyle.textContent = `
   @keyframes slideInRight {
     from {
       transform: translateX(100%);
@@ -668,6 +668,6 @@ style.textContent = `
     }
   }
 `;
-document.head.appendChild(style);
+document.head.appendChild(notificationStyle);
 
 console.log('✅ Notification System loaded');

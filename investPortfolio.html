@@ -1650,15 +1650,50 @@
         });
     </script>
     
-    <!-- 🚀 PERFORMANCE FIX: Direct loading without heavy external libs -->
-    <script src="error-handler.js"></script>
-    <script src="library-loader.js"></script>
-    <script src="accessibility.js"></script>
-    <script src="notification-system.js"></script>
-    <script src="command-stack.js"></script>
-    <script src="data-validation.js"></script>
-    <script src="calculations-engine.js"></script>
-    <script src="app.js"></script>
+    <!-- 🚀 ULTRA-OPTIMIZED LOADING: Critical modules only, rest load on-demand -->
+    <script src="error-handler.js" defer></script>
+    <script>
+        // Load non-critical modules progressively after page load
+        window.addEventListener('load', () => {
+            const modules = [
+                'library-loader.js',
+                'accessibility.js',
+                'notification-system.js',
+                'command-stack.js',
+                'data-validation.js',
+                'calculations-engine.js',
+                'app.js'
+            ];
+            
+            // Load modules one by one with delay to prevent CPU overload
+            let index = 0;
+            function loadNextModule() {
+                if (index >= modules.length) return;
+                
+                const script = document.createElement('script');
+                script.src = modules[index];
+                script.async = true;
+                
+                script.onload = () => {
+                    console.log(`✅ Loaded: ${modules[index]}`);
+                    index++;
+                    // Wait 200ms before loading next module (prevents CPU spike)
+                    setTimeout(loadNextModule, 200);
+                };
+                
+                script.onerror = () => {
+                    console.error(`❌ Failed: ${modules[index]}`);
+                    index++;
+                    setTimeout(loadNextModule, 200);
+                };
+                
+                document.body.appendChild(script);
+            }
+            
+            // Start loading after 500ms delay (let page render first)
+            setTimeout(loadNextModule, 500);
+        });
+    </script>
     
     <!-- ✅ Fast loading - Heavy libraries load on-demand only -->
 </body>

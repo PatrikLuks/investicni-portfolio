@@ -1,20 +1,137 @@
-# Server files
+# Portfolio Manager Pro - .gitignore
+# Enterprise-grade project configuration
+
+# =======================
+# Development & Build
+# =======================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.pnp
+.pnp.js
+*.log
+logs/
+*.lock
+
+# =======================
+# IDE & Editors
+# =======================
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# =======================
+# Testing & Coverage
+# =======================
+coverage/
+.nyc_output/
+*.lcov
+.coverage
+htmlcov/
+test-results/
+*.test.js.snap
+
+# =======================
+# Build & Distribution
+# =======================
+dist/
+build/
+out/
+.next/
+.nuxt/
+*.min.js
+*.min.css
+*.bundle.js
+
+# =======================
+# Environment & Config
+# =======================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+config.local.js
+
+# =======================
+# User Data & Cache
+# =======================
+*.cache
+.cache/
+cache-bust.txt
+*.tmp
+*.temp
+.temp/
+user-data/
+backups/*.backup
+*.bak
+
+# =======================
+# Security & Sensitive
+# =======================
+*.pem
+*.key
+*.cert
+secrets/
+credentials/
+.secrets
+.credentials
+
+# =======================
+# Server & Runtime
+# =======================
 server.log
 server.pid
 *.pid
 
-# macOS
+# =======================
+# OS & System Files
+# =======================
 .DS_Store
-*.swp
-*.swo
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
 
-# Logs
-*.log
+# =======================
+# Documentation Build
+# =======================
+docs/_build/
+site/
+mkdocs-site/
 
-# Editor
-.vscode/
-.idea/
+# =======================
+# Temporary Test Files
+# =======================
+debug-fix.html
+functional-test.html
+qa-dashboard.html
+index-test-direct.html
+index-working*.html
+*-test.html
+analyze-loading.sh
+diagnose.sh
 
-# Temporary files
-*.tmp
-*~
+# =======================
+# Keep Important Files
+# =======================
+!DEPLOY.sh
+!START.sh
+!QUICK_START.sh
+!VALIDATE.sh
+!enterprise-benchmark.sh
+!.github/

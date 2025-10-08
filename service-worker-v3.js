@@ -3,7 +3,7 @@
  * Aggressive caching + Performance optimization + Memory efficiency
  */
 
-const CACHE_VERSION = 'v3-ultra-2025';
+const CACHE_VERSION = 'v3-final-fix-1551';
 const STATIC_CACHE = `pm-static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `pm-dynamic-${CACHE_VERSION}`;
 const MAX_CACHE_SIZE = 50; // Maximum items in dynamic cache

@@ -1,497 +1,17 @@
-// ==================== DOM ELEMENT REFERENCES ====================
-// Lazy initialization - získání referencí až když jsou potřeba
-let clientForm, portfolioForm, generateReportBtn, fondList;
-let clientNameCard, portfolioCard, fondListCard, clientNameDisplay, dashboard;
-
-// Initialize DOM references when DOM is ready
-function initializeDOMReferences() {
-    clientForm = document.getElementById('clientForm');
-    portfolioForm = document.getElementById('portfolioForm');
-    generateReportBtn = document.getElementById('generateReport');
-    fondList = document.getElementById('fondList');
-    clientNameCard = document.getElementById('clientNameCard');
-    portfolioCard = document.getElementById('portfolioCard');
-    fondListCard = document.getElementById('fondListCard');
-    clientNameDisplay = document.getElementById('clientNameDisplay');
-    dashboard = document.getElementById('dashboard');
-}
+// Získání reference na formuláře a elementy
+const clientForm = document.getElementById('clientForm');
+const portfolioForm = document.getElementById('portfolioForm');
+const generateReportBtn = document.getElementById('generateReport');
+const fondList = document.getElementById('fondList');
+const clientNameCard = document.getElementById('clientNameCard');
+const portfolioCard = document.getElementById('portfolioCard');
+const fondListCard = document.getElementById('fondListCard');
+const clientNameDisplay = document.getElementById('clientNameDisplay');
 
 // Add these variables at the top with other declarations
 let advisorName = '';
 let advisorEmail = '';
 let viewMode = 'funds'; // 'funds' nebo 'producers'
-let currentSortColumn = null;
-let currentSortDirection = 'asc';
-let searchQuery = '';
-
-
-// ==================== STORAGE & PERSISTENCE ====================
-class PortfolioStorage {
-    constructor() {
-        this.storageKey = 'portfolioData_v2';
-        this.clientKey = 'portfolioClient_v2';
-        this.lastSaveKey = 'portfolioLastSave_v2';
-        this.autosaveInterval = null;
-    }
-    
-    saveData(data) {
-        try {
-            localStorage.setItem(this.storageKey, JSON.stringify(data));
-            const now = new Date().toISOString();
-            localStorage.setItem(this.lastSaveKey, now);
-            this.updateLastSaveDisplay(now);
-            return true;
-        } catch (e) {
-            console.error('Save failed:', e);
-            showToast('error', 'Chyba uložení', 'Nepodařilo se uložit data do localStorage');
-            return false;
-        }
-    }
-    
-    loadData() {
-        try {
-            const data = localStorage.getItem(this.storageKey);
-            return data ? JSON.parse(data) : [];
-        } catch (e) {
-            console.error('Load failed:', e);
-            return [];
-        }
-    }
-    
-    saveClient(client) {
-        try {
-            localStorage.setItem(this.clientKey, JSON.stringify(client));
-            return true;
-        } catch (e) {
-            console.error('Client save failed:', e);
-            return false;
-        }
-    }
-    
-    loadClient() {
-        try {
-            const client = localStorage.getItem(this.clientKey);
-            return client ? JSON.parse(client) : null;
-        } catch (e) {
-            console.error('Client load failed:', e);
-            return null;
-        }
-    }
-    
-    clearAll() {
-        try {
-            localStorage.removeItem(this.storageKey);
-            localStorage.removeItem(this.clientKey);
-            localStorage.removeItem(this.lastSaveKey);
-            showToast('info', 'Data smazána', 'Všechna data byla vymazána');
-            return true;
-        } catch (e) {
-            console.error('Clear failed:', e);
-            return false;
-        }
-    }
-    
-    startAutosave(callback) {
-        if (this.autosaveInterval) {
-            clearInterval(this.autosaveInterval);
-        }
-        this.autosaveInterval = setInterval(() => {
-            if (callback) callback();
-        }, 30000); // 30 sekund
-    }
-    
-    stopAutosave() {
-        if (this.autosaveInterval) {
-            clearInterval(this.autosaveInterval);
-            this.autosaveInterval = null;
-        }
-    }
-    
-    updateLastSaveDisplay(isoString) {
-        const date = new Date(isoString);
-        const timeStr = date.toLocaleTimeString('cs-CZ', { 
-            hour: '2-digit', 
-            minute: '2-digit',
-            second: '2-digit'
-        });
-        const indicator = document.getElementById('lastSaveIndicator');
-        const timeElement = document.getElementById('lastSaveTime');
-        
-        if (indicator && timeElement) {
-            timeElement.textContent = `Uloženo ${timeStr}`;
-            indicator.style.opacity = '1';
-            
-            // Pulse animation
-            indicator.style.animation = 'pulse 0.5s ease-in-out';
-            setTimeout(() => {
-                indicator.style.animation = '';
-                indicator.style.opacity = '0.7';
-            }, 2000);
-        }
-    }
-    
-    getLastSaveTime() {
-        const lastSave = localStorage.getItem(this.lastSaveKey);
-        return lastSave ? new Date(lastSave) : null;
-    }
-}
-
-const storage = new PortfolioStorage();
-
-// ==================== UTILITY FUNCTIONS ====================
-// Debounce function for performance optimization
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
-
-// Safe number parsing with validation
-function parseSafeNumber(value, defaultValue = 0) {
-    if (value === null || value === undefined || value === '') {
-        return defaultValue;
-    }
-    const parsed = typeof value === 'string' ? parseFloat(value.replace(/\s/g, '')) : parseFloat(value);
-    return isNaN(parsed) ? defaultValue : parsed;
-}
-
-// Validate form data
-function validateFondData(data) {
-    const errors = [];
-    
-    if (!data.name || data.name.trim() === '') {
-        errors.push('Název fondu je povinný');
-    }
-    
-    if (!data.producer || data.producer.trim() === '') {
-        errors.push('Správce je povinný');
-    }
-    
-    const investment = parseSafeNumber(data.investment);
-    if (investment <= 0) {
-        errors.push('Investice musí být kladné číslo');
-    }
-    
-    const value = parseSafeNumber(data.value);
-    if (value < 0) {
-        errors.push('Hodnota nemůže být záporná');
-    }
-    
-    return errors;
-}
-
-// Confirmation dialog with custom styling
-function showConfirmDialog(title, message, onConfirm, onCancel) {
-    const overlay = document.createElement('div');
-    overlay.className = 'confirm-overlay';
-    overlay.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.5);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 10000;
-        animation: fadeIn 0.2s ease-in-out;
-    `;
-    
-    const dialog = document.createElement('div');
-    dialog.style.cssText = `
-        background: white;
-        padding: 2rem;
-        border-radius: 8px;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-        max-width: 400px;
-        animation: slideInDown 0.3s ease-in-out;
-    `;
-    
-    dialog.innerHTML = `
-        <h3 style="margin: 0 0 1rem 0; color: #333;">${title}</h3>
-        <p style="margin: 0 0 1.5rem 0; color: #666;">${message}</p>
-        <div style="display: flex; gap: 1rem; justify-content: flex-end;">
-            <button id="cancelBtn" class="btn" style="background: #e0e0e0; color: #333;">Zrušit</button>
-            <button id="confirmBtn" class="btn btn-danger" style="background: #dc3545; color: white;">Potvrdit</button>
-        </div>
-    `;
-    
-    overlay.appendChild(dialog);
-    document.body.appendChild(overlay);
-    
-    const confirmBtn = dialog.querySelector('#confirmBtn');
-    const cancelBtn = dialog.querySelector('#cancelBtn');
-    
-    const cleanup = () => {
-        overlay.style.animation = 'fadeOut 0.2s ease-in-out';
-        setTimeout(() => document.body.removeChild(overlay), 200);
-    };
-    
-    confirmBtn.onclick = () => {
-        cleanup();
-        if (onConfirm) onConfirm();
-    };
-    
-    cancelBtn.onclick = () => {
-        cleanup();
-        if (onCancel) onCancel();
-    };
-    
-    overlay.onclick = (e) => {
-        if (e.target === overlay) {
-            cleanup();
-            if (onCancel) onCancel();
-        }
-    };
-}
-
-// Export chart as PNG
-function exportChartAsPNG(chartElement, filename = 'chart.png') {
-    try {
-        const canvas = chartElement.querySelector('canvas');
-        if (canvas) {
-            const url = canvas.toDataURL('image/png');
-            const link = document.createElement('a');
-            link.download = filename;
-            link.href = url;
-            link.click();
-            showToast('success', 'Export úspěšný', `Graf byl exportován jako ${filename}`);
-        }
-    } catch (e) {
-        console.error('Chart export failed:', e);
-        showToast('error', 'Export selhal', 'Nepodařilo se exportovat graf');
-    }
-}
-
-// Loading overlay
-function showLoading() {
-    const overlay = document.createElement('div');
-    overlay.className = 'loading-overlay';
-    overlay.id = 'loadingOverlay';
-    overlay.innerHTML = '<div class="loading-spinner"></div>';
-    document.body.appendChild(overlay);
-}
-
-function hideLoading() {
-    const overlay = document.getElementById('loadingOverlay');
-    if (overlay) {
-        overlay.remove();
-    }
-}
-
-// Empty state management
-function toggleEmptyState(show) {
-    const emptyState = document.getElementById('emptyState');
-    const table = document.getElementById('fondTable');
-    
-    if (emptyState && table) {
-        if (show) {
-            emptyState.style.display = 'block';
-            table.style.display = 'none';
-        } else {
-            emptyState.style.display = 'none';
-            table.style.display = 'table';
-        }
-    }
-}
-
-// Bulk selection state
-let selectedRows = new Set();
-
-function updateBulkActionsBar() {
-    const bar = document.getElementById('bulkActionsBar');
-    const count = document.getElementById('selectedCount');
-    
-    if (bar && count) {
-        count.textContent = selectedRows.size;
-        if (selectedRows.size > 0) {
-            bar.classList.add('active');
-        } else {
-            bar.classList.remove('active');
-        }
-    }
-}
-
-function toggleRowSelection(index, checked) {
-    if (checked) {
-        selectedRows.add(index);
-    } else {
-        selectedRows.delete(index);
-    }
-    updateBulkActionsBar();
-}
-
-function selectAllRows(checked) {
-    if (checked) {
-        portfolioData.forEach((_, index) => selectedRows.add(index));
-    } else {
-        selectedRows.clear();
-    }
-    updateBulkActionsBar();
-    updateFondTable();
-}
-
-function bulkDeleteSelected() {
-    if (selectedRows.size === 0) return;
-    
-    showConfirmDialog(
-        'Smazat vybrané fondy?',
-        `Opravdu chcete smazat ${selectedRows.size} vybraných fondů? Tato akce je nevratná.`,
-        () => {
-            // Sort indices in descending order to avoid index shifting
-            const indices = Array.from(selectedRows).sort((a, b) => b - a);
-            indices.forEach(index => {
-                portfolioData.splice(index, 1);
-            });
-            
-            selectedRows.clear();
-            updateBulkActionsBar();
-            updateFondTable();
-            updateDashboard();
-            storage.saveData(portfolioData);
-            
-            showToast('success', 'Fondy smazány', `${indices.length} fondů bylo úspěšně odstraněno`);
-            
-            // Check if portfolio is empty
-            if (portfolioData.length === 0) {
-                document.getElementById('fondListCard').style.display = 'none';
-                dashboard.style.display = 'none';
-            }
-        }
-    );
-}
-
-function bulkExportSelected() {
-    if (selectedRows.size === 0) return;
-    
-    const selected = portfolioData.filter((_, index) => selectedRows.has(index));
-    generateCSV(selected);
-    showToast('success', 'Export dokončen', `${selected.length} fondů bylo exportováno`);
-}
-
-// ==================== TOAST NOTIFICATIONS ====================
-function showToast(type, title, message, duration = 4000) {
-    const container = document.getElementById('toastContainer');
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    
-    const icons = {
-        success: '✓',
-        error: '✗',
-        warning: '⚠',
-        info: 'ℹ'
-    };
-    
-    toast.innerHTML = `
-        <div class="toast-icon">${icons[type]}</div>
-        <div class="toast-content">
-            <div class="toast-title">${title}</div>
-            ${message ? `<div class="toast-message">${message}</div>` : ''}
-        </div>
-        <button class="toast-close" onclick="this.parentElement.remove()">×</button>
-    `;
-    
-    container.appendChild(toast);
-    
-    // Auto remove after duration
-    setTimeout(() => {
-        toast.classList.add('removing');
-        setTimeout(() => toast.remove(), 300);
-    }, duration);
-}
-
-// ==================== DASHBOARD KPI FUNCTIONS ====================
-function updateDashboard() {
-    if (portfolioData.length === 0) {
-        dashboard.style.display = 'none';
-        return;
-    }
-    
-    dashboard.style.display = 'grid';
-    
-    // Calculate metrics
-    const totalInvestment = portfolioData.reduce((sum, item) => sum + Number(item.investment), 0);
-    const totalValue = portfolioData.reduce((sum, item) => sum + Number(item.value), 0);
-    const totalProfit = totalValue - totalInvestment;
-    const totalYield = totalInvestment !== 0 ? ((totalProfit / totalInvestment) * 100) : 0;
-    
-    // Find best performing fund
-    let bestFund = null;
-    let bestYield = -Infinity;
-    portfolioData.forEach(item => {
-        const fundYield = ((item.value - item.investment) / item.investment) * 100;
-        if (fundYield > bestYield) {
-            bestYield = fundYield;
-            bestFund = item;
-        }
-    });
-    
-    // Animate numbers with count-up effect
-    animateValue('kpiValueInvestment', 0, totalInvestment, 1000, true);
-    animateValue('kpiValueCurrent', 0, totalValue, 1000, true);
-    animateValue('kpiValueYield', 0, totalYield, 1000, false);
-    
-    // Update profit amount
-    document.getElementById('kpiProfitAmount').textContent = 
-        (totalProfit >= 0 ? '+' : '') + totalProfit.toLocaleString('cs-CZ') + ' Kč';
-    
-    // Update yield card styling
-    const yieldCard = document.getElementById('kpiTotalYield');
-    const yieldChange = document.getElementById('kpiChangeYield');
-    if (totalYield >= 0) {
-        yieldCard.classList.remove('negative');
-        yieldCard.classList.add('positive');
-        yieldChange.classList.remove('negative');
-        yieldChange.classList.add('positive');
-        yieldChange.querySelector('span:first-child').textContent = '↑';
-    } else {
-        yieldCard.classList.remove('positive');
-        yieldCard.classList.add('negative');
-        yieldChange.classList.remove('positive');
-        yieldChange.classList.add('negative');
-        yieldChange.querySelector('span:first-child').textContent = '↓';
-    }
-    
-    // Update best fund
-    if (bestFund) {
-        const shortName = bestFund.name.length > 50 
-            ? bestFund.name.substring(0, 50) + '...' 
-            : bestFund.name;
-        document.getElementById('kpiValueBestFund').textContent = shortName;
-        document.getElementById('kpiBestFundYield').textContent = 
-            `Nejvyšší výnos: ${bestYield.toFixed(2)}%`;
-    }
-}
-
-// Animate number count-up effect
-function animateValue(elementId, start, end, duration, isCurrency = false) {
-    const element = document.getElementById(elementId);
-    const range = end - start;
-    const increment = range / (duration / 16); // 60fps
-    let current = start;
-    
-    const timer = setInterval(() => {
-        current += increment;
-        if ((increment > 0 && current >= end) || (increment < 0 && current <= end)) {
-            current = end;
-            clearInterval(timer);
-        }
-        
-        if (isCurrency) {
-            element.textContent = Math.round(current).toLocaleString('cs-CZ') + ' Kč';
-        } else {
-            const prefix = current >= 0 ? '+' : '';
-            element.textContent = prefix + current.toFixed(2) + '%';
-        }
-    }, 16);
-}
 
 // Funkce pro aktualizaci seznamu fondů
 function updateFondList() {
@@ -529,9 +49,6 @@ function updateFondData(index, field, value) {
         value = parseFloat(value) || 0;
     }
     portfolioData[index][field] = value;
-    
-    // Save to localStorage
-    storage.saveData(portfolioData);
 }
 
 function deleteFond(index) {
@@ -539,56 +56,21 @@ function deleteFond(index) {
     updateFondList();
 }
 
-// ==================== APP INITIALIZATION ====================
-// Initialize app when DOM is ready
-function initializeApp() {
-    // Initialize DOM references
-    initializeDOMReferences();
-    
-    // Only proceed if critical elements exist
-    if (!clientForm) {
-        console.warn('⚠️ App initialization delayed - DOM not ready');
-        return setTimeout(initializeApp, 100);
-    }
-
-    // Event listener pro formulář se jménem klienta
-    clientForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        clientName = document.getElementById('clientName').value;
-        advisorName = document.getElementById('advisorName').value;
-        advisorEmail = document.getElementById('advisorEmail').value;
-
-    // Save client info
-    storage.saveClient({ clientName, advisorName, advisorEmail });
+// Event listener pro formulář se jménem klienta
+clientForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    clientName = document.getElementById('clientName').value;
+    advisorName = document.getElementById('advisorName').value;
+    advisorEmail = document.getElementById('advisorEmail').value;
 
     // Hide first card, show portfolio card
     document.getElementById('clientNameCard').style.display = 'none';
     document.getElementById('portfolioCard').style.display = 'block';
     document.getElementById('fondListCard').style.display = 'block';
     document.getElementById('clientNameDisplay').textContent = clientName;
-    
-    // Show dashboard if data exists
-    if (portfolioData.length > 0) {
-        dashboard.style.display = 'grid';
-        updateDashboard();
-    }
 
     // Initialize color picker after showing the portfolio card
     initializeColorPicker();
-    
-    // Start autosave
-    storage.startAutosave(() => {
-        storage.saveData(portfolioData);
-        const display = document.getElementById('lastSaveDisplay');
-        if (display) {
-            display.style.animation = 'pulse 0.5s ease-in-out';
-            setTimeout(() => {
-                if (display) display.style.animation = '';
-            }, 500);
-        }
-    });
-    
-    showToast('success', 'Vítejte!', `Portfolio pro ${clientName} je připraveno`);
 });
 
 function initializeColorPicker() {
@@ -625,101 +107,58 @@ portfolioForm.addEventListener('submit', function(e) {
     e.preventDefault();
     
     const fondData = {
-        name: document.getElementById('fondName').value.trim(),
-        producer: document.getElementById('producer').value.trim(),
-        investment: parseSafeNumber(document.getElementById('investment').value),
+        name: document.getElementById('fondName').value,
+        producer: document.getElementById('producer').value,
+        investment: parseFloat(document.getElementById('investment').value),
         investmentDate: document.getElementById('investmentDate').value,
-        value: parseSafeNumber(document.getElementById('value').value)
+        value: parseFloat(document.getElementById('value').value)
     };
 
-    // Validate data with improved validation
-    const errors = validateFondData(fondData);
-    if (errors.length > 0) {
-        showToast('error', 'Validační chyba', errors.join('<br>'));
-        return;
-    }
-
-    try {
-        // Přidáme nový fond do pole
-        portfolioData.push(fondData);
-        
-        // Přidáme fond do localStorage, pokud tam ještě není
-        addNewFund(fondData.name);
-        
-        // Aktualizujeme tabulku a dashboard
-        updateFondTable();
-        updateDashboard();
-        
-        // Save to localStorage
-        if (!storage.saveData(portfolioData)) {
-            // If save failed, remove the added item
-            portfolioData.pop();
-            updateFondTable();
-            updateDashboard();
-            return;
-        }
-        
-        // Vyčistíme formulář
-        document.getElementById('portfolioForm').reset();
-        
-        // Zobrazíme kartu se seznamem fondů
-        document.getElementById('fondListCard').style.display = 'block';
-        
-        // Show success toast
-        showToast('success', 'Fond přidán', `${fondData.name} byl úspěšně přidán do portfolia`);
-    } catch (error) {
-        console.error('Error adding fond:', error);
-        showToast('error', 'Chyba', 'Nepodařilo se přidat fond. Zkuste to prosím znovu.');
-    }
+    // Přidáme nový fond do pole
+    portfolioData.push(fondData);
+    
+    // Přidáme fond do localStorage, pokud tam ještě není
+    addNewFund(fondData.name);
+    
+    // Aktualizujeme tabulku
+    updateFondTable();
+    
+    // Vyčistíme formulář
+    document.getElementById('portfolioForm').reset();
+    
+    // Zobrazíme kartu se seznamem fondů
+    document.getElementById('fondListCard').style.display = 'block';
 });
 
 function updateFondTable() {
     const tbody = document.getElementById('fondTableBody');
     const thead = document.getElementById('fondTableHead');
     tbody.innerHTML = '';
-    
     if (viewMode === 'funds') {
         // Hlavička pro fondy
         if (thead) {
             thead.innerHTML = `<tr>
-                <th class="sortable" data-column="name">Název fondu</th>
-                <th class="sortable" data-column="producer">Producent</th>
-                <th class="sortable" data-column="investmentDate">Datum investice</th>
-                <th class="sortable" data-column="investment">Čistá investice</th>
-                <th class="sortable" data-column="value">Aktuální hodnota</th>
+                <th>Název fondu</th>
+                <th>Producent</th>
+                <th>Datum investice</th>
+                <th>Čistá investice</th>
+                <th>Aktuální hodnota</th>
                 <th>Akce</th>
             </tr>`;
         }
-        
-        // Apply filters and sorting
-        const filteredData = filterAndSortData(portfolioData);
-        
-        // Show message if no results
-        if (filteredData.length === 0) {
-            const row = document.createElement('tr');
-            row.innerHTML = `<td colspan="6" style="text-align: center; padding: 40px; color: var(--text-secondary);">
-                ${searchQuery ? '🔍 Žádné výsledky pro "' + searchQuery + '"' : 'Žádné fondy'}
-            </td>`;
-            tbody.appendChild(row);
-            return;
-        }
-        
-        // Render filtered and sorted data
-        filteredData.forEach((fond) => {
-            // Find original index for operations
-            const originalIndex = portfolioData.indexOf(fond);
+        // Původní tabulka podle fondů
+        portfolioData.forEach((fond, index) => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td><input type="text" class="inline-edit" value="${fond.name}" data-index="${originalIndex}" data-field="name"></td>
-                <td><input type="text" class="inline-edit" value="${fond.producer}" data-index="${originalIndex}" data-field="producer"></td>
-                <td><input type="date" class="inline-edit" value="${fond.investmentDate && fond.investmentDate !== '1970-01-01' ? fond.investmentDate : ''}" data-index="${originalIndex}" data-field="investmentDate"></td>
-                <td><input type="number" class="inline-edit" value="${fond.investment}" data-index="${originalIndex}" data-field="investment"></td>
-                <td><input type="number" class="inline-edit" value="${fond.value}" data-index="${originalIndex}" data-field="value"></td>
-                <td><button class="delete-btn" onclick="deleteFond(${originalIndex})">Smazat</button></td>
+                <td><input type="text" class="inline-edit" value="${fond.name}" data-index="${index}" data-field="name"></td>
+                <td><input type="text" class="inline-edit" value="${fond.producer}" data-index="${index}" data-field="producer"></td>
+                <td><input type="date" class="inline-edit" value="${fond.investmentDate && fond.investmentDate !== '1970-01-01' ? fond.investmentDate : ''}" data-index="${index}" data-field="investmentDate"></td>
+                <td><input type="number" class="inline-edit" value="${fond.investment}" data-index="${index}" data-field="investment"></td>
+                <td><input type="number" class="inline-edit" value="${fond.value}" data-index="${index}" data-field="value"></td>
+                <td><button class="delete-btn" onclick="deleteFond(${index})">Smazat</button></td>
             `;
             tbody.appendChild(row);
         });
-        
         // Přidáme event listener pro změny v inputech
         document.querySelectorAll('.inline-edit').forEach(input => {
             input.addEventListener('change', function() {
@@ -737,8 +176,6 @@ function updateFondTable() {
                 }
                 
                 portfolioData[index][field] = value;
-                updateDashboard(); // Update dashboard when data changes
-                showToast('info', 'Změna uložena', 'Data byla aktualizována');
             });
         });
     } else if (viewMode === 'producers') {
@@ -787,36 +224,19 @@ function updateFondTable() {
 }
 
 function deleteFond(index) {
-    const fondName = portfolioData[index].name;
+    portfolioData.splice(index, 1);
+    updateFondTable();
     
-    showConfirmDialog(
-        'Odstranit fond?',
-        `Opravdu chcete odstranit fond "${fondName}"? Tato akce je nevratná.`,
-        () => {
-            // Confirmed - delete the fund
-            portfolioData.splice(index, 1);
-            updateFondTable();
-            updateDashboard();
-            
-            // Save to localStorage
-            storage.saveData(portfolioData);
-            
-            // Skryjeme tabulku a dashboard, pokud není žádný fond
-            if (portfolioData.length === 0) {
-                document.getElementById('fondListCard').style.display = 'none';
-                dashboard.style.display = 'none';
-            }
-            
-            // Show toast
-            showToast('info', 'Fond odebrán', `${fondName.substring(0, 40)} byl odstraněn z portfolia`);
-        }
-    );
+    // Skryjeme tabulku, pokud není žádný fond
+    if (portfolioData.length === 0) {
+        document.getElementById('fondListCard').style.display = 'none';
+    }
 }
 
 // Event listener pro generování reportu
 generateReportBtn.addEventListener('click', function() {
     if (portfolioData.length === 0) {
-        showToast('warning', 'Žádná data', 'Nejprve přidejte nějaké fondy do portfolia.');
+        alert('Nejprve přidejte nějaké fondy do portfolia.');
         return;
     }
     
@@ -825,25 +245,7 @@ generateReportBtn.addEventListener('click', function() {
     
     // Generování CSV
     generateCSV(portfolioData);
-    
-    // Show success toast
-    showToast('success', 'Report vygenerován', 'HTML a CSV soubory byly úspěšně vytvořeny');
 });
-
-// Excel export button listener
-const exportExcelBtn = document.getElementById('exportExcel');
-if (exportExcelBtn) {
-    exportExcelBtn.addEventListener('click', function() {
-        if (portfolioData.length === 0) {
-            showToast('warning', 'Žádná data', 'Nejprve přidejte nějaké fondy do portfolia.');
-            return;
-        }
-        
-        // Export as CSV (can be opened in Excel)
-        generateCSV(portfolioData);
-        showToast('success', 'Export dokončen', 'Data byla exportována do CSV souboru');
-    });
-}
 
 function generatePortfolioHTML(portfolioData) {
     // Get the currently selected color scheme
@@ -1749,7 +1151,7 @@ function generatePortfolioHTML(portfolioData) {
                 <!-- Charts Section -->
                 <div class="charts-container">
                     <div class="card">
-                        <canvas id="pieChart" width="700" height="700"></canvas>
+                        <canvas id="pieChart" width="700" height="400"></canvas>
                     </div>
                     <div class="card">
                         <canvas id="barChart" width="700" height="400"></canvas>
@@ -1818,35 +1220,16 @@ function generatePortfolioHTML(portfolioData) {
                         donutValues = sortedData.map(item => item.value);
                     }
                     const showLabels = donutLabels.length <= 6;
-                    
-                    // Create gradient colors for donut chart
-                    const ctx = document.getElementById('pieChart').getContext('2d');
-                    const gradientColors = fondColors.positive.map((color, index) => {
-                        const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-                        // Lighter shade at top, darker at bottom
-                        gradient.addColorStop(0, color);
-                        gradient.addColorStop(1, adjustBrightness(color, -20));
-                        return gradient;
-                    });
-                    
-                    window.myPieChart = new Chart(ctx, {
+                    window.myPieChart = new Chart(document.getElementById('pieChart').getContext('2d'), {
                         type: 'doughnut',
                         data: {
                             labels: donutLabels,
                             datasets: [{
                                 data: donutValues,
-                                backgroundColor: gradientColors,
-                                borderWidth: 4,
-                                borderColor: '#ffffff',
-                                hoverOffset: 20,
-                                hoverBorderWidth: 5,
-                                hoverBorderColor: '#C8940A',
-                                borderRadius: 8,
-                                spacing: 2,
-                                shadowOffsetX: 0,
-                                shadowOffsetY: 8,
-                                shadowBlur: 20,
-                                shadowColor: 'rgba(200, 148, 10, 0.2)'
+                                backgroundColor: fondColors.positive,
+                                borderWidth: 2,
+                                borderColor: '#fff',
+                                hoverOffset: 10,
                             }]
                         },
                         options: {
@@ -1855,182 +1238,47 @@ function generatePortfolioHTML(portfolioData) {
                                 legend: {
                                     position: 'bottom',
                                     labels: {
-                                        font: { size: 13, weight: '600', family: 'Inter, system-ui' },
-                                        boxWidth: 18,
-                                        boxHeight: 18,
-                                        padding: 15,
-                                        color: '#1a1a1a',
+                                        font: { size: 12, weight: 'normal' },
+                                        boxWidth: 14,
+                                        padding: 8,
+                                        color: '#2c3e50',
                                         usePointStyle: true,
-                                        pointStyle: 'rectRounded',
-                                        generateLabels: function(chart) {
-                                            const data = chart.data;
-                                            if (data.labels.length && data.datasets.length) {
-                                                const total = data.datasets[0].data.reduce((a, b) => a + b, 0);
-                                                return data.labels.map((label, i) => {
-                                                    const value = data.datasets[0].data[i];
-                                                    const percent = ((value / total) * 100).toFixed(1);
-                                                    return {
-                                                        text: label + ' (' + percent + '%)',
-                                                        fillStyle: data.datasets[0].backgroundColor[i],
-                                                        hidden: false,
-                                                        index: i
-                                                    };
-                                                });
-                                            }
-                                            return [];
-                                        }
                                     }
                                 },
                                 title: {
                                     display: true,
                                     text: 'Rozdělení portfolia',
-                                    font: { size: 26, weight: '800', family: 'Inter, system-ui' },
-                                    color: '#0a0a0a',
-                                    padding: { top: 10, bottom: 35 }
+                                    font: { size: 22, weight: 600 },
+                                    color: '#2c3e50',
+                                    padding: { top: 0, bottom: 24 }
                                 },
                                 tooltip: {
                                     enabled: true,
-                                    backgroundColor: 'rgba(255, 255, 255, 0.98)',
-                                    titleColor: '#0a0a0a',
-                                    bodyColor: '#333333',
-                                    borderColor: '#C8940A',
-                                    borderWidth: 3,
-                                    titleFont: { size: 16, weight: '700', family: 'Inter, system-ui' },
-                                    bodyFont: { size: 14, weight: '500', family: 'Inter, system-ui', lineHeight: 1.8 },
-                                    padding: 20,
-                                    boxPadding: 10,
-                                    usePointStyle: true,
-                                    displayColors: true,
-                                    cornerRadius: 10,
-                                    caretSize: 10,
-                                    yAlign: 'center',
-                                    xAlign: 'center',
-                                    bodySpacing: 8,
-                                    titleSpacing: 12,
-                                    callbacks: {
-                                        title: function(context) {
-                                            const label = context[0].label;
-                                            // Zkrátit dlouhý text a rozdělit na více řádků pokud je potřeba
-                                            if (label.length > 40) {
-                                                return label.substring(0, 40) + '...';
-                                            }
-                                            return label;
-                                        },
-                                        label: function(context) {
-                                            const value = context.parsed;
-                                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                            const percent = ((value / total) * 100).toFixed(1);
-                                            return [
-                                                'Hodnota: ' + value.toLocaleString('cs-CZ') + ' Kč',
-                                                'Podíl: ' + percent + '%'
-                                            ];
-                                        }
-                                    }
+                                    backgroundColor: '#fff',
+                                    titleColor: '#2c3e50',
+                                    bodyColor: '#2c3e50',
+                                    borderColor: '#e0e0e0',
+                                    borderWidth: 1,
+                                    titleFont: { size: 12 },
+                                    bodyFont: { size: 10 }
                                 },
                                 datalabels: {
                                     display: showLabels,
-                                    color: '#ffffff',
-                                    font: { weight: '700', size: 14, family: 'Inter, system-ui' },
+                                    color: '#fff',
+                                    font: { weight: 'bold', size: 12 },
                                     formatter: (value, ctx) => {
                                         const total = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
                                         const percent = total ? ((value / total) * 100).toFixed(1) : 0;
                                         return percent + '%';
-                                    },
-                                    textStrokeColor: 'rgba(0, 0, 0, 0.3)',
-                                    textStrokeWidth: 3,
-                                    textShadowBlur: 6,
-                                    textShadowColor: 'rgba(0, 0, 0, 0.5)'
+                                    }
                                 }
                             },
-                            cutout: '68%',
-                            layout: { padding: 20 },
-                            animation: {
-                                animateRotate: true,
-                                animateScale: true,
-                                duration: 2000,
-                                easing: 'easeInOutCubic',
-                                onProgress: function(animation) {
-                                    const chart = animation.chart;
-                                    const ctx = chart.ctx;
-                                    const centerX = (chart.chartArea.left + chart.chartArea.right) / 2;
-                                    const centerY = (chart.chartArea.top + chart.chartArea.bottom) / 2;
-                                    const total = chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                                    const progress = animation.currentStep / animation.numSteps;
-                                    
-                                    ctx.save();
-                                    ctx.textAlign = 'center';
-                                    ctx.textBaseline = 'middle';
-                                    ctx.font = '700 32px Inter, system-ui';
-                                    ctx.fillStyle = '#0a0a0a';
-                                    ctx.fillText((total * progress).toLocaleString('cs-CZ', {maximumFractionDigits: 0}) + ' Kč', centerX, centerY - 10);
-                                    ctx.font = '500 14px Inter, system-ui';
-                                    ctx.fillStyle = '#666666';
-                                    ctx.fillText('Celková hodnota', centerX, centerY + 20);
-                                    ctx.restore();
-                                },
-                                onComplete: function(animation) {
-                                    const chart = animation.chart;
-                                    const ctx = chart.ctx;
-                                    const centerX = (chart.chartArea.left + chart.chartArea.right) / 2;
-                                    const centerY = (chart.chartArea.top + chart.chartArea.bottom) / 2;
-                                    const total = chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                                    
-                                    ctx.save();
-                                    ctx.textAlign = 'center';
-                                    ctx.textBaseline = 'middle';
-                                    ctx.font = '700 32px Inter, system-ui';
-                                    ctx.fillStyle = '#0a0a0a';
-                                    ctx.fillText(total.toLocaleString('cs-CZ') + ' Kč', centerX, centerY - 10);
-                                    ctx.font = '500 14px Inter, system-ui';
-                                    ctx.fillStyle = '#666666';
-                                    ctx.fillText('Celková hodnota', centerX, centerY + 20);
-                                    ctx.restore();
-                                }
-                            },
-                            interaction: {
-                                mode: 'nearest',
-                                intersect: true
-                            }
+                            cutout: '65%',
+                            layout: { padding: 8 },
                         },
-                        plugins: [window.ChartDataLabels, {
-                            id: 'centerText',
-                            afterDraw: function(chart) {
-                                if (chart.options.animation.onComplete) return; // Už je vykresleno animací
-                                const ctx = chart.ctx;
-                                const centerX = (chart.chartArea.left + chart.chartArea.right) / 2;
-                                const centerY = (chart.chartArea.top + chart.chartArea.bottom) / 2;
-                                const total = chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                                
-                                ctx.save();
-                                ctx.textAlign = 'center';
-                                ctx.textBaseline = 'middle';
-                                ctx.font = '700 32px Inter, system-ui';
-                                ctx.fillStyle = '#0a0a0a';
-                                ctx.fillText(total.toLocaleString('cs-CZ') + ' Kč', centerX, centerY - 10);
-                                ctx.font = '500 14px Inter, system-ui';
-                                ctx.fillStyle = '#666666';
-                                ctx.fillText('Celková hodnota', centerX, centerY + 20);
-                                ctx.restore();
-                            }
-                        }]
+                        plugins: [window.ChartDataLabels]
                     });
-                } catch (e) { 
-                    console.error('Pie chart error:', e);
-                    document.getElementById('pieChart').style.display = 'none'; 
-                }
-                
-                // Helper function to adjust color brightness
-                function adjustBrightness(color, percent) {
-                    const num = parseInt(color.replace('#', ''), 16);
-                    const amt = Math.round(2.55 * percent);
-                    const R = (num >> 16) + amt;
-                    const G = (num >> 8 & 0x00FF) + amt;
-                    const B = (num & 0x0000FF) + amt;
-                    return '#' + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
-                        (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
-                        (B < 255 ? B < 1 ? 0 : B : 255))
-                        .toString(16).slice(1);
-                }
+                } catch (e) { document.getElementById('pieChart').style.display = 'none'; }
                 // Bar Chart
                 try {
                     let barLabels, barData, barColors, fullLabels;
@@ -2069,60 +1317,28 @@ function generatePortfolioHTML(portfolioData) {
                         fullLabels = sortedData.map(item => item.name);
                         barData = sortedData.map(item => ((item.value - item.investment) / item.investment * 100));
                         barColors = sortedData.map((item, index) => {
-                            const yieldVal = ((item.value - item.investment) / item.investment * 100);
-                            return yieldVal >= 0 ? fondColors.positive[index % fondColors.positive.length] : fondColors.negative[index % fondColors.negative.length];
+                            const yield = ((item.value - item.investment) / item.investment * 100);
+                            return yield >= 0 ? fondColors.positive[index % fondColors.positive.length] : fondColors.negative[index % fondColors.negative.length];
                         });
                     }
-                    
-                    const barCtx = document.getElementById('barChart').getContext('2d');
-                    
-                    // Create gradient backgrounds for bars
-                    const gradientBars = barColors.map((color) => {
-                        const gradient = barCtx.createLinearGradient(0, 0, 0, 400);
-                        gradient.addColorStop(0, color);
-                        gradient.addColorStop(1, adjustBrightness(color, -15));
-                        return gradient;
-                    });
-                    
-                    window.myBarChart = new Chart(barCtx, {
+                    window.myBarChart = new Chart(document.getElementById('barChart').getContext('2d'), {
                         type: 'bar',
                         data: {
                             labels: barLabels,
                             datasets: [{
                                 label: 'Výnos v %',
                                 data: barData,
-                                backgroundColor: gradientBars,
-                                borderRadius: { topLeft: 12, topRight: 12, bottomLeft: 0, bottomRight: 0 },
+                                backgroundColor: barColors,
+                                borderRadius: 6,
                                 borderSkipped: false,
                                 barPercentage: 0.8,
-                                categoryPercentage: 0.88,
-                                borderWidth: 0,
-                                hoverBackgroundColor: barColors.map(c => adjustBrightness(c, 20)),
-                                shadowOffsetX: 0,
-                                shadowOffsetY: 4,
-                                shadowBlur: 12,
-                                shadowColor: 'rgba(0, 0, 0, 0.15)',
+                                categoryPercentage: 0.9,
                                 datalabels: {
-                                    anchor: function(context) {
-                                        return context.dataset.data[context.dataIndex] >= 0 ? 'end' : 'start';
-                                    },
-                                    align: function(context) {
-                                        return context.dataset.data[context.dataIndex] >= 0 ? 'end' : 'start';
-                                    },
-                                    color: '#0a0a0a',
-                                    font: { weight: '700', size: 12, family: 'Inter, system-ui' },
-                                    formatter: v => (v >= 0 ? '+' : '') + v.toFixed(1) + '%',
-                                    padding: 6,
-                                    backgroundColor: function(context) {
-                                        const value = context.dataset.data[context.dataIndex];
-                                        return value >= 0 ? 'rgba(200, 148, 10, 0.1)' : 'rgba(220, 38, 38, 0.1)';
-                                    },
-                                    borderRadius: 6,
-                                    borderWidth: 2,
-                                    borderColor: function(context) {
-                                        const value = context.dataset.data[context.dataIndex];
-                                        return value >= 0 ? 'rgba(200, 148, 10, 0.3)' : 'rgba(220, 38, 38, 0.3)';
-                                    }
+                                    anchor: 'end',
+                                    align: 'end',
+                                    color: '#2c3e50',
+                                    font: { weight: 'normal', size: 10 },
+                                    formatter: v => v.toFixed(2) + '%'
                                 }
                             }]
                         },
@@ -2133,129 +1349,62 @@ function generatePortfolioHTML(portfolioData) {
                                 title: {
                                     display: true,
                                     text: 'Výnosy jednotlivých fondů',
-                                    font: { size: 26, weight: '800', family: 'Inter, system-ui' },
-                                    color: '#0a0a0a',
-                                    padding: { top: 10, bottom: 35 }
+                                    font: { size: 22, weight: 600 },
+                                    color: '#2c3e50',
+                                    padding: { top: 0, bottom: 24 }
                                 },
                                 tooltip: {
                                     enabled: true,
-                                    backgroundColor: 'rgba(255, 255, 255, 0.98)',
-                                    titleColor: '#0a0a0a',
-                                    bodyColor: '#333333',
-                                    borderColor: function(context) {
-                                        const value = context.tooltip.dataPoints[0].raw;
-                                        return value >= 0 ? '#C8940A' : '#dc2626';
-                                    },
-                                    borderWidth: 3,
-                                    titleFont: { size: 15, weight: '700', family: 'Inter, system-ui' },
-                                    bodyFont: { size: 13, weight: '500', family: 'Inter, system-ui' },
-                                    padding: 16,
-                                    boxPadding: 8,
-                                    usePointStyle: true,
-                                    displayColors: true,
-                                    cornerRadius: 8,
-                                    caretSize: 8,
+                                    backgroundColor: '#fff',
+                                    titleColor: '#2c3e50',
+                                    bodyColor: '#2c3e50',
+                                    borderColor: '#e0e0e0',
+                                    borderWidth: 1,
+                                    titleFont: { size: 12 },
+                                    bodyFont: { size: 10 },
                                     callbacks: {
                                         title: function(context) {
                                             const idx = context[0].dataIndex;
                                             return fullLabels[idx];
-                                        },
-                                        label: function(context) {
-                                            const value = context.parsed.y;
-                                            const prefix = value >= 0 ? '📈 ' : '📉 ';
-                                            return prefix + ' Výnos: ' + (value >= 0 ? '+' : '') + value.toFixed(2) + '%';
-                                        },
-                                        afterLabel: function(context) {
-                                            const value = context.parsed.y;
-                                            if (value >= 0) {
-                                                return '✨ Pozitivní výnos';
-                                            } else {
-                                                return '⚠️ Negativní výnos';
-                                            }
                                         }
                                     }
                                 },
                                 datalabels: {
-                                    display: true
+                                    display: true,
+                                    color: '#2c3e50',
+                                    font: { weight: 'normal', size: 10 },
+                                    anchor: 'end',
+                                    align: 'end',
+                                    formatter: v => v.toFixed(2) + '%'
                                 }
                             },
-                            layout: { padding: 20 },
+                            layout: { padding: 8 },
                             scales: {
                                 x: {
                                     ticks: {
-                                        font: { size: 12, weight: '600', family: 'Inter, system-ui' },
-                                        color: '#333333',
+                                        font: { size: 10, weight: 'normal' },
+                                        color: '#2c3e50',
                                         maxRotation: 45,
                                         minRotation: 45,
                                         autoSkip: false,
                                         align: 'start',
-                                        padding: 8
                                     },
-                                    grid: { 
-                                        display: false,
-                                        drawBorder: false
-                                    },
-                                    border: {
-                                        display: false
-                                    }
+                                    grid: { display: false }
                                 },
                                 y: {
                                     beginAtZero: true,
                                     ticks: {
-                                        font: { size: 12, weight: '600', family: 'Inter, system-ui' },
-                                        color: '#333333',
-                                        callback: function(value) { 
-                                            return (value >= 0 ? '+' : '') + value + '%'; 
-                                        },
-                                        padding: 10,
-                                        stepSize: 5
+                                        font: { size: 10, weight: 'normal' },
+                                        color: '#2c3e50',
+                                        callback: function(value) { return value + '%'; }
                                     },
-                                    grid: { 
-                                        color: function(context) {
-                                            if (context.tick.value === 0) {
-                                                return 'rgba(0, 0, 0, 0.3)';
-                                            }
-                                            return 'rgba(224, 224, 224, 0.4)';
-                                        },
-                                        lineWidth: function(context) {
-                                            if (context.tick.value === 0) {
-                                                return 2;
-                                            }
-                                            return 1;
-                                        },
-                                        borderDash: [4, 4],
-                                        drawBorder: false
-                                    },
-                                    border: {
-                                        display: false
-                                    }
+                                    grid: { color: '#e0e0e0', borderDash: [4, 4] }
                                 }
-                            },
-                            animation: {
-                                duration: 2000,
-                                easing: 'easeInOutElastic',
-                                delay: (context) => {
-                                    return context.dataIndex * 60;
-                                },
-                                onComplete: function(animation) {
-                                    const chart = animation.chart;
-                                    chart.options.animation.duration = 400; // Rychlejší animace po prvním zobrazení
-                                }
-                            },
-                            interaction: {
-                                mode: 'index',
-                                intersect: false
-                            },
-                            onHover: function(event, activeElements) {
-                                event.native.target.style.cursor = activeElements.length > 0 ? 'pointer' : 'default';
                             }
                         },
                         plugins: [window.ChartDataLabels]
                     });
-                } catch (e) { 
-                    console.error('Bar chart error:', e);
-                    document.getElementById('barChart').style.display = 'none'; 
-                }
+                } catch (e) { document.getElementById('barChart').style.display = 'none'; }
             });
         </script>
     </body>
@@ -2303,7 +1452,7 @@ document.getElementById('processCSV').addEventListener('click', function() {
     const file = fileInput.files[0];
     
     if (!file) {
-        showToast('warning', 'Žádný soubor', 'Prosím, nejdříve vyberte CSV soubor');
+        alert('Prosím, nejdříve vyberte CSV soubor');
         return;
     }
 
@@ -2315,9 +1464,6 @@ document.getElementById('processCSV').addEventListener('click', function() {
         
         // Skip header row if it exists
         const startIndex = rows[0].toLowerCase().includes('název fondu') ? 1 : 0;
-        
-        let importedCount = 0;
-        let errorCount = 0;
         
         // Process each row
         for (let i = startIndex; i < rows.length; i++) {
@@ -2379,10 +1525,8 @@ document.getElementById('processCSV').addEventListener('click', function() {
                         investment: investmentNum,
                         value: valueNum
                     });
-                    importedCount++;
                 } else {
                     console.warn(`Skipping row ${i + 1}: Invalid numbers in investment or value`);
-                    errorCount++;
                 }
             } else if (columns.length >= 4) {
                 // Fallback pro starý formát bez data investice
@@ -2398,39 +1542,27 @@ document.getElementById('processCSV').addEventListener('click', function() {
                         investment: investmentNum,
                         value: valueNum
                     });
-                    importedCount++;
                 } else {
                     console.warn(`Skipping row ${i + 1}: Invalid numbers in investment or value`);
-                    errorCount++;
                 }
             } else {
                 console.warn(`Skipping row ${i + 1}: Invalid number of columns`);
-                errorCount++;
             }
         }
         
-        // Update the table, dashboard and show it
+        // Update the table and show it
         updateFondTable();
-        updateDashboard();
         document.getElementById('fondListCard').style.display = 'block';
-        
-        // Save imported data to localStorage
-        storage.saveData(portfolioData);
         
         // Clear the file input
         fileInput.value = '';
         
-        // Show success or warning message
-        if (importedCount > 0) {
-            showToast('success', 'Import dokončen', 
-                `Importováno ${importedCount} fondů${errorCount > 0 ? `, ${errorCount} řádků přeskočeno` : ''}`);
-        } else {
-            showToast('error', 'Import selhal', 'Nepodařilo se importovat žádná data');
-        }
+        // Show success message
+        alert('CSV soubor byl úspěšně zpracován');
     };
     
     reader.onerror = function() {
-        showToast('error', 'Chyba čtení', 'Chyba při čtení souboru');
+        alert('Chyba při čtení souboru');
     };
     
     reader.readAsText(file, 'UTF-8');
@@ -2519,30 +1651,6 @@ function generateCSV(data) {
 
 // Přidám event listenery na přepínače
 document.addEventListener('DOMContentLoaded', function() {
-    // ⚡ CRITICAL: Initialize DOM references first!
-    initializeDOMReferences();
-    
-    // Load saved data from localStorage
-    const savedData = storage.loadData();
-    if (savedData && savedData.length > 0) {
-        portfolioData = savedData;
-        updateFondTable();
-        updateDashboard();
-        document.getElementById('fondListCard').style.display = 'block';
-        const dashboard = document.querySelector('.dashboard');
-        if (dashboard) {
-            dashboard.style.display = 'grid';
-        }
-        showToast('info', 'Data načtena', `Obnoveno ${savedData.length} fondů z předchozí session`);
-    }
-    
-    // Load saved client info
-    const savedClient = storage.loadClient();
-    if (savedClient) {
-        document.getElementById('clientName').value = savedClient.name || '';
-        document.getElementById('clientICO').value = savedClient.ico || '';
-    }
-    
     const switchFunds = document.getElementById('switchFunds');
     const switchProducers = document.getElementById('switchProducers');
     if (switchFunds && switchProducers) {
@@ -2559,186 +1667,4 @@ document.addEventListener('DOMContentLoaded', function() {
             updateFondTable();
         });
     }
-    
-    // Search functionality
-    const searchInput = document.getElementById('tableSearch');
-    const clearSearchBtn = document.getElementById('clearSearch');
-    
-    if (searchInput) {
-        searchInput.addEventListener('input', function(e) {
-            const query = e.target.value;
-            clearSearchBtn.style.display = query ? 'block' : 'none';
-            debouncedSearch(query);
-        });
-    }
-    
-    if (clearSearchBtn) {
-        clearSearchBtn.addEventListener('click', function() {
-            searchInput.value = '';
-            searchQuery = '';
-            clearSearchBtn.style.display = 'none';
-            updateFondTable();
-        });
-    }
-    
-    // Bulk actions event listeners
-    const bulkDelete = document.getElementById('bulkDelete');
-    const bulkExport = document.getElementById('bulkExport');
-    const bulkDeselect = document.getElementById('bulkDeselect');
-    
-    if (bulkDelete) {
-        bulkDelete.addEventListener('click', bulkDeleteSelected);
-    }
-    
-    if (bulkExport) {
-        bulkExport.addEventListener('click', bulkExportSelected);
-    }
-    
-    if (bulkDeselect) {
-        bulkDeselect.addEventListener('click', function() {
-            selectedRows.clear();
-            updateBulkActionsBar();
-            updateFondTable();
-        });
-    }
-    
-    // Sorting functionality
-    document.addEventListener('click', function(e) {
-        if (e.target.classList.contains('sortable')) {
-            const column = e.target.dataset.column;
-            
-            // Toggle sort direction
-            if (currentSortColumn === column) {
-                currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
-            } else {
-                currentSortColumn = column;
-                currentSortDirection = 'asc';
-            }
-            
-            // Update header styles
-            document.querySelectorAll('.sortable').forEach(th => {
-                th.classList.remove('sort-asc', 'sort-desc');
-            });
-            e.target.classList.add(`sort-${currentSortDirection}`);
-            
-            updateFondTable();
-        }
-    });
 });
-
-// ==================== FILTER AND SORT FUNCTIONS ====================
-function filterAndSortData(data) {
-    let filtered = [...data];
-    
-    // Apply search filter
-    if (searchQuery) {
-        filtered = filtered.filter(item => 
-            item.name.toLowerCase().includes(searchQuery) ||
-            item.producer.toLowerCase().includes(searchQuery)
-        );
-    }
-    
-    // Apply sorting
-    if (currentSortColumn) {
-        filtered.sort((a, b) => {
-            let valA = a[currentSortColumn];
-            let valB = b[currentSortColumn];
-            
-            // Handle numeric columns
-            if (currentSortColumn === 'investment' || currentSortColumn === 'value') {
-                valA = Number(valA);
-                valB = Number(valB);
-            }
-            
-            // Handle date column
-            if (currentSortColumn === 'investmentDate') {
-                valA = new Date(valA || '1970-01-01');
-                valB = new Date(valB || '1970-01-01');
-            }
-            
-            // Handle string columns
-            if (typeof valA === 'string') {
-                valA = valA.toLowerCase();
-                valB = valB.toLowerCase();
-            }
-            
-            if (currentSortDirection === 'asc') {
-                return valA > valB ? 1 : valA < valB ? -1 : 0;
-            } else {
-                return valA < valB ? 1 : valA > valB ? -1 : 0;
-            }
-        });
-    }
-    
-    return filtered;
-}
-
-// ==================== KEYBOARD SHORTCUTS ====================
-document.addEventListener('keydown', function(e) {
-    // Ctrl/Cmd + S: Manual save
-    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-        e.preventDefault();
-        if (portfolioData.length > 0) {
-            storage.saveData(portfolioData);
-            showToast('success', 'Manuální uložení', 'Data byla úspěšně uložena');
-        }
-    }
-    
-    // Escape: Close toasts or dialogs
-    if (e.key === 'Escape') {
-        // Close all toasts
-        const toasts = document.querySelectorAll('.toast');
-        toasts.forEach(toast => {
-            toast.style.animation = 'slideOutRight 0.3s ease-in-out';
-            setTimeout(() => toast.remove(), 300);
-        });
-        
-        // Close confirmation dialogs
-        const overlays = document.querySelectorAll('.confirm-overlay');
-        overlays.forEach(overlay => overlay.remove());
-    }
-    
-    // Ctrl/Cmd + E: Export current view
-    if ((e.ctrlKey || e.metaKey) && e.key === 'e') {
-        e.preventDefault();
-        const generateBtn = document.getElementById('generateReport');
-        if (generateBtn && portfolioData.length > 0) {
-            generateBtn.click();
-        }
-    }
-});
-
-// ==================== DEBOUNCED SEARCH ====================
-// Replace the search input listener with debounced version
-const debouncedSearch = debounce(function(query) {
-    searchQuery = query.toLowerCase();
-    updateFondTable();
-}, 300);
-
-// ==================== DARK MODE ====================
-const darkModeToggle = document.getElementById('darkModeToggle');
-const savedDarkMode = localStorage.getItem('darkMode') === 'true';
-
-if (savedDarkMode) {
-    document.body.classList.add('dark-mode');
-    darkModeToggle.textContent = '☀️';
-}
-
-darkModeToggle.addEventListener('click', function() {
-    document.body.classList.toggle('dark-mode');
-    const isDark = document.body.classList.contains('dark-mode');
-    localStorage.setItem('darkMode', isDark);
-    darkModeToggle.textContent = isDark ? '☀️' : '🌙';
-    showToast('info', 'Vzhled změněn', `Přepnuto na ${isDark ? 'tmavý' : 'světlý'} režim`);
-});
-
-} // End of initializeApp function
-
-// ==================== START THE APP ====================
-// Try to initialize immediately, then fall back to DOMContentLoaded
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeApp);
-} else {
-    // DOM already loaded
-    initializeApp();
-}
