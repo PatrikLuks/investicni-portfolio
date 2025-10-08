@@ -198,12 +198,12 @@ class DataValidationManager {
     if (fieldSchema.type === 'string') {
       if (fieldSchema.minLength && value.length < fieldSchema.minLength) {
         errors.push(
-          fieldSchema.messages.minLength || `Minimální délka je ${fieldSchema.minLength}`
+          fieldSchema.messages.minLength || `Minimální délka je ${fieldSchema.minLength}`,
         );
       }
       if (fieldSchema.maxLength && value.length > fieldSchema.maxLength) {
         errors.push(
-          fieldSchema.messages.maxLength || `Maximální délka je ${fieldSchema.maxLength}`
+          fieldSchema.messages.maxLength || `Maximální délka je ${fieldSchema.maxLength}`,
         );
       }
       if (fieldSchema.pattern && !fieldSchema.pattern.test(value)) {
@@ -211,7 +211,7 @@ class DataValidationManager {
       }
       if (fieldSchema.enum && !fieldSchema.enum.includes(value)) {
         errors.push(
-          fieldSchema.messages.enum || `Povolené hodnoty: ${fieldSchema.enum.join(', ')}`
+          fieldSchema.messages.enum || `Povolené hodnoty: ${fieldSchema.enum.join(', ')}`,
         );
       }
     }
@@ -379,9 +379,15 @@ class DataValidationManager {
    * @returns {string} - Type name
    */
   getType(value) {
-    if (value === null) {return 'null';}
-    if (value === undefined) {return 'undefined';}
-    if (typeof value === 'number' && !isNaN(value)) {return 'number';}
+    if (value === null) {
+      return 'null';
+    }
+    if (value === undefined) {
+      return 'undefined';
+    }
+    if (typeof value === 'number' && !isNaN(value)) {
+      return 'number';
+    }
     if (typeof value === 'string') {
       // Check if it's a date string
       const date = new Date(value);
@@ -390,9 +396,15 @@ class DataValidationManager {
       }
       return 'string';
     }
-    if (typeof value === 'boolean') {return 'boolean';}
-    if (Array.isArray(value)) {return 'array';}
-    if (typeof value === 'object') {return 'object';}
+    if (typeof value === 'boolean') {
+      return 'boolean';
+    }
+    if (Array.isArray(value)) {
+      return 'array';
+    }
+    if (typeof value === 'object') {
+      return 'object';
+    }
     return typeof value;
   }
 
@@ -400,14 +412,18 @@ class DataValidationManager {
    * Setup real-time validation on form inputs
    */
   setupRealTimeValidation() {
-    if (!this.realTimeValidation) {return;}
+    if (!this.realTimeValidation) {
+      return;
+    }
 
     document.addEventListener('input', (e) => {
       const input = e.target;
-      if (!input.dataset.fieldName) {return;}
+      if (!input.dataset.fieldName) {
+        return;
+      }
 
-      const fieldName = input.dataset.fieldName;
-      let value = input.value;
+      const { fieldName } = input.dataset;
+      let { value } = input;
 
       // Convert value based on field type
       const fieldSchema = this.schema[fieldName];
@@ -459,7 +475,9 @@ class DataValidationManager {
    */
   sanitize(fieldName, value) {
     const fieldSchema = this.schema[fieldName];
-    if (!fieldSchema) {return value;}
+    if (!fieldSchema) {
+      return value;
+    }
 
     // String sanitization
     if (fieldSchema.type === 'string' && typeof value === 'string') {

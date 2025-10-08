@@ -11,6 +11,9 @@ import compression from 'vite-plugin-compression';
 export default defineConfig({
   // Base public path
   base: './',
+  
+  // 🚀 PERFORMANCE: Enable persistent cache for faster rebuilds
+  cacheDir: '.vite',
 
   // Server configuration
   server: {
@@ -26,16 +29,20 @@ export default defineConfig({
   build: {
     // Output directory
     outDir: 'dist',
-    
+
     // Assets directory
     assetsDir: 'assets',
     
+    // 🚀 PERFORMANCE: Faster builds
+    emptyOutDir: true,
+    reportCompressedSize: false, // Skip gzip size report for faster builds
+
     // Source maps for debugging
     sourcemap: true,
-    
+
     // Target browsers
     target: 'es2015',
-    
+
     // Minification
     minify: 'terser',
     terserOptions: {
@@ -44,10 +51,10 @@ export default defineConfig({
         drop_debugger: true,
       },
     },
-    
+
     // Chunk size warning limit
     chunkSizeWarningLimit: 600,
-    
+
     // Rollup options
     rollupOptions: {
       output: {
@@ -60,16 +67,11 @@ export default defineConfig({
             './modules/utilities.js',
           ],
           // UI components
-          'ui-components': [
-            './modules/ui-manager.js',
-            './modules/event-handlers.js',
-          ],
+          'ui-components': ['./modules/ui-manager.js', './modules/event-handlers.js'],
           // Business logic
-          'portfolio-logic': [
-            './modules/portfolio-calculator.js',
-          ],
-          // Third-party libraries (if any heavy libs are added)
-          // 'vendor': ['chart.js', 'jspdf']
+          'portfolio-logic': ['./modules/portfolio-calculator.js'],
+          // Help system (lazy loaded separately)
+          'help-system': ['./modules/help-system.js'],
         },
         // Asset file naming
         assetFileNames: (assetInfo) => {
@@ -87,7 +89,7 @@ export default defineConfig({
         entryFileNames: 'assets/js/[name]-[hash].js',
       },
     },
-    
+
     // CSS code splitting
     cssCodeSplit: true,
   },
@@ -96,10 +98,17 @@ export default defineConfig({
   plugins: [
     // Legacy browser support (for older browsers)
     legacy({
-      targets: ['defaults', 'not IE 11'],
-      additionalLegacyPolyfills: ['regenerator-runtime/runtime'],
+      targets: [
+        'Chrome >= 87',
+        'Firefox >= 78',
+        'Safari >= 14',
+        'Edge >= 88'
+      ],
+      polyfills: true,
+      modernPolyfills: true,
+      additionalLegacyPolyfills: [], // Remove regenerator-runtime (not needed)
     }),
-    
+
     // Gzip compression
     compression({
       algorithm: 'gzip',
@@ -107,7 +116,7 @@ export default defineConfig({
       threshold: 10240, // Only compress files >10KB
       deleteOriginFile: false,
     }),
-    
+
     // Brotli compression (better than gzip)
     compression({
       algorithm: 'brotliCompress',
@@ -120,10 +129,13 @@ export default defineConfig({
   // Optimization
   optimizeDeps: {
     include: [
-      // Add dependencies that need pre-bundling
+      'modules/app-core',
+      'modules/data-manager',
+      'modules/ui-manager',
+      'modules/utilities',
     ],
     exclude: [
-      // Add dependencies that should not be pre-bundled
+      'modules/help-system', // Lazy loaded
     ],
   },
 

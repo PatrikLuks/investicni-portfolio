@@ -1,7 +1,10 @@
 /**
- * APP CORE MODULE
+ * @module app-core
  * Main application initialization and bootstrap
  * Investment Portfolio Manager Pro v3.1.0
+ *
+ * @typedef {import('./data-manager.js').FundData} FundData
+ * @typedef {import('./data-manager.js').ClientInfo} ClientInfo
  */
 
 import { PortfolioStorage, parseSafeNumber, validateFundData, debounce } from './data-manager.js';
@@ -33,22 +36,35 @@ import {
 import { generateCSV, formatCurrency, formatPercentage, truncateText } from './utilities.js';
 
 // ==================== MODULE STATE ====================
+/** @type {FundData[]} */
 let portfolioData = [];
-let viewMode = 'funds'; // 'funds' or 'producers'
+/** @type {'funds'|'producers'} */
+let viewMode = 'funds';
 const currentSortColumn = null;
 const currentSortDirection = 'asc';
+/** @type {string} */
 let searchQuery = '';
 
 const storage = new PortfolioStorage();
 
 // ==================== DOM REFERENCES ====================
+/** @type {Object<string, HTMLElement>} */
 let elements = {};
 
+/**
+ * Initialize DOM element references
+ * @returns {void}
+ */
 function initElements() {
   elements = initializeDOMReferences();
 }
 
 // ==================== DASHBOARD UPDATE ====================
+
+/**
+ * Update dashboard with portfolio metrics and charts
+ * @returns {void}
+ */
 function updateDashboard() {
   if (portfolioData.length === 0) {
     if (elements.dashboard) {
@@ -113,6 +129,11 @@ function updateDashboard() {
 }
 
 // ==================== FUND LIST UPDATE ====================
+
+/**
+ * Update fund list view (table or producer view)
+ * @returns {void}
+ */
 function updateFundList() {
   // Implementation depends on view mode
   if (viewMode === 'funds') {
@@ -122,6 +143,10 @@ function updateFundList() {
   }
 }
 
+/**
+ * Update fund table with filtered and sorted data
+ * @returns {void}
+ */
 function updateFundTable() {
   const table = document.getElementById('fondTable');
   const tbody = table ? table.querySelector('tbody') : null;
@@ -152,6 +177,12 @@ function updateFundTable() {
   }
 }
 
+/**
+ * Create table row element for fund
+ * @param {FundData} fund - Fund data object
+ * @param {number} index - Index in portfolio array
+ * @returns {HTMLTableRowElement} Table row element
+ */
 function createFundRow(fund, index) {
   const row = document.createElement('tr');
   const fundYield = calculateFundYield(fund);
@@ -174,6 +205,10 @@ function createFundRow(fund, index) {
   return row;
 }
 
+/**
+ * Update producer aggregated view
+ * @returns {void}
+ */
 function updateProducerTable() {
   const aggregated = aggregateByProducer(portfolioData);
   // Implementation similar to updateFundTable but with aggregated data
@@ -181,6 +216,14 @@ function updateProducerTable() {
 }
 
 // ==================== DATA OPERATIONS ====================
+
+/**
+ * Update specific fund field
+ * @param {number} index - Fund index in array
+ * @param {string} field - Field name to update
+ * @param {*} value - New value
+ * @returns {void}
+ */
 function updateFundData(index, field, value) {
   if (index >= 0 && index < portfolioData.length) {
     portfolioData[index][field] = value;
@@ -190,6 +233,11 @@ function updateFundData(index, field, value) {
   }
 }
 
+/**
+ * Delete fund with confirmation dialog
+ * @param {number} index - Fund index to delete
+ * @returns {void}
+ */
 function deleteFund(index) {
   if (index >= 0 && index < portfolioData.length) {
     const fund = portfolioData[index];
@@ -203,6 +251,10 @@ function deleteFund(index) {
   }
 }
 
+/**
+ * Delete multiple selected funds with confirmation
+ * @returns {void}
+ */
 function bulkDeleteSelected() {
   const selectedIndexes = Array.from(getSelectedRows()).sort((a, b) => b - a);
   if (selectedIndexes.length === 0) {
@@ -223,6 +275,10 @@ function bulkDeleteSelected() {
   );
 }
 
+/**
+ * Export selected funds to CSV
+ * @returns {void}
+ */
 function bulkExportSelected() {
   const selectedIndexes = Array.from(getSelectedRows());
   if (selectedIndexes.length === 0) {
@@ -237,6 +293,11 @@ function bulkExportSelected() {
 }
 
 // ==================== INITIALIZATION ====================
+
+/**
+ * Initialize application - main entry point
+ * @returns {void}
+ */
 function initializeApp() {
   // Initialize DOM references
   initElements();
@@ -290,6 +351,10 @@ function initializeApp() {
   console.log('✅ App initialized successfully');
 }
 
+/**
+ * Setup keyboard shortcuts for app actions
+ * @returns {void}
+ */
 function setupKeyboardShortcuts() {
   document.addEventListener('keydown', (e) => {
     // Ctrl/Cmd + S: Save
@@ -316,6 +381,10 @@ function setupKeyboardShortcuts() {
   });
 }
 
+/**
+ * Setup dark mode toggle functionality
+ * @returns {void}
+ */
 function setupDarkMode() {
   const darkModeToggle = document.getElementById('darkModeToggle');
   if (!darkModeToggle) {

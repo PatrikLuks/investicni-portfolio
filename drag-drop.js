@@ -204,7 +204,7 @@ class DragDropManager {
       (e) => {
         this.handleTouchStart(e, row);
       },
-      { passive: false }
+      { passive: false },
     );
 
     handle.addEventListener(
@@ -212,7 +212,7 @@ class DragDropManager {
       (e) => {
         this.handleTouchMove(e, row);
       },
-      { passive: false }
+      { passive: false },
     );
 
     handle.addEventListener(
@@ -220,7 +220,7 @@ class DragDropManager {
       (e) => {
         this.handleTouchEnd(e);
       },
-      { passive: false }
+      { passive: false },
     );
 
     handle.addEventListener('touchcancel', (e) => {
@@ -267,7 +267,9 @@ class DragDropManager {
 
     // Change cursor
     const handle = row.querySelector('.drag-handle');
-    if (handle) {handle.style.cursor = 'grabbing';}
+    if (handle) {
+      handle.style.cursor = 'grabbing';
+    }
 
     // Create drag image
     this.createDragImage(e, row);
@@ -291,7 +293,9 @@ class DragDropManager {
    * @param {HTMLElement} row - Target row
    */
   handleDragEnter(e, row) {
-    if (!this.isDragging || row === this.draggedElement) {return;}
+    if (!this.isDragging || row === this.draggedElement) {
+      return;
+    }
 
     e.preventDefault();
 
@@ -319,7 +323,9 @@ class DragDropManager {
     e.preventDefault();
     e.stopPropagation();
 
-    if (!this.draggedElement || targetRow === this.draggedElement) {return;}
+    if (!this.draggedElement || targetRow === this.draggedElement) {
+      return;
+    }
 
     const targetIndex = this.getRowIndex(targetRow);
 
@@ -343,7 +349,9 @@ class DragDropManager {
       this.draggedElement.classList.remove('dragging');
 
       const handle = this.draggedElement.querySelector('.drag-handle');
-      if (handle) {handle.style.cursor = 'grab';}
+      if (handle) {
+        handle.style.cursor = 'grab';
+      }
     }
 
     this.hideDropIndicator();
@@ -384,7 +392,9 @@ class DragDropManager {
    * @param {HTMLElement} row - Table row
    */
   handleTouchMove(e, row) {
-    if (!this.isDragging) {return;}
+    if (!this.isDragging) {
+      return;
+    }
 
     e.preventDefault();
 
@@ -410,12 +420,14 @@ class DragDropManager {
    * @param {TouchEvent} e - Touch event
    */
   handleTouchEnd(e) {
-    if (!this.isDragging) {return;}
+    if (!this.isDragging) {
+      return;
+    }
 
     // Find final drop target
     const elementBelow = document.elementFromPoint(
       e.changedTouches[0].clientX,
-      e.changedTouches[0].clientY
+      e.changedTouches[0].clientY,
     );
 
     const targetRow = elementBelow?.closest('tr');
@@ -647,7 +659,9 @@ class DragDropManager {
    * Start auto-scrolling
    */
   startAutoScroll() {
-    if (this.scrollInterval) {return;}
+    if (this.scrollInterval) {
+      return;
+    }
 
     this.scrollInterval = setInterval(() => {
       window.scrollBy(0, this.scrollSpeed);

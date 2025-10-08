@@ -58,7 +58,9 @@ class SmartAutoSaveManager {
    * @param {Object} data - Data to save
    */
   markDirty(data) {
-    if (!this.enabled) {return;}
+    if (!this.enabled) {
+      return;
+    }
 
     this.isDirty = true;
 
@@ -252,12 +254,16 @@ class SmartAutoSaveManager {
    * @returns {Promise<boolean>} - Has conflict
    */
   async checkForConflicts(currentData) {
-    if (!this.lastSavedData) {return false;}
+    if (!this.lastSavedData) {
+      return false;
+    }
 
     try {
       // Load latest data from storage
       const latestData = JSON.parse(localStorage.getItem('portfolio_data') || 'null');
-      if (!latestData) {return false;}
+      if (!latestData) {
+        return false;
+      }
 
       // Compare timestamps or data content
       const currentHash = this.hashData(currentData);
@@ -296,7 +302,7 @@ class SmartAutoSaveManager {
       const choice = confirm(
         'Data byla změněna externě. Chcete přepsat uložená data?\n\n' +
           'OK = Použít aktuální verzi\n' +
-          'Cancel = Ponechat uloženou verzi'
+          'Cancel = Ponechat uloženou verzi',
       );
 
       if (!choice) {
@@ -430,7 +436,9 @@ class SmartAutoSaveManager {
     const indicator = document.getElementById('lastSaveIndicator');
     const timeEl = document.getElementById('lastSaveTime');
 
-    if (!indicator || !timeEl) {return;}
+    if (!indicator || !timeEl) {
+      return;
+    }
 
     indicator.style.opacity = '1';
 

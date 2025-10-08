@@ -19,8 +19,12 @@ class LibraryLoader {
    * Load Fuse.js for fuzzy search
    */
   async loadFuse() {
-    if (this.loaded.fuse) {return true;}
-    if (this.loading.fuse) {return this.loading.fuse;}
+    if (this.loaded.fuse) {
+      return true;
+    }
+    if (this.loading.fuse) {
+      return this.loading.fuse;
+    }
 
     console.log('📦 Loading Fuse.js on-demand...');
     this.loading.fuse = this.loadScript('https://cdn.jsdelivr.net/npm/fuse.js@7.0.0')
@@ -41,14 +45,21 @@ class LibraryLoader {
    * Load Chart.js for charts
    */
   async loadChart() {
-    if (this.loaded.chart) {return true;}
-    if (this.loading.chart) {return this.loading.chart;}
+    if (this.loaded.chart) {
+      return true;
+    }
+    if (this.loading.chart) {
+      return this.loading.chart;
+    }
 
     console.log('📦 Loading Chart.js on-demand...');
     this.loading.chart = Promise.all([
-      this.loadScript('https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js'),
       this.loadScript(
-        'https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js'
+        'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js',
+        'sha384-FcQlsUOd0TJjROrBxhJdUhXTUgNJQxTMcxZe6nHbaEfFL1zjQ+bq/uRoBQxb0KMo'
+      ),
+      this.loadScript(
+        'https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js',
       ),
     ])
       .then(() => {
@@ -68,12 +79,16 @@ class LibraryLoader {
    * Load jsPDF for PDF export
    */
   async loadJsPDF() {
-    if (this.loaded.jspdf) {return true;}
-    if (this.loading.jspdf) {return this.loading.jspdf;}
+    if (this.loaded.jspdf) {
+      return true;
+    }
+    if (this.loading.jspdf) {
+      return this.loading.jspdf;
+    }
 
     console.log('📦 Loading jsPDF on-demand...');
     this.loading.jspdf = this.loadScript(
-      'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'
+      'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
     )
       .then(() => {
         this.loaded.jspdf = true;
@@ -92,12 +107,16 @@ class LibraryLoader {
    * Load SheetJS for Excel export
    */
   async loadXLSX() {
-    if (this.loaded.xlsx) {return true;}
-    if (this.loading.xlsx) {return this.loading.xlsx;}
+    if (this.loaded.xlsx) {
+      return true;
+    }
+    if (this.loading.xlsx) {
+      return this.loading.xlsx;
+    }
 
     console.log('📦 Loading SheetJS on-demand...');
     this.loading.xlsx = this.loadScript(
-      'https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js'
+      'https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js',
     )
       .then(() => {
         this.loaded.xlsx = true;
@@ -113,12 +132,21 @@ class LibraryLoader {
   }
 
   /**
-   * Helper: Load script dynamically
+   * Helper: Load script dynamically with optional SRI
+   * @param {string} src - Script URL
+   * @param {string} integrity - Optional SRI hash
    */
-  loadScript(src) {
+  loadScript(src, integrity = null) {
     return new Promise((resolve, reject) => {
       const script = document.createElement('script');
       script.src = src;
+      
+      // Add SRI if provided
+      if (integrity) {
+        script.integrity = integrity;
+        script.crossOrigin = 'anonymous';
+      }
+      
       script.onload = resolve;
       script.onerror = reject;
       document.head.appendChild(script);

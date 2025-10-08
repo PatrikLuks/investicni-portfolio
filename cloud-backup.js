@@ -170,7 +170,7 @@ class CloudBackupManager {
       const formData = new FormData();
       formData.append(
         'metadata',
-        new Blob([JSON.stringify(metadata)], { type: 'application/json' })
+        new Blob([JSON.stringify(metadata)], { type: 'application/json' }),
       );
       formData.append('file', blob);
 
@@ -182,7 +182,7 @@ class CloudBackupManager {
             Authorization: `Bearer ${this.providers.googleDrive.accessToken}`,
           },
           body: formData,
-        }
+        },
       );
 
       if (!response.ok) {
@@ -783,7 +783,7 @@ function attachCloudBackupListeners() {
         updateCloudBackupUI();
         alert('✅ Google Drive připojeno');
       } catch (error) {
-        alert(`❌ Chyba připojení Google Drive: ${ error.message}`);
+        alert(`❌ Chyba připojení Google Drive: ${error.message}`);
       }
     }
   });
@@ -797,7 +797,7 @@ function attachCloudBackupListeners() {
         updateCloudBackupUI();
         alert('✅ Dropbox připojeno');
       } catch (error) {
-        alert(`❌ Chyba připojení Dropbox: ${ error.message}`);
+        alert(`❌ Chyba připojení Dropbox: ${error.message}`);
       }
     }
   });
@@ -815,7 +815,7 @@ function attachCloudBackupListeners() {
       alert(`✅ Záloha dokončena: ${results.length} úložišť`);
       updateCloudBackupUI();
     } catch (error) {
-      alert(`❌ Chyba zálohování: ${ error.message}`);
+      alert(`❌ Chyba zálohování: ${error.message}`);
     }
   });
 
@@ -866,7 +866,7 @@ function updateCloudBackupUI() {
       <span class="file-name">${h.fileName}</span>
       <span class="timestamp">${new Date(h.timestamp).toLocaleString('cs-CZ')}</span>
     </div>
-  `
+  `,
       )
       .join('') || '<p>Žádná historie</p>';
 }

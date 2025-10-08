@@ -190,7 +190,7 @@ class ExcelExportManager {
     const totalValue = data.reduce((sum, item) => sum + parseFloat(item.aktuálníHodnota || 0), 0);
     const totalCost = data.reduce(
       (sum, item) => sum + parseFloat(item.nákupníCena) * parseFloat(item.počet),
-      0
+      0,
     );
     const gainLoss = totalValue - totalCost;
     const roi = totalCost > 0 ? (gainLoss / totalCost) * 100 : 0;
@@ -378,7 +378,9 @@ class ExcelExportManager {
     // Header row
     for (let C = range.s.c; C <= range.e.c; C++) {
       const cell = ws[XLSX.utils.encode_cell({ r: 0, c: C })];
-      if (!cell) {continue;}
+      if (!cell) {
+        continue;
+      }
 
       cell.s = {
         font: { bold: true, color: { rgb: 'FFFFFF' } },
@@ -537,13 +539,19 @@ window.excelExportManager = new ExcelExportManager();
 // Add Excel export button
 window.addEventListener('DOMContentLoaded', () => {
   const portfolioCard = document.getElementById('portfolioCard');
-  if (!portfolioCard) {return;}
+  if (!portfolioCard) {
+    return;
+  }
 
   const headerDiv = portfolioCard.querySelector('div[style*="justify-content: space-between"]');
-  if (!headerDiv) {return;}
+  if (!headerDiv) {
+    return;
+  }
 
   const buttonContainer = headerDiv.querySelector('div[style*="gap"]');
-  if (!buttonContainer) {return;}
+  if (!buttonContainer) {
+    return;
+  }
 
   const excelBtn = document.createElement('button');
   excelBtn.id = 'exportExcel';
@@ -573,7 +581,7 @@ window.addEventListener('DOMContentLoaded', () => {
       }
     } catch (error) {
       console.error('Excel export failed:', error);
-      alert(`Chyba při exportu do Excelu: ${ error.message}`);
+      alert(`Chyba při exportu do Excelu: ${error.message}`);
     } finally {
       excelBtn.disabled = false;
       excelBtn.textContent = '📊 Excel';

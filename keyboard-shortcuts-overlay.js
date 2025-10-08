@@ -92,7 +92,9 @@ class KeyboardShortcutsOverlay {
    * Show overlay
    */
   show() {
-    if (this.visible) {return;}
+    if (this.visible) {
+      return;
+    }
 
     this.visible = true;
 
@@ -199,20 +201,20 @@ class KeyboardShortcutsOverlay {
                     color: #495057;
                     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
                   ">${key}</kbd>
-                `
-    )
+                `,
+                  )
     .join('<span style="margin: 0 4px; color: #adb5bd;">+</span>')}
               </div>
               <div style="color: #6c757d; font-size: 0.9rem; text-align: right; max-width: 60%;">
                 ${item.description}
               </div>
             </div>
-          `
-    )
+          `,
+            )
     .join('')}
         </div>
       </div>
-    `
+    `,
       )
       .join('');
   }
@@ -321,13 +323,13 @@ class KeyboardShortcutsOverlay {
                   </td>
                   <td>${item.description}</td>
                 </tr>
-              `
-    )
+              `,
+                )
     .join('')}
             </tbody>
           </table>
-        `
-    )
+        `,
+          )
     .join('')}
         
         <div style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #dee2e6; color: #6c757d;">

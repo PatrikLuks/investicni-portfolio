@@ -22,33 +22,36 @@ const localStorageMock = (() => {
 
 global.localStorage = localStorageMock;
 
-// Mock DOM
+// Mock DOM (ESM-compatible without jest.fn())
 global.document = {
-  body: { appendChild: jest.fn(), removeChild: jest.fn() },
-  createElement: jest.fn(() => ({
-    setAttribute: jest.fn(),
-    classList: { add: jest.fn(), remove: jest.fn() },
-    addEventListener: jest.fn(),
-  })),
-  getElementById: jest.fn(() => null),
-  querySelector: jest.fn(() => null),
-  querySelectorAll: jest.fn(() => []),
-  addEventListener: jest.fn(),
+  body: {
+    appendChild: () => {},
+    removeChild: () => {},
+  },
+  createElement: () => ({
+    setAttribute: () => {},
+    classList: { add: () => {}, remove: () => {} },
+    addEventListener: () => {},
+  }),
+  getElementById: () => null,
+  querySelector: () => null,
+  querySelectorAll: () => [],
+  addEventListener: () => {},
   documentElement: {
-    setAttribute: jest.fn(),
-    getAttribute: jest.fn(() => 'light'),
+    setAttribute: () => {},
+    getAttribute: () => 'light',
   },
 };
 
 global.window = {
   localStorage: localStorageMock,
-  matchMedia: jest.fn(() => ({
+  matchMedia: () => ({
     matches: false,
-    addEventListener: jest.fn(),
-    removeEventListener: jest.fn(),
-  })),
-  dispatchEvent: jest.fn(),
-  addEventListener: jest.fn(),
+    addEventListener: () => {},
+    removeEventListener: () => {},
+  }),
+  dispatchEvent: () => {},
+  addEventListener: () => {},
 };
 
 // ===== Theme Manager Tests =====
@@ -57,7 +60,6 @@ describe('ThemeManager', () => {
 
   beforeEach(() => {
     localStorageMock.clear();
-    jest.clearAllMocks();
 
     // Mock ThemeManager class
     ThemeManager = class {
@@ -128,13 +130,17 @@ describe('ThemeManager', () => {
 // ===== Market Data Service Tests =====
 describe('MarketDataService', () => {
   let MarketDataService;
+  let fetchMock;
 
   beforeEach(() => {
     localStorageMock.clear();
-    jest.clearAllMocks();
 
     // Mock fetch
-    global.fetch = jest.fn();
+    fetchMock = () => Promise.resolve({
+      ok: true,
+      json: () => Promise.resolve({}),
+    });
+    global.fetch = fetchMock;
 
     MarketDataService = class {
       constructor() {
@@ -240,7 +246,6 @@ describe('PortfolioManager', () => {
 
   beforeEach(() => {
     localStorageMock.clear();
-    jest.clearAllMocks();
 
     PortfolioManager = class {
       constructor() {

@@ -4,6 +4,22 @@
  * Treemap, Heatmap, Candlestick, and Sankey charts using Chart.js + D3.js
  */
 
+/* global Chart */
+
+/**
+ * Format currency value
+ * @param {number} value - Value to format
+ * @returns {string} Formatted currency
+ */
+function formatCurrency(value) {
+  return new Intl.NumberFormat('cs-CZ', {
+    style: 'currency',
+    currency: 'CZK',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(value);
+}
+
 // Treemap Chart - Portfolio Asset Allocation Visualization
 class TreemapChart {
   constructor(containerId) {
@@ -94,26 +110,25 @@ class TreemapChart {
   squarify(data, width, height) {
     const totalValue = data.reduce((sum, item) => sum + item.value, 0);
     const rects = [];
-    let x = 0,
-      y = 0;
+    const x = 0;
+    let y = 0;
     let remainingHeight = height;
 
     // Simple row-based layout
-    let currentRow = [];
+    const currentRow = [];
     let currentRowValue = 0;
     const targetRowRatio = width / height;
 
     data.forEach((item, index) => {
-      const itemRatio = item.value / totalValue;
       currentRow.push(item);
       currentRowValue += item.value;
 
       const isLastItem = index === data.length - 1;
-      const currentRatio = (currentRowValue / totalValue) * width / remainingHeight;
+      const currentRatio = ((currentRowValue / totalValue) * width) / remainingHeight;
 
       if (currentRatio >= targetRowRatio || isLastItem) {
         // Layout current row
-        const rowHeight = (currentRowValue / totalValue) * width * height / width;
+        const rowHeight = ((currentRowValue / totalValue) * width * height) / width;
         const rowWidth = width;
 
         let rowX = x;
@@ -121,7 +136,7 @@ class TreemapChart {
           const cellWidth = (rowItem.value / currentRowValue) * rowWidth;
           rects.push({
             x: rowX,
-            y: y,
+            y,
             width: cellWidth,
             height: rowHeight,
           });
@@ -130,7 +145,7 @@ class TreemapChart {
 
         y += rowHeight;
         remainingHeight -= rowHeight;
-        currentRow = [];
+        currentRow.length = 0;
         currentRowValue = 0;
       }
     });
@@ -170,8 +185,8 @@ class TreemapChart {
     `;
 
     tooltip.style.display = 'block';
-    tooltip.style.left = event.pageX + 10 + 'px';
-    tooltip.style.top = event.pageY + 10 + 'px';
+    tooltip.style.left = `${event.pageX + 10}px`;
+    tooltip.style.top = `${event.pageY + 10}px`;
   }
 
   hideTooltip() {
@@ -434,6 +449,10 @@ function generateDemoHeatmapData() {
   };
 }
 
+/**
+ * Generate demo candlestick data
+ * @returns {Array} Demo data array
+ */
 function generateDemoCandlestickData() {
   const data = [];
   let price = 150;
@@ -477,16 +496,18 @@ if (typeof Chart !== 'undefined') {
   Chart.register({
     id: 'candlestick',
     beforeDraw: (chart) => {
-      const ctx = chart.ctx;
+      const { ctx } = chart;
       const dataset = chart.data.datasets[0];
 
       dataset.data.forEach((point, index) => {
         const meta = chart.getDatasetMeta(0);
         const element = meta.data[index];
 
-        if (!element) return;
+        if (!element) {
+          return;
+        }
 
-        const x = element.x;
+        const { x } = element;
         const yOpen = chart.scales.y.getPixelForValue(point.o);
         const yClose = chart.scales.y.getPixelForValue(point.c);
         const yHigh = chart.scales.y.getPixelForValue(point.h);

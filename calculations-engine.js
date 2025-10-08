@@ -30,7 +30,9 @@ class CalculationsEngine {
     const currentValue = parseFloat(position.aktuálníHodnota) || 0;
     const originalValue = parseFloat(position.nákupníCena) * parseFloat(position.počet);
 
-    if (originalValue === 0) {return 0;}
+    if (originalValue === 0) {
+      return 0;
+    }
 
     const roi = ((currentValue - originalValue) / originalValue) * 100;
     return parseFloat(roi.toFixed(2));
@@ -50,7 +52,9 @@ class CalculationsEngine {
       totalOriginal += parseFloat(item.nákupníCena) * parseFloat(item.počet);
     });
 
-    if (totalOriginal === 0) {return 0;}
+    if (totalOriginal === 0) {
+      return 0;
+    }
 
     return ((totalCurrent - totalOriginal) / totalOriginal) * 100;
   }
@@ -65,7 +69,9 @@ class CalculationsEngine {
    * @returns {number} - CAGR percentage
    */
   calculateCAGR(startValue, endValue, years) {
-    if (startValue === 0 || years === 0) {return 0;}
+    if (startValue === 0 || years === 0) {
+      return 0;
+    }
 
     const cagr = (Math.pow(endValue / startValue, 1 / years) - 1) * 100;
     return parseFloat(cagr.toFixed(2));
@@ -80,17 +86,21 @@ class CalculationsEngine {
     // Get oldest purchase date
     const dates = data.filter((item) => item.datumNákupu).map((item) => new Date(item.datumNákupu));
 
-    if (dates.length === 0) {return 0;}
+    if (dates.length === 0) {
+      return 0;
+    }
 
     const oldestDate = new Date(Math.min(...dates));
     const today = new Date();
     const years = (today - oldestDate) / (1000 * 60 * 60 * 24 * 365.25);
 
-    if (years < 0.1) {return 0;} // Need at least ~1 month
+    if (years < 0.1) {
+      return 0;
+    } // Need at least ~1 month
 
     const totalOriginal = data.reduce(
       (sum, item) => sum + parseFloat(item.nákupníCena) * parseFloat(item.počet),
-      0
+      0,
     );
     const totalCurrent = data.reduce((sum, item) => sum + parseFloat(item.aktuálníHodnota), 0);
 
@@ -106,12 +116,16 @@ class CalculationsEngine {
    * @returns {number} - Sharpe ratio
    */
   calculateSharpeRatio(returns, riskFreeRate = this.riskFreeRate) {
-    if (!returns || returns.length < 2) {return 0;}
+    if (!returns || returns.length < 2) {
+      return 0;
+    }
 
     const avgReturn = this.calculateMean(returns);
     const stdDev = this.calculateStandardDeviation(returns);
 
-    if (stdDev === 0) {return 0;}
+    if (stdDev === 0) {
+      return 0;
+    }
 
     // Annualize if needed (assuming daily returns)
     const annualizedReturn = avgReturn * this.tradingDaysPerYear;
@@ -127,7 +141,9 @@ class CalculationsEngine {
    * @returns {number} - Sharpe ratio
    */
   calculatePortfolioSharpe(historicalValues) {
-    if (!historicalValues || historicalValues.length < 2) {return 0;}
+    if (!historicalValues || historicalValues.length < 2) {
+      return 0;
+    }
 
     const returns = [];
     for (let i = 1; i < historicalValues.length; i++) {
@@ -146,7 +162,9 @@ class CalculationsEngine {
    * @returns {number} - Annualized volatility percentage
    */
   calculateVolatility(returns) {
-    if (!returns || returns.length < 2) {return 0;}
+    if (!returns || returns.length < 2) {
+      return 0;
+    }
 
     const stdDev = this.calculateStandardDeviation(returns);
     const annualizedVol = stdDev * Math.sqrt(this.tradingDaysPerYear) * 100;
@@ -160,7 +178,9 @@ class CalculationsEngine {
    * @returns {number} - Volatility percentage
    */
   calculatePortfolioVolatility(historicalValues) {
-    if (!historicalValues || historicalValues.length < 2) {return 0;}
+    if (!historicalValues || historicalValues.length < 2) {
+      return 0;
+    }
 
     const returns = [];
     for (let i = 1; i < historicalValues.length; i++) {
@@ -192,7 +212,9 @@ class CalculationsEngine {
     const covariance = this.calculateCovariance(portfolioReturns, marketReturns);
     const marketVariance = this.calculateVariance(marketReturns);
 
-    if (marketVariance === 0) {return 1.0;}
+    if (marketVariance === 0) {
+      return 1.0;
+    }
 
     const beta = covariance / marketVariance;
     return parseFloat(beta.toFixed(2));
@@ -259,12 +281,16 @@ class CalculationsEngine {
    * @returns {number} - Current drawdown percentage
    */
   calculateCurrentDrawdown(values) {
-    if (!values || values.length === 0) {return 0;}
+    if (!values || values.length === 0) {
+      return 0;
+    }
 
     const peak = Math.max(...values);
     const current = values[values.length - 1];
 
-    if (peak === 0) {return 0;}
+    if (peak === 0) {
+      return 0;
+    }
 
     const drawdown = ((peak - current) / peak) * 100;
     return parseFloat(drawdown.toFixed(2));
@@ -278,7 +304,9 @@ class CalculationsEngine {
    * @returns {number} - Mean value
    */
   calculateMean(values) {
-    if (!values || values.length === 0) {return 0;}
+    if (!values || values.length === 0) {
+      return 0;
+    }
     return values.reduce((sum, val) => sum + val, 0) / values.length;
   }
 
@@ -288,7 +316,9 @@ class CalculationsEngine {
    * @returns {number} - Standard deviation
    */
   calculateStandardDeviation(values) {
-    if (!values || values.length < 2) {return 0;}
+    if (!values || values.length < 2) {
+      return 0;
+    }
 
     const mean = this.calculateMean(values);
     const squaredDiffs = values.map((val) => Math.pow(val - mean, 2));
@@ -303,7 +333,9 @@ class CalculationsEngine {
    * @returns {number} - Variance
    */
   calculateVariance(values) {
-    if (!values || values.length < 2) {return 0;}
+    if (!values || values.length < 2) {
+      return 0;
+    }
 
     const mean = this.calculateMean(values);
     const squaredDiffs = values.map((val) => Math.pow(val - mean, 2));
@@ -318,7 +350,9 @@ class CalculationsEngine {
    * @returns {number} - Covariance
    */
   calculateCovariance(x, y) {
-    if (!x || !y || x.length !== y.length || x.length < 2) {return 0;}
+    if (!x || !y || x.length !== y.length || x.length < 2) {
+      return 0;
+    }
 
     const meanX = this.calculateMean(x);
     const meanY = this.calculateMean(y);
@@ -383,7 +417,7 @@ class CalculationsEngine {
         const portfolioReturns = [];
         for (let i = 1; i < historicalValues.length; i++) {
           portfolioReturns.push(
-            (historicalValues[i] - historicalValues[i - 1]) / historicalValues[i - 1]
+            (historicalValues[i] - historicalValues[i - 1]) / historicalValues[i - 1],
           );
         }
         metrics.beta = this.calculateBeta(portfolioReturns, marketReturns.slice(1));
@@ -581,7 +615,9 @@ function createMetricsPanel() {
  */
 function showMetricsPanel() {
   const panel = document.getElementById('metrics-panel');
-  if (!panel) {return;}
+  if (!panel) {
+    return;
+  }
 
   panel.classList.remove('hidden');
   updateMetricsPanel();
@@ -606,17 +642,17 @@ function updateMetricsPanel() {
   document.getElementById('metric-total-value').textContent =
     window.calculationsEngine.formatCurrency(metrics.totalValue);
 
-  document.getElementById('metric-roi').textContent = `${metrics.roi.toFixed(2) }%`;
+  document.getElementById('metric-roi').textContent = `${metrics.roi.toFixed(2)}%`;
   document.getElementById('metric-roi').className =
-    `metric-value ${ metrics.roi >= 0 ? 'positive' : 'negative'}`;
+    `metric-value ${metrics.roi >= 0 ? 'positive' : 'negative'}`;
 
-  document.getElementById('metric-cagr').textContent = `${metrics.cagr.toFixed(2) }%`;
+  document.getElementById('metric-cagr').textContent = `${metrics.cagr.toFixed(2)}%`;
   document.getElementById('metric-sharpe').textContent = metrics.sharpeRatio.toFixed(2);
-  document.getElementById('metric-volatility').textContent = `${metrics.volatility.toFixed(2) }%`;
+  document.getElementById('metric-volatility').textContent = `${metrics.volatility.toFixed(2)}%`;
   document.getElementById('metric-beta').textContent = metrics.beta.toFixed(2);
-  document.getElementById('metric-max-drawdown').textContent = `${metrics.maxDrawdown.toFixed(2) }%`;
+  document.getElementById('metric-max-drawdown').textContent = `${metrics.maxDrawdown.toFixed(2)}%`;
   document.getElementById('metric-current-drawdown').textContent =
-    `${metrics.currentDrawdown.toFixed(2) }%`;
+    `${metrics.currentDrawdown.toFixed(2)}%`;
 
   // Top performers
   const topList = document.getElementById('top-performers-list');
@@ -627,7 +663,7 @@ function updateMetricsPanel() {
       <span class="performer-name">${p.fond}</span>
       <span class="performer-roi">${p.roi.toFixed(2)}%</span>
     </div>
-  `
+  `,
     )
     .join('');
 
@@ -640,7 +676,7 @@ function updateMetricsPanel() {
       <span class="performer-name">${p.fond}</span>
       <span class="performer-roi">${p.roi.toFixed(2)}%</span>
     </div>
-  `
+  `,
     )
     .join('');
 
@@ -691,13 +727,19 @@ function exportMetricsReport() {
 // Add metrics button to UI
 window.addEventListener('DOMContentLoaded', () => {
   const portfolioCard = document.getElementById('portfolioCard');
-  if (!portfolioCard) {return;}
+  if (!portfolioCard) {
+    return;
+  }
 
   const headerDiv = portfolioCard.querySelector('div[style*="justify-content: space-between"]');
-  if (!headerDiv) {return;}
+  if (!headerDiv) {
+    return;
+  }
 
   const buttonContainer = headerDiv.querySelector('div[style*="gap"]');
-  if (!buttonContainer) {return;}
+  if (!buttonContainer) {
+    return;
+  }
 
   const metricsBtn = document.createElement('button');
   metricsBtn.id = 'openMetricsPanel';

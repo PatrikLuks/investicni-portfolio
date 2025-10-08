@@ -52,9 +52,12 @@ class ThemeManager {
   }
 
   applyTheme(theme) {
-    const effectiveTheme = theme === this.THEMES.AUTO ? 
-      (this.mediaQuery.matches ? this.THEMES.DARK : this.THEMES.LIGHT) : 
-      theme;
+    const effectiveTheme =
+      theme === this.THEMES.AUTO
+        ? this.mediaQuery.matches
+          ? this.THEMES.DARK
+          : this.THEMES.LIGHT
+        : theme;
 
     document.documentElement.setAttribute('data-theme', effectiveTheme);
     document.body.classList.remove('theme-light', 'theme-dark');
@@ -71,9 +74,11 @@ class ThemeManager {
     metaThemeColor.content = themeColor;
 
     // Trigger custom event for other components
-    window.dispatchEvent(new CustomEvent('themechange', {
-      detail: { theme: effectiveTheme },
-    }));
+    window.dispatchEvent(
+      new CustomEvent('themechange', {
+        detail: { theme: effectiveTheme },
+      }),
+    );
   }
 
   toggleTheme() {

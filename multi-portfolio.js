@@ -143,7 +143,7 @@ class PortfolioManager {
     window.dispatchEvent(
       new CustomEvent('portfolioSwitched', {
         detail: { portfolioId },
-      })
+      }),
     );
   }
 
@@ -281,7 +281,7 @@ class PortfolioManager {
 
       return portfolio;
     } catch (e) {
-      throw new Error('Invalid portfolio data: ' + e.message);
+      throw new Error(`Invalid portfolio data: ${e.message}`);
     }
   }
 
@@ -414,7 +414,7 @@ class PortfolioSelector {
                   }
                 </div>
               </div>
-            `
+            `,
               )
               .join('')}
           </div>
@@ -452,7 +452,9 @@ window.switchToPortfolio = function (portfolioId) {
 
 window.openNewPortfolioModal = function () {
   const name = prompt('Enter portfolio name:');
-  if (!name) return;
+  if (!name) {
+    return;
+  }
 
   const portfolio = window.portfolioManager.createPortfolio(name);
   showToast(`Portfolio "${portfolio.name}" created`, 'success');
@@ -465,10 +467,14 @@ window.openNewPortfolioModal = function () {
 
 window.editPortfolio = function (portfolioId) {
   const portfolio = window.portfolioManager.getPortfolio(portfolioId);
-  if (!portfolio) return;
+  if (!portfolio) {
+    return;
+  }
 
   const newName = prompt('Enter new name:', portfolio.name);
-  if (!newName) return;
+  if (!newName) {
+    return;
+  }
 
   window.portfolioManager.updatePortfolio(portfolioId, { name: newName });
   showToast('Portfolio updated', 'success');
@@ -480,7 +486,9 @@ window.editPortfolio = function (portfolioId) {
 
 window.deletePortfolioConfirm = function (portfolioId) {
   const portfolio = window.portfolioManager.getPortfolio(portfolioId);
-  if (!portfolio) return;
+  if (!portfolio) {
+    return;
+  }
 
   if (!confirm(`Delete portfolio "${portfolio.name}"? This cannot be undone.`)) {
     return;

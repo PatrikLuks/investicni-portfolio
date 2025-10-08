@@ -3,6 +3,8 @@
  * Tests error catching, logging, and recovery mechanisms
  */
 
+import { jest } from '@jest/globals';
+
 describe('ErrorHandler', () => {
   let errorHandler;
   let mockShowToast;

@@ -3,12 +3,13 @@
  * Global test configuration and mocks
  */
 
-// Mock localStorage
+// Mock localStorage (simple implementation without jest.fn())
+const storage = {};
 const localStorageMock = {
-  getItem: jest.fn(),
-  setItem: jest.fn(),
-  removeItem: jest.fn(),
-  clear: jest.fn(),
+  getItem: (key) => storage[key] || null,
+  setItem: (key, value) => { storage[key] = value; },
+  removeItem: (key) => { delete storage[key]; },
+  clear: () => { Object.keys(storage).forEach(key => delete storage[key]); },
 };
 global.localStorage = localStorageMock;
 
@@ -22,27 +23,27 @@ window.location = {
   pathname: '/',
   search: '',
   hash: '',
-  reload: jest.fn(),
+  reload: () => {},
 };
 
-// Mock console methods to reduce noise in tests
+// Mock console methods to reduce noise in tests (simple implementation)
+const originalConsole = global.console;
 global.console = {
-  ...console,
-  log: jest.fn(),
-  debug: jest.fn(),
-  info: jest.fn(),
-  warn: jest.fn(),
-  error: jest.fn(),
+  ...originalConsole,
+  log: () => {},
+  debug: () => {},
+  info: () => {},
+  warn: () => {},
+  error: originalConsole.error, // Keep error for debugging
 };
 
 // Mock fetch API
-global.fetch = jest.fn(() =>
+global.fetch = () =>
   Promise.resolve({
     ok: true,
     json: () => Promise.resolve({}),
     text: () => Promise.resolve(''),
-  })
-);
+  });
 
 // Mock Chart.js
 global.Chart = class Chart {
@@ -57,21 +58,26 @@ global.Chart = class Chart {
 
 // Mock IndexedDB
 const indexedDB = {
-  open: jest.fn(),
-  deleteDatabase: jest.fn(),
+  open: () => {},
+  deleteDatabase: () => {},
 };
 global.indexedDB = indexedDB;
 
 // Setup DOM
-document.body.innerHTML = `
-  <div id="app"></div>
-  <div id="dashboard"></div>
-  <div id="transactionForm"></div>
-`;
+if (typeof document !== 'undefined') {
+  document.body.innerHTML = `
+    <div id="app"></div>
+    <div id="dashboard"></div>
+    <div id="transactionForm"></div>
+  `;
+}
 
-// Reset mocks after each test
+// Reset after each test
 afterEach(() => {
-  jest.clearAllMocks();
-  localStorage.clear();
-  sessionStorage.clear();
+  if (typeof localStorage !== 'undefined') {
+    localStorage.clear();
+  }
+  if (typeof sessionStorage !== 'undefined') {
+    sessionStorage.clear();
+  }
 });

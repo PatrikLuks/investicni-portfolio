@@ -1,52 +1,31 @@
-# 📊 Portfolio Manager Pro# 🏆 Portfolio Manager Pro v3.0
+# 📊 Portfolio Manager Pro
 
+<div align="center">
 
-
-<div align="center"><div align="center">
-
-
-
-![Version](https://img.shields.io/badge/version-3.0.0-blue.svg)![Version](https://img.shields.io/badge/version-3.0.0-blue.svg)
-
-![Tests](https://img.shields.io/badge/tests-39%2F39%20passing-brightgreen.svg)![License](https://img.shields.io/badge/license-MIT-green.svg)
-
-![Coverage](https://img.shields.io/badge/coverage-85%25%2B-green.svg)![Status](https://img.shields.io/badge/status-production%20ready-brightgreen.svg)
-
-![License](https://img.shields.io/badge/license-MIT-blue.svg)![Quality](https://img.shields.io/badge/quality-enterprise%20A+-gold.svg)
-
-![Docker](https://img.shields.io/badge/docker-ready-blue.svg)![Score](https://img.shields.io/badge/score-9.2%2F10-success.svg)
-
-![Security](https://img.shields.io/badge/security-A%2B-brightgreen.svg)
+![Version](https://img.shields.io/badge/version-3.1.0-blue.svg)
+![Tests](https://img.shields.io/badge/tests-90%2F90%20passing-brightgreen.svg)
+![Coverage](https://img.shields.io/badge/coverage-85%25%2B-green.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
+![Status](https://img.shields.io/badge/status-beta-orange.svg)
+![Quality](https://img.shields.io/badge/quality-enterprise%20grade-gold.svg)
+![Security](https://img.shields.io/badge/security-A-brightgreen.svg)
+![Score](https://img.shields.io/badge/score-87.5%2F100-green.svg)
 
 **Nejpokročilejší ZDARMA nástroj pro správu investičního portfolia**  
+*Enterprise funkce Bloomberg Terminalu za $0*
 
-**Enterprise-Grade Investment Portfolio Management Application***Enterprise funkce Bloomberg Terminalu za $0*
+[🚀 Rychlý Start](#-quick-start) • [📖 Dokumentace](#-dokumentace) • [✨ Funkce](#-klíčové-funkce) • [🏆 Certifikace](#-oficiální-certifikace)
 
+</div>
 
+---
 
-[🚀 Quick Start](#-quick-start) • [📖 Documentation](#-documentation) • [🎯 Features](#-features) • [🐳 Docker](#-docker) • [🤝 Contributing](#-contributing)[🚀 Rychlý Start](#-quick-start) • [📖 Dokumentace](#-dokumentace) • [✨ Funkce](#-klíčové-funkce) • [🏆 Certifikace](#-oficiální-certifikace)
+## ⚡ Quick Start
 
-
-
-</div></div>
-
-
-
-------
-
-
-
-## ✨ Features## ⚡ Quick Start
-
-
-
-### 💼 Portfolio Management```bash
-
-- ✅ **Add, Edit, Delete** funds with real-time calculations# 1. Clone repository
-
-- ✅ **Automatic calculations** - ROI, CAGR, Sharpe ratiogit clone https://github.com/PatrikLuks/investicni-portfolio.git
-
-- ✅ **Asset allocation** analysis and visualizationcd investicni-portfolio
+```bash
+# 1. Clone repository
+git clone https://github.com/PatrikLuks/investicni-portfolio.git
+cd investicni-portfolio
 
 - ✅ **Historical tracking** with investment dates
 

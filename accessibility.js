@@ -52,19 +52,31 @@ class AccessibilityManager {
       // Keyboard shortcuts with Alt key
       if (e.altKey) {
         switch (e.key) {
-          case 'h': // Alt+H: Go to home/dashboard
+          case 'h': {
+            // Alt+H: Go to home/dashboard
             e.preventDefault();
             window.location.hash = '';
             break;
-          case 's': // Alt+S: Focus search
+          }
+          case 's': {
+            // Alt+S: Focus search
             e.preventDefault();
             const search = document.getElementById('tableSearch');
-            if (search) {search.focus();}
+            if (search) {
+              search.focus();
+            }
             break;
-          case 'n': // Alt+N: New portfolio item
+          }
+          case 'n': {
+            // Alt+N: New portfolio item
             e.preventDefault();
             const addBtn = document.querySelector('button[type="submit"]');
-            if (addBtn) {addBtn.click();}
+            if (addBtn) {
+              addBtn.click();
+            }
+            break;
+          }
+          default:
             break;
         }
       }
@@ -87,6 +99,8 @@ class AccessibilityManager {
     document.body.appendChild(liveRegion);
 
     // Monitor DOM changes and announce them
+    // Note: MutationObserver is a global browser API
+    /* global MutationObserver */
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
@@ -240,25 +254,25 @@ class AccessibilityManager {
   trapFocus(element) {
     const focusableElements = element.querySelectorAll(
       'a[href], button:not([disabled]), textarea:not([disabled]), ' +
-        'input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        'input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])',
     );
 
     const firstFocusable = focusableElements[0];
     const lastFocusable = focusableElements[focusableElements.length - 1];
 
     const trapHandler = (e) => {
-      if (e.key !== 'Tab') {return;}
+      if (e.key !== 'Tab') {
+        return;
+      }
 
       if (e.shiftKey) {
         if (document.activeElement === firstFocusable) {
           e.preventDefault();
           lastFocusable.focus();
         }
-      } else {
-        if (document.activeElement === lastFocusable) {
-          e.preventDefault();
-          firstFocusable.focus();
-        }
+      } else if (document.activeElement === lastFocusable) {
+        e.preventDefault();
+        firstFocusable.focus();
       }
     };
 

@@ -1,6 +1,6 @@
 /**
  * Jest Configuration for Portfolio Manager Pro
- * Complete testing setup with coverage reporting
+ * Complete testing setup with coverage reporting and ESM support
  */
 
 module.exports = {
@@ -10,13 +10,17 @@ module.exports = {
   // Test match patterns
   testMatch: ['**/tests/**/*.test.js', '**/tests/**/*.spec.js', '**/__tests__/**/*.js'],
 
+  // No transform needed with NODE_OPTIONS=--experimental-vm-modules
+  transform: {},
+
   // Coverage configuration
   collectCoverage: true,
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov', 'html', 'json-summary'],
 
-  // Files to collect coverage from (only tested modules)
+  // Files to collect coverage from (all modules)
   collectCoverageFrom: [
+    'modules/**/*.js',
     'theme-manager.js',
     'market-data-service.js',
     'multi-portfolio.js',
@@ -24,23 +28,25 @@ module.exports = {
     'calculations-engine.js',
     'error-handler.js',
     'data-validation.js',
-    '!jest.config.js',
+    '!jest.config.cjs',
+    '!babel.config.cjs',
     '!coverage/**',
     '!node_modules/**',
     '!tests/**',
+    '!__tests__/**',
     '!*.test.js',
     '!*.spec.js',
   ],
 
-  // Coverage thresholds (disabled temporarily - modules need proper DOM setup)
-  // coverageThreshold: {
-  //   global: {
-  //     branches: 70,
-  //     functions: 70,
-  //     lines: 70,
-  //     statements: 70,
-  //   },
-  // },
+  // Coverage thresholds (re-enabled after Jest/ESM fixes)
+  coverageThreshold: {
+    global: {
+      branches: 70,
+      functions: 75,
+      lines: 75,
+      statements: 75,
+    },
+  },
 
   // Setup files
   setupFilesAfterEnv: ['<rootDir>/tests/setup.js'],

@@ -10,10 +10,10 @@ import prettier from 'eslint-plugin-prettier';
 export default [
   // Apply recommended rules
   js.configs.recommended,
-  
+
   {
     files: ['**/*.js'],
-    
+
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: 'module',
@@ -45,7 +45,7 @@ export default [
         Math: 'readonly',
         JSON: 'readonly',
         Promise: 'readonly',
-        
+
         // Node.js globals (for build scripts)
         process: 'readonly',
         __dirname: 'readonly',
@@ -55,11 +55,11 @@ export default [
         exports: 'readonly',
       },
     },
-    
+
     plugins: {
       prettier,
     },
-    
+
     rules: {
       // ===== ERROR PREVENTION =====
       'no-console': 'off', // Allow console in development
@@ -67,17 +67,20 @@ export default [
       'no-alert': 'warn',
       'no-var': 'error', // Use const/let instead
       'prefer-const': 'error',
-      'no-unused-vars': ['error', {
-        argsIgnorePattern: '^_',
-        varsIgnorePattern: '^_',
-      }],
+      'no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+        },
+      ],
       'no-undef': 'error',
       'no-redeclare': 'error',
       'no-shadow': 'warn',
-      
+
       // ===== BEST PRACTICES =====
-      'eqeqeq': ['error', 'always'], // Use === instead of ==
-      'curly': ['error', 'all'], // Require curly braces
+      eqeqeq: ['error', 'always'], // Use === instead of ==
+      curly: ['error', 'all'], // Require curly braces
       'no-eval': 'error',
       'no-implied-eval': 'error',
       'no-new-func': 'error',
@@ -89,12 +92,12 @@ export default [
       'no-useless-return': 'error',
       'prefer-promise-reject-errors': 'error',
       'require-await': 'warn',
-      
+
       // ===== CODE STYLE =====
-      'indent': ['error', 2, { SwitchCase: 1 }],
+      indent: ['error', 2, { SwitchCase: 1 }],
       'linebreak-style': ['error', 'unix'],
-      'quotes': ['error', 'single', { avoidEscape: true }],
-      'semi': ['error', 'always'],
+      quotes: ['error', 'single', { avoidEscape: true }],
+      semi: ['error', 'always'],
       'comma-dangle': ['error', 'always-multiline'],
       'object-curly-spacing': ['error', 'always'],
       'array-bracket-spacing': ['error', 'never'],
@@ -108,34 +111,40 @@ export default [
       'no-multiple-empty-lines': ['error', { max: 2 }],
       'no-trailing-spaces': 'error',
       'space-before-blocks': 'error',
-      'space-before-function-paren': ['error', {
-        anonymous: 'always',
-        named: 'never',
-        asyncArrow: 'always',
-      }],
+      'space-before-function-paren': [
+        'error',
+        {
+          anonymous: 'always',
+          named: 'never',
+          asyncArrow: 'always',
+        },
+      ],
       'space-in-parens': 'error',
       'space-infix-ops': 'error',
-      
+
       // ===== ES6+ =====
       'arrow-body-style': ['error', 'as-needed'],
       'arrow-parens': ['error', 'always'],
       'no-duplicate-imports': 'error',
       'no-useless-constructor': 'error',
       'prefer-arrow-callback': 'warn',
-      'prefer-destructuring': ['warn', {
-        array: false,
-        object: true,
-      }],
+      'prefer-destructuring': [
+        'warn',
+        {
+          array: false,
+          object: true,
+        },
+      ],
       'prefer-rest-params': 'error',
       'prefer-spread': 'error',
       'prefer-template': 'warn',
       'template-curly-spacing': 'error',
-      
+
       // ===== PRETTIER INTEGRATION =====
       'prettier/prettier': 'error',
     },
   },
-  
+
   // Test files configuration
   {
     files: ['tests/**/*.js', '**/*.test.js', '**/*.spec.js'],
@@ -157,7 +166,7 @@ export default [
       'no-unused-expressions': 'off',
     },
   },
-  
+
   // Ignore patterns
   {
     ignores: [

@@ -135,3 +135,6 @@ diagnose.sh
 !VALIDATE.sh
 !enterprise-benchmark.sh
 !.github/
+
+# Vite build cache
+.vite

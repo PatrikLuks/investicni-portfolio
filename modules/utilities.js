@@ -2,12 +2,23 @@
  * UTILITIES MODULE
  * Shared utility functions for export, import, and data operations
  * Investment Portfolio Manager Pro v3.1.0
+ * @module utilities
+ */
+
+/**
+ * @typedef {Object} FundData
+ * @property {string} name - Fund name
+ * @property {string} producer - Fund producer
+ * @property {number} investment - Investment amount
+ * @property {number} value - Current value
+ * @property {string} investmentDate - Investment date (YYYY-MM-DD)
  */
 
 /**
  * Generate CSV export file from portfolio data
- * @param {Array} data - Portfolio data to export
- * @param {string} clientName - Client name for filename
+ * @param {FundData[]} data - Portfolio data to export
+ * @param {string} [clientName='client'] - Client name for filename
+ * @returns {void}
  */
 export function generateCSV(data, clientName = 'client') {
   // Check if currency switch is enabled

@@ -168,7 +168,7 @@ function updateProviderStatus() {
         ${provider.hasApiKey ? ' • API Key Configured' : ''}
       </span>
     </div>
-  `
+  `,
     )
     .join('');
 }
@@ -377,7 +377,7 @@ function createSymbolSearchInput(inputElement) {
           <span class="result-name">${result.name}</span>
           <span class="result-type">${result.type}</span>
         </div>
-      `
+      `,
         )
         .join('');
 

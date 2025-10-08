@@ -22,7 +22,9 @@ class CommandStack {
   }
 
   execute(command) {
-    if (this.isExecuting) {return;} // Prevent nested execution
+    if (this.isExecuting) {
+      return;
+    } // Prevent nested execution
 
     this.isExecuting = true;
 
@@ -165,7 +167,9 @@ class CommandStack {
 
   updateHistoryTimeline() {
     const timeline = document.getElementById('historyTimeline');
-    if (!timeline) {return;}
+    if (!timeline) {
+      return;
+    }
 
     timeline.innerHTML = '';
 
@@ -189,7 +193,9 @@ class CommandStack {
   }
 
   jumpToIndex(targetIndex) {
-    if (targetIndex < 0 || targetIndex >= this.history.length) {return;}
+    if (targetIndex < 0 || targetIndex >= this.history.length) {
+      return;
+    }
 
     while (this.currentIndex > targetIndex) {
       this.undo();
@@ -204,9 +210,15 @@ class CommandStack {
     const now = new Date();
     const diff = now - date;
 
-    if (diff < 60000) {return 'Právě teď';}
-    if (diff < 3600000) {return `${Math.floor(diff / 60000)} min. zpět`;}
-    if (diff < 86400000) {return `${Math.floor(diff / 3600000)} hod. zpět`;}
+    if (diff < 60000) {
+      return 'Právě teď';
+    }
+    if (diff < 3600000) {
+      return `${Math.floor(diff / 60000)} min. zpět`;
+    }
+    if (diff < 86400000) {
+      return `${Math.floor(diff / 3600000)} hod. zpět`;
+    }
     return date.toLocaleString('cs-CZ');
   }
 }
@@ -216,18 +228,30 @@ class AddFondCommand extends Command {
   constructor(fondData) {
     const execute = () => {
       portfolioData.push(fondData);
-      if (typeof updateFondTable === 'function') {updateFondTable();}
-      if (typeof updateDashboard === 'function') {updateDashboard();}
-      if (typeof storage !== 'undefined') {storage.saveData(portfolioData);}
+      if (typeof updateFondTable === 'function') {
+        updateFondTable();
+      }
+      if (typeof updateDashboard === 'function') {
+        updateDashboard();
+      }
+      if (typeof storage !== 'undefined') {
+        storage.saveData(portfolioData);
+      }
     };
 
     const undo = () => {
       const index = portfolioData.findIndex((f) => f === fondData);
       if (index > -1) {
         portfolioData.splice(index, 1);
-        if (typeof updateFondTable === 'function') {updateFondTable();}
-        if (typeof updateDashboard === 'function') {updateDashboard();}
-        if (typeof storage !== 'undefined') {storage.saveData(portfolioData);}
+        if (typeof updateFondTable === 'function') {
+          updateFondTable();
+        }
+        if (typeof updateDashboard === 'function') {
+          updateDashboard();
+        }
+        if (typeof storage !== 'undefined') {
+          storage.saveData(portfolioData);
+        }
       }
     };
 
@@ -242,16 +266,28 @@ class DeleteFondCommand extends Command {
 
     const execute = () => {
       portfolioData.splice(index, 1);
-      if (typeof updateFondTable === 'function') {updateFondTable();}
-      if (typeof updateDashboard === 'function') {updateDashboard();}
-      if (typeof storage !== 'undefined') {storage.saveData(portfolioData);}
+      if (typeof updateFondTable === 'function') {
+        updateFondTable();
+      }
+      if (typeof updateDashboard === 'function') {
+        updateDashboard();
+      }
+      if (typeof storage !== 'undefined') {
+        storage.saveData(portfolioData);
+      }
     };
 
     const undo = () => {
       portfolioData.splice(index, 0, fondData);
-      if (typeof updateFondTable === 'function') {updateFondTable();}
-      if (typeof updateDashboard === 'function') {updateDashboard();}
-      if (typeof storage !== 'undefined') {storage.saveData(portfolioData);}
+      if (typeof updateFondTable === 'function') {
+        updateFondTable();
+      }
+      if (typeof updateDashboard === 'function') {
+        updateDashboard();
+      }
+      if (typeof storage !== 'undefined') {
+        storage.saveData(portfolioData);
+      }
     };
 
     super(execute, undo, `Smazán fond: ${fondData.name}`);
@@ -264,16 +300,28 @@ class EditFondCommand extends Command {
   constructor(index, oldData, newData) {
     const execute = () => {
       portfolioData[index] = { ...newData };
-      if (typeof updateFondTable === 'function') {updateFondTable();}
-      if (typeof updateDashboard === 'function') {updateDashboard();}
-      if (typeof storage !== 'undefined') {storage.saveData(portfolioData);}
+      if (typeof updateFondTable === 'function') {
+        updateFondTable();
+      }
+      if (typeof updateDashboard === 'function') {
+        updateDashboard();
+      }
+      if (typeof storage !== 'undefined') {
+        storage.saveData(portfolioData);
+      }
     };
 
     const undo = () => {
       portfolioData[index] = { ...oldData };
-      if (typeof updateFondTable === 'function') {updateFondTable();}
-      if (typeof updateDashboard === 'function') {updateDashboard();}
-      if (typeof storage !== 'undefined') {storage.saveData(portfolioData);}
+      if (typeof updateFondTable === 'function') {
+        updateFondTable();
+      }
+      if (typeof updateDashboard === 'function') {
+        updateDashboard();
+      }
+      if (typeof storage !== 'undefined') {
+        storage.saveData(portfolioData);
+      }
     };
 
     super(execute, undo, `Upraven fond: ${newData.name}`);
@@ -293,18 +341,30 @@ class BulkDeleteCommand extends Command {
       fondsToDelete.forEach(({ index }) => {
         portfolioData.splice(index, 1);
       });
-      if (typeof updateFondTable === 'function') {updateFondTable();}
-      if (typeof updateDashboard === 'function') {updateDashboard();}
-      if (typeof storage !== 'undefined') {storage.saveData(portfolioData);}
+      if (typeof updateFondTable === 'function') {
+        updateFondTable();
+      }
+      if (typeof updateDashboard === 'function') {
+        updateDashboard();
+      }
+      if (typeof storage !== 'undefined') {
+        storage.saveData(portfolioData);
+      }
     };
 
     const undo = () => {
       fondsToDelete.reverse().forEach(({ index, data }) => {
         portfolioData.splice(index, 0, data);
       });
-      if (typeof updateFondTable === 'function') {updateFondTable();}
-      if (typeof updateDashboard === 'function') {updateDashboard();}
-      if (typeof storage !== 'undefined') {storage.saveData(portfolioData);}
+      if (typeof updateFondTable === 'function') {
+        updateFondTable();
+      }
+      if (typeof updateDashboard === 'function') {
+        updateDashboard();
+      }
+      if (typeof storage !== 'undefined') {
+        storage.saveData(portfolioData);
+      }
     };
 
     super(execute, undo, `Smazáno ${indices.length} fondů`);
@@ -339,7 +399,9 @@ document.addEventListener('keydown', (e) => {
 // Create undo/redo UI buttons
 function createUndoRedoButtons() {
   const container = document.querySelector('.card h1');
-  if (!container) {return;}
+  if (!container) {
+    return;
+  }
 
   const buttonGroup = document.createElement('div');
   buttonGroup.style.cssText = `

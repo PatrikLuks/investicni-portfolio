@@ -97,7 +97,7 @@ class AdvancedChartsManager {
             position: 'right',
             labels: {
               generateLabels: (chart) => {
-                const data = chart.data;
+                const { data } = chart;
                 return data.labels.map((label, i) => ({
                   text: `${label}: ${this.formatCurrency(data.datasets[0].data[i])}`,
                   fillStyle: data.datasets[0].backgroundColor[i],
@@ -172,9 +172,7 @@ class AdvancedChartsManager {
           },
           tooltip: {
             callbacks: {
-              label: (context) => {
-                return `Hodnota: ${this.formatCurrency(context.parsed.y)}`;
-              },
+              label: (context) => `Hodnota: ${this.formatCurrency(context.parsed.y)}`,
             },
           },
           zoom: {
@@ -252,9 +250,7 @@ class AdvancedChartsManager {
           },
           tooltip: {
             callbacks: {
-              label: (context) => {
-                return `Hodnota: ${this.formatCurrency(context.parsed.x)}`;
-              },
+              label: (context) => `Hodnota: ${this.formatCurrency(context.parsed.x)}`,
             },
           },
         },
@@ -298,7 +294,7 @@ class AdvancedChartsManager {
             label: 'Zisk/Ztráta',
             data: profitLossData.map((item) => item.profitLoss),
             backgroundColor: profitLossData.map((item) =>
-              item.profitLoss >= 0 ? '#4caf50' : '#f44336'
+              item.profitLoss >= 0 ? '#4caf50' : '#f44336',
             ),
             borderWidth: 0,
           },
@@ -552,7 +548,9 @@ class AdvancedChartsManager {
    */
   showChartsPanel(data) {
     const panel = document.getElementById('charts-panel');
-    if (!panel) {return;}
+    if (!panel) {
+      return;
+    }
 
     panel.classList.remove('hidden');
 
@@ -591,14 +589,20 @@ if (document.readyState === 'loading') {
 
 function addChartsButton() {
   const portfolioCard = document.getElementById('portfolioCard');
-  if (!portfolioCard) {return;}
+  if (!portfolioCard) {
+    return;
+  }
 
   // Find button container
   const headerDiv = portfolioCard.querySelector('div[style*="justify-content: space-between"]');
-  if (!headerDiv) {return;}
+  if (!headerDiv) {
+    return;
+  }
 
   const buttonContainer = headerDiv.querySelector('div[style*="gap"]');
-  if (!buttonContainer) {return;}
+  if (!buttonContainer) {
+    return;
+  }
 
   // Add charts button
   const chartsBtn = document.createElement('button');

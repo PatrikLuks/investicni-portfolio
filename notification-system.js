@@ -239,13 +239,19 @@ class NotificationSystem {
   createNotificationUI() {
     // Add notification bell button
     const portfolioCard = document.getElementById('portfolioCard');
-    if (!portfolioCard) {return;}
+    if (!portfolioCard) {
+      return;
+    }
 
     const headerDiv = portfolioCard.querySelector('div[style*="justify-content: space-between"]');
-    if (!headerDiv) {return;}
+    if (!headerDiv) {
+      return;
+    }
 
     const buttonContainer = headerDiv.querySelector('div[style*="gap"]');
-    if (!buttonContainer) {return;}
+    if (!buttonContainer) {
+      return;
+    }
 
     const notifBtn = document.createElement('button');
     notifBtn.id = 'notificationBtn';
@@ -408,7 +414,9 @@ class NotificationSystem {
    */
   renderNotifications() {
     const container = document.getElementById('notificationsList');
-    if (!container) {return;}
+    if (!container) {
+      return;
+    }
 
     if (this.notifications.length === 0) {
       container.innerHTML = `
@@ -442,7 +450,7 @@ class NotificationSystem {
           <button onclick="event.stopPropagation(); window.notificationSystem.deleteNotification(${notif.id})" style="background: none; border: none; color: #999; cursor: pointer; font-size: 1rem; padding: 0;">×</button>
         </div>
       </div>
-    `
+    `,
       )
       .join('');
 
@@ -512,7 +520,9 @@ class NotificationSystem {
    */
   updateUnreadBadge() {
     const badge = document.getElementById('notificationBadge');
-    if (!badge) {return;}
+    if (!badge) {
+      return;
+    }
 
     if (this.unreadCount > 0) {
       badge.textContent = this.unreadCount > 99 ? '99+' : this.unreadCount;
@@ -569,7 +579,9 @@ class NotificationSystem {
    * Check if should show notification based on preferences
    */
   shouldShowNotification(category) {
-    if (!category) {return true;}
+    if (!category) {
+      return true;
+    }
     return this.preferences[category] !== false;
   }
 
@@ -580,7 +592,7 @@ class NotificationSystem {
     try {
       localStorage.setItem(
         'notifications',
-        JSON.stringify(this.notifications.slice(0, this.maxNotifications))
+        JSON.stringify(this.notifications.slice(0, this.maxNotifications)),
       );
     } catch (error) {
       console.error('Failed to save notifications:', error);
@@ -642,10 +654,18 @@ class NotificationSystem {
     const now = new Date();
     const diff = now - timestamp;
 
-    if (diff < 60000) {return 'Just now';}
-    if (diff < 3600000) {return `${Math.floor(diff / 60000)}m ago`;}
-    if (diff < 86400000) {return `${Math.floor(diff / 3600000)}h ago`;}
-    if (diff < 604800000) {return `${Math.floor(diff / 86400000)}d ago`;}
+    if (diff < 60000) {
+      return 'Just now';
+    }
+    if (diff < 3600000) {
+      return `${Math.floor(diff / 60000)}m ago`;
+    }
+    if (diff < 86400000) {
+      return `${Math.floor(diff / 3600000)}h ago`;
+    }
+    if (diff < 604800000) {
+      return `${Math.floor(diff / 86400000)}d ago`;
+    }
 
     return timestamp.toLocaleDateString('cs-CZ');
   }

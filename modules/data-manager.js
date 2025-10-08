@@ -1,10 +1,34 @@
 /**
  * DATA MANAGER MODULE
  * Handles data persistence, storage operations, and validation
+ * @module data-manager
  */
 
-// ==================== STORAGE & PERSISTENCE ====================
+/**
+ * @typedef {Object} ClientInfo
+ * @property {string} clientName - Client name
+ * @property {string} advisorName - Advisor name
+ * @property {string} advisorEmail - Advisor email
+ */
+
+/**
+ * @typedef {Object} FundData
+ * @property {string} name - Fund name
+ * @property {string} producer - Fund producer/provider
+ * @property {number} investment - Investment amount in CZK
+ * @property {number} value - Current value in CZK
+ * @property {string} investmentDate - Investment date (YYYY-MM-DD)
+ */
+
+/**
+ * Portfolio Storage Manager
+ * Handles localStorage operations for portfolio data
+ * @class
+ */
 class PortfolioStorage {
+  /**
+   * Initialize storage with keys
+   */
   constructor() {
     this.storageKey = 'portfolioData_v2';
     this.clientKey = 'portfolioClient_v2';
@@ -12,6 +36,11 @@ class PortfolioStorage {
     this.autosaveInterval = null;
   }
 
+  /**
+   * Save portfolio data to localStorage
+   * @param {FundData[]} data - Portfolio data array
+   * @returns {boolean} Success status
+   */
   saveData(data) {
     try {
       localStorage.setItem(this.storageKey, JSON.stringify(data));
@@ -26,6 +55,10 @@ class PortfolioStorage {
     }
   }
 
+  /**
+   * Load portfolio data from localStorage
+   * @returns {FundData[]} Portfolio data array (empty if not found)
+   */
   loadData() {
     try {
       const data = localStorage.getItem(this.storageKey);
@@ -36,6 +69,11 @@ class PortfolioStorage {
     }
   }
 
+  /**
+   * Save client information to localStorage
+   * @param {ClientInfo} client - Client information object
+   * @returns {boolean} Success status
+   */
   saveClient(client) {
     try {
       localStorage.setItem(this.clientKey, JSON.stringify(client));
@@ -46,6 +84,10 @@ class PortfolioStorage {
     }
   }
 
+  /**
+   * Load client information from localStorage
+   * @returns {ClientInfo|null} Client info or null if not found
+   */
   loadClient() {
     try {
       const client = localStorage.getItem(this.clientKey);
@@ -56,6 +98,10 @@ class PortfolioStorage {
     }
   }
 
+  /**
+   * Clear all stored data (portfolio, client, timestamps)
+   * @returns {boolean} Success status
+   */
   clearAll() {
     try {
       localStorage.removeItem(this.storageKey);
@@ -69,6 +115,11 @@ class PortfolioStorage {
     }
   }
 
+  /**
+   * Start autosave interval
+   * @param {Function} callback - Function to call on autosave trigger
+   * @returns {void}
+   */
   startAutosave(callback) {
     if (this.autosaveInterval) {
       clearInterval(this.autosaveInterval);
@@ -80,6 +131,10 @@ class PortfolioStorage {
     }, 30000); // 30 seconds
   }
 
+  /**
+   * Stop autosave interval
+   * @returns {void}
+   */
   stopAutosave() {
     if (this.autosaveInterval) {
       clearInterval(this.autosaveInterval);
@@ -87,6 +142,11 @@ class PortfolioStorage {
     }
   }
 
+  /**
+   * Update last save time display in UI
+   * @param {string} isoString - ISO date string
+   * @returns {void}
+   */
   updateLastSaveDisplay(isoString) {
     const date = new Date(isoString);
     const timeStr = date.toLocaleTimeString('cs-CZ', {
@@ -108,6 +168,10 @@ class PortfolioStorage {
     }
   }
 
+  /**
+   * Get last save timestamp from localStorage
+   * @returns {Date|null} Last save date or null
+   */
   getLastSaveTime() {
     const lastSave = localStorage.getItem(this.lastSaveKey);
     return lastSave ? new Date(lastSave) : null;
@@ -115,6 +179,13 @@ class PortfolioStorage {
 }
 
 // ==================== VALIDATION FUNCTIONS ====================
+
+/**
+ * Parse value to number with fallback
+ * @param {string|number} value - Value to parse
+ * @param {number} [defaultValue=0] - Default fallback value
+ * @returns {number} Parsed number or default
+ */
 function parseSafeNumber(value, defaultValue = 0) {
   if (value === null || value === undefined || value === '') {
     return defaultValue;
@@ -124,6 +195,15 @@ function parseSafeNumber(value, defaultValue = 0) {
   return isNaN(parsed) ? defaultValue : parsed;
 }
 
+/**
+ * Validate fund data fields
+ * @param {Object} data - Fund data to validate
+ * @param {string} data.name - Fund name
+ * @param {string} data.producer - Fund producer/manager
+ * @param {number|string} data.investment - Investment amount
+ * @param {number|string} data.value - Current value
+ * @returns {string[]} Array of error messages (empty if valid)
+ */
 function validateFundData(data) {
   const errors = [];
 
@@ -149,6 +229,13 @@ function validateFundData(data) {
 }
 
 // ==================== UTILITY FUNCTIONS ====================
+
+/**
+ * Create debounced function that delays execution
+ * @param {Function} func - Function to debounce
+ * @param {number} wait - Delay in milliseconds
+ * @returns {Function} Debounced function
+ */
 function debounce(func, wait) {
   let timeout;
   return function executedFunction(...args) {

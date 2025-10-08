@@ -1,11 +1,27 @@
 /**
- * PORTFOLIO CALCULATOR MODULE
+ * @module portfolio-calculator
  * Business logic for portfolio calculations and metrics
+ *
+ * @typedef {import('./data-manager.js').FundData} FundData
+ * @typedef {Object} PortfolioMetrics
+ * @property {number} totalInvestment - Total invested amount
+ * @property {number} totalValue - Total current value
+ * @property {number} totalProfit - Total profit/loss
+ * @property {number} totalYield - Total yield percentage
+ * @property {FundData & {yield: number}} bestFund - Best performing fund
+ * @property {FundData & {yield: number}} worstFund - Worst performing fund
+ * @property {number} averageYield - Average yield across all funds
  */
 
 import { parseSafeNumber } from './data-manager.js';
 
 // ==================== PORTFOLIO CALCULATIONS ====================
+
+/**
+ * Calculate comprehensive portfolio metrics
+ * @param {FundData[]} portfolioData - Array of fund data
+ * @returns {PortfolioMetrics} Calculated metrics
+ */
 function calculatePortfolioMetrics(portfolioData) {
   if (!portfolioData || portfolioData.length === 0) {
     return {
@@ -66,6 +82,12 @@ function calculatePortfolioMetrics(portfolioData) {
 }
 
 // ==================== FUND YIELD CALCULATION ====================
+
+/**
+ * Calculate yield percentage for single fund
+ * @param {FundData} fund - Fund data object
+ * @returns {number} Yield percentage
+ */
 function calculateFundYield(fund) {
   const investment = parseSafeNumber(fund.investment);
   const value = parseSafeNumber(fund.value);
@@ -114,6 +136,12 @@ function calculateDiversification(portfolioData) {
 }
 
 // ==================== PRODUCER AGGREGATION ====================
+
+/**
+ * Aggregate portfolio data by producer/manager
+ * @param {FundData[]} portfolioData - Array of fund data
+ * @returns {Array<Object>} Aggregated data by producer
+ */
 function aggregateByProducer(portfolioData) {
   if (!portfolioData || portfolioData.length === 0) {
     return [];
@@ -154,6 +182,14 @@ function aggregateByProducer(portfolioData) {
 }
 
 // ==================== SORTING & FILTERING ====================
+
+/**
+ * Sort funds by column and direction
+ * @param {FundData[]} funds - Array of funds to sort
+ * @param {string} column - Column name to sort by
+ * @param {'asc'|'desc'} [direction='asc'] - Sort direction
+ * @returns {FundData[]} Sorted array
+ */
 function sortFunds(funds, column, direction = 'asc') {
   const sorted = [...funds];
 
@@ -188,6 +224,12 @@ function sortFunds(funds, column, direction = 'asc') {
   return sorted;
 }
 
+/**
+ * Filter funds by search query (name or producer)
+ * @param {FundData[]} funds - Array of funds to filter
+ * @param {string} searchQuery - Search query string
+ * @returns {FundData[]} Filtered array
+ */
 function filterFunds(funds, searchQuery) {
   if (!searchQuery || searchQuery.trim() === '') {
     return funds;

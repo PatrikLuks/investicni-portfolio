@@ -98,7 +98,9 @@ class MarketDataFeed {
    * @param {Function} callback - Update callback
    */
   subscribe(symbol, callback) {
-    if (!symbol) {return;}
+    if (!symbol) {
+      return;
+    }
 
     this.subscriptions.add(symbol.toUpperCase());
 
@@ -135,7 +137,7 @@ class MarketDataFeed {
     window.dispatchEvent(
       new CustomEvent('market-data-update', {
         detail: { symbol, data },
-      })
+      }),
     );
   }
 
@@ -174,13 +176,19 @@ class MarketDataFeed {
   createMarketDataUI() {
     // Add market data button
     const portfolioCard = document.getElementById('portfolioCard');
-    if (!portfolioCard) {return;}
+    if (!portfolioCard) {
+      return;
+    }
 
     const headerDiv = portfolioCard.querySelector('div[style*="justify-content: space-between"]');
-    if (!headerDiv) {return;}
+    if (!headerDiv) {
+      return;
+    }
 
     const buttonContainer = headerDiv.querySelector('div[style*="gap"]');
-    if (!buttonContainer) {return;}
+    if (!buttonContainer) {
+      return;
+    }
 
     const marketBtn = document.createElement('button');
     marketBtn.id = 'marketDataBtn';
@@ -366,7 +374,9 @@ class MarketDataFeed {
    */
   renderSearchResults(suggestions) {
     const list = document.getElementById('marketDataList');
-    if (!list) {return;}
+    if (!list) {
+      return;
+    }
 
     if (suggestions.length === 0) {
       list.innerHTML = `
@@ -396,7 +406,7 @@ class MarketDataFeed {
         <div style="font-weight: 600; color: #333;">${symbol}</div>
         <div style="font-size: 0.85rem; color: #666;">Click to add to watchlist</div>
       </div>
-    `
+    `,
       )
       .join('');
   }
@@ -418,7 +428,9 @@ class MarketDataFeed {
    */
   renderWatchlist() {
     const list = document.getElementById('marketDataList');
-    if (!list) {return;}
+    if (!list) {
+      return;
+    }
 
     if (this.subscriptions.size === 0) {
       list.innerHTML = `
@@ -504,7 +516,9 @@ class MarketDataFeed {
    */
   updatePriceInUI(symbol, data) {
     const card = document.getElementById(`price-${symbol}`);
-    if (!card) {return;}
+    if (!card) {
+      return;
+    }
 
     const isPositive = data.change >= 0;
     const color = isPositive ? '#2ecc71' : '#e74c3c';
@@ -562,9 +576,9 @@ class MarketDataFeed {
    */
   formatVolume(volume) {
     if (volume >= 1000000) {
-      return `${(volume / 1000000).toFixed(1) }M`;
+      return `${(volume / 1000000).toFixed(1)}M`;
     } else if (volume >= 1000) {
-      return `${(volume / 1000).toFixed(1) }K`;
+      return `${(volume / 1000).toFixed(1)}K`;
     }
     return volume.toString();
   }

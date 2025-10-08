@@ -220,9 +220,11 @@ class ModuleLoader {
     // Click-based triggers
     document.addEventListener('click', (e) => {
       const target = e.target.closest('[data-feature]');
-      if (!target) {return;}
+      if (!target) {
+        return;
+      }
 
-      const feature = target.dataset.feature;
+      const { feature } = target.dataset;
       if (this.ON_DEMAND_MODULES[feature]) {
         this.loadFeature(feature);
       }
@@ -242,10 +244,14 @@ class ModuleLoader {
    */
   async loadFeature(featureName) {
     const modules = this.ON_DEMAND_MODULES[featureName];
-    if (!modules) {return;}
+    if (!modules) {
+      return;
+    }
 
     const unloaded = modules.filter((m) => !this.loaded.has(m));
-    if (unloaded.length === 0) {return;} // Already loaded
+    if (unloaded.length === 0) {
+      return;
+    } // Already loaded
 
     console.log(`🔄 Loading feature: ${featureName}`);
 

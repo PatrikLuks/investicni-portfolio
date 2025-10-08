@@ -159,7 +159,8 @@ class MarketDataService {
         price: quote.regularMarketPrice,
         previousClose: quote.previousClose,
         change: quote.regularMarketPrice - quote.previousClose,
-        changePercent: ((quote.regularMarketPrice - quote.previousClose) / quote.previousClose) * 100,
+        changePercent:
+          ((quote.regularMarketPrice - quote.previousClose) / quote.previousClose) * 100,
         volume: quote.regularMarketVolume,
         marketState: quote.marketState,
         currency: quote.currency,
@@ -288,7 +289,7 @@ class MarketDataService {
       this.getQuote(symbol).catch((error) => ({
         symbol,
         error: error.message,
-      }))
+      })),
     );
 
     return Promise.all(promises);
@@ -376,7 +377,7 @@ class AutoUpdateService {
       window.dispatchEvent(
         new CustomEvent('marketDataUpdate', {
           detail: { quotes },
-        })
+        }),
       );
 
       // Show notification

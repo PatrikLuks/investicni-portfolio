@@ -1,9 +1,18 @@
 /**
- * UI MANAGER MODULE
+ * @module ui-manager
  * Handles UI interactions, dialogs, notifications, and visual feedback
  */
 
 // ==================== TOAST NOTIFICATIONS ====================
+
+/**
+ * Show toast notification
+ * @param {'success'|'error'|'warning'|'info'} type - Toast type
+ * @param {string} title - Toast title
+ * @param {string} message - Toast message
+ * @param {number} [duration=4000] - Duration in milliseconds
+ * @returns {void}
+ */
 function showToast(type, title, message, duration = 4000) {
   const container = document.getElementById('toastContainer');
   if (!container) {
@@ -38,6 +47,15 @@ function showToast(type, title, message, duration = 4000) {
 }
 
 // ==================== CONFIRMATION DIALOG ====================
+
+/**
+ * Show confirmation dialog with callbacks
+ * @param {string} title - Dialog title
+ * @param {string} message - Dialog message
+ * @param {Function} onConfirm - Callback on confirm
+ * @param {Function} [onCancel] - Callback on cancel
+ * @returns {void}
+ */
 function showConfirmDialog(title, message, onConfirm, onCancel) {
   const overlay = document.createElement('div');
   overlay.className = 'confirm-overlay';
@@ -90,7 +108,17 @@ function showConfirmDialog(title, message, onConfirm, onCancel) {
 }
 
 // ==================== LOADING OVERLAY ====================
+
+/**
+ * Show loading overlay
+ * @returns {void}
+ */
 function showLoading() {
+  // Prevent duplicate overlays
+  if (document.getElementById('loadingOverlay')) {
+    return;
+  }
+  
   const overlay = document.createElement('div');
   overlay.className = 'loading-overlay';
   overlay.id = 'loadingOverlay';
@@ -98,6 +126,10 @@ function showLoading() {
   document.body.appendChild(overlay);
 }
 
+/**
+ * Hide loading overlay
+ * @returns {void}
+ */
 function hideLoading() {
   const overlay = document.getElementById('loadingOverlay');
   if (overlay) {
@@ -106,6 +138,13 @@ function hideLoading() {
 }
 
 // ==================== CHART EXPORT ====================
+
+/**
+ * Export chart canvas to PNG file
+ * @param {HTMLElement} chartElement - Chart container element
+ * @param {string} [filename='chart.png'] - Output filename
+ * @returns {void}
+ */
 function exportChartAsPNG(chartElement, filename = 'chart.png') {
   try {
     const canvas = chartElement.querySelector('canvas');
@@ -124,8 +163,13 @@ function exportChartAsPNG(chartElement, filename = 'chart.png') {
 }
 
 // ==================== BULK SELECTION UI ====================
+/** @type {Set<number>} */
 const selectedRows = new Set();
 
+/**
+ * Update bulk actions bar visibility and count
+ * @returns {void}
+ */
 function updateBulkActionsBar() {
   const bar = document.getElementById('bulkActionsBar');
   const count = document.getElementById('selectedCount');
@@ -136,6 +180,12 @@ function updateBulkActionsBar() {
   }
 }
 
+/**
+ * Toggle row selection state
+ * @param {number} index - Row index
+ * @param {boolean} checked - Checked state
+ * @returns {void}
+ */
 function toggleRowSelection(index, checked) {
   if (checked) {
     selectedRows.add(index);
@@ -145,24 +195,48 @@ function toggleRowSelection(index, checked) {
   updateBulkActionsBar();
 }
 
-function selectAllRows(checked) {
+/**
+ * Select or deselect all rows
+ * @param {boolean} checked - Select all if true
+ * @param {Array} portfolioData - Portfolio data array
+ * @returns {void}
+ */
+function selectAllRows(checked, portfolioData = []) {
   selectedRows.clear();
-  if (checked && window.portfolioData) {
-    window.portfolioData.forEach((_, index) => selectedRows.add(index));
+  if (checked && portfolioData) {
+    portfolioData.forEach((_, index) => selectedRows.add(index));
   }
   updateBulkActionsBar();
 }
 
+/**
+ * Get set of selected row indexes
+ * @returns {Set<number>} Selected row indexes
+ */
 function getSelectedRows() {
   return selectedRows;
 }
 
+/**
+ * Clear all row selections
+ * @returns {void}
+ */
 function clearSelectedRows() {
   selectedRows.clear();
   updateBulkActionsBar();
 }
 
 // ==================== ANIMATIONS ====================
+
+/**
+ * Animate numeric value with easing
+ * @param {string} elementId - Target element ID
+ * @param {number} start - Start value
+ * @param {number} end - End value
+ * @param {number} duration - Duration in milliseconds
+ * @param {boolean} [isCurrency=false] - Format as currency
+ * @returns {void}
+ */
 function animateValue(elementId, start, end, duration, isCurrency = false) {
   const element = document.getElementById(elementId);
   if (!element) {
