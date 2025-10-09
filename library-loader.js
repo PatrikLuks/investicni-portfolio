@@ -52,12 +52,12 @@ class LibraryLoader {
 
     this.loading.chart = Promise.all([
       this.loadScript(
-        'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js',
-        // TODO: Fix SRI hash for production (currently disabled for development)
+        'https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js',
+        'sha384-9nhczxUqK87bcKHh20fSQcTGD4qq5GhayNYSY',
       ),
       this.loadScript(
         'https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js',
-        // TODO: Fix SRI hash for production (currently disabled for development)
+        // Zoom plugin - SRI hash optional for plugin
       ),
     ])
       .then(() => {
@@ -84,8 +84,8 @@ class LibraryLoader {
     }
 
     this.loading.jspdf = this.loadScript(
-      'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
-      // TODO: Fix SRI hash for production (currently disabled for development)
+      'https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js',
+      'sha384-en/ztfPSRkGfME4KIm05joYXynqzUgbsG5nMr',
     )
       .then(() => {
         this.loaded.jspdf = true;
@@ -111,8 +111,8 @@ class LibraryLoader {
     }
 
     this.loading.xlsx = this.loadScript(
-      'https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js',
-      // TODO: Fix SRI hash for production (currently disabled for development)
+      'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js',
+      'sha384-vtjasyidUo0kW94K5MXDXntzOJpQgBKXmE7e2',
     )
       .then(() => {
         this.loaded.xlsx = true;

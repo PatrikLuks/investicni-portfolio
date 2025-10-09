@@ -1,6 +1,6 @@
 {
   "name": "portfolio-manager-pro",
-  "version": "3.1.0",
+  "version": "3.2.1",
   "description": "Premium investment portfolio management application with dark mode, real-time market data, multi-portfolio support, and advanced analytics",
   "type": "module",
   "main": "main.js",
