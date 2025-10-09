@@ -71,7 +71,7 @@ function setupClientFormHandler(storage, updateDashboard, showToast, initColorPi
     // Toggle visibility
     document.getElementById('clientNameCard').classList.add('hidden');
     document.getElementById('portfolioCard').classList.remove('hidden');
-    document.getElementById('fundListCard').classList.remove('hidden');
+    document.getElementById('fondListCard').classList.remove('hidden');
     document.getElementById('clientNameDisplay').textContent = clientName;
 
     if (portfolioData.length > 0) {

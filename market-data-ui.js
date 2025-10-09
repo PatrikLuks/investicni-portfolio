@@ -146,7 +146,10 @@ function saveApiSettings() {
     window.autoUpdateService.stop();
   }
 
-  showToast('API settings saved successfully', 'success');
+  window.notificationSystem.showNotification('API Settings Saved', {
+    body: 'API settings saved successfully',
+    category: 'success'
+  });
   closeApiSettingsModal();
 }
 
@@ -220,7 +223,10 @@ function startAutoUpdate() {
   const symbols = getPortfolioSymbols();
 
   if (symbols.length === 0) {
-    showToast('No symbols to update', 'warning');
+    window.notificationSystem.showNotification('No Symbols', {
+      body: 'No symbols to update',
+      category: 'warning'
+    });
     return;
   }
 
@@ -243,7 +249,10 @@ async function refreshMarketData() {
   const symbols = getPortfolioSymbols();
 
   if (symbols.length === 0) {
-    showToast('No investments to update', 'warning');
+    window.notificationSystem.showNotification('No Investments', {
+      body: 'No investments to update',
+      category: 'warning'
+    });
     return;
   }
 
@@ -256,10 +265,16 @@ async function refreshMarketData() {
     updatePortfolioWithQuotes(quotes);
 
     updateMarketDataStatus(quotes, 'Updated');
-    showToast(`Updated ${quotes.length} symbols`, 'success');
+    window.notificationSystem.showNotification('Market Data Updated', {
+      body: `Updated ${quotes.length} symbols`,
+      category: 'success'
+    });
   } catch (error) {
     updateMarketDataStatus(null, 'Error');
-    showToast(`Update failed: ${error.message}`, 'error');
+    window.notificationSystem.showNotification('Update Failed', {
+      body: `Update failed: ${error.message}`,
+      category: 'error'
+    });
   }
 }
 

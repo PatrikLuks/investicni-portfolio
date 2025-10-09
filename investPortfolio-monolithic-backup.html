@@ -1605,7 +1605,7 @@
         window.addEventListener('load', () => {
           // Register V3 service worker with aggressive caching
           navigator.serviceWorker
-            .register('./service-worker-v3.js')
+            .register('./service-worker.js')
             .then((registration) => {
               console.log('✅ SW V3: Registered (ultra-optimized):', registration.scope);
 

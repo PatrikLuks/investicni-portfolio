@@ -16,16 +16,8 @@
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
     <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
     <link rel="dns-prefetch" href="https://cdn.sheetjs.com" />
-    <link rel="dns-prefetch" href="https://query1.finance.yahoo.com" />
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
-    
-    <!-- 🚀 CRITICAL: Preload main modules for faster startup -->
-    <link rel="modulepreload" href="./main.js" />
-    <link rel="modulepreload" href="./modules/app-core.js" />
-    <link rel="modulepreload" href="./modules/data-manager.js" />
-    <link rel="modulepreload" href="./modules/ui-manager.js" />
-    <link rel="preload" href="./modules/refactored-styles.css" as="style" />
 
     <!-- Security Headers -->
     <meta
@@ -73,9 +65,6 @@
     
     <!-- ⚡ REFACTORED MODULAR STYLES (replaces inline styles) -->
     <link rel="stylesheet" href="modules/refactored-styles.css" />
-    
-    <!-- 🆘 HELP SYSTEM - User Guide & Onboarding -->
-    <link rel="stylesheet" href="help-system.css" />
     
     <style>
       :root {
@@ -1296,38 +1285,6 @@
       "
     >
       🌙
-    </button>
-
-    <!-- Help Button (Enhanced by help-system.js) -->
-    <button
-      id="helpButton"
-      class="help-button"
-      aria-label="Nápověda"
-      style="
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        width: 56px;
-        height: 56px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-        color: white;
-        border: none;
-        cursor: pointer;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        z-index: 999;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s ease;
-        opacity: 0.9;
-      "
-    >
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10"></circle>
-        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
-        <line x1="12" y1="17" x2="12.01" y2="17"></line>
-      </svg>
     </button>
 
     <div class="container">

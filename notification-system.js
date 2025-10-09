@@ -440,7 +440,7 @@ class NotificationSystem {
         cursor: pointer;
         transition: background 0.2s;
         ${notif.read ? 'opacity: 0.6;' : 'background: #f8f9fa;'}
-      " onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='${notif.read ? 'white' : '#f8f9fa'}'">
+      ">
         <div style="display: flex; justify-content: space-between; align-items: start; gap: 12px;">
           <div style="flex: 1;">
             <div style="font-weight: 600; color: #333; margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
@@ -453,17 +453,7 @@ class NotificationSystem {
           <button class="delete-notif-btn" data-notif-id="${notif.id}" style="background: none; border: none; color: #999; cursor: pointer; font-size: 1rem; padding: 0;">×</button>
         </div>
       </div>
-    `;
-    
-    // Add event listener for delete button
-    item.querySelector('.delete-notif-btn').addEventListener('click', (e) => {
-      e.stopPropagation();
-      const notifId = parseInt(e.target.dataset.notifId);
-      window.notificationSystem.deleteNotification(notifId);
-    });
-    
-    return item.outerHTML;
-    `,
+    `
       )
       .join('');
 
@@ -714,4 +704,4 @@ notificationStyle.textContent = `
 `;
 document.head.appendChild(notificationStyle);
 
-console.log('✅ Notification System loaded');
+console.log('Notification System loaded');

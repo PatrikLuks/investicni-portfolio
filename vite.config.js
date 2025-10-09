@@ -22,6 +22,9 @@ export default defineConfig({
     cors: true,
     hmr: {
       overlay: true,
+      protocol: 'ws',
+      host: 'localhost',
+      port: 3000,
     },
   },
 
