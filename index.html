@@ -1648,7 +1648,9 @@
       }
 
       // ==================== PWA SERVICE WORKER REGISTRATION (V3 Ultra-Optimized) ====================
-      if ('serviceWorker' in navigator) {
+      // 🔧 DEVELOPMENT: Service Worker temporarily disabled to avoid cache issues
+      // Re-enable for production by removing the '&& false' condition below
+      if ('serviceWorker' in navigator && false) {
         window.addEventListener('load', () => {
           // Register V3 service worker with aggressive caching
           navigator.serviceWorker
