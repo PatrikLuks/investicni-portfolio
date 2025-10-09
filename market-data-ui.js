@@ -148,7 +148,7 @@ function saveApiSettings() {
 
   window.notificationSystem.showNotification('API Settings Saved', {
     body: 'API settings saved successfully',
-    category: 'success'
+    category: 'success',
   });
   closeApiSettingsModal();
 }
@@ -225,7 +225,7 @@ function startAutoUpdate() {
   if (symbols.length === 0) {
     window.notificationSystem.showNotification('No Symbols', {
       body: 'No symbols to update',
-      category: 'warning'
+      category: 'warning',
     });
     return;
   }
@@ -251,7 +251,7 @@ async function refreshMarketData() {
   if (symbols.length === 0) {
     window.notificationSystem.showNotification('No Investments', {
       body: 'No investments to update',
-      category: 'warning'
+      category: 'warning',
     });
     return;
   }
@@ -267,13 +267,13 @@ async function refreshMarketData() {
     updateMarketDataStatus(quotes, 'Updated');
     window.notificationSystem.showNotification('Market Data Updated', {
       body: `Updated ${quotes.length} symbols`,
-      category: 'success'
+      category: 'success',
     });
   } catch (error) {
     updateMarketDataStatus(null, 'Error');
     window.notificationSystem.showNotification('Update Failed', {
       body: `Update failed: ${error.message}`,
-      category: 'error'
+      category: 'error',
     });
   }
 }
@@ -429,23 +429,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Add event delegation for all UI buttons
   document.addEventListener('click', (e) => {
-    const target = e.target;
-    
+    const { target } = e;
+
     // Modal close buttons
     if (target.classList.contains('modal-close-btn') || target.dataset.action === 'close') {
       closeApiSettingsModal();
     }
-    
+
     // Save settings button
     if (target.classList.contains('save-settings-btn') || target.dataset.action === 'save') {
       saveApiSettings();
     }
-    
+
     // Refresh button
     if (target.classList.contains('refresh-btn') || target.dataset.action === 'refresh') {
       refreshMarketData();
     }
-    
+
     // Open settings button
     if (target.classList.contains('open-settings-btn') || target.dataset.action === 'open') {
       openApiSettingsModal();
@@ -459,4 +459,3 @@ window.closeApiSettingsModal = closeApiSettingsModal;
 window.saveApiSettings = saveApiSettings;
 window.refreshMarketData = refreshMarketData;
 window.searchSymbol = searchSymbol;
-

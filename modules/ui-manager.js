@@ -118,7 +118,7 @@ function showLoading() {
   if (document.getElementById('loadingOverlay')) {
     return;
   }
-  
+
   const overlay = document.createElement('div');
   overlay.className = 'loading-overlay';
   overlay.id = 'loadingOverlay';

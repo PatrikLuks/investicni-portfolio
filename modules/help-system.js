@@ -24,7 +24,7 @@ export function initializeHelpSystem() {
 function createHelpButton() {
   // Check if button already exists in HTML
   let helpBtn = document.getElementById('helpButton');
-  
+
   if (helpBtn) {
     // Button exists - just enhance it with event listener
     helpBtn.addEventListener('click', () => showHelpModal());
@@ -40,7 +40,7 @@ function createHelpButton() {
     });
     return;
   }
-  
+
   // Fallback: Create button if not present (backward compatibility)
   helpBtn = document.createElement('button');
   helpBtn.id = 'helpButton';

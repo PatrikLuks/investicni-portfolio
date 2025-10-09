@@ -111,7 +111,9 @@ class ErrorHandler {
 
   shouldNotifyUser(errorInfo) {
     // Don't spam user with too many errors
-    if (this.recentErrors.length > 5) {return false;}
+    if (this.recentErrors.length > 5) {
+      return false;
+    }
 
     // Critical errors should always be shown
     const criticalKeywords = ['cannot read', 'undefined', 'null', 'network', 'fetch'];
@@ -130,7 +132,9 @@ class ErrorHandler {
 
   showErrorUI(errorEntry) {
     const existingError = document.getElementById('error-notification');
-    if (existingError) {return;} // Don't show multiple
+    if (existingError) {
+      return;
+    } // Don't show multiple
 
     const errorDiv = document.createElement('div');
     errorDiv.id = 'error-notification';
@@ -181,8 +185,12 @@ class ErrorHandler {
     // Add event listeners (secure - no inline handlers)
     const recoverBtn = errorDiv.querySelector('.error-recover-btn');
     const dismissBtn = errorDiv.querySelector('.error-dismiss-btn');
-    if (recoverBtn) recoverBtn.addEventListener('click', () => window.errorHandler.tryRecover());
-    if (dismissBtn) dismissBtn.addEventListener('click', () => errorDiv.remove());
+    if (recoverBtn) {
+      recoverBtn.addEventListener('click', () => window.errorHandler.tryRecover());
+    }
+    if (dismissBtn) {
+      dismissBtn.addEventListener('click', () => errorDiv.remove());
+    }
 
     // Auto-remove after 10 seconds
     setTimeout(() => {
@@ -275,7 +283,9 @@ ${this.errors
     // Add event listeners
     const reloadBtn = stormDiv.querySelector('.reload-btn');
     const clearReloadBtn = stormDiv.querySelector('.clear-reload-btn');
-    if (reloadBtn) reloadBtn.addEventListener('click', () => window.location.reload());
+    if (reloadBtn) {
+      reloadBtn.addEventListener('click', () => window.location.reload());
+    }
     if (clearReloadBtn) {
       clearReloadBtn.addEventListener('click', () => {
         localStorage.clear();
@@ -289,7 +299,9 @@ ${this.errors
 
     // Remove error notification
     const notification = document.getElementById('error-notification');
-    if (notification) {notification.remove();}
+    if (notification) {
+      notification.remove();
+    }
 
     // Try to reload data
     if (typeof storage !== 'undefined' && storage.loadData) {
@@ -300,8 +312,12 @@ ${this.errors
           portfolioData.push(...data);
         }
 
-        if (typeof updateFondTable === 'function') {updateFondTable();}
-        if (typeof updateDashboard === 'function') {updateDashboard();}
+        if (typeof updateFondTable === 'function') {
+          updateFondTable();
+        }
+        if (typeof updateDashboard === 'function') {
+          updateDashboard();
+        }
 
         if (typeof showToast === 'function') {
           showToast('success', 'Obnoveno', 'Data byla úspěšně obnovena');

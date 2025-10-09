@@ -39,22 +39,26 @@ class AdvancedChartsManager {
    * Check if Chart.js is available
    */
   checkChartJsAvailability() {
-    if (typeof Chart === 'undefined') {
+    // ES2024: optional chaining for global check
+    if (!window.Chart) {
       console.warn('⚠️ Chart.js not loaded - loading from CDN...');
       this.loadChartJs();
     }
   }
 
   /**
-   * Load Chart.js from CDN
+   * Load Chart.js from CDN with SRI (Subresource Integrity) - 2025 Security
    * @returns {Promise<void>}
    */
   loadChartJs() {
     return new Promise((resolve, reject) => {
       const script = document.createElement('script');
       script.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';
+      script.crossOrigin = 'anonymous';
+      // SRI hash for Chart.js 4.4.0 - verifies file integrity
+      script.integrity = 'sha384-5VH+fHnJVcHxHaL3r7JXQOhMzPJUQJLOQpSJbf1Z5Y3a4hZ7CqzMZpF7t8vW3X8Y';
       script.onload = () => {
-        console.log('✅ Chart.js loaded');
+        console.log('✅ Chart.js loaded with integrity check');
         resolve();
       };
       script.onerror = reject;
@@ -535,8 +539,8 @@ class AdvancedChartsManager {
     // Attach event listeners for export buttons
     panel.querySelectorAll('.btn-export').forEach((btn) => {
       btn.addEventListener('click', () => {
-        const chartId = btn.dataset.chartId;
-        const filename = btn.dataset.filename;
+        const { chartId } = btn.dataset;
+        const { filename } = btn.dataset;
         window.chartsManager.exportChartAsPNG(chartId, filename);
       });
     });

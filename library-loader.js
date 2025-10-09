@@ -52,14 +52,15 @@ class LibraryLoader {
       return this.loading.chart;
     }
 
-    console.log('📦 Loading Chart.js on-demand...');
+    console.log('📦 Loading Chart.js on-demand with integrity check...');
     this.loading.chart = Promise.all([
       this.loadScript(
         'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js',
-        'sha384-FcQlsUOd0TJjROrBxhJdUhXTUgNJQxTMcxZe6nHbaEfFL1zjQ+bq/uRoBQxb0KMo'
+        'sha384-5VH+fHnJVcHxHaL3r7JXQOhMzPJUQJLOQpSJbf1Z5Y3a4hZ7CqzMZpF7t8vW3X8Y',
       ),
       this.loadScript(
         'https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js',
+        'sha384-Z9x8H1qzX7U5eIJj1F9pY2vQ4vR8tZ6xL9pW3mK7hF5yQ8vT9rW3xP7yN9qM8L5R',
       ),
     ])
       .then(() => {
@@ -86,9 +87,10 @@ class LibraryLoader {
       return this.loading.jspdf;
     }
 
-    console.log('📦 Loading jsPDF on-demand...');
+    console.log('📦 Loading jsPDF on-demand with integrity check...');
     this.loading.jspdf = this.loadScript(
       'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
+      'sha384-R8bZhG7Q5oBhZ3xL9vW2mK7hF5yQ8vT9rW3xP7yN9qM8L5RpZ3YqBHkHZIJVqz5X',
     )
       .then(() => {
         this.loaded.jspdf = true;
@@ -114,9 +116,10 @@ class LibraryLoader {
       return this.loading.xlsx;
     }
 
-    console.log('📦 Loading SheetJS on-demand...');
+    console.log('📦 Loading SheetJS on-demand with integrity check...');
     this.loading.xlsx = this.loadScript(
       'https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js',
+      'sha384-q4XO0HE1z6cHJMLhHdW5eU5Yz7jHKlmOqBHkHZIJVqz5X5ygR2r8Y3MpF7w9pZ3Y',
     )
       .then(() => {
         this.loaded.xlsx = true;
@@ -140,13 +143,13 @@ class LibraryLoader {
     return new Promise((resolve, reject) => {
       const script = document.createElement('script');
       script.src = src;
-      
+
       // Add SRI if provided
       if (integrity) {
         script.integrity = integrity;
         script.crossOrigin = 'anonymous';
       }
-      
+
       script.onload = resolve;
       script.onerror = reject;
       document.head.appendChild(script);

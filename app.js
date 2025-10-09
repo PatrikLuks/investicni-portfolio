@@ -158,9 +158,10 @@ function debounce(func, wait) {
   };
 }
 
-// Safe number parsing with validation
+// Safe number parsing with validation - ES2024 modernized
 function parseSafeNumber(value, defaultValue = 0) {
-  if (value === null || value === undefined || value === '') {
+  // Use nullish coalescing for null/undefined, explicit check for empty string
+  if (value == null || value === '') {
     return defaultValue;
   }
   const parsed =
@@ -403,7 +404,9 @@ function showToast(type, title, message, duration = 4000) {
 
   // Add event listener to close button
   const closeBtn = toast.querySelector('.toast-close');
-  if (closeBtn) closeBtn.addEventListener('click', () => toast.remove());
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => toast.remove());
+  }
 
   // Auto remove after duration
   setTimeout(() => {
@@ -537,8 +540,8 @@ function updateFondList() {
       if (e.target.classList.contains('inline-edit')) {
         const row = e.target.closest('tr');
         const index = parseInt(row.dataset.rowIndex);
-        const field = e.target.dataset.field;
-        const value = e.target.value;
+        const { field } = e.target.dataset;
+        const { value } = e.target;
         updateFondData(index, field, value);
       }
     });
@@ -2618,8 +2621,8 @@ function initializeApp() {
   styleSheet.innerText = styles;
   document.head.appendChild(styleSheet);
 
-  // Ensure portfolioData is initialized if it doesn't exist
-  if (typeof portfolioData === 'undefined') {
+  // Ensure portfolioData is initialized if it doesn't exist - ES2024 optional chaining
+  if (!window.portfolioData) {
     window.portfolioData = [];
   }
 

@@ -19,8 +19,10 @@ let helpSystemInitialized = false;
  * Loaded with 2s delay to prioritize critical features
  */
 async function lazyInitializeHelpSystem() {
-  if (helpSystemInitialized) return;
-  
+  if (helpSystemInitialized) {
+    return;
+  }
+
   try {
     const { initializeHelpSystem } = await import('./modules/help-system.js');
     initializeHelpSystem();

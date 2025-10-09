@@ -187,7 +187,8 @@ class PortfolioStorage {
  * @returns {number} Parsed number or default
  */
 function parseSafeNumber(value, defaultValue = 0) {
-  if (value === null || value === undefined || value === '') {
+  // ES2024: nullish coalescing for null/undefined, explicit check for empty string
+  if (value == null || value === '') {
     return defaultValue;
   }
   const parsed =

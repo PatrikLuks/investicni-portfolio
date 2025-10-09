@@ -453,7 +453,7 @@ class NotificationSystem {
           <button class="delete-notif-btn" data-notif-id="${notif.id}" style="background: none; border: none; color: #999; cursor: pointer; font-size: 1rem; padding: 0;">×</button>
         </div>
       </div>
-    `
+    `,
       )
       .join('');
 
@@ -561,12 +561,12 @@ class NotificationSystem {
       return saved
         ? JSON.parse(saved)
         : {
-          browser: false,
-          portfolio: true,
-          trade: true,
-          alert: true,
-          collaboration: true,
-        };
+            browser: false,
+            portfolio: true,
+            trade: true,
+            alert: true,
+            collaboration: true,
+          };
     } catch (error) {
       return {
         browser: false,

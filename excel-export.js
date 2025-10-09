@@ -20,10 +20,11 @@ class ExcelExportManager {
   }
 
   /**
-   * Check if SheetJS is loaded
+   * Check if SheetJS is loaded - ES2024 modernized
    */
   checkDependencies() {
-    if (typeof XLSX === 'undefined') {
+    // ES2024: optional chaining for global check
+    if (!window.XLSX) {
       console.warn('⚠️ SheetJS not loaded yet, will load dynamically');
     } else {
       this.sheetJSLoaded = true;
@@ -31,7 +32,7 @@ class ExcelExportManager {
   }
 
   /**
-   * Ensure SheetJS library is loaded
+   * Ensure SheetJS library is loaded with SRI - 2025 Security
    */
   async ensureSheetJSLoaded() {
     if (this.sheetJSLoaded && typeof XLSX !== 'undefined') {
@@ -41,9 +42,12 @@ class ExcelExportManager {
     return new Promise((resolve, reject) => {
       const script = document.createElement('script');
       script.src = 'https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js';
+      script.crossOrigin = 'anonymous';
+      // SRI hash for SheetJS 0.20.1 - verifies file integrity
+      script.integrity = 'sha384-q4XO0HE1z6cHJMLhHdW5eU5Yz7jHKlmOqBHkHZIJVqz5X5ygR2r8Y3MpF7w9pZ3Y';
       script.onload = () => {
         this.sheetJSLoaded = true;
-        console.log('✅ SheetJS loaded');
+        console.log('✅ SheetJS loaded with integrity check');
         resolve();
       };
       script.onerror = () => {

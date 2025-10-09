@@ -1,7 +1,8 @@
 /**
  * ESLINT CONFIGURATION
- * Investment Portfolio Manager Pro v3.1.0
+ * Investment Portfolio Manager Pro v3.1.0 - 2025 Edition
  * Strict code quality rules for enterprise-grade application
+ * ESLint 9+ Flat Config with ES2024 support
  */
 
 import js from '@eslint/js';
@@ -15,7 +16,7 @@ export default [
     files: ['**/*.js'],
 
     languageOptions: {
-      ecmaVersion: 2022,
+      ecmaVersion: 2024,
       sourceType: 'module',
       globals: {
         // Browser globals
@@ -45,6 +46,28 @@ export default [
         Math: 'readonly',
         JSON: 'readonly',
         Promise: 'readonly',
+        CustomEvent: 'readonly',
+        Event: 'readonly',
+        EventTarget: 'readonly',
+
+        // PWA / Service Worker globals
+        caches: 'readonly',
+        CacheStorage: 'readonly',
+        Cache: 'readonly',
+        ServiceWorker: 'readonly',
+        ServiceWorkerGlobalScope: 'readonly',
+        clients: 'readonly',
+        registration: 'readonly',
+        navigator: 'readonly',
+        location: 'readonly',
+        self: 'readonly',
+
+        // App-specific globals
+        showToast: 'readonly',
+        Chart: 'readonly',
+        XLSX: 'readonly',
+        jsPDF: 'readonly',
+        Fuse: 'readonly',
 
         // Node.js globals (for build scripts)
         process: 'readonly',

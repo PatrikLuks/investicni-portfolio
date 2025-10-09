@@ -1,7 +1,8 @@
 /**
- * VITE CONFIGURATION
+ * VITE CONFIGURATION - 2025 Edition
  * Investment Portfolio Manager Pro v3.1.0
- * Production-ready build setup with optimization
+ * Production-ready build setup with modern optimizations
+ * Node.js 20+ | Vite 7+ | ES2024
  */
 
 import { defineConfig } from 'vite';
@@ -11,7 +12,7 @@ import compression from 'vite-plugin-compression';
 export default defineConfig({
   // Base public path
   base: './',
-  
+
   // 🚀 PERFORMANCE: Enable persistent cache for faster rebuilds
   cacheDir: '.vite',
 
@@ -35,7 +36,7 @@ export default defineConfig({
 
     // Assets directory
     assetsDir: 'assets',
-    
+
     // 🚀 PERFORMANCE: Faster builds
     emptyOutDir: true,
     reportCompressedSize: false, // Skip gzip size report for faster builds
@@ -43,8 +44,8 @@ export default defineConfig({
     // Source maps for debugging
     sourcemap: true,
 
-    // Target browsers
-    target: 'es2015',
+    // Target browsers - ES2022 for modern features
+    target: ['es2022', 'edge88', 'firefox78', 'chrome87', 'safari14'],
 
     // Minification
     minify: 'terser',
@@ -101,12 +102,7 @@ export default defineConfig({
   plugins: [
     // Legacy browser support (for older browsers)
     legacy({
-      targets: [
-        'Chrome >= 87',
-        'Firefox >= 78',
-        'Safari >= 14',
-        'Edge >= 88'
-      ],
+      targets: ['Chrome >= 87', 'Firefox >= 78', 'Safari >= 14', 'Edge >= 88'],
       polyfills: true,
       modernPolyfills: true,
       additionalLegacyPolyfills: [], // Remove regenerator-runtime (not needed)
