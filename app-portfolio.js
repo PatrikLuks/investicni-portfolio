@@ -15,7 +15,7 @@ let viewMode = 'funds'; // 'funds' nebo 'producers'
 
 // Funkce pro aktualizaci seznamu fondů
 function updateFondList() {
-    fondList.innerHTML = `
+  fondList.innerHTML = `
         <table class="fond-table">
             <thead>
                 <tr>
@@ -27,7 +27,9 @@ function updateFondList() {
                 </tr>
             </thead>
             <tbody>
-                ${portfolioData.map((item, index) => `
+                ${portfolioData
+                  .map(
+                    (item, index) => `
                     <tr>
                         <td><input type="text" class="inline-edit" value="${item.name}" onchange="updateFondData(${index}, 'name', this.value)"></td>
                         <td><input type="text" class="inline-edit" value="${item.producer}" onchange="updateFondData(${index}, 'producer', this.value)"></td>
@@ -37,7 +39,9 @@ function updateFondList() {
                             <button class="delete-btn" onclick="deleteFond(${index})">Smazat</button>
                         </td>
                     </tr>
-                `).join('')}
+                `,
+                  )
+                  .join('')}
             </tbody>
         </table>
     `;
@@ -45,98 +49,97 @@ function updateFondList() {
 
 // Přidat tyto nové funkce
 function updateFondData(index, field, value) {
-    if (field === 'investment' || field === 'value') {
-        value = parseFloat(value) || 0;
-    }
-    portfolioData[index][field] = value;
+  if (field === 'investment' || field === 'value') {
+    value = parseFloat(value) || 0;
+  }
+  portfolioData[index][field] = value;
 }
 
 function deleteFond(index) {
-    portfolioData.splice(index, 1);
-    updateFondList();
+  portfolioData.splice(index, 1);
+  updateFondList();
 }
 
 // Event listener pro formulář se jménem klienta
-clientForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-    clientName = document.getElementById('clientName').value;
-    advisorName = document.getElementById('advisorName').value;
-    advisorEmail = document.getElementById('advisorEmail').value;
+clientForm.addEventListener('submit', function (e) {
+  e.preventDefault();
+  clientName = document.getElementById('clientName').value;
+  advisorName = document.getElementById('advisorName').value;
+  advisorEmail = document.getElementById('advisorEmail').value;
 
-    // Hide first card, show portfolio card
-    document.getElementById('clientNameCard').style.display = 'none';
-    document.getElementById('portfolioCard').style.display = 'block';
-    document.getElementById('fondListCard').style.display = 'block';
-    document.getElementById('clientNameDisplay').textContent = clientName;
+  // Hide first card, show portfolio card
+  document.getElementById('clientNameCard').style.display = 'none';
+  document.getElementById('portfolioCard').style.display = 'block';
+  document.getElementById('fondListCard').style.display = 'block';
+  document.getElementById('clientNameDisplay').textContent = clientName;
 
-    // Initialize color picker after showing the portfolio card
-    initializeColorPicker();
+  // Initialize color picker after showing the portfolio card
+  initializeColorPicker();
 });
 
 function initializeColorPicker() {
-    const buttons = document.querySelectorAll('.scheme-button');
-    
-    buttons.forEach(button => {
-        button.addEventListener('click', function() {
-            // Remove active class from all buttons
-            buttons.forEach(btn => btn.classList.remove('active'));
-            
-            // Add active class to clicked button
-            this.classList.add('active');
-            
-            // Set the color scheme based on the clicked button
-            if (this.classList.contains('blue-scheme')) window.selectedColorScheme = 'blue';
-            if (this.classList.contains('red-scheme')) window.selectedColorScheme = 'red';
-            if (this.classList.contains('green-scheme')) window.selectedColorScheme = 'green';
-            if (this.classList.contains('yellow-scheme')) window.selectedColorScheme = 'yellow';
-            
-        });
+  const buttons = document.querySelectorAll('.scheme-button');
+
+  buttons.forEach((button) => {
+    button.addEventListener('click', function () {
+      // Remove active class from all buttons
+      buttons.forEach((btn) => btn.classList.remove('active'));
+
+      // Add active class to clicked button
+      this.classList.add('active');
+
+      // Set the color scheme based on the clicked button
+      if (this.classList.contains('blue-scheme')) window.selectedColorScheme = 'blue';
+      if (this.classList.contains('red-scheme')) window.selectedColorScheme = 'red';
+      if (this.classList.contains('green-scheme')) window.selectedColorScheme = 'green';
+      if (this.classList.contains('yellow-scheme')) window.selectedColorScheme = 'yellow';
     });
-    
-    // Set default color scheme
-    const blueButton = document.querySelector('.blue-scheme');
-    if (blueButton) {
-        blueButton.classList.add('active');
-        window.selectedColorScheme = 'blue';
-    }
+  });
+
+  // Set default color scheme
+  const blueButton = document.querySelector('.blue-scheme');
+  if (blueButton) {
+    blueButton.classList.add('active');
+    window.selectedColorScheme = 'blue';
+  }
 }
 
 // Event listener pro formulář
-portfolioForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const fondData = {
-        name: document.getElementById('fondName').value,
-        producer: document.getElementById('producer').value,
-        investment: parseFloat(document.getElementById('investment').value),
-        investmentDate: document.getElementById('investmentDate').value,
-        value: parseFloat(document.getElementById('value').value)
-    };
+portfolioForm.addEventListener('submit', function (e) {
+  e.preventDefault();
 
-    // Přidáme nový fond do pole
-    portfolioData.push(fondData);
-    
-    // Přidáme fond do localStorage, pokud tam ještě není
-    addNewFund(fondData.name);
-    
-    // Aktualizujeme tabulku
-    updateFondTable();
-    
-    // Vyčistíme formulář
-    document.getElementById('portfolioForm').reset();
-    
-    // Zobrazíme kartu se seznamem fondů
-    document.getElementById('fondListCard').style.display = 'block';
+  const fondData = {
+    name: document.getElementById('fondName').value,
+    producer: document.getElementById('producer').value,
+    investment: parseFloat(document.getElementById('investment').value),
+    investmentDate: document.getElementById('investmentDate').value,
+    value: parseFloat(document.getElementById('value').value),
+  };
+
+  // Přidáme nový fond do pole
+  portfolioData.push(fondData);
+
+  // Přidáme fond do localStorage, pokud tam ještě není
+  addNewFund(fondData.name);
+
+  // Aktualizujeme tabulku
+  updateFondTable();
+
+  // Vyčistíme formulář
+  document.getElementById('portfolioForm').reset();
+
+  // Zobrazíme kartu se seznamem fondů
+  document.getElementById('fondListCard').style.display = 'block';
 });
 
 function updateFondTable() {
-    const tbody = document.getElementById('fondTableBody');
-    const thead = document.getElementById('fondTableHead');
-    tbody.innerHTML = '';
-    if (viewMode === 'funds') {
-        // Hlavička pro fondy
-        if (thead) {
-            thead.innerHTML = `<tr>
+  const tbody = document.getElementById('fondTableBody');
+  const thead = document.getElementById('fondTableHead');
+  tbody.innerHTML = '';
+  if (viewMode === 'funds') {
+    // Hlavička pro fondy
+    if (thead) {
+      thead.innerHTML = `<tr>
                 <th>Název fondu</th>
                 <th>Producent</th>
                 <th>Datum investice</th>
@@ -144,11 +147,11 @@ function updateFondTable() {
                 <th>Aktuální hodnota</th>
                 <th>Akce</th>
             </tr>`;
-        }
-        // Původní tabulka podle fondů
-        portfolioData.forEach((fond, index) => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
+    }
+    // Původní tabulka podle fondů
+    portfolioData.forEach((fond, index) => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
                 <td><input type="text" class="inline-edit" value="${fond.name}" data-index="${index}" data-field="name"></td>
                 <td><input type="text" class="inline-edit" value="${fond.producer}" data-index="${index}" data-field="producer"></td>
                 <td><input type="date" class="inline-edit" value="${fond.investmentDate && fond.investmentDate !== '1970-01-01' ? fond.investmentDate : ''}" data-index="${index}" data-field="investmentDate"></td>
@@ -156,219 +159,303 @@ function updateFondTable() {
                 <td><input type="number" class="inline-edit" value="${fond.value}" data-index="${index}" data-field="value"></td>
                 <td><button class="delete-btn" onclick="deleteFond(${index})">Smazat</button></td>
             `;
-            tbody.appendChild(row);
-        });
-        // Přidáme event listener pro změny v inputech
-        document.querySelectorAll('.inline-edit').forEach(input => {
-            input.addEventListener('change', function() {
-                const index = parseInt(this.dataset.index);
-                const field = this.dataset.field;
-                let value;
-                
-                if (field === 'name' || field === 'producer') {
-                    value = this.value;
-                } else if (field === 'investmentDate') {
-                    // Pro datum input - už je ve správném formátu yyyy-mm-dd
-                    value = this.value;
-                } else {
-                    value = parseFloat(this.value);
-                }
-                
-                portfolioData[index][field] = value;
-            });
-        });
-    } else if (viewMode === 'producers') {
-        // Hlavička pro producenty
-        if (thead) {
-            thead.innerHTML = `<tr>
+      tbody.appendChild(row);
+    });
+    // Přidáme event listener pro změny v inputech
+    document.querySelectorAll('.inline-edit').forEach((input) => {
+      input.addEventListener('change', function () {
+        const index = parseInt(this.dataset.index);
+        const field = this.dataset.field;
+        let value;
+
+        if (field === 'name' || field === 'producer') {
+          value = this.value;
+        } else if (field === 'investmentDate') {
+          // Pro datum input - už je ve správném formátu yyyy-mm-dd
+          value = this.value;
+        } else {
+          value = parseFloat(this.value);
+        }
+
+        portfolioData[index][field] = value;
+      });
+    });
+  } else if (viewMode === 'producers') {
+    // Hlavička pro producenty
+    if (thead) {
+      thead.innerHTML = `<tr>
                 <th>Producent</th>
                 <th>Čistá investice</th>
                 <th>Aktuální hodnota</th>
                 <th>Zisk/Ztráta</th>
                 <th>Výnos %</th>
             </tr>`;
-        }
-        // Agregace podle producenta
-        const producerMap = {};
-        portfolioData.forEach(item => {
-            if (!producerMap[item.producer]) {
-                producerMap[item.producer] = { investment: 0, value: 0 };
-            }
-            producerMap[item.producer].investment += Number(item.investment);
-            producerMap[item.producer].value += Number(item.value);
-        });
-        const rows = Object.entries(producerMap).map(([producer, data]) => {
-            const profit = data.value - data.investment;
-            const yieldPercent = data.investment !== 0 ? ((profit / data.investment) * 100).toFixed(2) : '0.00';
-            return {
-                producer,
-                investment: data.investment,
-                value: data.value,
-                profit,
-                yieldPercent
-            };
-        });
-        rows.forEach(rowData => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
+    }
+    // Agregace podle producenta
+    const producerMap = {};
+    portfolioData.forEach((item) => {
+      if (!producerMap[item.producer]) {
+        producerMap[item.producer] = { investment: 0, value: 0 };
+      }
+      producerMap[item.producer].investment += Number(item.investment);
+      producerMap[item.producer].value += Number(item.value);
+    });
+    const rows = Object.entries(producerMap).map(([producer, data]) => {
+      const profit = data.value - data.investment;
+      const yieldPercent =
+        data.investment !== 0 ? ((profit / data.investment) * 100).toFixed(2) : '0.00';
+      return {
+        producer,
+        investment: data.investment,
+        value: data.value,
+        profit,
+        yieldPercent,
+      };
+    });
+    rows.forEach((rowData) => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
                 <td>${rowData.producer}</td>
                 <td>${rowData.investment.toLocaleString('cs-CZ')} Kč</td>
                 <td>${rowData.value.toLocaleString('cs-CZ')} Kč</td>
                 <td class="${rowData.profit >= 0 ? 'positive' : 'negative'}">${rowData.profit.toLocaleString('cs-CZ')} Kč</td>
                 <td class="${rowData.yieldPercent >= 0 ? 'positive' : 'negative'}">${rowData.yieldPercent}%</td>
             `;
-            tbody.appendChild(row);
-        });
-    }
+      tbody.appendChild(row);
+    });
+  }
 }
 
 function deleteFond(index) {
-    portfolioData.splice(index, 1);
-    updateFondTable();
-    
-    // Skryjeme tabulku, pokud není žádný fond
-    if (portfolioData.length === 0) {
-        document.getElementById('fondListCard').style.display = 'none';
-    }
+  portfolioData.splice(index, 1);
+  updateFondTable();
+
+  // Skryjeme tabulku, pokud není žádný fond
+  if (portfolioData.length === 0) {
+    document.getElementById('fondListCard').style.display = 'none';
+  }
 }
 
 // Event listener pro generování reportu
-generateReportBtn.addEventListener('click', function() {
-    if (portfolioData.length === 0) {
-        alert('Nejprve přidejte nějaké fondy do portfolia.');
-        return;
-    }
-    
-    // Generování HTML reportu
-    generatePortfolioHTML(portfolioData);
-    
-    // Generování CSV
-    generateCSV(portfolioData);
+generateReportBtn.addEventListener('click', function () {
+  if (portfolioData.length === 0) {
+    alert('Nejprve přidejte nějaké fondy do portfolia.');
+    return;
+  }
+
+  // Generování HTML reportu
+  generatePortfolioHTML(portfolioData);
+
+  // Generování CSV
+  generateCSV(portfolioData);
 });
 
 function generatePortfolioHTML(portfolioData) {
-    // Get the currently selected color scheme
-    const selectedColor = window.selectedColorScheme || 'blue';
-    
-    // Check if currency switch is enabled
-    const currencySwitch = document.getElementById('currencySwitch');
-    const useEuros = currencySwitch ? currencySwitch.checked : false;
-    const currencySymbol = useEuros ? '€' : 'Kč';
-    
-    // Define color schemes for different elements
-    const colorSchemes = {
-        blue: {
-            primary: '#0d1b2a',
-            colors: ['#1e3a8a', '#3b82f6', '#60a5fa', '#93c5fd', '#dbeafe',
-                    '#1e40af', '#2563eb', '#3b82f6', '#60a5fa', '#93c5fd'],
-            negativeColors: ['#c62828', '#d32f2f', '#e53935', '#f44336', '#ef5350',
-                    '#e57373', '#ef9a9a', '#ffcdd2', '#ff8a80', '#ff5252']
-        },
-        red: {
-            primary: '#c0392b',
-            colors: ['#c0392b', '#cd6155', '#d98880', '#e6b0aa', '#f2d7d5',
-                    '#943126', '#8c2d1c', '#7b241c', '#641e16', '#5c1916'],
-            negativeColors: ['#c0392b', '#cd6155', '#d98880', '#e6b0aa', '#f2d7d5',
-                    '#943126', '#8c2d1c', '#7b241c', '#641e16', '#5c1916']
-        },
-        green: {
-            primary: '#27ae60',
-            colors: ['#27ae60', '#2ecc71', '#58d68d', '#82e0aa', '#abebc6',
-                    '#196f3d', '#145a32', '#186a3b', '#0b5345', '#145a32'],
-            negativeColors: ['#c0392b', '#cd6155', '#d98880', '#e6b0aa', '#f2d7d5',
-                    '#943126', '#8c2d1c', '#7b241c', '#641e16', '#5c1916']
-        },
-        yellow: {
-            primary: '#f39c12',
-            colors: ['#f39c12', '#f5b041', '#f8c471', '#fad7a0', '#fdebd0',
-                    '#b9770e', '#9c640c', '#7e5109', '#634205', '#493303'],
-            negativeColors: ['#c0392b', '#cd6155', '#d98880', '#e6b0aa', '#f2d7d5',
-                    '#943126', '#8c2d1c', '#7b241c', '#641e16', '#5c1916']
-        }
-    };
+  // Get the currently selected color scheme
+  const selectedColor = window.selectedColorScheme || 'blue';
 
-    const selectedScheme = colorSchemes[selectedColor];
+  // Check if currency switch is enabled
+  const currencySwitch = document.getElementById('currencySwitch');
+  const useEuros = currencySwitch ? currencySwitch.checked : false;
+  const currencySymbol = useEuros ? '€' : 'Kč';
 
-    const currentDate = new Date().toLocaleDateString('cs-CZ');
+  // Define color schemes for different elements
+  const colorSchemes = {
+    blue: {
+      primary: '#0d1b2a',
+      colors: [
+        '#1e3a8a',
+        '#3b82f6',
+        '#60a5fa',
+        '#93c5fd',
+        '#dbeafe',
+        '#1e40af',
+        '#2563eb',
+        '#3b82f6',
+        '#60a5fa',
+        '#93c5fd',
+      ],
+      negativeColors: [
+        '#c62828',
+        '#d32f2f',
+        '#e53935',
+        '#f44336',
+        '#ef5350',
+        '#e57373',
+        '#ef9a9a',
+        '#ffcdd2',
+        '#ff8a80',
+        '#ff5252',
+      ],
+    },
+    red: {
+      primary: '#c0392b',
+      colors: [
+        '#c0392b',
+        '#cd6155',
+        '#d98880',
+        '#e6b0aa',
+        '#f2d7d5',
+        '#943126',
+        '#8c2d1c',
+        '#7b241c',
+        '#641e16',
+        '#5c1916',
+      ],
+      negativeColors: [
+        '#c0392b',
+        '#cd6155',
+        '#d98880',
+        '#e6b0aa',
+        '#f2d7d5',
+        '#943126',
+        '#8c2d1c',
+        '#7b241c',
+        '#641e16',
+        '#5c1916',
+      ],
+    },
+    green: {
+      primary: '#27ae60',
+      colors: [
+        '#27ae60',
+        '#2ecc71',
+        '#58d68d',
+        '#82e0aa',
+        '#abebc6',
+        '#196f3d',
+        '#145a32',
+        '#186a3b',
+        '#0b5345',
+        '#145a32',
+      ],
+      negativeColors: [
+        '#c0392b',
+        '#cd6155',
+        '#d98880',
+        '#e6b0aa',
+        '#f2d7d5',
+        '#943126',
+        '#8c2d1c',
+        '#7b241c',
+        '#641e16',
+        '#5c1916',
+      ],
+    },
+    yellow: {
+      primary: '#f39c12',
+      colors: [
+        '#f39c12',
+        '#f5b041',
+        '#f8c471',
+        '#fad7a0',
+        '#fdebd0',
+        '#b9770e',
+        '#9c640c',
+        '#7e5109',
+        '#634205',
+        '#493303',
+      ],
+      negativeColors: [
+        '#c0392b',
+        '#cd6155',
+        '#d98880',
+        '#e6b0aa',
+        '#f2d7d5',
+        '#943126',
+        '#8c2d1c',
+        '#7b241c',
+        '#641e16',
+        '#5c1916',
+      ],
+    },
+  };
 
-    // Připravím data podle režimu
-    let tableRows = '';
-    let tableHeader = '';
-    let totalInvestment = 0;
-    let totalValue = 0;
-    let totalProfit = 0;
-    let totalYield = 0;
-    if (viewMode === 'producers') {
-        // Agregace podle producenta
-        const producerMap = {};
-        portfolioData.forEach(item => {
-            if (!producerMap[item.producer]) {
-                producerMap[item.producer] = { investment: 0, value: 0 };
-            }
-            producerMap[item.producer].investment += Number(item.investment);
-            producerMap[item.producer].value += Number(item.value);
-        });
-        const rows = Object.entries(producerMap).map(([producer, data]) => {
-            const profit = data.value - data.investment;
-            const yieldPercent = data.investment !== 0 ? ((profit / data.investment) * 100).toFixed(2) : '0.00';
-            return {
-                producer,
-                investment: data.investment,
-                value: data.value,
-                profit,
-                yieldPercent
-            };
-        });
-        tableHeader = `<tr>
+  const selectedScheme = colorSchemes[selectedColor];
+
+  const currentDate = new Date().toLocaleDateString('cs-CZ');
+
+  // Připravím data podle režimu
+  let tableRows = '';
+  let tableHeader = '';
+  let totalInvestment = 0;
+  let totalValue = 0;
+  let totalProfit = 0;
+  let totalYield = 0;
+  if (viewMode === 'producers') {
+    // Agregace podle producenta
+    const producerMap = {};
+    portfolioData.forEach((item) => {
+      if (!producerMap[item.producer]) {
+        producerMap[item.producer] = { investment: 0, value: 0 };
+      }
+      producerMap[item.producer].investment += Number(item.investment);
+      producerMap[item.producer].value += Number(item.value);
+    });
+    const rows = Object.entries(producerMap).map(([producer, data]) => {
+      const profit = data.value - data.investment;
+      const yieldPercent =
+        data.investment !== 0 ? ((profit / data.investment) * 100).toFixed(2) : '0.00';
+      return {
+        producer,
+        investment: data.investment,
+        value: data.value,
+        profit,
+        yieldPercent,
+      };
+    });
+    tableHeader = `<tr>
             <th>Producent</th>
             <th>Čistá investice</th>
             <th>Aktuální hodnota</th>
             <th>Zisk/Ztráta</th>
             <th>Výnos %</th>
         </tr>`;
-        // Agregace podle producenta
-        const producerMapForReport = {};
-        portfolioData.forEach(item => {
-            if (!producerMapForReport[item.producer]) {
-                producerMapForReport[item.producer] = { investment: 0, value: 0 };
-            }
-            producerMapForReport[item.producer].investment += Number(item.investment);
-            producerMapForReport[item.producer].value += Number(item.value);
-        });
-        const producerRows = Object.entries(producerMapForReport).map(([producer, data]) => {
-            const profit = data.value - data.investment;
-            const yieldPercent = data.investment !== 0 ? ((profit / data.investment) * 100).toFixed(2) : '0.00';
-            return {
-                producer,
-                investment: data.investment,
-                value: data.value,
-                profit,
-                yieldPercent
-            };
-        });
-        producerRows.forEach(rowData => {
-            tableRows += `<tr>
+    // Agregace podle producenta
+    const producerMapForReport = {};
+    portfolioData.forEach((item) => {
+      if (!producerMapForReport[item.producer]) {
+        producerMapForReport[item.producer] = { investment: 0, value: 0 };
+      }
+      producerMapForReport[item.producer].investment += Number(item.investment);
+      producerMapForReport[item.producer].value += Number(item.value);
+    });
+    const producerRows = Object.entries(producerMapForReport).map(([producer, data]) => {
+      const profit = data.value - data.investment;
+      const yieldPercent =
+        data.investment !== 0 ? ((profit / data.investment) * 100).toFixed(2) : '0.00';
+      return {
+        producer,
+        investment: data.investment,
+        value: data.value,
+        profit,
+        yieldPercent,
+      };
+    });
+    producerRows.forEach((rowData) => {
+      tableRows += `<tr>
                 <td>${rowData.producer}</td>
                 <td>${rowData.investment.toLocaleString('cs-CZ')} ${currencySymbol}</td>
                 <td>${rowData.value.toLocaleString('cs-CZ')} ${currencySymbol}</td>
                 <td class="${rowData.profit >= 0 ? 'positive' : 'negative'}">${rowData.profit.toLocaleString('cs-CZ')} ${currencySymbol}</td>
                 <td class="${rowData.yieldPercent >= 0 ? 'positive' : 'negative'}">${rowData.yieldPercent}%</td>
             </tr>`;
-            totalInvestment += rowData.investment;
-            totalValue += rowData.value;
-            totalProfit += rowData.profit;
-        });
-        totalYield = totalInvestment !== 0 ? ((totalProfit / totalInvestment) * 100).toFixed(2) : '0.00';
-        tableRows += `<tr class="total-row">
+      totalInvestment += rowData.investment;
+      totalValue += rowData.value;
+      totalProfit += rowData.profit;
+    });
+    totalYield =
+      totalInvestment !== 0 ? ((totalProfit / totalInvestment) * 100).toFixed(2) : '0.00';
+    tableRows += `<tr class="total-row">
             <td>CELKEM</td>
             <td>${totalInvestment.toLocaleString('cs-CZ')} ${currencySymbol}</td>
             <td>${totalValue.toLocaleString('cs-CZ')} ${currencySymbol}</td>
             <td class="positive">${totalProfit.toLocaleString('cs-CZ')} ${currencySymbol}</td>
             <td class="positive">${totalYield}%</td>
         </tr>`;
-    } else {
-        // Původní tabulka podle fondů
-        tableHeader = `<tr>
+  } else {
+    // Původní tabulka podle fondů
+    tableHeader = `<tr>
             <th>Fond</th>
             <th>Producent</th>
             <th>Datum</th>
@@ -378,57 +465,69 @@ function generatePortfolioHTML(portfolioData) {
             <th>Výnos %</th>
             <th>Výnos % p.a.</th>
         </tr>`;
-        portfolioData.forEach(item => {
-            const investment = Number(item.investment);
-            const value = Number(item.value);
-            const profit = value - investment;
-            const yield = investment !== 0 ? ((profit / investment) * 100).toFixed(2) : '0.00';
-            const currentDate = new Date().toLocaleDateString('cs-CZ');
-            
-            // Výpočet výnosu p.a. na základě doby držení
-            let yieldPA = '0.00';
-            if (item.investmentDate && item.investmentDate !== '' && item.investmentDate !== '1970-01-01' && investment !== 0) {
-                try {
-                    const investmentDate = new Date(item.investmentDate);
-                    const currentDateObj = new Date();
-                    
-                    // Kontrola, že datum je platné
-                    if (investmentDate.getTime() && investmentDate < currentDateObj) {
-                        const daysHeld = Math.max(1, Math.floor((currentDateObj - investmentDate) / (1000 * 60 * 60 * 24)));
-                        const yearsHeld = daysHeld / 365;
-                        
-                        if (yearsHeld > 0) {
-                            const annualizedReturn = Math.pow(value / investment, 1 / yearsHeld) - 1;
-                            yieldPA = (annualizedReturn * 100).toFixed(2);
-                        } else {
-                            yieldPA = yield; // Pokud je investice mladší než rok, použijeme běžný výnos
-                        }
-                    } else {
-                        yieldPA = yield; // Neplatné datum
-                    }
-                } catch (e) {
-                    yieldPA = yield; // Chyba při parsování data
-                }
+    portfolioData.forEach((item) => {
+      const investment = Number(item.investment);
+      const value = Number(item.value);
+      const profit = value - investment;
+      const yield = investment !== 0 ? ((profit / investment) * 100).toFixed(2) : '0.00';
+      const currentDate = new Date().toLocaleDateString('cs-CZ');
+
+      // Výpočet výnosu p.a. na základě doby držení
+      let yieldPA = '0.00';
+      if (
+        item.investmentDate &&
+        item.investmentDate !== '' &&
+        item.investmentDate !== '1970-01-01' &&
+        investment !== 0
+      ) {
+        try {
+          const investmentDate = new Date(item.investmentDate);
+          const currentDateObj = new Date();
+
+          // Kontrola, že datum je platné
+          if (investmentDate.getTime() && investmentDate < currentDateObj) {
+            const daysHeld = Math.max(
+              1,
+              Math.floor((currentDateObj - investmentDate) / (1000 * 60 * 60 * 24)),
+            );
+            const yearsHeld = daysHeld / 365;
+
+            if (yearsHeld > 0) {
+              const annualizedReturn = Math.pow(value / investment, 1 / yearsHeld) - 1;
+              yieldPA = (annualizedReturn * 100).toFixed(2);
             } else {
-                yieldPA = yield; // Fallback na běžný výnos
+              yieldPA = yield; // Pokud je investice mladší než rok, použijeme běžný výnos
             }
-            let displayDate;
-            if (item.investmentDate && item.investmentDate !== '' && item.investmentDate !== '1970-01-01') {
-                try {
-                    // Konverze z ISO formátu (yyyy-mm-dd) na český formát
-                    const dateObj = new Date(item.investmentDate + 'T00:00:00'); // Přidáme čas, aby se předešlo problémům s časovými pásmy
-                    if (dateObj.getTime() && !isNaN(dateObj.getTime())) {
-                        displayDate = dateObj.toLocaleDateString('cs-CZ');
-                    } else {
-                        displayDate = currentDate;
-                    }
-                } catch (e) {
-                    displayDate = currentDate;
-                }
-            } else {
-                displayDate = currentDate;
-            }
-            tableRows += `<tr>
+          } else {
+            yieldPA = yield; // Neplatné datum
+          }
+        } catch (e) {
+          yieldPA = yield; // Chyba při parsování data
+        }
+      } else {
+        yieldPA = yield; // Fallback na běžný výnos
+      }
+      let displayDate;
+      if (
+        item.investmentDate &&
+        item.investmentDate !== '' &&
+        item.investmentDate !== '1970-01-01'
+      ) {
+        try {
+          // Konverze z ISO formátu (yyyy-mm-dd) na český formát
+          const dateObj = new Date(item.investmentDate + 'T00:00:00'); // Přidáme čas, aby se předešlo problémům s časovými pásmy
+          if (dateObj.getTime() && !isNaN(dateObj.getTime())) {
+            displayDate = dateObj.toLocaleDateString('cs-CZ');
+          } else {
+            displayDate = currentDate;
+          }
+        } catch (e) {
+          displayDate = currentDate;
+        }
+      } else {
+        displayDate = currentDate;
+      }
+      tableRows += `<tr>
                 <td>${item.name}</td>
                 <td>${item.producer}</td>
                 <td>${displayDate}</td>
@@ -438,12 +537,13 @@ function generatePortfolioHTML(portfolioData) {
                 <td data-value="${yield}" class="${yield >= 0 ? 'positive' : 'negative'}">${yield}%</td>
                 <td data-value="${yieldPA}" class="${yieldPA >= 0 ? 'positive' : 'negative'}">${yieldPA}%</td>
             </tr>`;
-            totalInvestment += investment;
-            totalValue += value;
-            totalProfit += profit;
-        });
-        totalYield = totalInvestment !== 0 ? ((totalProfit / totalInvestment) * 100).toFixed(2) : '0.00';
-        tableRows += `<tr class="total-row">
+      totalInvestment += investment;
+      totalValue += value;
+      totalProfit += profit;
+    });
+    totalYield =
+      totalInvestment !== 0 ? ((totalProfit / totalInvestment) * 100).toFixed(2) : '0.00';
+    tableRows += `<tr class="total-row">
             <td>CELKEM</td>
             <td>-</td>
             <td>-</td>
@@ -453,9 +553,9 @@ function generatePortfolioHTML(portfolioData) {
             <td class="positive">${totalYield}%</td>
             <td class="positive">${totalYield}%</td>
         </tr>`;
-    }
+  }
 
-    const html = `
+  const html = `
     <!DOCTYPE html>
     <html lang="cs">
     <head>
@@ -1408,21 +1508,21 @@ function generatePortfolioHTML(portfolioData) {
     </body>
     </html>`;
 
-    // Vytvoření a stažení HTML souboru
-    const blob = new Blob([html], { type: 'text/html' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'portfolio-report.html';
-    a.click();
-    window.URL.revokeObjectURL(url);
+  // Vytvoření a stažení HTML souboru
+  const blob = new Blob([html], { type: 'text/html' });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'portfolio-report.html';
+  a.click();
+  window.URL.revokeObjectURL(url);
 }
 
 // Make sure the color picker is initialized with a default selection
-document.addEventListener('DOMContentLoaded', function() {
-    // Select blue as default
-    const defaultColor = document.querySelector('.color-option[data-color="blue"]');
-    defaultColor.classList.add('selected');
+document.addEventListener('DOMContentLoaded', function () {
+  // Select blue as default
+  const defaultColor = document.querySelector('.color-option[data-color="blue"]');
+  defaultColor.classList.add('selected');
 });
 
 // Add this HTML to the portfolioCard div through JavaScript
@@ -1445,121 +1545,122 @@ const csvImportHTML = `
 portfolioForm.insertAdjacentHTML('beforebegin', csvImportHTML);
 
 // Add event listener for the process CSV button
-document.getElementById('processCSV').addEventListener('click', function() {
-    const fileInput = document.getElementById('csvFile');
-    const file = fileInput.files[0];
-    
-    if (!file) {
-        alert('Prosím, nejdříve vyberte CSV soubor');
-        return;
+document.getElementById('processCSV').addEventListener('click', function () {
+  const fileInput = document.getElementById('csvFile');
+  const file = fileInput.files[0];
+
+  if (!file) {
+    alert('Prosím, nejdříve vyberte CSV soubor');
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = function (e) {
+    const text = e.target.result;
+    const rows = text.split('\n').filter((row) => row.trim());
+
+    // Skip header row if it exists
+    const startIndex = rows[0].toLowerCase().includes('název fondu') ? 1 : 0;
+
+    // Process each row
+    for (let i = startIndex; i < rows.length; i++) {
+      const row = rows[i];
+
+      // Parse CSV row properly handling quoted fields
+      const columns = [];
+      let currentColumn = '';
+      let insideQuotes = false;
+
+      for (let j = 0; j < row.length; j++) {
+        const char = row[j];
+
+        if (char === '"') {
+          insideQuotes = !insideQuotes;
+        } else if (char === ',' && !insideQuotes) {
+          columns.push(currentColumn.trim());
+          currentColumn = '';
+        } else {
+          currentColumn += char;
+        }
+      }
+      columns.push(currentColumn.trim()); // Add the last column
+
+      if (columns.length >= 5) {
+        const [name, producer, investmentDate, investment, value] = columns.map((col) =>
+          col.replace(/^"|"$/g, ''),
+        );
+        const investmentNum = parseFloat(investment.replace(/\s/g, ''));
+        const valueNum = parseFloat(value.replace(/\s/g, ''));
+
+        if (!isNaN(investmentNum) && !isNaN(valueNum)) {
+          // Konverze data z různých formátů na ISO formát (yyyy-mm-dd)
+          let formattedDate = '';
+          if (investmentDate && investmentDate.trim() !== '') {
+            try {
+              // Zkusíme různé formáty data
+              let dateObj;
+
+              // Formát mm/dd/yyyy nebo mm-dd-yyyy
+              if (investmentDate.includes('/') || investmentDate.includes('-')) {
+                dateObj = new Date(investmentDate);
+              } else {
+                // Jiné formáty
+                dateObj = new Date(investmentDate);
+              }
+
+              // Kontrola, že datum je platné
+              if (dateObj.getTime() && !isNaN(dateObj.getTime())) {
+                formattedDate = dateObj.toISOString().split('T')[0]; // yyyy-mm-dd
+              }
+            } catch (e) {}
+          }
+
+          portfolioData.push({
+            name: name,
+            producer: producer,
+            investmentDate: formattedDate,
+            investment: investmentNum,
+            value: valueNum,
+          });
+        } else {
+        }
+      } else if (columns.length >= 4) {
+        // Fallback pro starý formát bez data investice
+        const [name, producer, investment, value] = columns.map((col) => col.replace(/^"|"$/g, ''));
+        const investmentNum = parseFloat(investment.replace(/\s/g, ''));
+        const valueNum = parseFloat(value.replace(/\s/g, ''));
+
+        if (!isNaN(investmentNum) && !isNaN(valueNum)) {
+          portfolioData.push({
+            name: name,
+            producer: producer,
+            investmentDate: '', // Prázdné datum pro starý formát
+            investment: investmentNum,
+            value: valueNum,
+          });
+        } else {
+        }
+      } else {
+      }
     }
 
-    const reader = new FileReader();
-    
-    reader.onload = function(e) {
-        const text = e.target.result;
-        const rows = text.split('\n').filter(row => row.trim());
-        
-        // Skip header row if it exists
-        const startIndex = rows[0].toLowerCase().includes('název fondu') ? 1 : 0;
-        
-        // Process each row
-        for (let i = startIndex; i < rows.length; i++) {
-            const row = rows[i];
-            
-            // Parse CSV row properly handling quoted fields
-            const columns = [];
-            let currentColumn = '';
-            let insideQuotes = false;
-            
-            for (let j = 0; j < row.length; j++) {
-                const char = row[j];
-                
-                if (char === '"') {
-                    insideQuotes = !insideQuotes;
-                } else if (char === ',' && !insideQuotes) {
-                    columns.push(currentColumn.trim());
-                    currentColumn = '';
-                } else {
-                    currentColumn += char;
-                }
-            }
-            columns.push(currentColumn.trim()); // Add the last column
-            
-            if (columns.length >= 5) {
-                const [name, producer, investmentDate, investment, value] = columns.map(col => col.replace(/^"|"$/g, ''));
-                const investmentNum = parseFloat(investment.replace(/\s/g, ''));
-                const valueNum = parseFloat(value.replace(/\s/g, ''));
-                
-                if (!isNaN(investmentNum) && !isNaN(valueNum)) {
-                    // Konverze data z různých formátů na ISO formát (yyyy-mm-dd)
-                    let formattedDate = '';
-                    if (investmentDate && investmentDate.trim() !== '') {
-                        try {
-                            // Zkusíme různé formáty data
-                            let dateObj;
-                            
-                            // Formát mm/dd/yyyy nebo mm-dd-yyyy
-                            if (investmentDate.includes('/') || investmentDate.includes('-')) {
-                                dateObj = new Date(investmentDate);
-                            } else {
-                                // Jiné formáty
-                                dateObj = new Date(investmentDate);
-                            }
-                            
-                            // Kontrola, že datum je platné
-                            if (dateObj.getTime() && !isNaN(dateObj.getTime())) {
-                                formattedDate = dateObj.toISOString().split('T')[0]; // yyyy-mm-dd
-                            }
-                        } catch (e) {
-                        }
-                    }
-                    
-                    portfolioData.push({
-                        name: name,
-                        producer: producer,
-                        investmentDate: formattedDate,
-                        investment: investmentNum,
-                        value: valueNum
-                    });
-                } else {
-                }
-            } else if (columns.length >= 4) {
-                // Fallback pro starý formát bez data investice
-                const [name, producer, investment, value] = columns.map(col => col.replace(/^"|"$/g, ''));
-                const investmentNum = parseFloat(investment.replace(/\s/g, ''));
-                const valueNum = parseFloat(value.replace(/\s/g, ''));
-                
-                if (!isNaN(investmentNum) && !isNaN(valueNum)) {
-                    portfolioData.push({
-                        name: name,
-                        producer: producer,
-                        investmentDate: '', // Prázdné datum pro starý formát
-                        investment: investmentNum,
-                        value: valueNum
-                    });
-                } else {
-                }
-            } else {
-            }
-        }
-        
-        // Update the table and show it
-        updateFondTable();
-        document.getElementById('fondListCard').style.display = 'block';
-        
-        // Clear the file input
-        fileInput.value = '';
-        
-        // Show success message
-        alert('CSV soubor byl úspěšně zpracován');
-    };
-    
-    reader.onerror = function() {
-        alert('Chyba při čtení souboru');
-    };
-    
-    reader.readAsText(file, 'UTF-8');
+    // Update the table and show it
+    updateFondTable();
+    document.getElementById('fondListCard').style.display = 'block';
+
+    // Clear the file input
+    fileInput.value = '';
+
+    // Show success message
+    alert('CSV soubor byl úspěšně zpracován');
+  };
+
+  reader.onerror = function () {
+    alert('Chyba při čtení souboru');
+  };
+
+  reader.readAsText(file, 'UTF-8');
 });
 
 // Add these styles to your CSS
@@ -1597,68 +1698,70 @@ const styles = `
 `;
 
 // Add styles to document
-const styleSheet = document.createElement("style");
+const styleSheet = document.createElement('style');
 styleSheet.innerText = styles;
 document.head.appendChild(styleSheet);
 
 // Ensure portfolioData is initialized if it doesn't exist
 if (typeof portfolioData === 'undefined') {
-    window.portfolioData = [];
+  window.portfolioData = [];
 }
 
 // Úprava generateCSV - vždy exportuje ve formátu fondů
 function generateCSV(data) {
-    // Check if currency switch is enabled
-    const currencySwitch = document.getElementById('currencySwitch');
-    const useEuros = currencySwitch ? currencySwitch.checked : false;
-    const currencySymbol = useEuros ? '€' : 'Kč';
-    
-    // Vždy exportujeme ve formátu fondů, bez ohledu na viewMode
-    const csvRows = [`Název fondu,Producent,Datum investice,Čistá investice (${currencySymbol}),Aktuální hodnota (${currencySymbol})`];
-    data.forEach(item => {
-        const row = [
-            '"' + item.name + '"',
-            '"' + item.producer + '"',
-            item.investmentDate || '',
-            item.investment,
-            item.value
-        ];
-        csvRows.push(row.join(','));
-    });
-    const csvContent = csvRows.join('\n');
-    const BOM = '\uFEFF';
-    const csvContentWithBOM = BOM + csvContent;
-    const blob = new Blob([csvContentWithBOM], { 
-        type: 'text/csv;charset=utf-8'
-    });
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    const date = new Date().toISOString().split('T')[0];
-    const fileName = `portfolio-${clientName}-${date}.csv`;
-    link.href = url;
-    link.setAttribute('download', fileName);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
+  // Check if currency switch is enabled
+  const currencySwitch = document.getElementById('currencySwitch');
+  const useEuros = currencySwitch ? currencySwitch.checked : false;
+  const currencySymbol = useEuros ? '€' : 'Kč';
+
+  // Vždy exportujeme ve formátu fondů, bez ohledu na viewMode
+  const csvRows = [
+    `Název fondu,Producent,Datum investice,Čistá investice (${currencySymbol}),Aktuální hodnota (${currencySymbol})`,
+  ];
+  data.forEach((item) => {
+    const row = [
+      '"' + item.name + '"',
+      '"' + item.producer + '"',
+      item.investmentDate || '',
+      item.investment,
+      item.value,
+    ];
+    csvRows.push(row.join(','));
+  });
+  const csvContent = csvRows.join('\n');
+  const BOM = '\uFEFF';
+  const csvContentWithBOM = BOM + csvContent;
+  const blob = new Blob([csvContentWithBOM], {
+    type: 'text/csv;charset=utf-8',
+  });
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  const date = new Date().toISOString().split('T')[0];
+  const fileName = `portfolio-${clientName}-${date}.csv`;
+  link.href = url;
+  link.setAttribute('download', fileName);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  window.URL.revokeObjectURL(url);
 }
 
 // Přidám event listenery na přepínače
-document.addEventListener('DOMContentLoaded', function() {
-    const switchFunds = document.getElementById('switchFunds');
-    const switchProducers = document.getElementById('switchProducers');
-    if (switchFunds && switchProducers) {
-        switchFunds.addEventListener('click', function() {
-            viewMode = 'funds';
-            switchFunds.classList.add('active');
-            switchProducers.classList.remove('active');
-            updateFondTable();
-        });
-        switchProducers.addEventListener('click', function() {
-            viewMode = 'producers';
-            switchProducers.classList.add('active');
-            switchFunds.classList.remove('active');
-            updateFondTable();
-        });
-    }
+document.addEventListener('DOMContentLoaded', function () {
+  const switchFunds = document.getElementById('switchFunds');
+  const switchProducers = document.getElementById('switchProducers');
+  if (switchFunds && switchProducers) {
+    switchFunds.addEventListener('click', function () {
+      viewMode = 'funds';
+      switchFunds.classList.add('active');
+      switchProducers.classList.remove('active');
+      updateFondTable();
+    });
+    switchProducers.addEventListener('click', function () {
+      viewMode = 'producers';
+      switchProducers.classList.add('active');
+      switchFunds.classList.remove('active');
+      updateFondTable();
+    });
+  }
 });

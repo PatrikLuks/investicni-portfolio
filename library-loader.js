@@ -169,4 +169,3 @@ class LibraryLoader {
 
 // Global instance
 window.libraryLoader = new LibraryLoader();
-

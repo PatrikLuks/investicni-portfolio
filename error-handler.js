@@ -271,9 +271,9 @@ class ErrorHandler {
                 <pre style="background: rgba(255,255,255,0.1); padding: 12px; border-radius: 4px; 
                             font-size: 0.75rem; overflow: auto; max-height: 200px; margin-top: 10px;">
 ${this.errors
-    .slice(-5)
-    .map((e) => `${e.timestamp}: ${e.message}`)
-    .join('\n')}
+  .slice(-5)
+  .map((e) => `${e.timestamp}: ${e.message}`)
+  .join('\n')}
                 </pre>
             </details>
         `;

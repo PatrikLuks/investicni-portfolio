@@ -434,7 +434,6 @@ class DataValidationManager {
       const result = this.validateField(fieldName, value);
       this.displayFieldValidation(input, result);
     });
-
   }
 
   /**
@@ -578,4 +577,3 @@ window.dataValidationManager.addCustomRule('ticker', (value, context) => {
     errors,
   };
 });
-

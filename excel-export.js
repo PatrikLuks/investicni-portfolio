@@ -590,4 +590,3 @@ window.addEventListener('DOMContentLoaded', () => {
 
   buttonContainer.insertBefore(excelBtn, buttonContainer.children[3]);
 });
-

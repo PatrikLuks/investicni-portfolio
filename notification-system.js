@@ -39,7 +39,6 @@ class NotificationSystem {
 
       // Setup event listeners
       this.setupEventListeners();
-
     } catch (error) {
       console.error('❌ Notification System initialization failed:', error);
     }
@@ -564,7 +563,7 @@ class NotificationSystem {
             alert: true,
             collaboration: true,
           };
-    } catch (error) {
+    } catch (_error) {
       return {
         browser: false,
         portfolio: true,
@@ -700,4 +699,3 @@ notificationStyle.textContent = `
   }
 `;
 document.head.appendChild(notificationStyle);
-

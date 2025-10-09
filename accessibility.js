@@ -334,4 +334,3 @@ window.accessibilityManager = new AccessibilityManager();
 window.announce = (message, priority = 'polite') => {
   window.accessibilityManager.announce(message, priority);
 };
-

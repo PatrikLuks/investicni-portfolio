@@ -22,13 +22,10 @@ const PRECACHE_URLS = [
 
 // Install event - cache static assets
 self.addEventListener('install', (event) => {
-
   event.waitUntil(
     caches
       .open(CACHE_NAME)
-      .then((cache) => {
-        return cache.addAll(PRECACHE_URLS);
-      })
+      .then((cache) => cache.addAll(PRECACHE_URLS))
       .then(() => self.skipWaiting())
       .catch((error) => {
         console.error('[SW] Precaching failed:', error);
@@ -38,7 +35,6 @@ self.addEventListener('install', (event) => {
 
 // Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
-
   const currentCaches = [CACHE_NAME, RUNTIME_CACHE, IMAGE_CACHE];
 
   event.waitUntil(
@@ -97,7 +93,7 @@ async function cacheFirstStrategy(request, cacheName) {
     }
 
     return response;
-  } catch (error) {
+  } catch (_error) {
     console.error('[SW] Cache first strategy failed:', error);
     return new Response('Offline - resource not available', {
       status: 503,
@@ -123,7 +119,7 @@ async function networkFirstStrategy(request, cacheName) {
     }
 
     return response;
-  } catch (error) {
+  } catch (_error) {
     const cached = await caches.match(request);
 
     if (cached) {
@@ -148,7 +144,6 @@ async function networkFirstStrategy(request, cacheName) {
 
 // Background Sync - for offline data submission
 self.addEventListener('sync', (event) => {
-
   if (event.tag === 'sync-portfolio-data') {
     event.waitUntil(syncPortfolioData());
   }
@@ -165,8 +160,7 @@ async function syncPortfolioData() {
         data: { success: true },
       });
     });
-
-  } catch (error) {
+  } catch (_error) {
     console.error('[SW] Sync failed:', error);
     throw error;
   }
@@ -174,7 +168,6 @@ async function syncPortfolioData() {
 
 // Push Notifications
 self.addEventListener('push', (event) => {
-
   const options = {
     body: event.data ? event.data.text() : 'Nová aktualizace portfolia',
     icon: '/icons/icon-192x192.png',
@@ -203,7 +196,6 @@ self.addEventListener('push', (event) => {
 
 // Notification click handler
 self.addEventListener('notificationclick', (event) => {
-
   event.notification.close();
 
   if (event.action === 'explore') {
@@ -213,7 +205,6 @@ self.addEventListener('notificationclick', (event) => {
 
 // Message handler for communication with main app
 self.addEventListener('message', (event) => {
-
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
   }
@@ -223,4 +214,3 @@ self.addEventListener('message', (event) => {
     event.waitUntil(caches.open(RUNTIME_CACHE).then((cache) => cache.addAll(urls)));
   }
 });
-

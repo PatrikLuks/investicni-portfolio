@@ -552,4 +552,3 @@ commandStackStyle.textContent = `
     }
 `;
 document.head.appendChild(commandStackStyle);
-

@@ -515,8 +515,8 @@ function updateFondList() {
             </thead>
             <tbody>
                 ${portfolioData
-    .map(
-      (item, index) => `
+                  .map(
+                    (item, index) => `
                     <tr data-row-index="${index}">
                         <td><input type="text" class="inline-edit" data-field="name" value="${item.name}"></td>
                         <td><input type="text" class="inline-edit" data-field="producer" value="${item.producer}"></td>
@@ -528,7 +528,7 @@ function updateFondList() {
                     </tr>
                 `,
                   )
-    .join('')}
+                  .join('')}
             </tbody>
         </table>
     `;

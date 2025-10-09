@@ -13,21 +13,21 @@
   --color-danger: #ef4444;
   --color-warning: #f59e0b;
   --color-info: #06b6d4;
-  
+
   --bg-primary: #ffffff;
   --bg-secondary: #f3f4f6;
   --bg-tertiary: #e5e7eb;
   --bg-modal: rgba(0, 0, 0, 0.5);
-  
+
   --text-primary: #111827;
   --text-secondary: #6b7280;
   --text-tertiary: #9ca3af;
-  
+
   --border-color: #d1d5db;
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-  
+
   --transition-speed: 300ms;
 }
 
@@ -40,16 +40,16 @@
   --color-danger: #f87171;
   --color-warning: #fbbf24;
   --color-info: #22d3ee;
-  
+
   --bg-primary: #111827;
   --bg-secondary: #1f2937;
   --bg-tertiary: #374151;
   --bg-modal: rgba(0, 0, 0, 0.7);
-  
+
   --text-primary: #f9fafb;
   --text-secondary: #d1d5db;
   --text-tertiary: #9ca3af;
-  
+
   --border-color: #4b5563;
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
@@ -58,9 +58,10 @@
 
 /* Smooth transitions for theme switching */
 * {
-  transition: background-color var(--transition-speed), 
-              color var(--transition-speed), 
-              border-color var(--transition-speed);
+  transition:
+    background-color var(--transition-speed),
+    color var(--transition-speed),
+    border-color var(--transition-speed);
 }
 
 /* ===== Theme Toggle Button ===== */
@@ -80,7 +81,9 @@
   font-size: 24px;
   box-shadow: var(--shadow-md);
   z-index: 1000;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 
 .theme-toggle:hover {
@@ -177,8 +180,12 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .modal-content {
@@ -224,7 +231,9 @@
   color: var(--text-secondary);
   cursor: pointer;
   line-height: 1;
-  transition: color 0.2s, transform 0.2s;
+  transition:
+    color 0.2s,
+    transform 0.2s;
 }
 
 .modal-close:hover {
@@ -587,7 +596,9 @@
   border-radius: 12px;
   padding: 20px;
   text-align: center;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 
 .stat-card:hover {
@@ -629,7 +640,9 @@
   border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 16px;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 
 .portfolio-card:hover {
@@ -749,7 +762,9 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* ===== Glassmorphism Effects (Dark Mode) ===== */

@@ -192,7 +192,6 @@ class ModuleLoader {
       const loadTime = performance.now() - startTime;
       this.updateLoadingProgress('Hotovo!', 100);
 
-
       // Remove loading screen
       setTimeout(() => this.hideLoadingScreen(), 500);
 
@@ -247,7 +246,6 @@ class ModuleLoader {
       return;
     } // Already loaded
 
-
     if (window.notificationSystem) {
       window.notificationSystem.show(`Načítání ${featureName}...`, 'info', 2000);
     }
@@ -263,8 +261,7 @@ class ModuleLoader {
       // Load UI enhancements in background
       const backgroundModules = ['virtual-list.js', 'performance-monitor.js', 'auto-save.js'];
 
-      this.loadModules(backgroundModules, false).then(() => {
-      });
+      this.loadModules(backgroundModules, false).then(() => {});
     };
 
     // Use requestIdleCallback if available

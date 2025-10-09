@@ -48,7 +48,7 @@
     padding: 10px;
     border-radius: 50%;
   }
-  
+
   .help-text {
     display: none;
   }
@@ -509,7 +509,9 @@ kbd {
 .tour-highlight {
   position: relative;
   z-index: 10002;
-  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.5), 0 0 0 9999px rgba(0, 0, 0, 0.7) !important;
+  box-shadow:
+    0 0 0 4px rgba(102, 126, 234, 0.5),
+    0 0 0 9999px rgba(0, 0, 0, 0.7) !important;
   border-radius: 8px;
 }
 

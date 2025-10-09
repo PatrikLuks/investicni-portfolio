@@ -468,7 +468,6 @@ class CloudBackupManager {
     this.autoBackupInterval = setInterval(() => {
       this.performAutoBackup();
     }, this.autoBackupFrequency);
-
   }
 
   /**
@@ -510,7 +509,6 @@ class CloudBackupManager {
       }
 
       if (results.length > 0) {
-
         // Show toast notification
         if (typeof showToast === 'function') {
           showToast('success', 'Záloha', `Data zálohována do ${results.length} úložišť`);

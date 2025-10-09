@@ -70,7 +70,6 @@ class SmartAutoSaveManager {
     this.saveTimeout = setTimeout(() => {
       this.save(data);
     }, this.saveDelay);
-
   }
 
   /**
@@ -348,7 +347,6 @@ class SmartAutoSaveManager {
       return 0;
     }
 
-
     let processed = 0;
 
     while (this.offlineQueue.length > 0) {
@@ -571,7 +569,6 @@ if (document.readyState === 'loading') {
 }
 
 function initSmartAutoSave() {
-
   // Process offline queue if online
   if (navigator.onLine) {
     window.smartAutoSaveManager.processOfflineQueue();

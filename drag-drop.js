@@ -99,7 +99,6 @@ class DragDropManager {
     });
 
     observer.observe(tableBody, { childList: true });
-
   }
 
   /**
@@ -271,7 +270,6 @@ class DragDropManager {
 
     // Create drag image
     this.createDragImage(e, row);
-
   }
 
   /**
@@ -333,7 +331,6 @@ class DragDropManager {
     if (this.onReorderCallback) {
       this.onReorderCallback(this.draggedIndex, targetIndex);
     }
-
   }
 
   /**
@@ -357,7 +354,6 @@ class DragDropManager {
     this.draggedElement = null;
     this.draggedIndex = null;
     this.isDragging = false;
-
   }
 
   /**
@@ -377,7 +373,6 @@ class DragDropManager {
 
     // Show ghost element
     this.showGhostElement(row, e.touches[0].clientX, e.touches[0].clientY);
-
   }
 
   /**
@@ -432,7 +427,6 @@ class DragDropManager {
       if (this.onReorderCallback) {
         this.onReorderCallback(this.draggedIndex, targetIndex);
       }
-
     }
 
     // Clean up
@@ -447,7 +441,6 @@ class DragDropManager {
     this.draggedElement = null;
     this.draggedIndex = null;
     this.isDragging = false;
-
   }
 
   /**
@@ -569,7 +562,6 @@ class DragDropManager {
 
       // Keep focus on handle
       row.querySelector('.drag-handle')?.focus();
-
     }
   }
 
@@ -591,7 +583,6 @@ class DragDropManager {
 
       // Keep focus on handle
       row.querySelector('.drag-handle')?.focus();
-
     }
   }
 
@@ -713,7 +704,6 @@ function initDragDrop() {
   const tableBody = document.querySelector('#portfolioTable tbody');
   if (tableBody) {
     window.dragDropManager.enableOnTable(tableBody, (fromIndex, toIndex) => {
-
       // Update portfolio data order
       if (typeof window.getFondyData === 'function' && typeof window.saveFondy === 'function') {
         const data = window.getFondyData();
@@ -739,6 +729,5 @@ function initDragDrop() {
         window.commandStack.execute(command);
       }
     });
-
   }
 }

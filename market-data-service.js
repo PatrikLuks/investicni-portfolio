@@ -352,7 +352,6 @@ class AutoUpdateService {
     this.intervalId = setInterval(() => {
       this.update();
     }, this.updateInterval);
-
   }
 
   stop() {

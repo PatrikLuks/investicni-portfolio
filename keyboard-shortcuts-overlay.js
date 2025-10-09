@@ -70,7 +70,6 @@ class KeyboardShortcutsOverlay {
           this.hide();
         }
       });
-
     } catch (error) {
       console.error('❌ Shortcuts overlay initialization failed:', error);
     }
@@ -181,13 +180,13 @@ class KeyboardShortcutsOverlay {
         
         <div style="background: #f8f9fa; border-radius: 8px; padding: 16px;">
           ${category.items
-    .map(
-      (item) => `
+            .map(
+              (item) => `
             <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #e9ecef;">
               <div style="display: flex; gap: 6px;">
                 ${item.keys
-    .map(
-      (key) => `
+                  .map(
+                    (key) => `
                   <kbd style="
                     display: inline-block;
                     padding: 6px 10px;
@@ -202,7 +201,7 @@ class KeyboardShortcutsOverlay {
                   ">${key}</kbd>
                 `,
                   )
-    .join('<span style="margin: 0 4px; color: #adb5bd;">+</span>')}
+                  .join('<span style="margin: 0 4px; color: #adb5bd;">+</span>')}
               </div>
               <div style="color: #6c757d; font-size: 0.9rem; text-align: right; max-width: 60%;">
                 ${item.description}
@@ -210,7 +209,7 @@ class KeyboardShortcutsOverlay {
             </div>
           `,
             )
-    .join('')}
+            .join('')}
         </div>
       </div>
     `,
@@ -302,8 +301,8 @@ class KeyboardShortcutsOverlay {
         <p><strong>Portfolio Manager Pro v3.0</strong> - Kompletní přehled</p>
         
         ${this.shortcuts
-    .map(
-      (category) => `
+          .map(
+            (category) => `
           <h2>${category.category}</h2>
           <table>
             <thead>
@@ -314,8 +313,8 @@ class KeyboardShortcutsOverlay {
             </thead>
             <tbody>
               ${category.items
-    .map(
-      (item) => `
+                .map(
+                  (item) => `
                 <tr>
                   <td>
                     ${item.keys.map((key) => `<kbd>${key}</kbd>`).join(' + ')}
@@ -324,12 +323,12 @@ class KeyboardShortcutsOverlay {
                 </tr>
               `,
                 )
-    .join('')}
+                .join('')}
             </tbody>
           </table>
         `,
           )
-    .join('')}
+          .join('')}
         
         <div style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #dee2e6; color: #6c757d;">
           <p><small>Generováno: ${new Date().toLocaleString('cs-CZ')}</small></p>
@@ -382,4 +381,3 @@ style.textContent = `
   }
 `;
 document.head.appendChild(style);
-

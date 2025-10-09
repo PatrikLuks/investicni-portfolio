@@ -22,13 +22,11 @@ class MarketDataFeed {
    */
   async init() {
     try {
-
       // Create UI
       this.createMarketDataUI();
 
       // Start simulated feed (in production, use real WebSocket)
       this.startSimulatedFeed();
-
     } catch (error) {
       console.error('❌ Market Data Feed initialization failed:', error);
     }
@@ -79,7 +77,6 @@ class MarketDataFeed {
         this.notifySubscribers(symbol, priceUpdate);
       });
     }, 2000); // Update every 2 seconds
-
   }
 
   /**
@@ -140,10 +137,8 @@ class MarketDataFeed {
    * On connected handler
    */
   onConnected() {
-
     // Resubscribe to all symbols
-    this.subscriptions.forEach((symbol) => {
-    });
+    this.subscriptions.forEach((symbol) => {});
   }
 
   /**
@@ -594,4 +589,3 @@ window.marketDataFeed = new MarketDataFeed();
 
 // Auto-start connection
 window.marketDataFeed.connect();
-

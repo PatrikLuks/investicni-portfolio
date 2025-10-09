@@ -345,7 +345,6 @@ function initializeApp() {
   if (lastSave) {
     storage.updateLastSaveDisplay(lastSave.toISOString());
   }
-
 }
 
 /**

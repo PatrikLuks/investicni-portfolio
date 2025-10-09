@@ -15,8 +15,7 @@ class CalculationsEngine {
   /**
    * Initialize calculations engine
    */
-  init() {
-  }
+  init() {}
 
   // ==================== ROI CALCULATIONS ====================
 
@@ -676,7 +675,6 @@ function updateMetricsPanel() {
   `,
     )
     .join('');
-
 }
 
 /**
@@ -716,7 +714,6 @@ function exportMetricsReport() {
   link.href = URL.createObjectURL(blob);
   link.download = `portfolio-metrics-${new Date().toISOString().split('T')[0]}.txt`;
   link.click();
-
 }
 
 // Add metrics button to UI
@@ -747,4 +744,3 @@ window.addEventListener('DOMContentLoaded', () => {
 
   buttonContainer.insertBefore(metricsBtn, buttonContainer.children[1]);
 });
-

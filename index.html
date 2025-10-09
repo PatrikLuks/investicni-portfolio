@@ -19,7 +19,7 @@
     <link rel="dns-prefetch" href="https://query1.finance.yahoo.com" />
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
-    
+
     <!-- � DEVELOPMENT: Preload temporarily disabled to avoid warnings during dev -->
     <!-- 🚀 PRODUCTION: Re-enable modulepreload for faster startup -->
     <!--
@@ -70,16 +70,16 @@
     <link rel="stylesheet" href="quick-reference.css" />
     <link rel="stylesheet" href="calculations-styles.css" />
     <link rel="stylesheet" href="dashboard-styles.css" />
-    
+
     <!-- ✨ v3.1.0 Premium Styles -->
     <link rel="stylesheet" href="styles-v3.1.css" />
-    
+
     <!-- ⚡ REFACTORED MODULAR STYLES (replaces inline styles) -->
     <link rel="stylesheet" href="modules/refactored-styles.css" />
-    
+
     <!-- 🆘 HELP SYSTEM - User Guide & Onboarding -->
     <link rel="stylesheet" href="help-system.css" />
-    
+
     <style>
       :root {
         --primary-blue: #1a237e;
@@ -1326,7 +1326,17 @@
         opacity: 0.9;
       "
     >
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
         <circle cx="12" cy="12" r="10"></circle>
         <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
         <line x1="12" y1="17" x2="12.01" y2="17"></line>
@@ -1678,7 +1688,7 @@
                         () => {
                           newWorker.postMessage({ action: 'SKIP_WAITING' });
                           window.location.reload();
-                        }
+                        },
                       );
                     }
                   }
@@ -1804,7 +1814,7 @@
           showToast(
             'warning',
             'Offline režim',
-            'Pracujete v offline režimu. Data budou synchronizována po obnovení připojení.'
+            'Pracujete v offline režimu. Data budou synchronizována po obnovení připojení.',
           );
         }
       });
@@ -1824,7 +1834,7 @@
 
     <!-- 🚀 ES6 MODULE ARCHITECTURE: Clean, modular, production-ready -->
     <script src="error-handler.js" defer></script>
-    
+
     <!-- Critical dependencies (loaded first) -->
     <!-- Cache-busting: v3.2.1 to force browser reload after SRI fix -->
     <script src="library-loader.js?v=3.2.1" defer></script>
@@ -1833,7 +1843,7 @@
     <script src="command-stack.js" defer></script>
     <script src="data-validation.js" defer></script>
     <script src="calculations-engine.js" defer></script>
-    
+
     <!-- ✨ v3.1.0 Premium Features -->
     <script src="theme-manager.js" defer></script>
     <script src="auto-save.js" defer></script>
@@ -1843,7 +1853,7 @@
     <script src="multi-portfolio.js" defer></script>
     <script src="advanced-charts.js" defer></script>
     <script src="charts-manager.js" defer></script>
-    
+
     <!-- 🎯 MAIN APPLICATION: ES6 Module Entry Point (load last) -->
     <script type="module" src="main.js"></script>
 

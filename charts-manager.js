@@ -406,7 +406,6 @@ class AdvancedChartsManager {
     link.href = url;
     link.download = filename;
     link.click();
-
   }
 
   /**
@@ -418,7 +417,6 @@ class AdvancedChartsManager {
     this.chartInstances.forEach((chart, containerId) => {
       this.exportChartAsPNG(containerId, `${containerId}-${timestamp}.png`);
     });
-
   }
 
   /**
@@ -565,7 +563,6 @@ class AdvancedChartsManager {
       this.createHoldingsChart(data);
       this.createProfitLossChart(data);
     }, 100);
-
   }
 
   /**
@@ -622,5 +619,4 @@ function addChartsButton() {
   });
 
   buttonContainer.insertBefore(chartsBtn, buttonContainer.firstChild);
-
 }
