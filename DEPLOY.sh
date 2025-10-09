@@ -24,8 +24,8 @@ echo -e "${BLUE}📦 Initializing deployment...${NC}"
 echo ""
 
 # Check if in correct directory
-if [ ! -f "investPortfolio.html" ]; then
-    echo -e "${RED}❌ Error: investPortfolio.html not found!${NC}"
+if [ ! -f "index.html" ]; then
+    echo -e "${RED}❌ Error: index.html not found!${NC}"
     echo "Please run this script from the project root directory."
     exit 1
 fi
@@ -36,10 +36,10 @@ echo ""
 # Step 1: Validate required files
 echo -e "${BLUE}📋 Step 1/5: Validating required files...${NC}"
 required_files=(
-    "investPortfolio.html"
+    "index.html"
     "app.js"
     "manifest.json"
-    "service-worker-v3.js"
+    "service-worker.js"
     "error-handler.js"
 )
 
@@ -232,9 +232,8 @@ echo "  • Features: FEATURE_LIST.md"
 echo "  • Production: PRODUCTION_PACKAGE_COMPLETE.md"
 echo ""
 echo -e "${GREEN}🔗 Useful Links:${NC}"
-echo "  • Main App: http://localhost:$PORT/investPortfolio.html"
-echo "  • QA Dashboard: http://localhost:$PORT/qa-dashboard.html"
-echo "  • Functional Tests: http://localhost:$PORT/functional-test.html"
+echo "  • Main App: http://localhost:$PORT/"
+echo "  • Alternative: http://localhost:$PORT/index.html"
 echo ""
 echo -e "${BLUE}💬 Need help? Check the documentation or visit:${NC}"
 echo "   https://github.com/PatrikLuks/investicni-portfolio"
