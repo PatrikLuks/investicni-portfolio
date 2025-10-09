@@ -487,4 +487,3 @@ describe('v3.1.0 Integration', () => {
   });
 });
 
-console.log('✅ All v3.1.0 tests defined successfully');

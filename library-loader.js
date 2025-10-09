@@ -26,11 +26,9 @@ class LibraryLoader {
       return this.loading.fuse;
     }
 
-    console.log('📦 Loading Fuse.js on-demand...');
     this.loading.fuse = this.loadScript('https://cdn.jsdelivr.net/npm/fuse.js@7.0.0')
       .then(() => {
         this.loaded.fuse = true;
-        console.log('✅ Fuse.js loaded');
         return true;
       })
       .catch((e) => {
@@ -52,7 +50,6 @@ class LibraryLoader {
       return this.loading.chart;
     }
 
-    console.log('📦 Loading Chart.js on-demand with integrity check...');
     this.loading.chart = Promise.all([
       this.loadScript(
         'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js',
@@ -65,7 +62,6 @@ class LibraryLoader {
     ])
       .then(() => {
         this.loaded.chart = true;
-        console.log('✅ Chart.js loaded');
         return true;
       })
       .catch((e) => {
@@ -87,14 +83,12 @@ class LibraryLoader {
       return this.loading.jspdf;
     }
 
-    console.log('📦 Loading jsPDF on-demand with integrity check...');
     this.loading.jspdf = this.loadScript(
       'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
       'sha384-R8bZhG7Q5oBhZ3xL9vW2mK7hF5yQ8vT9rW3xP7yN9qM8L5RpZ3YqBHkHZIJVqz5X',
     )
       .then(() => {
         this.loaded.jspdf = true;
-        console.log('✅ jsPDF loaded');
         return true;
       })
       .catch((e) => {
@@ -116,14 +110,12 @@ class LibraryLoader {
       return this.loading.xlsx;
     }
 
-    console.log('📦 Loading SheetJS on-demand with integrity check...');
     this.loading.xlsx = this.loadScript(
       'https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js',
       'sha384-q4XO0HE1z6cHJMLhHdW5eU5Yz7jHKlmOqBHkHZIJVqz5X5ygR2r8Y3MpF7w9pZ3Y',
     )
       .then(() => {
         this.loaded.xlsx = true;
-        console.log('✅ SheetJS loaded');
         return true;
       })
       .catch((e) => {
@@ -178,4 +170,3 @@ class LibraryLoader {
 // Global instance
 window.libraryLoader = new LibraryLoader();
 
-console.log('✅ Library Loader initialized (on-demand loading enabled)');

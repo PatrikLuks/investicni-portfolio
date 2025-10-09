@@ -22,7 +22,6 @@ class NotificationSystem {
     try {
       // Check browser support
       if (!('Notification' in window)) {
-        console.warn('⚠️ Browser does not support notifications');
         return;
       }
 
@@ -41,7 +40,6 @@ class NotificationSystem {
       // Setup event listeners
       this.setupEventListeners();
 
-      console.log('✅ Notification System initialized');
     } catch (error) {
       console.error('❌ Notification System initialization failed:', error);
     }
@@ -55,7 +53,6 @@ class NotificationSystem {
       try {
         const registration = await navigator.serviceWorker.ready;
         this.serviceWorkerRegistration = registration;
-        console.log('✅ Service Worker ready for push notifications');
       } catch (error) {
         console.error('Service Worker registration failed:', error);
       }
@@ -704,4 +701,3 @@ notificationStyle.textContent = `
 `;
 document.head.appendChild(notificationStyle);
 
-console.log('Notification System loaded');

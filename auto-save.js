@@ -30,7 +30,6 @@ class SmartAutoSaveManager {
     this.loadLastSavedData();
     this.setupOnlineListener();
     this.setupUnloadListener();
-    console.log('✅ Smart Auto-save Manager initialized');
   }
 
   /**
@@ -38,7 +37,6 @@ class SmartAutoSaveManager {
    */
   enable() {
     this.enabled = true;
-    console.log('✅ Auto-save enabled');
   }
 
   /**
@@ -50,7 +48,6 @@ class SmartAutoSaveManager {
       clearTimeout(this.saveTimeout);
       this.saveTimeout = null;
     }
-    console.log('❌ Auto-save disabled');
   }
 
   /**
@@ -74,7 +71,6 @@ class SmartAutoSaveManager {
       this.save(data);
     }, this.saveDelay);
 
-    console.log('⏳ Save scheduled in', this.saveDelay / 1000, 'seconds');
   }
 
   /**
@@ -84,7 +80,6 @@ class SmartAutoSaveManager {
    */
   async save(data) {
     if (this.isSaving) {
-      console.log('⏳ Save already in progress, queuing...');
       return false;
     }
 
@@ -96,14 +91,12 @@ class SmartAutoSaveManager {
       if (hasConflict) {
         const resolved = await this.resolveConflict(data);
         if (!resolved) {
-          console.log('❌ Conflict not resolved, save cancelled');
           return false;
         }
       }
 
       // Check online status
       if (!navigator.onLine) {
-        console.log('📵 Offline - adding to queue');
         this.addToOfflineQueue(data);
         this.updateSaveIndicator('offline');
         return false;
@@ -123,7 +116,6 @@ class SmartAutoSaveManager {
           this.onSaveCallback(data);
         }
 
-        console.log('✅ Save successful');
         return true;
       } else {
         throw new Error('Save failed');
@@ -274,7 +266,6 @@ class SmartAutoSaveManager {
       const hasConflict = savedHash !== latestHash && currentHash !== latestHash;
 
       if (hasConflict) {
-        console.warn('⚠️ Conflict detected: data was modified externally');
       }
 
       return hasConflict;
@@ -346,7 +337,6 @@ class SmartAutoSaveManager {
     });
 
     this.persistOfflineQueue();
-    console.log('📦 Added to offline queue. Queue size:', this.offlineQueue.length);
   }
 
   /**
@@ -355,11 +345,9 @@ class SmartAutoSaveManager {
    */
   async processOfflineQueue() {
     if (this.offlineQueue.length === 0) {
-      console.log('ℹ️ Offline queue is empty');
       return 0;
     }
 
-    console.log('🔄 Processing offline queue:', this.offlineQueue.length, 'items');
 
     let processed = 0;
 
@@ -371,9 +359,7 @@ class SmartAutoSaveManager {
         if (success) {
           this.offlineQueue.shift(); // Remove from queue
           processed++;
-          console.log('✅ Processed offline item:', processed);
         } else {
-          console.log('❌ Failed to process offline item, stopping');
           break;
         }
       } catch (error) {
@@ -383,7 +369,6 @@ class SmartAutoSaveManager {
     }
 
     this.persistOfflineQueue();
-    console.log('✅ Offline queue processed:', processed, 'items');
 
     return processed;
   }
@@ -474,7 +459,6 @@ class SmartAutoSaveManager {
    */
   setupOnlineListener() {
     window.addEventListener('online', async () => {
-      console.log('🌐 Back online - processing offline queue');
       const processed = await this.processOfflineQueue();
 
       if (processed > 0 && typeof showToast === 'function') {
@@ -505,7 +489,6 @@ class SmartAutoSaveManager {
       this.offlineQueue = stored ? JSON.parse(stored) : [];
 
       if (this.offlineQueue.length > 0) {
-        console.log('📦 Loaded offline queue:', this.offlineQueue.length, 'items');
       }
     } catch (error) {
       console.error('Failed to load offline queue:', error);
@@ -588,7 +571,6 @@ if (document.readyState === 'loading') {
 }
 
 function initSmartAutoSave() {
-  console.log('✅ Smart Auto-save initialized');
 
   // Process offline queue if online
   if (navigator.onLine) {

@@ -19,7 +19,6 @@ class DataValidationManager {
    */
   init() {
     this.setupRealTimeValidation();
-    console.log('✅ Data Validation Manager initialized');
   }
 
   /**
@@ -362,7 +361,6 @@ class DataValidationManager {
    */
   addCustomRule(fieldName, rule) {
     this.customRules.set(fieldName, rule);
-    console.log(`✅ Custom rule added for field: ${fieldName}`);
   }
 
   /**
@@ -437,7 +435,6 @@ class DataValidationManager {
       this.displayFieldValidation(input, result);
     });
 
-    console.log('✅ Real-time validation enabled');
   }
 
   /**
@@ -555,7 +552,6 @@ class DataValidationManager {
    */
   enableStrictMode() {
     this.strictMode = true;
-    console.log('✅ Strict validation mode enabled');
   }
 
   /**
@@ -563,7 +559,6 @@ class DataValidationManager {
    */
   disableStrictMode() {
     this.strictMode = false;
-    console.log('❌ Strict validation mode disabled');
   }
 }
 
@@ -584,4 +579,3 @@ window.dataValidationManager.addCustomRule('ticker', (value, context) => {
   };
 });
 
-console.log('✅ Data Validation Manager ready');

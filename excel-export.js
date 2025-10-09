@@ -16,7 +16,6 @@ class ExcelExportManager {
    */
   init() {
     this.checkDependencies();
-    console.log('✅ Excel Export Manager initialized');
   }
 
   /**
@@ -25,7 +24,6 @@ class ExcelExportManager {
   checkDependencies() {
     // ES2024: optional chaining for global check
     if (!window.XLSX) {
-      console.warn('⚠️ SheetJS not loaded yet, will load dynamically');
     } else {
       this.sheetJSLoaded = true;
     }
@@ -47,7 +45,6 @@ class ExcelExportManager {
       script.integrity = 'sha384-q4XO0HE1z6cHJMLhHdW5eU5Yz7jHKlmOqBHkHZIJVqz5X5ygR2r8Y3MpF7w9pZ3Y';
       script.onload = () => {
         this.sheetJSLoaded = true;
-        console.log('✅ SheetJS loaded with integrity check');
         resolve();
       };
       script.onerror = () => {
@@ -86,7 +83,6 @@ class ExcelExportManager {
       // Write file
       XLSX.writeFile(wb, filename);
 
-      console.log('✅ Excel file exported:', filename);
       return filename;
     } catch (error) {
       console.error('❌ Excel export failed:', error);
@@ -595,4 +591,3 @@ window.addEventListener('DOMContentLoaded', () => {
   buttonContainer.insertBefore(excelBtn, buttonContainer.children[3]);
 });
 
-console.log('✅ Excel Export Manager ready');

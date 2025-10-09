@@ -579,7 +579,6 @@ function initializeApp() {
 
   // Only proceed if critical elements exist
   if (!clientForm) {
-    console.warn('⚠️ App initialization delayed - DOM not ready');
     return setTimeout(initializeApp, 100);
   }
 

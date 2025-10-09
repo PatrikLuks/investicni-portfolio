@@ -22,13 +22,11 @@ const PRECACHE_URLS = [
 
 // Install event - cache static assets
 self.addEventListener('install', (event) => {
-  console.log('[SW] Installing service worker...');
 
   event.waitUntil(
     caches
       .open(CACHE_NAME)
       .then((cache) => {
-        console.log('[SW] Precaching app shell');
         return cache.addAll(PRECACHE_URLS);
       })
       .then(() => self.skipWaiting())
@@ -40,7 +38,6 @@ self.addEventListener('install', (event) => {
 
 // Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
-  console.log('[SW] Activating service worker...');
 
   const currentCaches = [CACHE_NAME, RUNTIME_CACHE, IMAGE_CACHE];
 
@@ -51,7 +48,6 @@ self.addEventListener('activate', (event) => {
         Promise.all(
           cacheNames.map((cacheName) => {
             if (!currentCaches.includes(cacheName)) {
-              console.log('[SW] Deleting old cache:', cacheName);
               return caches.delete(cacheName);
             }
           }),
@@ -91,11 +87,9 @@ async function cacheFirstStrategy(request, cacheName) {
     const cached = await cache.match(request);
 
     if (cached) {
-      console.log('[SW] Cache hit:', request.url);
       return cached;
     }
 
-    console.log('[SW] Cache miss, fetching:', request.url);
     const response = await fetch(request);
 
     if (response.ok) {
@@ -130,7 +124,6 @@ async function networkFirstStrategy(request, cacheName) {
 
     return response;
   } catch (error) {
-    console.log('[SW] Network failed, trying cache:', request.url);
     const cached = await caches.match(request);
 
     if (cached) {
@@ -155,7 +148,6 @@ async function networkFirstStrategy(request, cacheName) {
 
 // Background Sync - for offline data submission
 self.addEventListener('sync', (event) => {
-  console.log('[SW] Background sync:', event.tag);
 
   if (event.tag === 'sync-portfolio-data') {
     event.waitUntil(syncPortfolioData());
@@ -174,7 +166,6 @@ async function syncPortfolioData() {
       });
     });
 
-    console.log('[SW] Portfolio data synced successfully');
   } catch (error) {
     console.error('[SW] Sync failed:', error);
     throw error;
@@ -183,7 +174,6 @@ async function syncPortfolioData() {
 
 // Push Notifications
 self.addEventListener('push', (event) => {
-  console.log('[SW] Push notification received');
 
   const options = {
     body: event.data ? event.data.text() : 'Nová aktualizace portfolia',
@@ -213,7 +203,6 @@ self.addEventListener('push', (event) => {
 
 // Notification click handler
 self.addEventListener('notificationclick', (event) => {
-  console.log('[SW] Notification clicked:', event.action);
 
   event.notification.close();
 
@@ -224,7 +213,6 @@ self.addEventListener('notificationclick', (event) => {
 
 // Message handler for communication with main app
 self.addEventListener('message', (event) => {
-  console.log('[SW] Message received:', event.data);
 
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
@@ -236,4 +224,3 @@ self.addEventListener('message', (event) => {
   }
 });
 
-console.log('[SW] Service Worker loaded successfully');

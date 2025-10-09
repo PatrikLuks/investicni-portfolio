@@ -353,7 +353,6 @@ class AutoUpdateService {
       this.update();
     }, this.updateInterval);
 
-    console.log('Auto-update service started');
   }
 
   stop() {
@@ -362,7 +361,6 @@ class AutoUpdateService {
       this.intervalId = null;
     }
     this.isRunning = false;
-    console.log('Auto-update service stopped');
   }
 
   async update() {

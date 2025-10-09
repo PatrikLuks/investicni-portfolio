@@ -90,7 +90,6 @@ function initializeColorPicker() {
             if (this.classList.contains('green-scheme')) window.selectedColorScheme = 'green';
             if (this.classList.contains('yellow-scheme')) window.selectedColorScheme = 'yellow';
             
-            console.log('Selected new color scheme:', window.selectedColorScheme);
         });
     });
     
@@ -289,7 +288,6 @@ function generatePortfolioHTML(portfolioData) {
     };
 
     const selectedScheme = colorSchemes[selectedColor];
-    console.log('Using color scheme:', selectedColor); // Pro debugování
 
     const currentDate = new Date().toLocaleDateString('cs-CZ');
 
@@ -1514,7 +1512,6 @@ document.getElementById('processCSV').addEventListener('click', function() {
                                 formattedDate = dateObj.toISOString().split('T')[0]; // yyyy-mm-dd
                             }
                         } catch (e) {
-                            console.warn(`Invalid date format: ${investmentDate}`);
                         }
                     }
                     
@@ -1526,7 +1523,6 @@ document.getElementById('processCSV').addEventListener('click', function() {
                         value: valueNum
                     });
                 } else {
-                    console.warn(`Skipping row ${i + 1}: Invalid numbers in investment or value`);
                 }
             } else if (columns.length >= 4) {
                 // Fallback pro starý formát bez data investice
@@ -1543,10 +1539,8 @@ document.getElementById('processCSV').addEventListener('click', function() {
                         value: valueNum
                     });
                 } else {
-                    console.warn(`Skipping row ${i + 1}: Invalid numbers in investment or value`);
                 }
             } else {
-                console.warn(`Skipping row ${i + 1}: Invalid number of columns`);
             }
         }
         

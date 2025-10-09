@@ -22,7 +22,6 @@ class MarketDataFeed {
    */
   async init() {
     try {
-      console.log('📡 Initializing Market Data Feed...');
 
       // Create UI
       this.createMarketDataUI();
@@ -30,7 +29,6 @@ class MarketDataFeed {
       // Start simulated feed (in production, use real WebSocket)
       this.startSimulatedFeed();
 
-      console.log('✅ Market Data Feed initialized');
     } catch (error) {
       console.error('❌ Market Data Feed initialization failed:', error);
     }
@@ -82,7 +80,6 @@ class MarketDataFeed {
       });
     }, 2000); // Update every 2 seconds
 
-    console.log('✅ Simulated market feed started');
   }
 
   /**
@@ -109,7 +106,6 @@ class MarketDataFeed {
     }
 
     // Send subscription request (simulated)
-    console.log('📡 Subscribed to:', symbol);
 
     // Return initial data if available
     return this.priceData.get(symbol.toUpperCase());
@@ -121,7 +117,6 @@ class MarketDataFeed {
   unsubscribe(symbol) {
     this.subscriptions.delete(symbol.toUpperCase());
     this.updateCallbacks = this.updateCallbacks.filter((cb) => cb.symbol !== symbol);
-    console.log('📡 Unsubscribed from:', symbol);
   }
 
   /**
@@ -145,11 +140,9 @@ class MarketDataFeed {
    * On connected handler
    */
   onConnected() {
-    console.log('✅ Connected to market data feed');
 
     // Resubscribe to all symbols
     this.subscriptions.forEach((symbol) => {
-      console.log('📡 Resubscribing to:', symbol);
     });
   }
 
@@ -602,4 +595,3 @@ window.marketDataFeed = new MarketDataFeed();
 // Auto-start connection
 window.marketDataFeed.connect();
 
-console.log('✅ Market Data Feed loaded');

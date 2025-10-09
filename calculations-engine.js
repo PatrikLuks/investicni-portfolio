@@ -16,7 +16,6 @@ class CalculationsEngine {
    * Initialize calculations engine
    */
   init() {
-    console.log('✅ Calculations Engine initialized');
   }
 
   // ==================== ROI CALCULATIONS ====================
@@ -490,7 +489,6 @@ ${metrics.worstPerformers.map((p, i) => `  ${i + 1}. ${p.fond}: ${p.roi.toFixed(
    */
   setRiskFreeRate(rate) {
     this.riskFreeRate = rate;
-    console.log(`✅ Risk-free rate set to ${(rate * 100).toFixed(2)}%`);
   }
 
   /**
@@ -498,7 +496,6 @@ ${metrics.worstPerformers.map((p, i) => `  ${i + 1}. ${p.fond}: ${p.roi.toFixed(
    */
   clearCache() {
     this.cache.clear();
-    console.log('🗑️ Calculations cache cleared');
   }
 }
 
@@ -680,7 +677,6 @@ function updateMetricsPanel() {
     )
     .join('');
 
-  console.log('✅ Metrics panel updated');
 }
 
 /**
@@ -721,7 +717,6 @@ function exportMetricsReport() {
   link.download = `portfolio-metrics-${new Date().toISOString().split('T')[0]}.txt`;
   link.click();
 
-  console.log('✅ Metrics report exported');
 }
 
 // Add metrics button to UI
@@ -753,4 +748,3 @@ window.addEventListener('DOMContentLoaded', () => {
   buttonContainer.insertBefore(metricsBtn, buttonContainer.children[1]);
 });
 
-console.log('✅ Calculations Engine ready');

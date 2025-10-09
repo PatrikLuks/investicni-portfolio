@@ -27,7 +27,6 @@ async function lazyInitializeHelpSystem() {
     const { initializeHelpSystem } = await import('./modules/help-system.js');
     initializeHelpSystem();
     helpSystemInitialized = true;
-    console.log('✓ Help system loaded');
   } catch (error) {
     console.error('Failed to load help system:', error);
   }

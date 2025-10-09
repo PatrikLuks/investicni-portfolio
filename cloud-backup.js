@@ -35,7 +35,6 @@ class CloudBackupManager {
   init() {
     this.loadProviderSettings();
     this.setupAutoBackup();
-    console.log('✅ Cloud Backup Manager initialized');
   }
 
   // ==================== GOOGLE DRIVE INTEGRATION ====================
@@ -79,7 +78,6 @@ class CloudBackupManager {
             await this.createGoogleDriveFolder();
 
             this.saveProviderSettings();
-            console.log('✅ Google Drive connected successfully');
             resolve();
           } catch (error) {
             reject(error);
@@ -195,7 +193,6 @@ class CloudBackupManager {
       this.addToBackupHistory('googleDrive', fileName, result.id, content.length);
       this.saveProviderSettings();
 
-      console.log('✅ Backed up to Google Drive:', fileName);
       return { provider: 'googleDrive', fileId: result.id, fileName, timestamp };
     } catch (error) {
       console.error('❌ Google Drive backup failed:', error);
@@ -219,7 +216,6 @@ class CloudBackupManager {
         alt: 'media',
       });
 
-      console.log('✅ Restored from Google Drive:', fileId);
       return JSON.parse(response.body);
     } catch (error) {
       console.error('❌ Google Drive restore failed:', error);
@@ -270,7 +266,6 @@ class CloudBackupManager {
     };
 
     this.saveProviderSettings();
-    console.log('❌ Google Drive disconnected');
   }
 
   // ==================== DROPBOX INTEGRATION ====================
@@ -304,7 +299,6 @@ class CloudBackupManager {
       await this.createDropboxFolder();
 
       this.saveProviderSettings();
-      console.log('✅ Dropbox connected successfully:', accountInfo.email);
       return true;
     } catch (error) {
       console.error('❌ Failed to connect Dropbox:', error);
@@ -375,7 +369,6 @@ class CloudBackupManager {
       this.addToBackupHistory('dropbox', fileName, result.id, content.length);
       this.saveProviderSettings();
 
-      console.log('✅ Backed up to Dropbox:', fileName);
       return { provider: 'dropbox', fileId: result.id, fileName, timestamp };
     } catch (error) {
       console.error('❌ Dropbox backup failed:', error);
@@ -407,7 +400,6 @@ class CloudBackupManager {
       }
 
       const content = await response.text();
-      console.log('✅ Restored from Dropbox:', path);
       return JSON.parse(content);
     } catch (error) {
       console.error('❌ Dropbox restore failed:', error);
@@ -460,7 +452,6 @@ class CloudBackupManager {
     };
 
     this.saveProviderSettings();
-    console.log('❌ Dropbox disconnected');
   }
 
   // ==================== AUTO-BACKUP ====================
@@ -478,7 +469,6 @@ class CloudBackupManager {
       this.performAutoBackup();
     }, this.autoBackupFrequency);
 
-    console.log(`✅ Auto-backup enabled: every ${frequencyMinutes} minutes`);
   }
 
   /**
@@ -486,7 +476,6 @@ class CloudBackupManager {
    */
   async performAutoBackup() {
     if (this.isBackingUp) {
-      console.log('⏳ Backup already in progress, skipping...');
       return;
     }
 
@@ -496,7 +485,6 @@ class CloudBackupManager {
       // Get portfolio data
       const data = window.getFondyData ? window.getFondyData() : null;
       if (!data || data.length === 0) {
-        console.log('ℹ️ No data to backup');
         return;
       }
 
@@ -522,7 +510,6 @@ class CloudBackupManager {
       }
 
       if (results.length > 0) {
-        console.log(`✅ Auto-backup completed: ${results.length} provider(s)`);
 
         // Show toast notification
         if (typeof showToast === 'function') {
@@ -543,7 +530,6 @@ class CloudBackupManager {
     if (this.autoBackupInterval) {
       clearInterval(this.autoBackupInterval);
       this.autoBackupInterval = null;
-      console.log('❌ Auto-backup stopped');
     }
   }
 

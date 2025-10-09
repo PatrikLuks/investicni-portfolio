@@ -32,7 +32,6 @@ class AdvancedChartsManager {
   init() {
     this.checkChartJsAvailability();
     this.createChartsPanel();
-    console.log('✅ Advanced Charts Manager initialized');
   }
 
   /**
@@ -41,7 +40,6 @@ class AdvancedChartsManager {
   checkChartJsAvailability() {
     // ES2024: optional chaining for global check
     if (!window.Chart) {
-      console.warn('⚠️ Chart.js not loaded - loading from CDN...');
       this.loadChartJs();
     }
   }
@@ -58,7 +56,6 @@ class AdvancedChartsManager {
       // SRI hash for Chart.js 4.4.0 - verifies file integrity
       script.integrity = 'sha384-5VH+fHnJVcHxHaL3r7JXQOhMzPJUQJLOQpSJbf1Z5Y3a4hZ7CqzMZpF7t8vW3X8Y';
       script.onload = () => {
-        console.log('✅ Chart.js loaded with integrity check');
         resolve();
       };
       script.onerror = reject;
@@ -367,7 +364,6 @@ class AdvancedChartsManager {
     const chart = new Chart(canvas, config);
     this.chartInstances.set(containerId, chart);
 
-    console.log(`✅ Chart rendered: ${containerId}`);
     return chart;
   }
 
@@ -391,7 +387,6 @@ class AdvancedChartsManager {
     }
 
     chart.update();
-    console.log(`✅ Chart updated: ${containerId}`);
   }
 
   /**
@@ -412,7 +407,6 @@ class AdvancedChartsManager {
     link.download = filename;
     link.click();
 
-    console.log(`✅ Chart exported: ${filename}`);
   }
 
   /**
@@ -425,7 +419,6 @@ class AdvancedChartsManager {
       this.exportChartAsPNG(containerId, `${containerId}-${timestamp}.png`);
     });
 
-    console.log('✅ All charts exported');
   }
 
   /**
@@ -573,7 +566,6 @@ class AdvancedChartsManager {
       this.createProfitLossChart(data);
     }, 100);
 
-    console.log('✅ Charts panel opened');
   }
 
   /**
@@ -582,7 +574,6 @@ class AdvancedChartsManager {
   destroyAllCharts() {
     this.chartInstances.forEach((chart, id) => {
       chart.destroy();
-      console.log(`🗑️ Chart destroyed: ${id}`);
     });
     this.chartInstances.clear();
   }
@@ -632,5 +623,4 @@ function addChartsButton() {
 
   buttonContainer.insertBefore(chartsBtn, buttonContainer.firstChild);
 
-  console.log('✅ Charts button added');
 }

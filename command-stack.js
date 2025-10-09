@@ -46,7 +46,6 @@ class CommandStack {
       }
 
       this.updateUI();
-      console.log(`✅ Executed: ${command.description}`);
     } catch (error) {
       console.error('Command execution failed:', error);
       if (window.errorHandler) {
@@ -62,7 +61,6 @@ class CommandStack {
 
   undo() {
     if (!this.canUndo()) {
-      console.log('⚠️ Nothing to undo');
       return false;
     }
 
@@ -79,7 +77,6 @@ class CommandStack {
         announce(`Vráceno: ${command.description}`);
       }
 
-      console.log(`↩️ Undone: ${command.description}`);
       return true;
     } catch (error) {
       console.error('Undo failed:', error);
@@ -91,7 +88,6 @@ class CommandStack {
 
   redo() {
     if (!this.canRedo()) {
-      console.log('⚠️ Nothing to redo');
       return false;
     }
 
@@ -108,7 +104,6 @@ class CommandStack {
         announce(`Znovu provedeno: ${command.description}`);
       }
 
-      console.log(`↪️ Redone: ${command.description}`);
       return true;
     } catch (error) {
       console.error('Redo failed:', error);
@@ -131,7 +126,6 @@ class CommandStack {
     this.history = [];
     this.currentIndex = -1;
     this.updateUI();
-    console.log('🗑️ History cleared');
   }
 
   getHistory() {
@@ -559,5 +553,3 @@ commandStackStyle.textContent = `
 `;
 document.head.appendChild(commandStackStyle);
 
-console.log('✅ Undo/Redo system loaded');
-console.log('💡 Ctrl+Z (Undo), Ctrl+Y (Redo), Ctrl+H (History)');

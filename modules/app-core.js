@@ -212,7 +212,6 @@ function createFundRow(fund, index) {
 function updateProducerTable() {
   const aggregated = aggregateByProducer(portfolioData);
   // Implementation similar to updateFundTable but with aggregated data
-  console.log('Producer view:', aggregated);
 }
 
 // ==================== DATA OPERATIONS ====================
@@ -304,7 +303,6 @@ function initializeApp() {
 
   // Check if DOM is ready
   if (!elements.clientForm) {
-    console.warn('⚠️ App initialization delayed - DOM not ready');
     return setTimeout(initializeApp, 100);
   }
 
@@ -348,7 +346,6 @@ function initializeApp() {
     storage.updateLastSaveDisplay(lastSave.toISOString());
   }
 
-  console.log('✅ App initialized successfully');
 }
 
 /**

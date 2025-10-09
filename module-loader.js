@@ -15,10 +15,8 @@ class ModuleLoader {
     this.isLowPower = this.detectLowPowerMode();
 
     if (this.isSafari) {
-      console.log('🍎 Safari ultra-minimal mode');
     }
     if (this.isLowPower) {
-      console.log('⚡ Low power mode detected');
     }
   }
 
@@ -62,7 +60,6 @@ class ModuleLoader {
       script.onload = () => {
         this.loaded.add(src);
         this.loading.delete(src);
-        console.log(`✅ Loaded: ${src}`);
         resolve();
       };
 
@@ -195,9 +192,6 @@ class ModuleLoader {
       const loadTime = performance.now() - startTime;
       this.updateLoadingProgress('Hotovo!', 100);
 
-      console.log(`🎉 App loaded in ${Math.round(loadTime)}ms`);
-      console.log(`📊 Loaded ${this.loaded.size} modules initially`);
-      console.log('⏰ Remaining modules will load on-demand');
 
       // Remove loading screen
       setTimeout(() => this.hideLoadingScreen(), 500);
@@ -253,7 +247,6 @@ class ModuleLoader {
       return;
     } // Already loaded
 
-    console.log(`🔄 Loading feature: ${featureName}`);
 
     if (window.notificationSystem) {
       window.notificationSystem.show(`Načítání ${featureName}...`, 'info', 2000);
@@ -271,7 +264,6 @@ class ModuleLoader {
       const backgroundModules = ['virtual-list.js', 'performance-monitor.js', 'auto-save.js'];
 
       this.loadModules(backgroundModules, false).then(() => {
-        console.log('📦 Background modules loaded');
       });
     };
 

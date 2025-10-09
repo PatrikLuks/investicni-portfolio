@@ -26,7 +26,6 @@ class DragDropManager {
     this.createDropIndicator();
     this.createGhostElement();
     this.setupAutoScroll();
-    console.log('✅ Drag & Drop Manager initialized');
   }
 
   /**
@@ -101,7 +100,6 @@ class DragDropManager {
 
     observer.observe(tableBody, { childList: true });
 
-    console.log('✅ Drag & Drop enabled on table');
   }
 
   /**
@@ -274,7 +272,6 @@ class DragDropManager {
     // Create drag image
     this.createDragImage(e, row);
 
-    console.log(`🎯 Drag started: Row ${this.draggedIndex}`);
   }
 
   /**
@@ -337,7 +334,6 @@ class DragDropManager {
       this.onReorderCallback(this.draggedIndex, targetIndex);
     }
 
-    console.log(`✅ Dropped: Row ${this.draggedIndex} → ${targetIndex}`);
   }
 
   /**
@@ -362,7 +358,6 @@ class DragDropManager {
     this.draggedIndex = null;
     this.isDragging = false;
 
-    console.log('🏁 Drag ended');
   }
 
   /**
@@ -383,7 +378,6 @@ class DragDropManager {
     // Show ghost element
     this.showGhostElement(row, e.touches[0].clientX, e.touches[0].clientY);
 
-    console.log(`📱 Touch drag started: Row ${this.draggedIndex}`);
   }
 
   /**
@@ -439,7 +433,6 @@ class DragDropManager {
         this.onReorderCallback(this.draggedIndex, targetIndex);
       }
 
-      console.log(`✅ Touch dropped: Row ${this.draggedIndex} → ${targetIndex}`);
     }
 
     // Clean up
@@ -455,7 +448,6 @@ class DragDropManager {
     this.draggedIndex = null;
     this.isDragging = false;
 
-    console.log('🏁 Touch drag ended');
   }
 
   /**
@@ -578,7 +570,6 @@ class DragDropManager {
       // Keep focus on handle
       row.querySelector('.drag-handle')?.focus();
 
-      console.log(`⬆️ Moved row up: ${fromIndex} → ${toIndex}`);
     }
   }
 
@@ -601,7 +592,6 @@ class DragDropManager {
       // Keep focus on handle
       row.querySelector('.drag-handle')?.focus();
 
-      console.log(`⬇️ Moved row down: ${fromIndex} → ${toIndex}`);
     }
   }
 
@@ -614,7 +604,6 @@ class DragDropManager {
 
     if (isSelected) {
       row.classList.remove('keyboard-selected');
-      console.log('❌ Keyboard drag mode disabled');
     } else {
       // Remove selection from other rows
       document.querySelectorAll('.keyboard-selected').forEach((r) => {
@@ -622,7 +611,6 @@ class DragDropManager {
       });
 
       row.classList.add('keyboard-selected');
-      console.log('✅ Keyboard drag mode enabled');
     }
   }
 
@@ -688,7 +676,6 @@ class DragDropManager {
       handle.style.cursor = 'not-allowed';
       handle.style.opacity = '0.5';
     });
-    console.log('❌ Drag & Drop disabled');
   }
 
   /**
@@ -700,7 +687,6 @@ class DragDropManager {
       handle.style.cursor = 'grab';
       handle.style.opacity = '1';
     });
-    console.log('✅ Drag & Drop enabled');
   }
 
   /**
@@ -710,7 +696,6 @@ class DragDropManager {
     this.dropIndicator?.remove();
     this.ghostElement?.remove();
     this.stopAutoScroll();
-    console.log('🗑️ Drag & Drop Manager destroyed');
   }
 }
 
@@ -728,7 +713,6 @@ function initDragDrop() {
   const tableBody = document.querySelector('#portfolioTable tbody');
   if (tableBody) {
     window.dragDropManager.enableOnTable(tableBody, (fromIndex, toIndex) => {
-      console.log(`📊 Portfolio reordered: ${fromIndex} → ${toIndex}`);
 
       // Update portfolio data order
       if (typeof window.getFondyData === 'function' && typeof window.saveFondy === 'function') {
@@ -756,6 +740,5 @@ function initDragDrop() {
       }
     });
 
-    console.log('✅ Drag & Drop initialized on portfolio table');
   }
 }

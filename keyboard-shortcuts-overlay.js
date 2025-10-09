@@ -71,7 +71,6 @@ class KeyboardShortcutsOverlay {
         }
       });
 
-      console.log('✅ Keyboard Shortcuts Overlay initialized (Press ? to show)');
     } catch (error) {
       console.error('❌ Shortcuts overlay initialization failed:', error);
     }
@@ -384,4 +383,3 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-console.log('✅ Keyboard Shortcuts Overlay loaded (Press ? to show)');

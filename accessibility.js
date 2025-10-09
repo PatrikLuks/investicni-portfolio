@@ -15,7 +15,6 @@ class AccessibilityManager {
     this.enhanceKeyboardNavigation();
     this.announcePageChanges();
     this.addARIALabels();
-    console.log('✅ Accessibility Manager initialized');
   }
 
   // Add skip to main content link
@@ -336,5 +335,3 @@ window.announce = (message, priority = 'polite') => {
   window.accessibilityManager.announce(message, priority);
 };
 
-console.log('✅ Accessibility helpers loaded');
-console.log('💡 Keyboard shortcuts: Alt+H (Home), Alt+S (Search), Alt+N (New)');
