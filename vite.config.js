@@ -1,6 +1,6 @@
 /**
  * VITE CONFIGURATION - 2025 Edition
- * Investment Portfolio Manager Pro v3.1.0
+ * Investment Portfolio Manager Pro v3.2.1
  * Production-ready build setup with modern optimizations
  * Node.js 20+ | Vite 7+ | ES2024
  */
@@ -8,6 +8,7 @@
 import { defineConfig } from 'vite';
 import legacy from '@vitejs/plugin-legacy';
 import compression from 'vite-plugin-compression';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig({
   // Base public path
@@ -39,7 +40,7 @@ export default defineConfig({
 
     // 🚀 PERFORMANCE: Faster builds
     emptyOutDir: true,
-    reportCompressedSize: false, // Skip gzip size report for faster builds
+    reportCompressedSize: true, // Enable to see bundle size
 
     // Source maps for debugging
     sourcemap: true,
@@ -122,6 +123,15 @@ export default defineConfig({
       ext: '.br',
       threshold: 10240,
       deleteOriginFile: false,
+    }),
+
+    // Bundle visualizer (generates stats.html)
+    visualizer({
+      filename: './dist/stats.html',
+      open: false, // Don't auto-open browser
+      gzipSize: true,
+      brotliSize: true,
+      template: 'treemap', // Options: treemap, sunburst, network
     }),
   ],
 
