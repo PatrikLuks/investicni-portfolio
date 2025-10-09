@@ -22,78 +22,90 @@
 
 ## ⚡ Quick Start
 
+### 🎯 Nová Portfolio App (Doporučeno!)
+
 ```bash
 # 1. Clone repository
 git clone https://github.com/PatrikLuks/investicni-portfolio.git
 cd investicni-portfolio
 
-- ✅ **Historical tracking** with investment dates
+# 2. Spusť dev server
+npm install
+npm run dev
 
-- ✅ **Profit/Loss** analysis with percentage returns# 2. Spusť aplikaci (žádná instalace!)
+# 3. Otevři v prohlížeči
+http://localhost:3000/portfolio-app.html
+```
 
+**🆕 Nová funkční aplikace** - Kompletní standalone řešení s moderním designem!
+
+### 🔧 Alternativní metoda (Původní verze)
+
+```bash
+# Spusť produkční server
 ./DEPLOY.sh
 
-### 📊 Advanced Analytics
+# Otevři v prohlížeči
+http://localhost:8080/investPortfolio.html
+```
 
-- ✅ **Interactive charts** (Chart.js) - pie, bar, line graphs# 3. Otevři v prohlížeči
+**Hotovo!** 🎉 Žádné npm install potřeba, prostě funguje.
 
-- ✅ **Performance metrics** - annual returns, volatilityhttp://localhost:8080/investPortfolio.html
+---
 
-- ✅ **Risk analysis** - standard deviation, risk-adjusted returns```
+---
 
-- ✅ **Trend analysis** - historical performance tracking
+## 🎯 Dostupné aplikace
 
-- ✅ **Comparison tools** - fund vs fund, portfolio benchmarking**Hotovo!** 🎉 Žádné npm install, žádné build, prostě funguje.
+### 🆕 Portfolio App (Nová verze - Doporučeno!)
+**URL:** `http://localhost:3000/portfolio-app.html`
 
+Kompletní standalone aplikace s moderním designem:
+- ✅ **Moderní gradient UI** s plynulými animacemi
+- ✅ **Inline editace** hodnot přímo v tabulce
+- ✅ **Přepínání měn** (Kč/€) s automatickým přepočtem
+- ✅ **4 barevná schémata** (modrá, červená, zelená, žlutá)
+- ✅ **Dva pohledy** - fondy + producenti
+- ✅ **Generování reportů** s automatickým stažením
+- ✅ **Toast notifikace** pro lepší UX
+- ✅ **Kompletně standalone** - vše v jednom HTML souboru
+- ✅ **Responzivní design** pro všechna zařízení
 
+### 🔧 Index.html (Původní verze)
+**URL:** `http://localhost:3000/` nebo `http://localhost:3000/index.html`
 
-### 💾 Data Management---
+Enterprise verze s pokročilými funkcemi:
+- ✅ **Market Data API** integrace
+- ✅ **Service Worker** pro PWA
+- ✅ **Advanced Charts** s Chart.js
+- ✅ **Dark Mode** podpora
+- ✅ **Real-time validace** dat
+- ✅ **Undo/Redo** systém
+- ✅ **Auto-save** funkce
+- ✅ **Keyboard shortcuts**
 
-- ✅ **Export to Excel** (.xlsx) with full formatting
+---
 
-- ✅ **Export to PDF** with charts and summaries## 🎯 Co to je?
+## 🎯 Co to je?
 
-- ✅ **Export to CSV** for external analysis
+**Portfolio Manager Pro** je **enterprise-grade webová aplikace** pro správu investičních portfolií:
 
-- ✅ **Import data** from CSV/Excel files**Portfolio Manager Pro** je **enterprise-grade webová aplikace** pro správu investičních portfolií:
-
-- ✅ **Offline support** - PWA with localStorage
-
-- ✅ **Auto-save** - never lose your data- 🆓 **Zcela ZDARMA** - žádné skryté poplatky
-
+- 🆓 **Zcela ZDARMA** - žádné skryté poplatky
 - 🔒 **100% soukromí** - data zůstávají lokálně
+- 🚀 **Ultrarychlé** - load time 0.0003s (400x rychlejší)
+- 📱 **Funguje všude** - desktop, tablet, mobil
+- 🤖 **AI predikce** - ML-based optimalizace
+- ⭐ **Top kvalita** - 9.2/10 (A+)
 
-### 🎨 User Experience- 🚀 **Ultrarychlé** - load time 0.0003s (400x rychlejší)
+---
 
-- ✅ **Responsive design** - works on desktop, tablet, mobile- 📱 **Funguje všude** - desktop, tablet, mobil
+## 🏅 Oficiální Certifikace
 
-- ✅ **Dark mode** support- 🤖 **AI predikce** - ML-based optimalizace
-
-- ✅ **Keyboard shortcuts** for power users- ⭐ **Top kvalita** - 9.2/10 (A+)  
-
-- ✅ **Accessibility** - WCAG 2.1 AA compliant
-
-- ✅ **Multi-language** support (Czech, English)```
-
-- ✅ **Search & filter** - find funds instantly
-
-
-
-### 🔒 Security---
-
-- ✅ **Content Security Policy** headers
-
-- ✅ **XSS protection** with input sanitization## 🏅 Oficiální Certifikace
-
-- ✅ **CSRF protection** for form submissions
-
-- ✅ **No backend required** - all data stays local```
-
-- ✅ **HTTPS ready** for production deployment🏆 ENTERPRISE QUALITY CERTIFICATION
+```
+🏆 ENTERPRISE QUALITY CERTIFICATION
 
 ├─ Overall Score:        9.2/10  (92%)
-
----├─ Performance:          9.5/10  ⭐⭐⭐⭐⭐
+├─ Performance:          9.5/10  ⭐⭐⭐⭐⭐
 
 ├─ Security:             9.0/10  ⭐⭐⭐⭐⭐
 
