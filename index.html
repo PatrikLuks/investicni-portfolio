@@ -1826,7 +1826,8 @@
     <script src="error-handler.js" defer></script>
     
     <!-- Critical dependencies (loaded first) -->
-    <script src="library-loader.js" defer></script>
+    <!-- Cache-busting: v3.2.1 to force browser reload after SRI fix -->
+    <script src="library-loader.js?v=3.2.1" defer></script>
     <script src="accessibility.js" defer></script>
     <script src="notification-system.js" defer></script>
     <script src="command-stack.js" defer></script>
