@@ -120,45 +120,44 @@ class ModuleLoader {
 
   /**
    * TIER 3: ON-DEMAND - Načte se AŽ při použití
-   * Všechny ostatní moduly - 30+ modulů
+   * Všechny ostatní moduly - POUZE skutečně existující soubory
    */
   get ON_DEMAND_MODULES() {
     return {
-      // Search feature
-      search: ['search-engine.js', 'search-styles.css'],
-
       // Charts feature
-      charts: ['charts-manager.js', 'charts-styles.css', 'advanced-analytics.js'],
+      charts: ['charts-manager.js', 'charts-styles.css', 'advanced-charts.js'],
 
-      // Export features
-      export: ['excel-export.js', 'pdf-export.js'],
-
-      // Dashboard
-      dashboard: ['dashboard-builder.js', 'dashboard-styles.css'],
+      // Export features (pdf-export.js removed - doesn't exist)
+      export: ['excel-export.js'],
 
       // Drag & Drop
       dragDrop: ['drag-drop.js', 'drag-drop.css'],
 
-      // Cloud & Collaboration
-      cloud: ['cloud-backup.js', 'cloud-backup.css', 'collaboration.js', 'social-features.js'],
-
       // Help system
       help: ['help-system.js', 'keyboard-shortcuts-overlay.js', 'quick-reference.css'],
 
-      // Settings
-      settings: ['advanced-settings.js', 'i18n.js'],
-
-      // Advanced features
-      advanced: [
-        'portfolio-optimizer.js',
+      // Marketplace features
+      marketplace: [
         'market-data.js',
-        'ai-insights.js',
-        'version-control.js',
-        'activity-log.js',
+        'market-data-service.js',
+        'market-data-ui.js',
+      ],
+
+      // Theme management
+      themes: ['theme-manager.js'],
+
+      // Portfolio & Multi-portfolio
+      portfolio: [
+        'app-portfolio.js',
+        'multi-portfolio.js',
+      ],
+
+      // Utilities & Infrastructure
+      utilities: [
         'auto-save.js',
-        'virtual-list.js',
-        'performance-monitor.js',
-        'mobile-app.js',
+        'calculations-engine.js',
+        'command-stack.js',
+        'data-validation.js',
       ],
     };
   }
