@@ -184,9 +184,9 @@ class ModuleLoader {
       this.updateLoadingProgress('Načítání funkcí...', 40);
       await this.loadModules(this.ESSENTIAL_MODULES, true);
 
-      // FÁZE 3: Main app - ~100ms
+      // FÁZE 3: Main app initialization done via main.js ES module
+      // app.js has been removed - app-core.js is loaded directly
       this.updateLoadingProgress('Spouštění aplikace...', 70);
-      await this.loadModule('app.js', true);
 
       // HOTOVO
       const loadTime = performance.now() - startTime;
