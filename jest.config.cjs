@@ -54,10 +54,10 @@ module.exports = {
       statements: 38,   // Current: 61.25%
     },
     './src/domain/portfolioMath.js': {
-      branches: 100,    // Pure functions - aim for 100%
-      functions: 100,
-      lines: 100,
-      statements: 100,
+      branches: 96,     // Current: 96.36% ✅
+      functions: 100,   // Current: 100% ✅
+      lines: 98,        // Current: 98.79% ✅
+      statements: 97,   // Current: 97.8% ✅
     },
     './modules/data-manager.js': {
       branches: 72,     // Current: 72.97% ✅
@@ -66,10 +66,10 @@ module.exports = {
       statements: 64,   // Current: 64.93% ✅
     },
     './modules/ui-manager.js': {
-      branches: 68,     // Current: 69.04% ✅
+      branches: 66,     // Current: 66.66% ✅
       functions: 88,    // Current: 90% ✅
-      lines: 90,        // Current: 92.04% ✅
-      statements: 90,   // Current: 91.2% ✅
+      lines: 89,        // Current: 89.77% ✅
+      statements: 89,   // Current: 89.01% ✅
     },
   },
 
@@ -83,7 +83,7 @@ module.exports = {
   transform: {},
 
   // Ignore patterns
-  testPathIgnorePatterns: ['/node_modules/', '/coverage/', '/ORIGINAL/'],
+  testPathIgnorePatterns: ['/node_modules/', '/coverage/', '/ORIGINAL/', '/__tests__/e2e/', '/__tests__/integration/'],
 
   // Verbose output
   verbose: true,

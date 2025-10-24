@@ -255,7 +255,7 @@ describe('CalculationsEngine', () => {
         { nákupníCena: 50, počet: 20, aktuálníHodnota: 1100 }
       ];
       const totalROI = engine.calculateTotalROI(data);
-      expect(totalROI).toBeCloseTo(10, 0); // (2300 - 2000) / 2000 * 100 = 15%
+      expect(totalROI).toBeCloseTo(15, 0); // (2300 - 2000) / 2000 * 100 = 15%
     });
 
     test('should handle mixed gains and losses', () => {
