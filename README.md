@@ -17,6 +17,22 @@
 
 ---
 
+## 🎯 Kuba – Start here! 👇
+
+**Právě ses připojil na UI MVP integraci?**
+
+1. ✅ **Přečti si:** [`KUBA_UI_TASKS.md`](./KUBA_UI_TASKS.md) – 15 konkrétních testů
+2. ✅ **Zkontroluj:** [`EXECUTION_CHECKLIST.md`](./EXECUTION_CHECKLIST.md) – Co je hotovo, co zbývá
+3. 🔄 **Větvení:** `git checkout -b feat/ui-mvp-integration`
+4. 📋 **Verifikuj:** Spusť všech 15 bodů z KUBA_UI_TASKS.md
+5. 💾 **Pushni:** `git push origin feat/ui-mvp-integration` → vytvoř PR
+
+**~25 minut na kompletní ověření.** Vše potřebné je přihlášeno, nikam chodit nemusíš.
+
+---
+
+---
+
 ## 📋 Overview
 
 Portfolio Manager Pro is a modern, enterprise-grade web application for managing investment portfolios. Built with vanilla JavaScript and optimized for performance, it provides powerful analytics, real-time market data, and professional-grade reporting tools.

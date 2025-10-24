@@ -20,6 +20,7 @@ module.exports = {
 
   // Files to collect coverage from (focus on testable ES modules)
   collectCoverageFrom: [
+    'src/domain/**/*.js',        // Pure functions - full coverage
     'modules/**/*.js',           // ES modules can be properly tested
     '!modules/app-core.js',      // Requires DOM, tested via E2E
     '!modules/event-handlers.js', // Requires DOM, tested via E2E
@@ -51,6 +52,12 @@ module.exports = {
       functions: 31,    // Current: 59.09%
       lines: 39,        // Current: 62.11%
       statements: 38,   // Current: 61.25%
+    },
+    './src/domain/portfolioMath.js': {
+      branches: 100,    // Pure functions - aim for 100%
+      functions: 100,
+      lines: 100,
+      statements: 100,
     },
     './modules/data-manager.js': {
       branches: 72,     // Current: 72.97% ✅
