@@ -17,17 +17,12 @@
 
 ---
 
-## 🎯 Kuba – Start here! 👇
+## 🎯 Quick Navigation
 
-**Právě ses připojil na UI MVP integraci?**
-
-1. ✅ **Přečti si:** [`KUBA_UI_TASKS.md`](./KUBA_UI_TASKS.md) – 15 konkrétních testů
-2. ✅ **Zkontroluj:** [`EXECUTION_CHECKLIST.md`](./EXECUTION_CHECKLIST.md) – Co je hotovo, co zbývá
-3. 🔄 **Větvení:** `git checkout -b feat/ui-mvp-integration`
-4. 📋 **Verifikuj:** Spusť všech 15 bodů z KUBA_UI_TASKS.md
-5. 💾 **Pushni:** `git push origin feat/ui-mvp-integration` → vytvoř PR
-
-**~25 minut na kompletní ověření.** Vše potřebné je přihlášeno, nikam chodit nemusíš.
+- 📁 **Project Structure**: See [`PROJECT_STRUCTURE.md`](./PROJECT_STRUCTURE.md) for detailed architecture
+- 👨‍💻 **Development Setup**: See [`DEVELOPER_GUIDE.md`](./DEVELOPER_GUIDE.md)
+- � **User Guide**: See [`USER_GUIDE.md`](./USER_GUIDE.md)
+- � **Security**: See [`SECURITY.md`](./SECURITY.md)
 
 ---
 
@@ -35,7 +30,7 @@
 
 ## 📋 Overview
 
-Portfolio Manager Pro is a modern, enterprise-grade web application for managing investment portfolios. Built with vanilla JavaScript and optimized for performance, it provides powerful analytics, real-time market data, and professional-grade reporting tools.
+Portfolio Manager Pro v3.2.1 is a modern, enterprise-grade web application for managing investment portfolios. Built with vanilla JavaScript and optimized for performance, it provides powerful analytics, real-time market data, and professional-grade reporting tools.
 
 ### ✨ Key Features
 

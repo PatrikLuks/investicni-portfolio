@@ -56,26 +56,22 @@
     <!-- - Fuse.js, Chart.js, Chart.js Zoom, jsPDF, SheetJS -->
     <!-- Will load on-demand when needed via library-loader.js -->
 
-    <!-- Core Styles -->
-    <link rel="stylesheet" href="accessibility.css" />
-    <link rel="stylesheet" href="module-loader.css" />
-    <link rel="stylesheet" href="search-styles.css" />
-    <link rel="stylesheet" href="drag-drop.css" />
-    <link rel="stylesheet" href="cloud-backup.css" />
-    <link rel="stylesheet" href="validation-styles.css" />
-    <link rel="stylesheet" href="charts-styles.css" />
-    <link rel="stylesheet" href="quick-reference.css" />
-    <link rel="stylesheet" href="calculations-styles.css" />
-    <link rel="stylesheet" href="dashboard-styles.css" />
+    <!-- CORE Styles -->
+    <link rel="stylesheet" href="src/css/core/accessibility.css" />
+    <link rel="stylesheet" href="src/css/core/module-loader.css" />
 
-    <!-- ✨ v3.1.0 Premium Styles -->
-    <link rel="stylesheet" href="styles-v3.1.css" />
+    <!-- FEATURES Styles -->
+    <link rel="stylesheet" href="src/css/features/search-styles.css" />
+    <link rel="stylesheet" href="src/css/features/drag-drop.css" />
+    <link rel="stylesheet" href="src/css/features/validation-styles.css" />
+    <link rel="stylesheet" href="src/css/features/charts-styles.css" />
+    <link rel="stylesheet" href="src/css/features/quick-reference.css" />
+    <link rel="stylesheet" href="src/css/features/calculations-styles.css" />
+    <link rel="stylesheet" href="src/css/features/dashboard-styles.css" />
 
-    <!-- ⚡ REFACTORED MODULAR STYLES (replaces inline styles) -->
-    <link rel="stylesheet" href="modules/refactored-styles.css" />
-
-    <!-- 🆘 HELP SYSTEM - User Guide & Onboarding -->
-    <link rel="stylesheet" href="help-system.css" />
+    <!-- THEMES Styles -->
+    <link rel="stylesheet" href="src/css/themes/styles-v3.1.css" />
+    <link rel="stylesheet" href="src/css/themes/help-system.css" />
 
     <style>
       :root {
@@ -1829,26 +1825,43 @@
     </script>
 
     <!-- 🚀 ES6 MODULE ARCHITECTURE: Clean, modular, production-ready -->
-    <script src="error-handler.js" defer></script>
+    <!-- CORE: Error handling and accessibility -->
+    <script src="src/js/core/error-handler.js" defer></script>
+    <script src="src/js/core/accessibility.js" defer></script>
+    <script src="src/js/core/notification-system.js" defer></script>
 
-    <!-- Critical dependencies (loaded first) -->
-    <!-- Cache-busting: v3.2.1 to force browser reload after SRI fix -->
-    <script src="library-loader.js?v=3.2.1" defer></script>
-    <script src="accessibility.js" defer></script>
-    <script src="notification-system.js" defer></script>
-    <script src="command-stack.js" defer></script>
-    <script src="data-validation.js" defer></script>
-    <script src="calculations-engine.js" defer></script>
+    <!-- LOADERS: Module and library loading system -->
+    <script src="src/js/loaders/library-loader.js?v=3.2.1" defer></script>
+    <script src="src/js/loaders/module-loader.js" defer></script>
 
-    <!-- ✨ v3.1.0 Premium Features -->
-    <script src="theme-manager.js" defer></script>
-    <script src="auto-save.js" defer></script>
-    <script src="keyboard-shortcuts-overlay.js" defer></script>
-    <script src="market-data-service.js" defer></script>
-    <script src="market-data-ui.js" defer></script>
-    <script src="multi-portfolio.js" defer></script>
-    <script src="advanced-charts.js" defer></script>
-    <script src="charts-manager.js" defer></script>
+    <!-- UTILITIES: Data validation and calculations -->
+    <script src="src/js/utilities/command-stack.js" defer></script>
+    <script src="src/js/utilities/data-validation.js" defer></script>
+    <script src="src/js/utilities/calculations-engine.js" defer></script>
+    <script src="src/js/utilities/auto-save.js" defer></script>
+    <script src="src/js/utilities/drag-drop.js" defer></script>
+    <script src="src/js/utilities/keyboard-shortcuts-overlay.js" defer></script>
+    <script src="src/js/utilities/service-worker.js" defer></script>
+
+    <!-- FEATURES: Market data and portfolio management -->
+    <script src="src/js/features/marketplace/market-data-service.js" defer></script>
+    <script src="src/js/features/marketplace/market-data-ui.js" defer></script>
+    <script src="src/js/features/marketplace/market-data.js" defer></script>
+    <script src="src/js/features/portfolio/multi-portfolio.js" defer></script>
+    <script src="src/js/features/portfolio/app-portfolio.js" defer></script>
+
+    <!-- FEATURES: Charts and visualization -->
+    <script src="src/js/features/charts/charts-manager.js" defer></script>
+    <script src="src/js/features/charts/advanced-charts.js" defer></script>
+
+    <!-- FEATURES: Export functionality -->
+    <script src="src/js/features/export/excel-export.js" defer></script>
+
+    <!-- THEMES: Styling and theming -->
+    <script src="src/js/features/themes/theme-manager.js" defer></script>
+
+    <!-- APP LOADER: Main app controller -->
+    <script src="src/js/loaders/app.js" defer></script>
 
     <!-- 🎯 MAIN APPLICATION: ES6 Module Entry Point (load last) -->
     <script type="module" src="main.js"></script>

@@ -18,7 +18,6 @@ import {
 import {
   calculatePortfolioMetrics,
   calculateFundYield,
-  aggregateByProducer,
   sortFunds,
   filterFunds,
 } from './portfolio-calculator.js';
@@ -210,7 +209,7 @@ function createFundRow(fund, index) {
  * @returns {void}
  */
 function updateProducerTable() {
-  const aggregated = aggregateByProducer(portfolioData);
+  // const aggregated = aggregateByProducer(portfolioData);
   // Implementation similar to updateFundTable but with aggregated data
 }
 

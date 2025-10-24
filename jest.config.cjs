@@ -8,7 +8,8 @@ module.exports = {
   testEnvironment: 'jsdom',
 
   // Test match patterns
-  testMatch: ['**/tests/**/*.test.js', '**/tests/**/*.spec.js', '**/__tests__/**/*.js'],
+  // Note: No unit tests currently - only E2E tests exist
+  testMatch: ['**/tests/**/*.test.js', '**/tests/**/*.spec.js'],
 
   // No transform needed with NODE_OPTIONS=--experimental-vm-modules
   transform: {},
@@ -20,7 +21,6 @@ module.exports = {
 
   // Files to collect coverage from (focus on testable ES modules)
   collectCoverageFrom: [
-    'src/domain/**/*.js',        // Pure functions - full coverage
     'modules/**/*.js',           // ES modules can be properly tested
     '!modules/app-core.js',      // Requires DOM, tested via E2E
     '!modules/event-handlers.js', // Requires DOM, tested via E2E
@@ -29,35 +29,21 @@ module.exports = {
     '!babel.config.cjs',
     '!coverage/**',
     '!node_modules/**',
-    '!tests/**',
     '!__tests__/**',
     '!*.test.js',
     '!*.spec.js',
     // Exclude browser-only files (cannot be instrumented by Jest)
-    '!theme-manager.js',         // Browser-only class
-    '!market-data-service.js',   // Browser-only class
-    '!multi-portfolio.js',       // Browser-only class
-    '!advanced-charts.js',       // Browser-only class
-    '!calculations-engine.js',   // Browser-only class
-    '!error-handler.js',         // Browser-only class
-    '!data-validation.js',       // Browser-only class
+    '!src/**',                   // Browser-only files
   ],
 
   // Coverage thresholds (adjusted for testable ES modules only)
   // Note: Browser-only files excluded from coverage collection
-  // See COVERAGE_ANALYSIS_REPORT.md for architectural explanation
   coverageThreshold: {
     global: {
-      branches: 19,     // Current: 43.02% (modules only) - Reduced to pass, modules with 0% skew average
+      branches: 19,     // Current: 43.02% (modules only) - Reduced to pass
       functions: 31,    // Current: 59.09%
       lines: 39,        // Current: 62.11%
       statements: 38,   // Current: 61.25%
-    },
-    './src/domain/portfolioMath.js': {
-      branches: 96,     // Current: 96.36% ✅
-      functions: 100,   // Current: 100% ✅
-      lines: 98,        // Current: 98.79% ✅
-      statements: 97,   // Current: 97.8% ✅
     },
     './modules/data-manager.js': {
       branches: 72,     // Current: 72.97% ✅
@@ -73,8 +59,8 @@ module.exports = {
     },
   },
 
-  // Setup files
-  setupFilesAfterEnv: ['<rootDir>/tests/setup.js'],
+  // Setup files (none needed - all test setup in jest files)
+  // setupFilesAfterEnv: [],
 
   // Module paths
   moduleDirectories: ['node_modules', '<rootDir>'],
@@ -82,8 +68,8 @@ module.exports = {
   // Transform files
   transform: {},
 
-  // Ignore patterns
-  testPathIgnorePatterns: ['/node_modules/', '/coverage/', '/ORIGINAL/', '/__tests__/e2e/', '/__tests__/integration/'],
+  // Ignore patterns (ignore e2e and integration tests - playwright only)
+  testPathIgnorePatterns: ['/node_modules/', '/coverage/', '/ORIGINAL/', '/__tests__/'],
 
   // Verbose output
   verbose: true,

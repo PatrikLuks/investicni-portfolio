@@ -117,7 +117,7 @@ export function deepClone(obj) {
  */
 export function isEmpty(value) {
   // ES2024 nullish coalescing for cleaner null/undefined check
-  if (value == null) {
+  if (value === null || value === undefined) {
     return true;
   }
   if (typeof value === 'string' && value.trim() === '') {
