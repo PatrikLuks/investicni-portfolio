@@ -299,7 +299,12 @@ class CandlestickChart {
     this.chart = null;
   }
 
-  render(data) {
+  async render(data) {
+    // Load Chart.js on-demand
+    if (!window.libraryLoader?.loaded?.chart) {
+      await window.libraryLoader.loadChart();
+    }
+
     // data format: [{ date, open, high, low, close }]
     if (this.chart) {
       this.chart.destroy();
@@ -362,7 +367,12 @@ class WaterfallChart {
     this.chart = null;
   }
 
-  render(data) {
+  async render(data) {
+    // Load Chart.js on-demand
+    if (!window.libraryLoader?.loaded?.chart) {
+      await window.libraryLoader.loadChart();
+    }
+
     // data format: [{ label, value }]
     if (this.chart) {
       this.chart.destroy();

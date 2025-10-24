@@ -69,7 +69,7 @@ class AdvancedChartsManager {
    * @param {string} containerId - Container element ID
    * @returns {Chart} - Chart instance
    */
-  createAllocationChart(data, containerId = 'allocationChart') {
+  async createAllocationChart(data, containerId = 'allocationChart') {
     const categoryData = this.aggregateByCategory(data);
 
     const config = {
@@ -123,7 +123,7 @@ class AdvancedChartsManager {
       },
     };
 
-    return this.renderChart(containerId, config);
+    return await this.renderChart(containerId, config);
   }
 
   /**
@@ -132,7 +132,7 @@ class AdvancedChartsManager {
    * @param {string} containerId - Container element ID
    * @returns {Chart} - Chart instance
    */
-  createPerformanceChart(data, containerId = 'performanceChart') {
+  async createPerformanceChart(data, containerId = 'performanceChart') {
     // Simulate historical data (in real app, this would come from backend)
     const historicalData = this.generateHistoricalData(data);
 
@@ -208,7 +208,7 @@ class AdvancedChartsManager {
       },
     };
 
-    return this.renderChart(containerId, config);
+    return await this.renderChart(containerId, config);
   }
 
   /**
@@ -217,7 +217,7 @@ class AdvancedChartsManager {
    * @param {string} containerId - Container element ID
    * @returns {Chart} - Chart instance
    */
-  createHoldingsChart(data, containerId = 'holdingsChart') {
+  async createHoldingsChart(data, containerId = 'holdingsChart') {
     // Sort by value and take top 10
     const sortedData = [...data]
       .sort((a, b) => parseFloat(b.aktuálníHodnota) - parseFloat(a.aktuálníHodnota))
@@ -265,7 +265,7 @@ class AdvancedChartsManager {
       },
     };
 
-    return this.renderChart(containerId, config);
+    return await this.renderChart(containerId, config);
   }
 
   /**
@@ -274,7 +274,7 @@ class AdvancedChartsManager {
    * @param {string} containerId - Container element ID
    * @returns {Chart} - Chart instance
    */
-  createProfitLossChart(data, containerId = 'profitLossChart') {
+  async createProfitLossChart(data, containerId = 'profitLossChart') {
     const profitLossData = data
       .map((item) => {
         const current = parseFloat(item.aktuálníHodnota);
@@ -332,7 +332,7 @@ class AdvancedChartsManager {
       },
     };
 
-    return this.renderChart(containerId, config);
+    return await this.renderChart(containerId, config);
   }
 
   /**
@@ -341,7 +341,17 @@ class AdvancedChartsManager {
    * @param {Object} config - Chart configuration
    * @returns {Chart} - Chart instance
    */
-  renderChart(containerId, config) {
+  async renderChart(containerId, config) {
+    // Load Chart.js on-demand if needed
+    if (window.libraryLoader && !window.libraryLoader.loaded?.chart) {
+      try {
+        await window.libraryLoader.loadChart();
+      } catch (e) {
+        console.error('❌ Failed to load Chart.js:', e);
+        return null;
+      }
+    }
+
     const container = document.getElementById(containerId);
     if (!container) {
       console.error(`Container ${containerId} not found`);

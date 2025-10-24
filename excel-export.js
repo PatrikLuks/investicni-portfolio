@@ -30,19 +30,43 @@ class ExcelExportManager {
   }
 
   /**
-   * Ensure SheetJS library is loaded with SRI - 2025 Security
+   * Ensure SheetJS library is loaded - uses LibraryLoader for on-demand loading
    */
   async ensureSheetJSLoaded() {
     if (this.sheetJSLoaded && typeof XLSX !== 'undefined') {
       return;
     }
 
+    // Use LibraryLoader for on-demand loading with caching
+    if (window.libraryLoader?.loaded?.xlsx) {
+      this.sheetJSLoaded = true;
+      return;
+    }
+
+    if (!window.libraryLoader) {
+      console.warn('⚠️ LibraryLoader not available, falling back to direct load');
+      return this.loadSheetJSManually();
+    }
+
+    // Load via libraryLoader (caches, handles SRI, etc.)
+    try {
+      await window.libraryLoader.loadXLSX();
+      this.sheetJSLoaded = true;
+    } catch (error) {
+      console.error('❌ Failed to load SheetJS via LibraryLoader:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Fallback: Load SheetJS manually (old method, used if LibraryLoader unavailable)
+   */
+  loadSheetJSManually() {
     return new Promise((resolve, reject) => {
       const script = document.createElement('script');
-      script.src = 'https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js';
+      script.src = 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
       script.crossOrigin = 'anonymous';
-      // SRI hash for SheetJS 0.20.1 - verifies file integrity
-      script.integrity = 'sha384-q4XO0HE1z6cHJMLhHdW5eU5Yz7jHKlmOqBHkHZIJVqz5X5ygR2r8Y3MpF7w9pZ3Y';
+      script.integrity = 'sha384-vtjasyidUo0kW94K5MXDXntzOJpQgBKXmE7e2';
       script.onload = () => {
         this.sheetJSLoaded = true;
         resolve();

@@ -1923,7 +1923,17 @@ function initializeApp() {
                 if (window.myBarChart) window.myBarChart.update();
             });
             
-            document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('DOMContentLoaded', async function() {
+                // Load Chart.js on-demand before first use
+                if (window.libraryLoader && !window.libraryLoader.loaded?.chart) {
+                    try {
+                        await window.libraryLoader.loadChart();
+                    } catch (e) {
+                        console.error('❌ Failed to load Chart.js:', e);
+                        return;
+                    }
+                }
+                
                 Chart.register(window.ChartDataLabels);
                 // Data pro grafy
                 const portfolioData = ${JSON.stringify(portfolioData)};
