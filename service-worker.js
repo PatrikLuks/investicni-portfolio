@@ -1,10 +1,10 @@
 /**
  * Portfolio Manager Pro - Service Worker
- * Version: 3.2.2
+ * Version: 3.2.3
  * PWA Support with offline caching (external APIs excluded)
  */
 
-const CACHE_VERSION = 'portfolio-v3.2.2';
+const CACHE_VERSION = 'portfolio-v3.2.3';
 const CACHE_NAME = `portfolio-manager-${CACHE_VERSION}`;
 
 // Assets to cache on install
@@ -58,7 +58,7 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
   
-  // Skip caching for external APIs (Yahoo Finance, etc.)
+  // Skip service worker completely for external APIs (Yahoo Finance, etc.)
   const isExternalAPI = 
     url.origin !== self.location.origin &&
     (url.hostname.includes('finance.yahoo.com') ||
@@ -66,8 +66,7 @@ self.addEventListener('fetch', (event) => {
      url.hostname.includes('finnhub.io'));
 
   if (isExternalAPI) {
-    // Just pass through external API requests without caching
-    event.respondWith(fetch(event.request));
+    // Don't intercept external API requests at all - let browser handle them
     return;
   }
 
@@ -88,9 +87,9 @@ self.addEventListener('fetch', (event) => {
       })
       .catch(() => {
         // Network failed, try cache
-        return caches.match(event.request).then((response) => {
-          if (response) {
-            return response;
+        return caches.match(event.request).then((cachedResponse) => {
+          if (cachedResponse) {
+            return cachedResponse;
           }
 
           // If not in cache and it's navigation, return offline page
@@ -98,8 +97,11 @@ self.addEventListener('fetch', (event) => {
             return caches.match('/index.html');
           }
           
-          // For other requests, return null to allow browser default behavior
-          return null;
+          // For other failed requests, return a basic error response
+          return new Response('Network error', {
+            status: 408,
+            headers: { 'Content-Type': 'text/plain' }
+          });
         });
       }),
   );
