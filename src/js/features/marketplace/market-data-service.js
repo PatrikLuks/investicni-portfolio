@@ -36,6 +36,20 @@ class MarketDataService {
     this.RETRY_DELAY = 1000;
 
     this.loadApiKeys();
+    
+    // Show CORS warning once
+    if (!localStorage.getItem('corsWarningShown')) {
+      setTimeout(() => {
+        if (window.notificationSystem) {
+          window.notificationSystem.show(
+            'ℹ️ Development Mode: Using mock market data due to CORS restrictions. For production, configure a backend proxy.',
+            'info',
+            8000
+          );
+        }
+        localStorage.setItem('corsWarningShown', 'true');
+      }, 2000);
+    }
   }
 
   loadApiKeys() {
@@ -296,22 +310,64 @@ class MarketDataService {
   }
 
   async searchSymbol(query) {
-    // Yahoo Finance search
-    const url = `${this.providers.yahoo.baseUrl}/v1/finance/search?q=${encodeURIComponent(query)}`;
-
-    try {
-      const data = await this.fetchWithRetry(url);
-
-      return (data.quotes || []).map((quote) => ({
-        symbol: quote.symbol,
-        name: quote.longname || quote.shortname,
-        type: quote.quoteType,
-        exchange: quote.exchange,
-      }));
-    } catch (error) {
-      console.error('Symbol search error:', error);
-      return [];
+    // Note: Yahoo Finance API has CORS restrictions
+    // For production, use a backend proxy server
+    // For now, return mock data for development
+    
+    console.warn('⚠️ Yahoo Finance API blocked by CORS. Using mock data for development.');
+    console.info('💡 For production: Set up a backend proxy server to access Yahoo Finance API');
+    
+    // Mock data for common symbols
+    const mockResults = {
+      'aapl': [
+        { symbol: 'AAPL', name: 'Apple Inc.', type: 'EQUITY', exchange: 'NASDAQ' }
+      ],
+      'google': [
+        { symbol: 'GOOGL', name: 'Alphabet Inc. Class A', type: 'EQUITY', exchange: 'NASDAQ' },
+        { symbol: 'GOOG', name: 'Alphabet Inc. Class C', type: 'EQUITY', exchange: 'NASDAQ' }
+      ],
+      'msft': [
+        { symbol: 'MSFT', name: 'Microsoft Corporation', type: 'EQUITY', exchange: 'NASDAQ' }
+      ],
+      'tsla': [
+        { symbol: 'TSLA', name: 'Tesla, Inc.', type: 'EQUITY', exchange: 'NASDAQ' }
+      ],
+      'amzn': [
+        { symbol: 'AMZN', name: 'Amazon.com, Inc.', type: 'EQUITY', exchange: 'NASDAQ' }
+      ],
+      'meta': [
+        { symbol: 'META', name: 'Meta Platforms, Inc.', type: 'EQUITY', exchange: 'NASDAQ' }
+      ],
+      'nvda': [
+        { symbol: 'NVDA', name: 'NVIDIA Corporation', type: 'EQUITY', exchange: 'NASDAQ' }
+      ]
+    };
+    
+    const searchKey = query.toLowerCase();
+    
+    // Try exact match first
+    if (mockResults[searchKey]) {
+      return mockResults[searchKey];
     }
+    
+    // Try partial match
+    const matches = [];
+    for (const [key, value] of Object.entries(mockResults)) {
+      if (key.includes(searchKey) || 
+          value.some(item => 
+            item.symbol.toLowerCase().includes(searchKey) ||
+            item.name.toLowerCase().includes(searchKey)
+          )) {
+        matches.push(...value);
+      }
+    }
+    
+    if (matches.length > 0) {
+      return matches;
+    }
+    
+    // Return empty if no match
+    return [];
   }
 
   clearCache() {
