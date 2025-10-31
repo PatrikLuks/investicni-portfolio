@@ -51,10 +51,10 @@ class AdvancedChartsManager {
   loadChartJs() {
     return new Promise((resolve, reject) => {
       const script = document.createElement('script');
-      script.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';
+      script.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js';
       script.crossOrigin = 'anonymous';
-      // SRI hash for Chart.js 4.4.0 - verifies file integrity
-      script.integrity = 'sha384-5VH+fHnJVcHxHaL3r7JXQOhMzPJUQJLOQpSJbf1Z5Y3a4hZ7CqzMZpF7t8vW3X8Y';
+      // SRI hash for Chart.js 4.4.1 - verifies file integrity
+      script.integrity = 'sha384-9nhczxUqK87bcKHh20fSQcTGD4qq5GhayNYSYWqwBkINBhOfQLg/P5HG5lF1urn4';
       script.onload = () => {
         resolve();
       };
