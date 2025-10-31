@@ -63,22 +63,22 @@ function deleteFond(index) {
 // Event listener pro formulář se jménem klienta
 clientForm.addEventListener('submit', function (e) {
   e.preventDefault();
-  clientName = document.getElementById('clientName').value;
-  advisorName = document.getElementById('advisorName').value;
-  advisorEmail = document.getElementById('advisorEmail').value;
+  clientName = safeGetValue('clientName', '');
+  advisorName = safeGetValue('advisorName', '');
+  advisorEmail = safeGetValue('advisorEmail', '');
 
   // Hide first card, show portfolio card
-  document.getElementById('clientNameCard').style.display = 'none';
-  document.getElementById('portfolioCard').style.display = 'block';
-  document.getElementById('fondListCard').style.display = 'block';
-  document.getElementById('clientNameDisplay').textContent = clientName;
+  safeSetDisplay('clientNameCard', 'none');
+  safeSetDisplay('portfolioCard', 'block');
+  safeSetDisplay('fondListCard', 'block');
+  safeSetText('clientNameDisplay', clientName);
 
   // Initialize color picker after showing the portfolio card
   initializeColorPicker();
 });
 
 function initializeColorPicker() {
-  const buttons = document.querySelectorAll('.scheme-button');
+  const buttons = safeQuerySelectorAll('.scheme-button');
 
   buttons.forEach((button) => {
     button.addEventListener('click', function () {
@@ -97,7 +97,7 @@ function initializeColorPicker() {
   });
 
   // Set default color scheme
-  const blueButton = document.querySelector('.blue-scheme');
+  const blueButton = safeQuerySelector('.blue-scheme');
   if (blueButton) {
     blueButton.classList.add('active');
     window.selectedColorScheme = 'blue';
@@ -109,11 +109,11 @@ portfolioForm.addEventListener('submit', function (e) {
   e.preventDefault();
 
   const fondData = {
-    name: document.getElementById('fondName').value,
-    producer: document.getElementById('producer').value,
-    investment: parseFloat(document.getElementById('investment').value),
-    investmentDate: document.getElementById('investmentDate').value,
-    value: parseFloat(document.getElementById('value').value),
+    name: safeGetValue('fondName', ''),
+    producer: safeGetValue('producer', ''),
+    investment: parseFloat(safeGetValue('investment', '')),
+    investmentDate: safeGetValue('investmentDate', ''),
+    value: parseFloat(safeGetValue('value', '')),
   };
 
   // Přidáme nový fond do pole
@@ -126,10 +126,10 @@ portfolioForm.addEventListener('submit', function (e) {
   updateFondTable();
 
   // Vyčistíme formulář
-  document.getElementById('portfolioForm').reset();
+  safeResetForm('portfolioForm');
 
   // Zobrazíme kartu se seznamem fondů
-  document.getElementById('fondListCard').style.display = 'block';
+  safeSetDisplay('fondListCard', 'block');
 });
 
 function updateFondTable() {
@@ -162,7 +162,7 @@ function updateFondTable() {
       tbody.appendChild(row);
     });
     // Přidáme event listener pro změny v inputech
-    document.querySelectorAll('.inline-edit').forEach((input) => {
+    safeQuerySelectorAll('.inline-edit').forEach((input) => {
       input.addEventListener('change', function () {
         const index = parseInt(this.dataset.index);
         const field = this.dataset.field;
@@ -232,7 +232,7 @@ function deleteFond(index) {
 
   // Skryjeme tabulku, pokud není žádný fond
   if (portfolioData.length === 0) {
-    document.getElementById('fondListCard').style.display = 'none';
+    safeSetDisplay('fondListCard', 'none');
   }
 }
 
@@ -1296,9 +1296,9 @@ function generatePortfolioHTML(portfolioData) {
                 const portfolioData = ${JSON.stringify(portfolioData)};
                 const validData = portfolioData.filter(item => !isNaN(item.value) && !isNaN(item.investment));
                 if (!validData.length) {
-                    document.getElementById('pieChart').remove();
-                    document.getElementById('barChart').remove();
-                    const charts = document.querySelector('.charts-container');
+                    safeRemoveElement('pieChart');
+                    safeRemoveElement('barChart');
+                    const charts = safeQuerySelector('.charts-container');
                     charts.innerHTML = '<div style="width:100%;text-align:center;color:#aaa;font-size:1.2rem;padding:60px 0;">Žádná data pro zobrazení grafů</div>';
                     return;
                 }
@@ -1386,7 +1386,7 @@ function generatePortfolioHTML(portfolioData) {
                         },
                         plugins: [window.ChartDataLabels]
                     });
-                } catch (e) { document.getElementById('pieChart').style.display = 'none'; }
+                } catch (e) { safeSetDisplay('pieChart', 'none'); }
                 // Bar Chart
                 try {
                     let barLabels, barData, barColors, fullLabels;
@@ -1512,7 +1512,7 @@ function generatePortfolioHTML(portfolioData) {
                         },
                         plugins: [window.ChartDataLabels]
                     });
-                } catch (e) { document.getElementById('barChart').style.display = 'none'; }
+                } catch (e) { safeSetDisplay('barChart', 'none'); }
             });
         </script>
     </body>
@@ -1531,7 +1531,7 @@ function generatePortfolioHTML(portfolioData) {
 // Make sure the color picker is initialized with a default selection
 document.addEventListener('DOMContentLoaded', function () {
   // Select blue as default
-  const defaultColor = document.querySelector('.color-option[data-color="blue"]');
+  const defaultColor = safeQuerySelector('.color-option[data-color="blue"]');
   defaultColor.classList.add('selected');
 });
 
@@ -1555,7 +1555,7 @@ const csvImportHTML = `
 portfolioForm.insertAdjacentHTML('beforebegin', csvImportHTML);
 
 // Add event listener for the process CSV button
-document.getElementById('processCSV').addEventListener('click', function () {
+safeAddEventListener('processCSV', 'click', function () {
   const fileInput = document.getElementById('csvFile');
   const file = fileInput.files[0];
 
@@ -1657,7 +1657,7 @@ document.getElementById('processCSV').addEventListener('click', function () {
 
     // Update the table and show it
     updateFondTable();
-    document.getElementById('fondListCard').style.display = 'block';
+    safeSetDisplay('fondListCard', 'block');
 
     // Clear the file input
     fileInput.value = '';
