@@ -314,8 +314,12 @@ class MarketDataService {
     // For production, use a backend proxy server
     // For now, return mock data for development
     
-    console.warn('⚠️ Yahoo Finance API blocked by CORS. Using mock data for development.');
-    console.info('💡 For production: Set up a backend proxy server to access Yahoo Finance API');
+    // Log warning only once per session
+    if (!window._marketDataWarningShown) {
+      console.warn('⚠️ Yahoo Finance API blocked by CORS. Using mock data for development.');
+      console.info('💡 For production: Set up a backend proxy server to access Yahoo Finance API');
+      window._marketDataWarningShown = true;
+    }
     
     // Mock data for common symbols
     const mockResults = {
