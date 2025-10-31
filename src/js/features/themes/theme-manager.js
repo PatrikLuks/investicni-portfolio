@@ -60,8 +60,15 @@ class ThemeManager {
         : theme;
 
     document.documentElement.setAttribute('data-theme', effectiveTheme);
-    document.body.classList.remove('theme-light', 'theme-dark');
+    document.body.classList.remove('theme-light', 'theme-dark', 'dark-mode', 'light-mode');
     document.body.classList.add(`theme-${effectiveTheme}`);
+    
+    // Add dark-mode class for CSS compatibility
+    if (effectiveTheme === this.THEMES.DARK) {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.add('light-mode');
+    }
 
     // Update meta theme-color for mobile browsers
     const themeColor = effectiveTheme === this.THEMES.DARK ? '#1a1a1a' : '#ffffff';
