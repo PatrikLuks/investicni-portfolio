@@ -41,10 +41,10 @@ class MarketDataService {
     if (!localStorage.getItem('corsWarningShown')) {
       setTimeout(() => {
         if (window.notificationSystem) {
-          window.notificationSystem.show(
-            'ℹ️ Development Mode: Using mock market data due to CORS restrictions. For production, configure a backend proxy.',
+          window.notificationSystem.showInAppNotification(
+            'Development Mode',
             'info',
-            8000
+            'Using mock market data due to CORS restrictions. For production, configure a backend proxy.'
           );
         }
         localStorage.setItem('corsWarningShown', 'true');
