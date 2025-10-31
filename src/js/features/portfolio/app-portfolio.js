@@ -464,7 +464,7 @@ function generatePortfolioHTML(portfolioData) {
       const investment = Number(item.investment);
       const value = Number(item.value);
       const profit = value - investment;
-      const yield = investment !== 0 ? ((profit / investment) * 100).toFixed(2) : '0.00';
+      const yieldPercent = investment !== 0 ? ((profit / investment) * 100).toFixed(2) : '0.00';
       const currentDate = new Date().toLocaleDateString('cs-CZ');
 
       // Výpočet výnosu p.a. na základě doby držení
@@ -491,16 +491,16 @@ function generatePortfolioHTML(portfolioData) {
               const annualizedReturn = Math.pow(value / investment, 1 / yearsHeld) - 1;
               yieldPA = (annualizedReturn * 100).toFixed(2);
             } else {
-              yieldPA = yield; // Pokud je investice mladší než rok, použijeme běžný výnos
+              yieldPA = yieldPercent; // Pokud je investice mladší než rok, použijeme běžný výnos
             }
           } else {
-            yieldPA = yield; // Neplatné datum
+            yieldPA = yieldPercent; // Neplatné datum
           }
         } catch (e) {
-          yieldPA = yield; // Chyba při parsování data
+          yieldPA = yieldPercent; // Chyba při parsování data
         }
       } else {
-        yieldPA = yield; // Fallback na běžný výnos
+        yieldPA = yieldPercent; // Fallback na běžný výnos
       }
       let displayDate;
       if (
@@ -529,7 +529,7 @@ function generatePortfolioHTML(portfolioData) {
                 <td data-value="${investment}">${investment.toLocaleString('cs-CZ')} ${currencySymbol}</td>
                 <td data-value="${value}">${value.toLocaleString('cs-CZ')} ${currencySymbol}</td>
                 <td data-value="${profit}" class="${profit >= 0 ? 'positive' : 'negative'}">${profit.toLocaleString('cs-CZ')} ${currencySymbol}</td>
-                <td data-value="${yield}" class="${yield >= 0 ? 'positive' : 'negative'}">${yield}%</td>
+                <td data-value="${yieldPercent}" class="${yieldPercent >= 0 ? 'positive' : 'negative'}">${yieldPercent}%</td>
                 <td data-value="${yieldPA}" class="${yieldPA >= 0 ? 'positive' : 'negative'}">${yieldPA}%</td>
             </tr>`;
       totalInvestment += investment;
@@ -1420,8 +1420,8 @@ function generatePortfolioHTML(portfolioData) {
                         fullLabels = sortedData.map(item => item.name);
                         barData = sortedData.map(item => ((item.value - item.investment) / item.investment * 100));
                         barColors = sortedData.map((item, index) => {
-                            const yield = ((item.value - item.investment) / item.investment * 100);
-                            return yield >= 0 ? fondColors.positive[index % fondColors.positive.length] : fondColors.negative[index % fondColors.negative.length];
+                            const yieldPercent = ((item.value - item.investment) / item.investment * 100);
+                            return yieldPercent >= 0 ? fondColors.positive[index % fondColors.positive.length] : fondColors.negative[index % fondColors.negative.length];
                         });
                     }
                     window.myBarChart = new Chart(document.getElementById('barChart').getContext('2d'), {
