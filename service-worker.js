@@ -1,10 +1,10 @@
 /**
  * Portfolio Manager Pro - Service Worker
- * Version: 3.2.1
- * PWA Support with offline caching
+ * Version: 3.2.2
+ * PWA Support with offline caching (external APIs excluded)
  */
 
-const CACHE_VERSION = 'portfolio-v3.2.1';
+const CACHE_VERSION = 'portfolio-v3.2.2';
 const CACHE_NAME = `portfolio-manager-${CACHE_VERSION}`;
 
 // Assets to cache on install
@@ -56,15 +56,33 @@ self.addEventListener('activate', (event) => {
 
 // Fetch event - network first, fallback to cache
 self.addEventListener('fetch', (event) => {
+  const url = new URL(event.request.url);
+  
+  // Skip caching for external APIs (Yahoo Finance, etc.)
+  const isExternalAPI = 
+    url.origin !== self.location.origin &&
+    (url.hostname.includes('finance.yahoo.com') ||
+     url.hostname.includes('alphavantage.co') ||
+     url.hostname.includes('finnhub.io'));
+
+  if (isExternalAPI) {
+    // Just pass through external API requests without caching
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
+  // For same-origin requests, use cache strategy
   event.respondWith(
     fetch(event.request)
       .then((response) => {
-        // Clone the response before caching
-        const responseToCache = response.clone();
-
-        caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, responseToCache);
-        });
+        // Only cache successful responses
+        if (response && response.status === 200) {
+          const responseToCache = response.clone();
+          
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseToCache);
+          });
+        }
 
         return response;
       })
@@ -75,10 +93,13 @@ self.addEventListener('fetch', (event) => {
             return response;
           }
 
-          // If not in cache, return offline page
+          // If not in cache and it's navigation, return offline page
           if (event.request.mode === 'navigate') {
             return caches.match('/index.html');
           }
+          
+          // For other requests, return null to allow browser default behavior
+          return null;
         });
       }),
   );
