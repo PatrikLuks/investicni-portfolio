@@ -8,8 +8,13 @@ module.exports = {
   testEnvironment: 'jsdom',
 
   // Test match patterns
-  // Note: No unit tests currently - only E2E tests exist
-  testMatch: ['**/tests/**/*.test.js', '**/tests/**/*.spec.js'],
+  // Support both tests/ and __tests__/ directories
+  testMatch: [
+    '**/tests/**/*.test.js', 
+    '**/tests/**/*.spec.js',
+    '**/__tests__/**/*.test.js',
+    '**/__tests__/**/*.spec.js'
+  ],
 
   // No transform needed with NODE_OPTIONS=--experimental-vm-modules
   transform: {},
@@ -68,8 +73,8 @@ module.exports = {
   // Transform files
   transform: {},
 
-  // Ignore patterns (ignore e2e and integration tests - playwright only)
-  testPathIgnorePatterns: ['/node_modules/', '/coverage/', '/ORIGINAL/', '/__tests__/'],
+  // Ignore patterns - removed __tests__/ to allow test discovery
+  testPathIgnorePatterns: ['/node_modules/', '/coverage/', '/ORIGINAL/'],
 
   // Verbose output
   verbose: true,

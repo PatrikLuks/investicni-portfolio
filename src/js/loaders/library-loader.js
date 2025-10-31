@@ -26,7 +26,10 @@ class LibraryLoader {
       return this.loading.fuse;
     }
 
-    this.loading.fuse = this.loadScript('https://cdn.jsdelivr.net/npm/fuse.js@7.0.0')
+    this.loading.fuse = this.loadScript(
+      'https://cdn.jsdelivr.net/npm/fuse.js@7.0.0',
+      'sha384-PCSoOZTpbkikBEtd/+uV3WNdc676i9KUf01KOA8CnJotvlx8rRrETbDuwdjqTYvt',
+    )
       .then(() => {
         this.loaded.fuse = true;
         return true;
@@ -53,11 +56,11 @@ class LibraryLoader {
     this.loading.chart = Promise.all([
       this.loadScript(
         'https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js',
-        'sha384-9nhczxUqK87bcKHh20fSQcTGD4qq5GhayNYSY',
+        'sha384-9nhczxUqK87bcKHh20fSQcTGD4qq5GhayNYSYWqwBkINBhOfQLg/P5HG5lF1urn4',
       ),
       this.loadScript(
         'https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js',
-        // Zoom plugin - SRI hash optional for plugin
+        'sha384-zPzbVRXfR492Sd5D+HydTYCxxgHAfgVO8KERbLlpeH5unsmbAEXrscGUUqLZG9BM',
       ),
     ])
       .then(() => {
@@ -85,7 +88,7 @@ class LibraryLoader {
 
     this.loading.jspdf = this.loadScript(
       'https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js',
-      'sha384-en/ztfPSRkGfME4KIm05joYXynqzUgbsG5nMr',
+      'sha384-en/ztfPSRkGfME4KIm05joYXynqzUgbsG5nMrj/xEFAHXkeZfO3yMK8QQ+mP7p1/',
     )
       .then(() => {
         this.loaded.jspdf = true;
@@ -111,8 +114,8 @@ class LibraryLoader {
     }
 
     this.loading.xlsx = this.loadScript(
-      'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js',
-      'sha384-vtjasyidUo0kW94K5MXDXntzOJpQgBKXmE7e2',
+      'https://cdn.sheetjs.com/xlsx-0.18.5/package/dist/xlsx.full.min.js',
+      'sha384-vtjasyidUo0kW94K5MXDXntzOJpQgBKXmE7e2Ga4LG0skTTLeBi97eFAXsqewJjw',
     )
       .then(() => {
         this.loaded.xlsx = true;
