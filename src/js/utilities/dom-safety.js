@@ -161,7 +161,7 @@ function safeQuerySelector(selector, context = '') {
   try {
     const element = document.querySelector(selector);
     if (!element) {
-      console.warn(`DOM Safety: Selector '${selector}' not found${context ? ` in ${context}` : ''}`);
+      // Silently return null - not found is not an error
       return null;
     }
     return element;
