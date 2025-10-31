@@ -20,6 +20,11 @@ class ErrorHandler {
   init() {
     // Global error handler
     window.addEventListener('error', (event) => {
+      // Ignore Chart.js source map errors (non-critical)
+      if (event.message && event.message.includes('chart.js') && event.message.includes('.map')) {
+        return;
+      }
+      
       this.handleError({
         message: event.message,
         source: event.filename,
