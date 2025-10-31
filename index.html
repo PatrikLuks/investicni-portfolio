@@ -25,7 +25,6 @@
     <link rel="modulepreload" href="./modules/app-core.js" />
     <link rel="modulepreload" href="./modules/data-manager.js" />
     <link rel="modulepreload" href="./modules/ui-manager.js" />
-    <link rel="preload" href="./styles-v3.1.css" as="style" />
 
     <!-- Security Headers -->
     <meta
@@ -1824,45 +1823,21 @@
       });
     </script>
 
-    <!-- 🚀 ES6 MODULE ARCHITECTURE: Clean, modular, production-ready -->
-    <!-- CORE: Error handling and accessibility -->
-    <script type="module" src="src/js/core/error-handler.js"></script>
-    <script type="module" src="src/js/core/accessibility.js"></script>
-    <script type="module" src="src/js/core/notification-system.js"></script>
+    <!-- 🚀 MODULE LOADER: Optimized on-demand loading -->
+    <!-- Library loader for CDN dependencies -->
+    <script src="src/js/loaders/library-loader.js?v=3.2.1" defer></script>
+    
+    <!-- Module loader handles all other scripts dynamically -->
+    <script src="src/js/loaders/module-loader.js" defer></script>
+    
+    <!-- DOM safety utilities (needed early) -->
+    <script src="src/js/utilities/dom-safety.js" defer></script>
+    
+    <!-- Service worker registration -->
+    <script src="src/js/utilities/service-worker.js" defer></script>
 
-    <!-- LOADERS: Module and library loading system -->
-    <script type="module" src="src/js/loaders/library-loader.js?v=3.2.1"></script>
-    <script type="module" src="src/js/loaders/module-loader.js"></script>
-
-    <!-- UTILITIES: Data validation and calculations -->
-    <script type="module" src="src/js/utilities/command-stack.js"></script>
-    <script type="module" src="src/js/utilities/data-validation.js"></script>
-    <script type="module" src="src/js/utilities/calculations-engine.js"></script>
-    <script type="module" src="src/js/utilities/auto-save.js"></script>
-    <script type="module" src="src/js/utilities/drag-drop.js"></script>
-    <script type="module" src="src/js/utilities/keyboard-shortcuts-overlay.js"></script>
-    <script type="module" src="src/js/utilities/service-worker.js"></script>
-    <script type="module" src="src/js/utilities/dom-safety.js"></script>
-
-    <!-- FEATURES: Market data and portfolio management -->
-    <script type="module" src="src/js/features/marketplace/market-data-service.js"></script>
-    <script type="module" src="src/js/features/marketplace/market-data-ui.js"></script>
-    <script type="module" src="src/js/features/marketplace/market-data.js"></script>
-    <script type="module" src="src/js/features/portfolio/multi-portfolio.js"></script>
-    <script type="module" src="src/js/features/portfolio/app-portfolio.js"></script>
-
-    <!-- FEATURES: Charts and visualization -->
-    <script type="module" src="src/js/features/charts/charts-manager.js"></script>
-    <script type="module" src="src/js/features/charts/advanced-charts.js"></script>
-
-    <!-- FEATURES: Export functionality -->
-    <script type="module" src="src/js/features/export/excel-export.js"></script>
-
-    <!-- THEMES: Styling and theming -->
-    <script type="module" src="src/js/features/themes/theme-manager.js"></script>
-
-    <!-- LEGACY APP LOADER: REMOVED - Duplicate of app-core.js from main.js -->
-    <!-- <script src="src/js/loaders/app.js" defer></script> -->
+    <!-- Portfolio app (main application logic) -->
+    <script src="src/js/features/portfolio/app-portfolio.js" defer></script>
 
     <!-- 🎯 MAIN APPLICATION: ES6 Module Entry Point (load last) -->
     <script type="module" src="main.js"></script>

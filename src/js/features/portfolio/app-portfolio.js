@@ -1525,9 +1525,11 @@ function generatePortfolioHTML(portfolioData) {
 
 // Make sure the color picker is initialized with a default selection
 document.addEventListener('DOMContentLoaded', function () {
-  // Select blue as default
+  // Select blue as default (only if element exists)
   const defaultColor = safeQuerySelector('.color-option[data-color="blue"]');
-  defaultColor.classList.add('selected');
+  if (defaultColor) {
+    defaultColor.classList.add('selected');
+  }
 });
 
 // Add this HTML to the portfolioCard div through JavaScript

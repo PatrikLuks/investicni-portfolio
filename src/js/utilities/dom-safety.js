@@ -373,25 +373,6 @@ if (typeof window !== 'undefined') {
   });
 }
 
-// For ES6 module usage
-export {
-  safeGetElement,
-  safeGetValue,
-  safeSetText,
-  safeSetHTML,
-  safeSetStyle,
-  safeSetDisplay,
-  safeHide,
-  safeShow,
-  safeAddEventListener,
-  safeQuerySelector,
-  safeQuerySelectorAll,
-  safeRemoveElement,
-  safeAppendChild,
-  safeAddClass,
-  safeRemoveClass,
-  safeToggleClass,
-  safeSetAttributes,
-  safeGetFormData,
-  safeResetForm,
-};
+// 📦 Global namespace - functions available as window.DOMSafety.*
+// Removed ES6 exports for compatibility with non-module scripts
+

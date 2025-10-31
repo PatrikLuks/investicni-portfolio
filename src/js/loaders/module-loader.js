@@ -107,7 +107,11 @@ class ModuleLoader {
    * Pouze absolutní základ pro zobrazení stránky
    */
   get CRITICAL_MODULES() {
-    return ['error-handler.js', 'accessibility.js', 'notification-system.js'];
+    return [
+      'src/js/core/error-handler.js',
+      'src/js/core/accessibility.js',
+      'src/js/core/notification-system.js'
+    ];
   }
 
   /**
@@ -115,7 +119,11 @@ class ModuleLoader {
    * Základní funkčnost aplikace
    */
   get ESSENTIAL_MODULES() {
-    return ['command-stack.js', 'data-validation.js', 'calculations-engine.js'];
+    return [
+      'src/js/utilities/command-stack.js',
+      'src/js/utilities/data-validation.js',
+      'src/js/utilities/calculations-engine.js'
+    ];
   }
 
   /**
@@ -125,39 +133,50 @@ class ModuleLoader {
   get ON_DEMAND_MODULES() {
     return {
       // Charts feature
-      charts: ['charts-manager.js', 'charts-styles.css', 'advanced-charts.js'],
+      charts: [
+        'src/js/features/charts/charts-manager.js',
+        'src/css/features/charts-styles.css',
+        'src/js/features/charts/advanced-charts.js'
+      ],
 
-      // Export features (pdf-export.js removed - doesn't exist)
-      export: ['excel-export.js'],
+      // Export features
+      export: ['src/js/features/export/excel-export.js'],
 
       // Drag & Drop
-      dragDrop: ['drag-drop.js', 'drag-drop.css'],
+      dragDrop: [
+        'src/js/utilities/drag-drop.js',
+        'src/css/features/drag-drop.css'
+      ],
 
       // Help system
-      help: ['help-system.js', 'keyboard-shortcuts-overlay.js', 'quick-reference.css'],
+      help: [
+        'src/js/features/help/help-system.js',
+        'src/js/utilities/keyboard-shortcuts-overlay.js',
+        'src/css/features/quick-reference.css'
+      ],
 
       // Marketplace features
       marketplace: [
-        'market-data.js',
-        'market-data-service.js',
-        'market-data-ui.js',
+        'src/js/features/marketplace/market-data.js',
+        'src/js/features/marketplace/market-data-service.js',
+        'src/js/features/marketplace/market-data-ui.js'
       ],
 
       // Theme management
-      themes: ['theme-manager.js'],
+      themes: ['src/js/features/themes/theme-manager.js'],
 
       // Portfolio & Multi-portfolio
       portfolio: [
-        'app-portfolio.js',
-        'multi-portfolio.js',
+        'src/js/features/portfolio/app-portfolio.js',
+        'src/js/features/portfolio/multi-portfolio.js'
       ],
 
       // Utilities & Infrastructure
       utilities: [
-        'auto-save.js',
-        'calculations-engine.js',
-        'command-stack.js',
-        'data-validation.js',
+        'src/js/utilities/auto-save.js',
+        'src/js/utilities/calculations-engine.js',
+        'src/js/utilities/command-stack.js',
+        'src/js/utilities/data-validation.js'
       ],
     };
   }
@@ -257,8 +276,10 @@ class ModuleLoader {
    */
   deferRemainingModules() {
     const deferredLoad = () => {
-      // Load UI enhancements in background
-      const backgroundModules = ['virtual-list.js', 'performance-monitor.js', 'auto-save.js'];
+      // Load UI enhancements in background (only existing files)
+      const backgroundModules = [
+        'src/js/utilities/auto-save.js'
+      ];
 
       this.loadModules(backgroundModules, false).then(() => {});
     };
