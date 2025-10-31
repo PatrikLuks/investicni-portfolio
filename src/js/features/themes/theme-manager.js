@@ -93,15 +93,13 @@ class ThemeManager {
   }
 
   createThemeToggle() {
-    const toggle = document.createElement('button');
-    toggle.id = 'theme-toggle';
-    toggle.className = 'theme-toggle';
-    toggle.setAttribute('aria-label', 'Toggle theme');
-    toggle.title = 'Switch theme (Light/Dark/Auto)';
-
-    const icon = document.createElement('span');
-    icon.className = 'theme-icon';
-    toggle.appendChild(icon);
+    // Use existing toggle button from HTML
+    const toggle = document.getElementById('darkModeToggle');
+    
+    if (!toggle) {
+      console.warn('Theme toggle button #darkModeToggle not found in HTML');
+      return;
+    }
 
     toggle.addEventListener('click', () => {
       const newTheme = this.toggleTheme();
@@ -111,24 +109,18 @@ class ThemeManager {
       this.showThemeNotification(newTheme);
     });
 
-    // Insert into header
-    const header = document.querySelector('header') || document.querySelector('.app-header');
-    if (header) {
-      header.appendChild(toggle);
-    }
-
     // Initial icon
     this.updateToggleIcon(toggle, this.currentTheme);
   }
 
   updateToggleIcon(button, theme) {
-    const icon = button.querySelector('.theme-icon');
     const icons = {
       light: '☀️',
       dark: '🌙',
       auto: '🌓',
     };
-    icon.textContent = icons[theme] || icons.auto;
+    button.textContent = icons[theme] || icons.auto;
+    button.title = `Current theme: ${theme}`;
   }
 
   showThemeNotification(theme) {
