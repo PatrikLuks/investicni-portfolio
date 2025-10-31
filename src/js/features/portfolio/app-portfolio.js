@@ -55,11 +55,6 @@ function updateFondData(index, field, value) {
   portfolioData[index][field] = value;
 }
 
-function deleteFond(index) {
-  portfolioData.splice(index, 1);
-  updateFondList();
-}
-
 // Event listener pro formulář se jménem klienta
 clientForm.addEventListener('submit', function (e) {
   e.preventDefault();
