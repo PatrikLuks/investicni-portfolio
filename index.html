@@ -93,9 +93,9 @@
 
       body.dark-mode {
         --background: #1a1a1a;
-        --text-primary: #e0e0e0;
-        --text-secondary: #a0a0a0;
-        --border-color: #333333;
+        --text-primary: #e8e8e8;
+        --text-secondary: #b0b0b0;
+        --border-color: #444444;
         --card-background: #2d2d2d;
         --input-background: #3a3a3a;
         --shadow: rgba(0, 0, 0, 0.3);
@@ -141,11 +141,66 @@
       input {
         width: 100%;
         padding: 12px;
-        background: var(--background);
+        background: var(--input-background);
         border: 1px solid var(--border-color);
         border-radius: 6px;
         font-size: 0.875rem;
         color: var(--text-primary);
+      }
+
+      input::placeholder {
+        color: var(--text-secondary);
+        opacity: 0.8;
+      }
+
+      select {
+        width: 100%;
+        padding: 12px;
+        background: var(--input-background);
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        font-size: 0.875rem;
+        color: var(--text-primary);
+        cursor: pointer;
+      }
+
+      select option {
+        background: var(--card-background);
+        color: var(--text-primary);
+        padding: 8px;
+      }
+
+      select option:first-child {
+        color: var(--text-secondary);
+      }
+
+      /* Dark mode specific fixes */
+      body.dark-mode select {
+        color: #e8e8e8;
+      }
+
+      body.dark-mode select option {
+        background: #2d2d2d;
+        color: #e8e8e8;
+      }
+
+      body.dark-mode select option:first-child {
+        color: #b0b0b0;
+      }
+
+      textarea {
+        width: 100%;
+        padding: 12px;
+        background: var(--input-background);
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        font-size: 0.875rem;
+        color: var(--text-primary);
+      }
+
+      textarea::placeholder {
+        color: var(--text-secondary);
+        opacity: 0.8;
       }
 
       input:focus {
