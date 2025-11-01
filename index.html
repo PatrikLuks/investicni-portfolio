@@ -1324,6 +1324,8 @@
     <!-- Dark Mode Toggle -->
     <button
       id="darkModeToggle"
+      aria-label="Přepnout barevný režim (světlý/tmavý/automatický)"
+      title="Přepnout barevný režim"
       style="
         position: fixed;
         top: 20px;
@@ -1476,10 +1478,10 @@
           </div>
         </div>
         <div class="color-picker">
-          <button type="button" class="scheme-button blue-scheme">Modrá</button>
-          <button type="button" class="scheme-button red-scheme">Červená</button>
-          <button type="button" class="scheme-button green-scheme">Zelená</button>
-          <button type="button" class="scheme-button yellow-scheme">Žlutá</button>
+          <button type="button" class="scheme-button blue-scheme" aria-label="Nastavit modré barevné schéma grafu">Modrá</button>
+          <button type="button" class="scheme-button red-scheme" aria-label="Nastavit červené barevné schéma grafu">Červená</button>
+          <button type="button" class="scheme-button green-scheme" aria-label="Nastavit zelené barevné schéma grafu">Zelená</button>
+          <button type="button" class="scheme-button yellow-scheme" aria-label="Nastavit žluté barevné schéma grafu">Žlutá</button>
         </div>
         <div class="currency-switch">
           <label class="checkbox-label">
@@ -1584,13 +1586,14 @@
             <input type="number" id="value" required />
           </div>
           <div class="button-group">
-            <button type="submit">Přidat fond</button>
-            <button type="button" id="generateReport" class="secondary">Generovat report</button>
+            <button type="submit" aria-label="Přidat nový fond do portfolia">Přidat fond</button>
+            <button type="button" id="generateReport" class="secondary" aria-label="Generovat PDF report portfolia">Generovat report</button>
             <button
               type="button"
               id="exportExcel"
               class="secondary"
               style="background: #10b981; color: white"
+              aria-label="Exportovat všechny fondy do Excel souboru"
             >
               📊 Export do Excelu
             </button>
@@ -1599,8 +1602,8 @@
       </div>
       <div class="card" id="fondListCard" style="display: none">
         <div class="view-switch" style="display: flex; gap: 10px; margin-bottom: 16px">
-          <button id="switchFunds" class="switch-btn active" type="button">Fondy</button>
-          <button id="switchProducers" class="switch-btn" type="button">Producenti</button>
+          <button id="switchFunds" class="switch-btn active" type="button" aria-label="Zobrazit seznam fondů">Fondy</button>
+          <button id="switchProducers" class="switch-btn" type="button" aria-label="Zobrazit seznam producentů">Producenti</button>
         </div>
         <h2>Přidané fondy</h2>
 
@@ -1608,9 +1611,9 @@
         <div class="bulk-actions-bar" id="bulkActionsBar">
           <div class="bulk-actions-info"><span id="selectedCount">0</span> vybraných fondů</div>
           <div class="bulk-actions-buttons">
-            <button class="bulk-action-btn" id="bulkExport">📥 Export vybraných</button>
-            <button class="bulk-action-btn danger" id="bulkDelete">🗑️ Smazat vybrané</button>
-            <button class="bulk-action-btn" id="bulkDeselect">✕ Zrušit výběr</button>
+            <button class="bulk-action-btn" id="bulkExport" aria-label="Exportovat vybrané fondy do CSV">📥 Export vybraných</button>
+            <button class="bulk-action-btn danger" id="bulkDelete" aria-label="Smazat vybrané fondy">🗑️ Smazat vybrané</button>
+            <button class="bulk-action-btn" id="bulkDeselect" aria-label="Zrušit výběr fondů">✕ Zrušit výběr</button>
           </div>
         </div>
 
@@ -1621,8 +1624,9 @@
               type="text"
               id="tableSearch"
               placeholder="Hledat podle názvu nebo producenta..."
+              aria-label="Vyhledat fond podle názvu nebo producenta"
             />
-            <button class="clear-search" id="clearSearch">×</button>
+            <button class="clear-search" id="clearSearch" aria-label="Vymazat vyhledávání">×</button>
           </div>
         </div>
 
@@ -1638,11 +1642,11 @@
         <table class="fond-table" id="fondTable">
           <thead id="fondTableHead">
             <tr>
-              <th class="sortable" data-column="name">Název fondu</th>
-              <th class="sortable" data-column="producer">Producent</th>
-              <th class="sortable" data-column="investmentDate">Datum investice</th>
-              <th class="sortable" data-column="investment">Čistá investice</th>
-              <th class="sortable" data-column="value">Aktuální hodnota</th>
+              <th class="sortable" data-column="name" aria-label="Seřadit podle názvu fondu">Název fondu</th>
+              <th class="sortable" data-column="producer" aria-label="Seřadit podle producenta">Producent</th>
+              <th class="sortable" data-column="investmentDate" aria-label="Seřadit podle data investice">Datum investice</th>
+              <th class="sortable" data-column="investment" aria-label="Seřadit podle čisté investice">Čistá investice</th>
+              <th class="sortable" data-column="value" aria-label="Seřadit podle aktuální hodnoty">Aktuální hodnota</th>
               <th>Akce</th>
             </tr>
           </thead>
