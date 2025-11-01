@@ -19,7 +19,17 @@
   --bg-tertiary: #e5e7eb;
   --bg-modal: rgba(0, 0, 0, 0.5);
 
+  /* Light mode text colors */
+  --text-primary: #1f2937;
+  --text-secondary: #4b5563;
+  --text-tertiary: #6b7280;
+
   --border-color: #e0e0e0;
+  --input-bg: #ffffff;
+  --input-border: #d1d5db;
+  --input-text: #1f2937;
+  --input-placeholder: #9ca3af;
+  
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
@@ -44,11 +54,16 @@ body.theme-dark,
   --bg-tertiary: #374151;
   --bg-modal: rgba(0, 0, 0, 0.7);
 
-  --text-primary: #e8e8e8;
-  --text-secondary: #b0b0b0;
+  --text-primary: #f3f4f6;
+  --text-secondary: #d1d5db;
   --text-tertiary: #9ca3af;
 
   --border-color: #444444;
+  --input-bg: #2d2d2d;
+  --input-border: #4b5563;
+  --input-text: #f3f4f6;
+  --input-placeholder: #6b7280;
+
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
@@ -778,3 +793,114 @@ body.theme-dark,
   background: rgba(55, 65, 81, 0.6);
   backdrop-filter: blur(5px);
 }
+
+/* ===== FORM INPUT VISIBILITY FIX ===== */
+input[type='text'],
+input[type='number'],
+input[type='email'],
+input[type='password'],
+input[type='search'],
+textarea,
+select {
+  background-color: var(--input-bg);
+  color: var(--input-text);
+  border: 2px solid var(--input-border);
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+input[type='text']::placeholder,
+input[type='number']::placeholder,
+input[type='email']::placeholder,
+input[type='password']::placeholder,
+input[type='search']::placeholder,
+textarea::placeholder {
+  color: var(--input-placeholder);
+}
+
+input[type='text']:focus,
+input[type='number']:focus,
+input[type='email']:focus,
+input[type='password']:focus,
+input[type='search']:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  background-color: var(--input-bg);
+  color: var(--input-text);
+}
+
+/* Dark mode specific input adjustments */
+[data-theme='dark'] input[type='text'],
+[data-theme='dark'] input[type='number'],
+[data-theme='dark'] input[type='email'],
+[data-theme='dark'] input[type='password'],
+[data-theme='dark'] input[type='search'],
+[data-theme='dark'] textarea,
+[data-theme='dark'] select {
+  background-color: #3a3a3a;
+  color: #f3f4f6;
+  border-color: #555;
+}
+
+[data-theme='dark'] input[type='text']::placeholder,
+[data-theme='dark'] input[type='number']::placeholder,
+[data-theme='dark'] input[type='email']::placeholder,
+[data-theme='dark'] input[type='password']::placeholder,
+[data-theme='dark'] input[type='search']::placeholder,
+[data-theme='dark'] textarea::placeholder {
+  color: #888;
+}
+
+[data-theme='dark'] input[type='text']:focus,
+[data-theme='dark'] input[type='number']:focus,
+[data-theme='dark'] input[type='email']:focus,
+[data-theme='dark'] input[type='password']:focus,
+[data-theme='dark'] input[type='search']:focus,
+[data-theme='dark'] textarea:focus,
+[data-theme='dark'] select:focus {
+  background-color: #3a3a3a;
+  color: #f3f4f6;
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+}
+
+/* Light mode specific input adjustments */
+body.light-mode input[type='text'],
+body.light-mode input[type='number'],
+body.light-mode input[type='email'],
+body.light-mode input[type='password'],
+body.light-mode input[type='search'],
+body.light-mode textarea,
+body.light-mode select {
+  background-color: #ffffff;
+  color: #1f2937;
+  border-color: #d1d5db;
+}
+
+body.light-mode input[type='text']::placeholder,
+body.light-mode input[type='number']::placeholder,
+body.light-mode input[type='email']::placeholder,
+body.light-mode input[type='password']::placeholder,
+body.light-mode input[type='search']::placeholder,
+body.light-mode textarea::placeholder {
+  color: #9ca3af;
+}
+
+body.light-mode input[type='text']:focus,
+body.light-mode input[type='number']:focus,
+body.light-mode input[type='email']:focus,
+body.light-mode input[type='password']:focus,
+body.light-mode input[type='search']:focus,
+body.light-mode textarea:focus,
+body.light-mode select:focus {
+  background-color: #ffffff;
+  color: #1f2937;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+

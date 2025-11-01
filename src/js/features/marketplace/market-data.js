@@ -291,6 +291,25 @@ class MarketDataFeed {
         }
       });
     }
+
+    // Add event delegation for dynamic elements
+    const list = document.getElementById('marketDataList');
+    if (list) {
+      list.addEventListener('click', (e) => {
+        const action = e.target.closest('[data-action]');
+        if (action) {
+          const actionType = action.getAttribute('data-action');
+          const symbol = action.getAttribute('data-symbol');
+
+          if (actionType === 'add-symbol' && symbol) {
+            this.addSymbolToWatch(symbol);
+          } else if (actionType === 'unsubscribe' && symbol) {
+            this.unsubscribe(symbol);
+            this.renderWatchlist();
+          }
+        }
+      });
+    }
   }
 
   /**
@@ -379,7 +398,7 @@ class MarketDataFeed {
       .map(
         (symbol) => `
       <div 
-        data-action="add-symbol" data-symbol('${symbol}')"
+        data-action="add-symbol" data-symbol="${symbol}"
         style="
           padding: 12px;
           margin: 4px;
