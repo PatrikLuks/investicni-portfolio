@@ -1,0 +1,64 @@
+{
+  "app.title": "Gestionnaire de Portefeuille Pro",
+  "app.subtitle": "Gestion professionnelle de portefeuille d'investissement",
+  "app.version": "v3.3.0",
+  
+  "nav.dashboard": "Tableau de bord",
+  "nav.portfolio": "Portefeuille",
+  "nav.analytics": "Analyse",
+  "nav.settings": "Paramètres",
+  "nav.help": "Aide",
+  
+  "button.add": "Ajouter",
+  "button.edit": "Modifier",
+  "button.delete": "Supprimer",
+  "button.save": "Enregistrer",
+  "button.cancel": "Annuler",
+  "button.export": "Exporter",
+  "button.import": "Importer",
+  "button.logout": "Déconnexion",
+  "button.login": "Connexion",
+  
+  "form.fundName": "Nom du fonds",
+  "form.ticker": "Symbole du titre",
+  "form.quantity": "Quantité",
+  "form.purchasePrice": "Prix d'achat",
+  "form.currentPrice": "Prix actuel",
+  "form.currency": "Devise",
+  "form.category": "Catégorie",
+  "form.categoryStocks": "Actions",
+  "form.categoryBonds": "Obligations",
+  "form.categoryFunds": "Fonds communs de placement",
+  
+  "message.success": "Opération réussie!",
+  "message.error": "Une erreur s'est produite",
+  "message.confirm": "Êtes-vous sûr?",
+  "message.loading": "Chargement...",
+  "message.saved": "Modifications enregistrées",
+  
+  "analytics.totalValue": "Valeur totale",
+  "analytics.totalGain": "Gain total",
+  "analytics.gainPercent": "% de gain",
+  "analytics.distribution": "Distribution",
+  "analytics.performance": "Performance",
+  
+  "auth.email": "E-mail",
+  "auth.password": "Mot de passe",
+  "auth.login": "Connexion",
+  "auth.logout": "Déconnexion",
+  "auth.register": "S'inscrire",
+  
+  "error.invalidEmail": "Adresse e-mail invalide",
+  "error.weakPassword": "Le mot de passe est trop faible",
+  "error.emailInUse": "L'e-mail est déjà utilisé",
+  
+  "theme.light": "Clair",
+  "theme.dark": "Sombre",
+  "theme.auto": "Auto",
+  
+  "language": "Langue",
+  "language.en": "English",
+  "language.fr": "Français",
+  "language.es": "Español",
+  "language.de": "Deutsch"
+}
