@@ -33,6 +33,33 @@
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json" />
 
+    <!-- 📊 Google Analytics 4 (Replace G-XXXXXXXXXX with your Measurement ID) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX', {
+        'cookie_flags': 'SameSite=None;Secure',
+        'anonymize_ip': true,
+        'allow_google_signals': false
+      });
+      
+      // Track page views
+      gtag('event', 'page_view', {
+        'page_path': window.location.pathname,
+        'page_title': document.title
+      });
+      
+      // Track feature usage
+      window.trackEvent = function(eventName, eventParams = {}) {
+        gtag('event', eventName, {
+          'event_category': 'portfolio_app',
+          ...eventParams
+        });
+      };
+    </script>
+
     <!-- iOS Icons -->
     <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-192x192.png" />
     <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152x152.png" />
