@@ -21,12 +21,16 @@
 
 ## 🎯 Quick Navigation
 
-- 📁 **Project Structure**: See [`PROJECT_STRUCTURE.md`](./PROJECT_STRUCTURE.md) for detailed architecture
-- 👨‍💻 **Development Setup**: See [`DEVELOPER_GUIDE.md`](./DEVELOPER_GUIDE.md)
-- � **User Guide**: See [`USER_GUIDE.md`](./USER_GUIDE.md)
-- � **Security**: See [`SECURITY.md`](./SECURITY.md)
+- � **[QUICKSTART.md](./QUICKSTART.md)** - Start here! 60-second setup
+- 📖 **[SETUP.md](./SETUP.md)** - Complete installation & all 6 deployment options
+- 📁 **[docs/](./docs/)** - Full documentation index & all resources
+- � **[SECURITY.md](./SECURITY.md)** - Security policies & features
 
----
+**Key Documentation Files:**
+- 👨‍💻 **[DEVELOPER_GUIDE.md](./docs/DEVELOPER_GUIDE.md)** - Architecture & development
+- 👥 **[USER_GUIDE.md](./docs/USER_GUIDE.md)** - How to use the app
+- 📊 **[PROJECT_STRUCTURE.md](./docs/PROJECT_STRUCTURE.md)** - Folder organization
+- 🚀 **[DEPLOYMENT.md](./docs/DEPLOYMENT.md)** - Detailed deployment guide
 
 ---
 
@@ -54,37 +58,19 @@ Portfolio Manager Pro v3.3.0 is a modern, enterprise-grade web application for m
 
 ## 🚀 Quick Start
 
-### Prerequisites
-
-- Node.js 18+ (LTS recommended)
-- npm 9+ or yarn 1.22+
-- Modern web browser (Chrome, Firefox, Safari, Edge)
-
-### Installation
-
+**⏱️ 60 seconds:**
 ```bash
-# Clone the repository
 git clone https://github.com/PatrikLuks/investicni-portfolio.git
 cd investicni-portfolio
-
-# Install dependencies
 npm install
-
-# Start development server
 npm run dev
+# Open http://localhost:3000/
 ```
 
-The application will be available at **http://localhost:5173/**
+✅ **That's it!** Your portfolio manager is running.
 
-### Production Build
-
-```bash
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
-```
+📖 **Full setup guide:** See [SETUP.md](./SETUP.md)  
+🚀 **Ready to deploy?** See deployment options in [SETUP.md section 7](./SETUP.md#-deployment-options)
 
 ---
 
