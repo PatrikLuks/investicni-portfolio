@@ -1,8 +1,14 @@
 /**
  * @module main
+ * PROPRIETARY SOFTWARE - ALL RIGHTS RESERVED
  * MAIN ENTRY POINT
- * Investment Portfolio Manager Pro v3.1.0
+ * Investment Portfolio Manager Pro v3.3.0
  * ES6 Module Orchestrator - Clean Architecture
+ *
+ * © 2025 Portfolio Manager Pro. All Rights Reserved.
+ * This software is proprietary and confidential.
+ * Unauthorized copying, modification, or distribution is strictly prohibited.
+ * See LICENSE file for complete license terms.
  *
  * This is the main entry point that bootstraps the application.
  * It imports the core initialization function and starts the app when DOM is ready.

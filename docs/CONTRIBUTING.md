@@ -1,8 +1,8 @@
 # Contributing Guidelines
 
-Děkujeme za zájem o přispívání do **investicni-portfolio** projektu! 🙏
+⚠️ **PROPRIETARY SOFTWARE NOTICE** - This project is proprietary software. Contributions are not accepted through open-source channels.
 
-Tato příručka popisuje naše standardy pro branching, commit messages, pull requesty a code review.
+If you are an authorized contributor, please follow the guidelines below. Unauthorized contributors should contact licensing@portfoliomanager.pro for inquiries.
 
 ---
 

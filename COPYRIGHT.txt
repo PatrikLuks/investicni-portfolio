@@ -1,0 +1,165 @@
+================================================================================
+                      PROPRIETARY SOFTWARE COPYRIGHT NOTICE
+================================================================================
+
+Portfolio Manager Pro v3.3.0
+Copyright © 2025 Portfolio Manager Pro
+
+ALL RIGHTS RESERVED
+
+================================================================================
+                               PROPRIETARY NOTICE
+================================================================================
+
+This software is the proprietary and confidential property of Portfolio
+Manager Pro. It contains valuable trade secrets and intellectual property.
+
+UNAUTHORIZED ACCESS, COPYING, MODIFICATION, OR DISTRIBUTION IS STRICTLY
+PROHIBITED AND MAY RESULT IN SEVERE CIVIL AND CRIMINAL PENALTIES.
+
+================================================================================
+                            LICENSE INFORMATION
+================================================================================
+
+License Type:       PROPRIETARY
+License Status:     ACTIVE AND ENFORCED
+Copyright Owner:    Portfolio Manager Pro
+Copyright Date:     2025
+All Rights:         RESERVED
+
+This software is NOT licensed under any open-source license including but not
+limited to: MIT, Apache, GPL, BSD, or any other open-source licenses.
+
+The ONLY valid license is the PROPRIETARY SOFTWARE LICENSE AGREEMENT provided
+by Portfolio Manager Pro in writing. Without such written agreement, you have
+NO right to use, possess, access, or distribute this software.
+
+================================================================================
+                          INTELLECTUAL PROPERTY
+================================================================================
+
+The following are the exclusive property of Portfolio Manager Pro:
+
+  • All source code and object code
+  • All algorithms and methodologies
+  • All user interfaces and designs
+  • All documentation and specifications
+  • All data structures and databases
+  • All trade secrets and confidential information
+  • All patents, trademarks, and copyrights
+
+================================================================================
+                         RESTRICTION ON USE
+================================================================================
+
+YOU MAY NOT:
+
+  ✗ Copy, reproduce, or duplicate any part of this software
+  ✗ Modify, adapt, translate, or create derivative works
+  ✗ Reverse engineer, decompile, or disassemble the software
+  ✗ Rent, lease, lend, or time-share the software
+  ✗ Sell, transfer, assign, or sublicense your rights
+  ✗ Remove or alter proprietary notices and labels
+  ✗ Distribute or publish the software
+  ✗ Use for any commercial purpose without permission
+  ✗ Violate any applicable law or regulation
+
+================================================================================
+                         DISCLAIMER OF WARRANTY
+================================================================================
+
+THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO:
+
+  • Warranties of merchantability
+  • Warranties of fitness for a particular purpose
+  • Warranties of non-infringement
+  • Warranties of title
+  • Warranties of performance
+
+Portfolio Manager Pro does not warrant that the software will be error-free,
+uninterrupted, or that all defects will be corrected.
+
+================================================================================
+                          LIMITATION OF LIABILITY
+================================================================================
+
+IN NO EVENT SHALL PORTFOLIO MANAGER PRO BE LIABLE FOR:
+
+  • Direct, indirect, incidental, or consequential damages
+  • Lost profits or business interruption
+  • Loss of data or information
+  • Any other damages or losses
+  • Even if advised of the possibility of such damages
+
+This limitation applies regardless of the cause, whether in contract, tort,
+or any other legal theory.
+
+================================================================================
+                         CONFIDENTIALITY OBLIGATION
+================================================================================
+
+If you have received this software, you acknowledge that:
+
+  1. The software is confidential and proprietary
+  2. You will maintain strict confidentiality
+  3. You will not disclose to any unauthorized party
+  4. Breach would cause irreparable harm
+  5. You are authorized to use this software only as specified
+
+================================================================================
+                         ENFORCEMENT & TERMINATION
+================================================================================
+
+Portfolio Manager Pro:
+
+  • Actively monitors for unauthorized use
+  • Enforces intellectual property rights to the fullest extent of the law
+  • Reserves the right to take civil and criminal action
+  • Will terminate any license upon breach
+  • May seek injunctive relief to prevent violations
+
+================================================================================
+                            CONTACT INFORMATION
+================================================================================
+
+For licensing inquiries, compliance questions, or to request authorization:
+
+  Email:    licensing@portfoliomanager.pro
+  Legal:    legal@portfoliomanager.pro
+  Security: security@portfoliomanager.pro
+  Website:  https://portfoliomanager.pro
+
+================================================================================
+                            VERSION & DATE
+================================================================================
+
+Software Version:   3.3.0
+Copyright Date:     2025
+Notice Effective:   November 7, 2025
+Last Updated:       November 7, 2025
+Status:             ACTIVE AND ENFORCED
+
+================================================================================
+                         ACKNOWLEDGMENT
+================================================================================
+
+By accessing, copying, or using this software in any way, you acknowledge that:
+
+  ✓ You have read this copyright notice in its entirety
+  ✓ You understand the proprietary nature of this software
+  ✓ You agree to comply with all terms and restrictions
+  ✓ You accept the disclaimer of warranty and limitation of liability
+  ✓ You are authorized to use this software
+
+Violation of these terms may result in immediate termination of your license
+and legal action up to and including civil and criminal prosecution.
+
+================================================================================
+
+© 2025 Portfolio Manager Pro. All Rights Reserved.
+
+THIS IS A PROPRIETARY AND CONFIDENTIAL DOCUMENT. UNAUTHORIZED DISTRIBUTION
+OR DISCLOSURE IS STRICTLY PROHIBITED.
+
+================================================================================

@@ -1,0 +1,60 @@
+{
+  "software": {
+    "name": "Portfolio Manager Pro",
+    "version": "3.3.0",
+    "type": "PROPRIETARY",
+    "status": "ACTIVE",
+    "copyright": "© 2025 Portfolio Manager Pro. All Rights Reserved."
+  },
+  "license": {
+    "type": "PROPRIETARY",
+    "owner": "Portfolio Manager Pro",
+    "issued": "2025-11-07",
+    "valid": true,
+    "transferable": false,
+    "renewable": false
+  },
+  "intellectual_property": {
+    "protected": true,
+    "trade_secrets": true,
+    "patents_pending": false,
+    "trademarks": [
+      "Portfolio Manager Pro",
+      "Portfolio Manager",
+      "JPL Invest"
+    ]
+  },
+  "restrictions": {
+    "reverse_engineering": "PROHIBITED",
+    "modification": "PROHIBITED",
+    "distribution": "PROHIBITED",
+    "commercial_use": "PROHIBITED",
+    "open_source_license": "NOT APPLICABLE"
+  },
+  "enforcement": {
+    "monitoring": true,
+    "active_enforcement": true,
+    "legal_action": "AUTHORIZED",
+    "criminal_prosecution": "AUTHORIZED"
+  },
+  "contacts": {
+    "licensing": "licensing@portfoliomanager.pro",
+    "legal": "legal@portfoliomanager.pro",
+    "security": "security@portfoliomanager.pro"
+  },
+  "security": {
+    "encryption": true,
+    "access_control": true,
+    "audit_logging": true,
+    "ip_protection": true
+  },
+  "compliance": {
+    "gdpr": true,
+    "owasp": true,
+    "cwe": true,
+    "iso27001_ready": true
+  },
+  "disclaimer": "THIS SOFTWARE IS PROVIDED AS-IS WITHOUT ANY WARRANTIES. USE AT YOUR OWN RISK. PORTFOLIO MANAGER PRO IS NOT LIABLE FOR ANY DAMAGES.",
+  "last_updated": "2025-11-07",
+  "next_review": "2026-02-07"
+}

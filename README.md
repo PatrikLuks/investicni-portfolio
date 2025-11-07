@@ -4,18 +4,24 @@
 
 ![Version](https://img.shields.io/badge/version-3.3.0-blue.svg)
 ![Tests](https://img.shields.io/badge/tests-32%2F32%20passing-brightgreen.svg)
-![License](https://img.shields.io/badge/license-MIT-green.svg)
+![License](https://img.shields.io/badge/license-PROPRIETARY-red.svg)
 ![Quality](https://img.shields.io/badge/quality-A+-gold.svg)
 ![Score](https://img.shields.io/badge/score-98%2F100-brightgreen.svg)
 ![Security](https://img.shields.io/badge/security-A%2B-brightgreen.svg)
 ![Features](https://img.shields.io/badge/features-10%20languages-blue.svg)
 
 **Professional Investment Portfolio Management Application**  
-*Enterprise-grade features, zero cost*
+*Enterprise-grade proprietary software*
 
-[🚀 Quick Start](#-quick-start) • [📖 Documentation](#-documentation) • [✨ Features](#-key-features) • [🤝 Contributing](#-contributing)
+[🚀 Quick Start](#-quick-start) • [📖 Documentation](#-documentation) • [✨ Features](#-key-features) • [📜 License](#-license)
 
 </div>
+
+---
+
+## ⚠️ PROPRIETARY SOFTWARE NOTICE
+
+**This software is proprietary and confidential.** Unauthorized copying, modification, or distribution is strictly prohibited. All intellectual property rights are reserved. See [LICENSE](./LICENSE) for full terms.
 
 ---
 
