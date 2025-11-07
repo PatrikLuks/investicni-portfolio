@@ -1773,4 +1773,29 @@ document.addEventListener('DOMContentLoaded', function () {
       updateFondTable();
     });
   }
+
+  // Search functionality
+  const tableSearch = document.getElementById('tableSearch');
+  const clearSearch = document.getElementById('clearSearch');
+  
+  if (tableSearch) {
+    tableSearch.addEventListener('input', function (e) {
+      const searchTerm = e.target.value.toLowerCase().trim();
+      const rows = document.querySelectorAll('.fond-table tbody tr');
+      
+      rows.forEach((row) => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(searchTerm) ? '' : 'none';
+      });
+      
+      clearSearch.style.display = searchTerm ? 'block' : 'none';
+    });
+  }
+  
+  if (clearSearch) {
+    clearSearch.addEventListener('click', function () {
+      tableSearch.value = '';
+      tableSearch.dispatchEvent(new Event('input'));
+    });
+  }
 });

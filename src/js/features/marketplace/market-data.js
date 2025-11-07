@@ -330,17 +330,25 @@ class MarketDataFeed {
    * Load symbols from portfolio
    */
   loadPortfolioSymbols() {
-    const data = window.getFondyData ? window.getFondyData() : [];
-
-    data.forEach((item) => {
-      const symbol = this.extractSymbol(item.název);
-      if (symbol) {
-        this.subscribe(symbol, (priceData) => {
-          // Auto-update portfolio with live prices
-          this.updatePortfolioPrice(item, priceData);
-        });
-      }
-    });
+    // Read from localStorage like market-data-ui.js does
+    try {
+      const portfolio = JSON.parse(localStorage.getItem('investmentPortfolio') || '[]');
+      
+      // portfolio contains: { name, producer, investmentDate, investment, value }
+      // Extract symbols from fund names
+      portfolio.forEach((item) => {
+        // Try to extract ticker from fund name (e.g., "Apple (AAPL)" -> "AAPL")
+        const symbol = this.extractSymbol(item.name || item.producer || '');
+        if (symbol && symbol.length > 0) {
+          this.subscribe(symbol, (priceData) => {
+            // Auto-update portfolio with live prices
+            this.updatePortfolioPrice(item, priceData);
+          });
+        }
+      });
+    } catch (e) {
+      console.error('Failed to load portfolio symbols:', e);
+    }
 
     this.renderWatchlist();
   }
