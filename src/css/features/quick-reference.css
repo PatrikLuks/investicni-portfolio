@@ -17,7 +17,7 @@
   font-size: 1.8rem;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  z-index: 9999;
+  z-index: 1007;
   transition: all 0.3s;
   animation: bounce 2s infinite;
 }
@@ -52,7 +52,7 @@
   border-radius: 6px;
   font-size: 0.85rem;
   white-space: nowrap;
-  z-index: 10005;
+  z-index: 1008;
   pointer-events: none;
   animation: fadeIn 0.2s ease;
 }
@@ -186,7 +186,7 @@
   right: 0;
   height: 4px;
   background: #e9ecef;
-  z-index: 10006;
+  z-index: 9998;
 }
 
 #onboardingProgress .progress-fill {
@@ -206,7 +206,7 @@
   background: white;
   border-radius: 16px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  z-index: 10007;
+  z-index: 1009;
   animation: scaleIn 0.4s ease;
 }
 

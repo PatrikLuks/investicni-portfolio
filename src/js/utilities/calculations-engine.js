@@ -623,7 +623,22 @@ function showMetricsPanel() {
  * Update metrics panel with current data
  */
 function updateMetricsPanel() {
-  const data = window.getFondyData ? window.getFondyData() : [];
+  // Read from localStorage like market-data-ui.js does
+  let data = [];
+  try {
+    const portfolio = JSON.parse(localStorage.getItem('investmentPortfolio') || '[]');
+    // Convert portfolio format to expected data structure
+    data = portfolio.map(item => ({
+      fond: item.name || item.producer || 'Unknown',
+      producer: item.producer || 'Unknown',
+      investment: parseFloat(item.investment) || 0,
+      value: parseFloat(item.value) || 0,
+      investmentDate: item.investmentDate || ''
+    }));
+  } catch (e) {
+    console.error('Failed to load portfolio data for metrics:', e);
+  }
+
   if (!data || data.length === 0) {
     alert('Žádná data k výpočtu metrik');
     return;
