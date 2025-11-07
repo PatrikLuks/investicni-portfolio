@@ -52,21 +52,32 @@ class NotificationSystem {
   async registerServiceWorker() {
     if ('serviceWorker' in navigator) {
       try {
-        // First try to register service worker for push notifications
-        if ('PushManager' in window) {
-          const registration = await navigator.serviceWorker.register('/service-worker.js', {
-            scope: '/'
-          });
-          this.serviceWorkerRegistration = registration;
-          console.log('Service Worker registered successfully');
+        // Service Worker - pouze pro produkci
+        // V dev módu (Vite) se registrace přeskočí
+        if (import.meta.env.PROD) {
+          // Production: registrovat service worker
+          if ('PushManager' in window) {
+            const registration = await navigator.serviceWorker.register('/service-worker.js', {
+              scope: '/'
+            });
+            this.serviceWorkerRegistration = registration;
+            console.log('✅ Service Worker registered for production');
+          }
         } else {
-          // Fallback: just wait for ready
-          const registration = await navigator.serviceWorker.ready;
-          this.serviceWorkerRegistration = registration;
+          // Development: přeskočit registraci, ale připravit ready state
+          if (navigator.serviceWorker.controller) {
+            const registration = await navigator.serviceWorker.ready;
+            this.serviceWorkerRegistration = registration;
+            console.log('[DEV] Service Worker already active');
+          }
         }
       } catch (error) {
-        console.warn('Service Worker registration failed (this is OK for development):', error.message);
-        // Continue without service worker - not critical for functionality
+        // Bezpečně ignorovat - SW není kritické
+        if (!import.meta.env.PROD) {
+          console.debug('[DEV] SW registration skipped (OK for development)');
+        } else {
+          console.warn('⚠️ Service Worker registration failed:', error.message);
+        }
       }
     }
   }

@@ -79,6 +79,7 @@ class PerformanceEnhancement {
           const lastEntry = entries[entries.length - 1];
           console.log(
             `[PerformanceEnhancement] LCP: ${lastEntry.renderTime || lastEntry.loadTime}ms`,
+          );
 
           if (window.trackEvent) {
             window.trackEvent('core_web_vitals_lcp', {
@@ -154,6 +155,7 @@ class PerformanceEnhancement {
               console.warn(
                 `[PerformanceEnhancement] Slow resource: ${entry.name} (${duration.toFixed(2)}ms)`,
               );
+            }
 
             console.log(
               `[PerformanceEnhancement] Resource: ${entry.name} (${size}B, ${duration.toFixed(2)}ms)`,
@@ -390,9 +392,12 @@ class PerformanceEnhancement {
   async initServiceWorker() {
     if ('serviceWorker' in navigator) {
       try {
-        const registration = await navigator.serviceWorker.register('/service-worker.js');
-        console.log('[PerformanceEnhancement] Service Worker registered:', registration);
-        return registration;
+        // Only register in production - development uses Vite
+        if (import.meta.env.PROD) {
+          const registration = await navigator.serviceWorker.register('/service-worker.js');
+          console.log('[PerformanceEnhancement] Service Worker registered:', registration);
+          return registration;
+        }
       } catch (error) {
         console.error('[PerformanceEnhancement] Service Worker registration failed:', error);
       }
