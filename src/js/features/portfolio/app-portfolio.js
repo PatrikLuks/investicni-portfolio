@@ -127,6 +127,37 @@ portfolioForm.addEventListener('submit', function (e) {
   safeSetDisplay('fondListCard', 'block');
 });
 
+/**
+ * Save fund to localStorage for market data and other features
+ * @param {string} fundName - Name of the fund to add
+ */
+function addNewFund(fundName) {
+  try {
+    // Get existing portfolio from localStorage
+    const existingPortfolio = JSON.parse(localStorage.getItem('investmentPortfolio') || '[]');
+    
+    // Check if fund already exists
+    const fundExists = existingPortfolio.some(item => item.name === fundName);
+    if (fundExists) {
+      return; // Fund already in localStorage
+    }
+    
+    // Find the fund in portfolioData
+    const fundData = portfolioData.find(item => item.name === fundName);
+    if (!fundData) {
+      return; // Fund not found
+    }
+    
+    // Add to localStorage
+    existingPortfolio.push(fundData);
+    localStorage.setItem('investmentPortfolio', JSON.stringify(existingPortfolio));
+    
+    console.log(`✅ Fund added to localStorage: ${fundName}`);
+  } catch (e) {
+    console.error('Failed to add fund to localStorage:', e);
+  }
+}
+
 function updateFondTable() {
   const tbody = document.getElementById('fondTableBody');
   const thead = document.getElementById('fondTableHead');

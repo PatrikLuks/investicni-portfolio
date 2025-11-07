@@ -218,16 +218,18 @@ class MarketDataFeed {
       right: 20px;
       width: 400px;
       max-height: 600px;
-      background: white;
+      background: var(--card-background);
+      color: var(--text-primary);
       border-radius: 12px;
+      border: 1px solid var(--border-color);
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      z-index: 9999;
+      z-index: 1002;
       display: none;
       overflow: hidden;
     `;
 
     panel.innerHTML = `
-      <div style="padding: 16px; border-bottom: 1px solid #eee; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white;">
+      <div style="padding: 16px; border-bottom: 1px solid var(--border-color); background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <h3 style="margin: 0; display: flex; align-items: center; gap: 8px;">
             <span>📡</span>
@@ -357,10 +359,30 @@ class MarketDataFeed {
    * Extract symbol from asset name
    */
   extractSymbol(name) {
+    if (!name) {
+      return null;
+    }
+
     // Try to extract ticker symbol from name
     // e.g., "Apple Inc. (AAPL)" -> "AAPL"
-    const match = name?.match(/\(([A-Z]{1,5})\)/);
-    return match ? match[1] : name?.substring(0, 5).toUpperCase();
+    const match = name.match(/\(([A-Z]{1,5})\)/);
+    if (match && match[1]) {
+      return match[1];
+    }
+    
+    // If no ticker found, create from first letters of words
+    // e.g., "Conseq Invest Akcie Nové" -> "CIAN"
+    const words = name.split(/\s+/).filter(w => w.length > 0);
+    if (words.length > 0) {
+      let symbol = words.slice(0, 4).map(w => w[0].toUpperCase()).join('');
+      if (symbol.length >= 2 && symbol.length <= 5) {
+        return symbol;
+      }
+    }
+    
+    // Fallback: first 2-5 characters uppercase
+    const fallback = name.substring(0, 5).toUpperCase().replace(/[^A-Z]/g, '');
+    return fallback.length >= 2 ? fallback : null;
   }
 
   /**
@@ -395,7 +417,7 @@ class MarketDataFeed {
 
     if (suggestions.length === 0) {
       list.innerHTML = `
-        <div style="padding: 20px; text-align: center; color: #999;">
+        <div style="padding: 20px; text-align: center; color: var(--text-secondary);">
           No symbols found
         </div>
       `;
@@ -410,16 +432,17 @@ class MarketDataFeed {
         style="
           padding: 12px;
           margin: 4px;
-          background: #f8f9fa;
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
           border-radius: 8px;
           cursor: pointer;
           transition: all 0.2s;
         "
-        onmouseover="this.style.background='#e9ecef'"
-        onmouseout="this.style.background='#f8f9fa'"
+        onmouseover="this.style.background='var(--card-background)'"
+        onmouseout="this.style.background='var(--bg-secondary)'"
       >
-        <div style="font-weight: 600; color: #333;">${symbol}</div>
-        <div style="font-size: 0.85rem; color: #666;">Click to add to watchlist</div>
+        <div style="font-weight: 600; color: var(--text-primary);">${symbol}</div>
+        <div style="font-size: 0.85rem; color: var(--text-secondary);">Click to add to watchlist</div>
       </div>
     `,
       )
@@ -480,21 +503,22 @@ class MarketDataFeed {
       <div id="price-${symbol}" style="
         padding: 16px;
         margin: 8px;
-        background: white;
-        border: 1px solid #eee;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
         border-left: 4px solid ${color};
         border-radius: 8px;
         transition: all 0.3s;
+        color: var(--text-primary);
       ">
         <div style="display: flex; justify-content: space-between; align-items: start;">
           <div>
-            <div style="font-weight: 600; font-size: 1.1rem; color: #333;">${symbol}</div>
-            <div style="font-size: 0.85rem; color: #666; margin-top: 2px;">
+            <div style="font-weight: 600; font-size: 1.1rem; color: var(--text-primary);">${symbol}</div>
+            <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 2px;">
               Vol: ${this.formatVolume(priceData.volume)}
             </div>
           </div>
           <div style="text-align: right;">
-            <div style="font-weight: bold; font-size: 1.3rem; color: #333;">
+            <div style="font-weight: bold; font-size: 1.3rem; color: var(--text-primary);">
               $${priceData.price.toFixed(2)}
             </div>
             <div style="font-size: 0.9rem; color: ${color}; margin-top: 2px;">
@@ -502,7 +526,7 @@ class MarketDataFeed {
             </div>
           </div>
         </div>
-        <div style="display: flex; justify-content: space-between; margin-top: 12px; font-size: 0.8rem; color: #999;">
+        <div style="display: flex; justify-content: space-between; margin-top: 12px; font-size: 0.8rem; color: var(--text-secondary);">
           <span>Bid: $${priceData.bid?.toFixed(2) || '-'}</span>
           <span>Ask: $${priceData.ask?.toFixed(2) || '-'}</span>
         </div>
