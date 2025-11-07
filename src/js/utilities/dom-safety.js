@@ -2,7 +2,7 @@
  * @module dom-safety
  * Safe DOM manipulation utilities with null/undefined checks
  * Prevents crashes from missing DOM elements
- * 
+ *
  * Investment Portfolio Manager Pro v3.2.1
  */
 
@@ -181,7 +181,9 @@ function safeQuerySelectorAll(selector, context = '') {
   try {
     const elements = document.querySelectorAll(selector);
     if (!elements || elements.length === 0) {
-      console.warn(`DOM Safety: Selector '${selector}' found 0 elements${context ? ` in ${context}` : ''}`);
+      console.warn(
+        `DOM Safety: Selector '${selector}' found 0 elements${context ? ` in ${context}` : ''}`,
+      );
       return [];
     }
     return Array.from(elements);
@@ -375,4 +377,3 @@ if (typeof window !== 'undefined') {
 
 // 📦 Global namespace - functions available as window.DOMSafety.*
 // Removed ES6 exports for compatibility with non-module scripts
-

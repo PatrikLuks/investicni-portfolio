@@ -24,7 +24,7 @@ class ErrorHandler {
       if (event.message && event.message.includes('chart.js') && event.message.includes('.map')) {
         return;
       }
-      
+
       this.handleError({
         message: event.message,
         source: event.filename,
@@ -273,12 +273,12 @@ class ErrorHandler {
             </div>
             <details style="margin-top: 20px; max-width: 600px; text-align: left;">
                 <summary style="cursor: pointer; opacity: 0.6;">Technické detaily</summary>
-                <pre style="background: rgba(255,255,255,0.1); padding: 12px; border-radius: 4px; 
-                            font-size: 0.75rem; overflow: auto; max-height: 200px; margin-top: 10px;">
-${this.errors
-  .slice(-5)
-  .map((e) => `${e.timestamp}: ${e.message}`)
-  .join('\n')}
+                <pre style="background: rgba(255,255,255,0.1); padding: 12px; border-radius: 4px;
+                    font-size: 0.75rem; overflow: auto; max-height: 200px; margin-top: 10px;">
+                  ${this.errors
+    .slice(-5)
+    .map((e) => `${e.timestamp}: ${e.message}`)
+    .join('\n')}
                 </pre>
             </details>
         `;
@@ -309,9 +309,11 @@ ${this.errors
     }
 
     // Try to reload data
+    // eslint-disable-next-line no-undef
     if (typeof storage !== 'undefined' && storage.loadData) {
       try {
         const data = storage.loadData();
+
         if (typeof portfolioData !== 'undefined') {
           portfolioData.length = 0;
           portfolioData.push(...data);
@@ -320,6 +322,7 @@ ${this.errors
         if (typeof updateFondTable === 'function') {
           updateFondTable();
         }
+
         if (typeof updateDashboard === 'function') {
           updateDashboard();
         }
@@ -357,7 +360,9 @@ ${this.errors
   sendToAnalytics(errorEntry) {
     // Placeholder for analytics integration
     // You can integrate with Google Analytics, Sentry, etc.
+
     if (window.gtag) {
+      // eslint-disable-next-line no-undef
       gtag('event', 'exception', {
         description: errorEntry.message,
         fatal: false,
@@ -395,6 +400,7 @@ ${this.errors
 }
 
 // Safe async wrapper with error handling
+// eslint-disable-next-line no-unused-vars
 function safeAsync(fn, errorMessage = 'Operation failed') {
   return async function (...args) {
     try {
@@ -414,6 +420,7 @@ function safeAsync(fn, errorMessage = 'Operation failed') {
 }
 
 // Safe sync wrapper with error handling
+// eslint-disable-next-line no-unused-vars
 function safeSyncFunction(fn, errorMessage = 'Operation failed') {
   return function (...args) {
     try {

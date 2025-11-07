@@ -1,13 +1,13 @@
 /**
  * Performance Enhancement Module - PHASE 8
- * 
+ *
  * Implements performance optimization strategies:
  * - Code splitting & lazy loading
  * - Caching strategy
  * - Resource optimization
  * - Database query optimization
  * - API rate limiting
- * 
+ *
  * @module PerformanceEnhancement
  * @version 1.0.0
  */
@@ -31,7 +31,7 @@ class PerformanceEnhancement {
    */
   init() {
     console.log('[PerformanceEnhancement] Initializing...');
-    
+
     // Measure page load time
     if (window.performance && window.performance.timing) {
       window.addEventListener('load', () => {
@@ -52,17 +52,17 @@ class PerformanceEnhancement {
    * Measure page load time
    */
   measurePageLoadTime() {
-    const timing = window.performance.timing;
+    const {timing} = window.performance;
     const loadTime = timing.loadEventEnd - timing.navigationStart;
     this.metrics.pageLoadTime = loadTime;
-    
+
     console.log(`[PerformanceEnhancement] Page load time: ${loadTime}ms`);
-    
+
     // Log performance metrics
     if (window.trackEvent) {
       window.trackEvent('performance_page_load', {
         value: loadTime,
-        label: 'page_load_time_ms'
+        label: 'page_load_time_ms',
       });
     }
   }
@@ -77,12 +77,13 @@ class PerformanceEnhancement {
         const lcpObserver = new PerformanceObserver((list) => {
           const entries = list.getEntries();
           const lastEntry = entries[entries.length - 1];
-          console.log(`[PerformanceEnhancement] LCP: ${lastEntry.renderTime || lastEntry.loadTime}ms`);
-          
+          console.log(
+            `[PerformanceEnhancement] LCP: ${lastEntry.renderTime || lastEntry.loadTime}ms`,
+
           if (window.trackEvent) {
             window.trackEvent('core_web_vitals_lcp', {
               value: lastEntry.renderTime || lastEntry.loadTime,
-              label: 'largest_contentful_paint'
+              label: 'largest_contentful_paint',
             });
           }
         });
@@ -101,11 +102,11 @@ class PerformanceEnhancement {
             }
           }
           console.log(`[PerformanceEnhancement] CLS: ${clsValue}`);
-          
+
           if (window.trackEvent) {
             window.trackEvent('core_web_vitals_cls', {
               value: clsValue,
-              label: 'cumulative_layout_shift'
+              label: 'cumulative_layout_shift',
             });
           }
         });
@@ -120,11 +121,11 @@ class PerformanceEnhancement {
           const entries = list.getEntries();
           entries.forEach((entry) => {
             console.log(`[PerformanceEnhancement] FID: ${entry.processingDuration}ms`);
-            
+
             if (window.trackEvent) {
               window.trackEvent('core_web_vitals_fid', {
                 value: entry.processingDuration,
-                label: 'first_input_delay'
+                label: 'first_input_delay',
               });
             }
           });
@@ -145,14 +146,18 @@ class PerformanceEnhancement {
         const resourceObserver = new PerformanceObserver((list) => {
           const entries = list.getEntries();
           entries.forEach((entry) => {
-            const duration = entry.duration;
+            const {duration} = entry;
             const size = entry.transferSize || 0;
-            
-            if (duration > 1000) { // Log slow resources (>1s)
-              console.warn(`[PerformanceEnhancement] Slow resource: ${entry.name} (${duration.toFixed(2)}ms)`);
-            }
-            
-            console.log(`[PerformanceEnhancement] Resource: ${entry.name} (${size}B, ${duration.toFixed(2)}ms)`);
+
+            if (duration > 1000) {
+              // Log slow resources (>1s)
+              console.warn(
+                `[PerformanceEnhancement] Slow resource: ${entry.name} (${duration.toFixed(2)}ms)`,
+              );
+
+            console.log(
+              `[PerformanceEnhancement] Resource: ${entry.name} (${size}B, ${duration.toFixed(2)}ms)`,
+            );
           });
         });
         resourceObserver.observe({ entryTypes: ['resource'] });
@@ -181,7 +186,7 @@ class PerformanceEnhancement {
    */
   getCache(key) {
     const item = this.cache.get(key);
-    
+
     if (!item) {
       this.metrics.cacheMisses++;
       return null;
@@ -223,9 +228,9 @@ class PerformanceEnhancement {
     }
 
     const requests = this.rateLimits.get(key);
-    
+
     // Remove old requests
-    const recentRequests = requests.filter(time => time > oneMinuteAgo);
+    const recentRequests = requests.filter((time) => time > oneMinuteAgo);
     this.rateLimits.set(key, recentRequests);
 
     if (recentRequests.length >= limit) {
@@ -244,7 +249,7 @@ class PerformanceEnhancement {
    */
   async lazyLoadModule(modulePath) {
     console.log(`[PerformanceEnhancement] Lazy loading: ${modulePath}`);
-    
+
     try {
       const module = await import(modulePath);
       console.log(`[PerformanceEnhancement] Loaded: ${modulePath}`);
@@ -290,9 +295,9 @@ class PerformanceEnhancement {
    */
   async batchRequests(requests) {
     console.log(`[PerformanceEnhancement] Batching ${requests.length} requests`);
-    
+
     try {
-      const results = await Promise.all(requests.map(req => req()));
+      const results = await Promise.all(requests.map((req) => req()));
       console.log(`[PerformanceEnhancement] Batch complete: ${results.length} results`);
       return results;
     } catch (error) {
@@ -350,12 +355,15 @@ class PerformanceEnhancement {
   getMetrics() {
     return {
       ...this.metrics,
-      cacheHitRatio: this.metrics.cacheHits / (this.metrics.cacheHits + this.metrics.cacheMisses || 1),
-      memoryUsage: performance.memory ? {
-        usedJSHeapSize: `${(performance.memory.usedJSHeapSize / 1048576).toFixed(2)}MB`,
-        totalJSHeapSize: `${(performance.memory.totalJSHeapSize / 1048576).toFixed(2)}MB`,
-        jsHeapSizeLimit: `${(performance.memory.jsHeapSizeLimit / 1048576).toFixed(2)}MB`
-      } : null
+      cacheHitRatio:
+        this.metrics.cacheHits / (this.metrics.cacheHits + this.metrics.cacheMisses || 1),
+      memoryUsage: performance.memory
+        ? {
+            usedJSHeapSize: `${(performance.memory.usedJSHeapSize / 1048576).toFixed(2)}MB`,
+            totalJSHeapSize: `${(performance.memory.totalJSHeapSize / 1048576).toFixed(2)}MB`,
+            jsHeapSizeLimit: `${(performance.memory.jsHeapSizeLimit / 1048576).toFixed(2)}MB`,
+          }
+        : null,
     };
   }
 

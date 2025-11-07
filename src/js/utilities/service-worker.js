@@ -93,8 +93,8 @@ async function cacheFirstStrategy(request, cacheName) {
     }
 
     return response;
-  } catch (_error) {
-    console.error('[SW] Cache first strategy failed:', error);
+  } catch (err) {
+    console.error('[SW] Cache first strategy failed:', err);
     return new Response('Offline - resource not available', {
       status: 503,
       statusText: 'Service Unavailable',
@@ -119,7 +119,7 @@ async function networkFirstStrategy(request, cacheName) {
     }
 
     return response;
-  } catch (_error) {
+  } catch (err) {
     const cached = await caches.match(request);
 
     if (cached) {
@@ -160,9 +160,9 @@ async function syncPortfolioData() {
         data: { success: true },
       });
     });
-  } catch (_error) {
-    console.error('[SW] Sync failed:', error);
-    throw error;
+  } catch (err) {
+    console.error('[SW] Sync failed:', err);
+    throw err;
   }
 }
 

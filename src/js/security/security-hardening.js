@@ -1,6 +1,6 @@
 /**
  * Security Hardening Module - PHASE 9
- * 
+ *
  * Implements comprehensive security controls:
  * - Input validation & sanitization
  * - CSRF protection
@@ -9,7 +9,7 @@
  * - Security headers
  * - Authentication/Authorization
  * - Data protection
- * 
+ *
  * @module SecurityHardening
  * @version 1.0.0
  */
@@ -25,7 +25,7 @@ class SecurityHardening {
       'https://firebase.googleapis.com',
       'https://query1.finance.yahoo.com',
       'https://www.alphavantage.co',
-      'https://finnhub.io'
+      'https://finnhub.io',
     ]);
     this.csrfTokens = new Map();
   }
@@ -35,7 +35,7 @@ class SecurityHardening {
    */
   init() {
     console.log('[SecurityHardening] Initializing security measures...');
-    
+
     this.setupSecurityHeaders();
     this.setupCSRFProtection();
     this.setupInputValidation();
@@ -57,7 +57,7 @@ class SecurityHardening {
       'X-XSS-Protection': '1; mode=block',
       'Referrer-Policy': 'strict-origin-when-cross-origin',
       'Permissions-Policy': 'geolocation=(), microphone=(), camera=(), payment=()',
-      'Content-Security-Policy': this.buildCSP()
+      'Content-Security-Policy': this.buildCSP(),
     };
 
     console.log('[SecurityHardening] Security headers configured:', this.securityHeaders);
@@ -78,7 +78,9 @@ class SecurityHardening {
       frame-ancestors 'none';
       base-uri 'self';
       form-action 'self';
-    `.replace(/\s+/g, ' ').trim();
+    `
+      .replace(/\s+/g, ' ')
+      .trim();
   }
 
   /**
@@ -118,11 +120,11 @@ class SecurityHardening {
     let token = '';
     const array = new Uint8Array(32);
     crypto.getRandomValues(array);
-    
+
     for (let i = 0; i < array.length; i++) {
       token += chars[array[i] % chars.length];
     }
-    
+
     return token;
   }
 
@@ -134,7 +136,7 @@ class SecurityHardening {
     document.addEventListener('submit', (e) => {
       const form = e.target;
       const formData = new FormData(form);
-      
+
       for (const [key, value] of formData.entries()) {
         if (!this.validateInput(key, value)) {
           e.preventDefault();
@@ -226,7 +228,7 @@ class SecurityHardening {
       /<embed[^>]*>/gi,
     ];
 
-    return xssPatterns.some(pattern => pattern.test(content));
+    return xssPatterns.some((pattern) => pattern.test(content));
   }
 
   /**
@@ -237,7 +239,7 @@ class SecurityHardening {
     const originalFetch = window.fetch;
     window.fetch = async (resource, config) => {
       const url = typeof resource === 'string' ? resource : resource.url;
-      
+
       if (!this.validateCORS(url)) {
         console.error(`[SecurityHardening] CORS validation failed for: ${url}`);
         throw new Error('CORS validation failed');
@@ -257,7 +259,7 @@ class SecurityHardening {
   validateCORS(url) {
     try {
       const requestOrigin = new URL(url).origin;
-      
+
       // Allow same-origin requests
       if (requestOrigin === window.location.origin) {
         return true;
@@ -295,27 +297,30 @@ class SecurityHardening {
   trackFailedAttempt(userId) {
     const key = `attempts:${userId}`;
     const attempts = (this.failedAttempts.get(key) || 0) + 1;
-    
+
     this.failedAttempts.set(key, attempts);
 
     // Lock account after 5 failed attempts
     if (attempts >= 5) {
       this.blockList.add(userId);
       console.warn(`[SecurityHardening] Account locked after 5 failed attempts: ${userId}`);
-      
+
       if (window.trackEvent) {
         window.trackEvent('security_account_locked', {
           label: 'failed_login_attempts',
-          value: attempts
+          value: attempts,
         });
       }
 
       // Reset after 15 minutes
-      setTimeout(() => {
-        this.failedAttempts.delete(key);
-        this.blockList.delete(userId);
-        console.log(`[SecurityHardening] Account unlocked: ${userId}`);
-      }, 15 * 60 * 1000);
+      setTimeout(
+        () => {
+          this.failedAttempts.delete(key);
+          this.blockList.delete(userId);
+          console.log(`[SecurityHardening] Account unlocked: ${userId}`);
+        },
+        15 * 60 * 1000,
+      );
     }
   }
 
@@ -344,7 +349,7 @@ class SecurityHardening {
     }
 
     const requests = this.rateLimits.get(key);
-    const recentRequests = requests.filter(time => time > oneMinuteAgo);
+    const recentRequests = requests.filter((time) => time > oneMinuteAgo);
 
     if (recentRequests.length >= limit) {
       console.warn(`[SecurityHardening] Rate limit exceeded: ${endpoint}`);
@@ -404,7 +409,7 @@ class SecurityHardening {
       event,
       details,
       url: window.location.href,
-      userAgent: navigator.userAgent
+      userAgent: navigator.userAgent,
     };
 
     console.log('[SecurityHardening] Security Event:', logEntry);
@@ -413,7 +418,7 @@ class SecurityHardening {
     if (window.trackEvent) {
       window.trackEvent('security_event', {
         event,
-        ...details
+        ...details,
       });
     }
 
@@ -433,7 +438,7 @@ class SecurityHardening {
     const {
       maxSize = 10 * 1024 * 1024, // 10MB
       allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'],
-      allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'pdf']
+      allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'pdf'],
     } = options;
 
     // Check file size
@@ -468,7 +473,7 @@ class SecurityHardening {
     const data = encoder.encode(password);
     const hashBuffer = await crypto.subtle.digest('SHA-256', data);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
   }
 
   /**
@@ -481,10 +486,10 @@ class SecurityHardening {
       blockedUsers: Array.from(this.blockList),
       failedAttempts: Object.fromEntries(this.failedAttempts),
       rateLimits: Object.fromEntries(
-        Array.from(this.rateLimits.entries()).map(([key, value]) => [key, value.length])
+        Array.from(this.rateLimits.entries()).map(([key, value]) => [key, value.length]),
       ),
       trustedOrigins: Array.from(this.trustedOrigins),
-      csrfTokenActive: !!sessionStorage.getItem('csrf_token')
+      csrfTokenActive: !!sessionStorage.getItem('csrf_token'),
     };
   }
 

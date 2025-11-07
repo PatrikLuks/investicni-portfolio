@@ -177,44 +177,44 @@ class KeyboardShortcutsOverlay {
           <span style="width: 4px; height: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 2px;"></span>
           <span>${category.category}</span>
         </h3>
-        
+
         <div style="background: #f8f9fa; border-radius: 8px; padding: 16px;">
           ${category.items
             .map(
               (item) => `
-            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #e9ecef;">
-              <div style="display: flex; gap: 6px;">
-                ${item.keys
-                  .map(
-                    (key) => `
-                  <kbd style="
-                    display: inline-block;
-                    padding: 6px 10px;
-                    background: white;
-                    border: 1px solid #ced4da;
-                    border-radius: 6px;
-                    font-family: 'Courier New', monospace;
-                    font-size: 0.85rem;
-                    font-weight: 600;
-                    color: #495057;
-                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-                  ">${key}</kbd>
-                `,
-                  )
-                  .join('<span style="margin: 0 4px; color: #adb5bd;">+</span>')}
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #e9ecef;">
+                <div style="display: flex; gap: 6px;">
+                  ${item.keys
+                    .map(
+                      (key) => `
+                      <kbd style="
+                        display: inline-block;
+                        padding: 6px 10px;
+                        background: white;
+                        border: 1px solid #ced4da;
+                        border-radius: 6px;
+                        font-family: 'Courier New', monospace;
+                        font-size: 0.85rem;
+                        font-weight: 600;
+                        color: #495057;
+                        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                      ">${key}</kbd>
+                      `,
+                    )
+                    .join('<span style="margin: 0 4px; color: #adb5bd;">+</span>')}
+                </div>
+                <div style="color: #6c757d; font-size: 0.9rem; text-align: right; max-width: 60%;">
+                  ${item.description}
+                </div>
               </div>
-              <div style="color: #6c757d; font-size: 0.9rem; text-align: right; max-width: 60%;">
-                ${item.description}
-              </div>
-            </div>
-          `,
+            `,
             )
             .join('')}
         </div>
       </div>
     `,
-      )
-      .join('');
+    )
+    .join('');
   }
 
   /**
@@ -299,37 +299,37 @@ class KeyboardShortcutsOverlay {
       <body>
         <h1>⌨️ Klávesové Zkratky</h1>
         <p><strong>Portfolio Manager Pro v3.0</strong> - Kompletní přehled</p>
-        
+
         ${this.shortcuts
           .map(
             (category) => `
-          <h2>${category.category}</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Zkratka</th>
-                <th>Popis</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${category.items
-                .map(
-                  (item) => `
+            <h2>${category.category}</h2>
+            <table>
+              <thead>
                 <tr>
-                  <td>
-                    ${item.keys.map((key) => `<kbd>${key}</kbd>`).join(' + ')}
-                  </td>
-                  <td>${item.description}</td>
+                  <th>Zkratka</th>
+                  <th>Popis</th>
                 </tr>
-              `,
-                )
-                .join('')}
-            </tbody>
-          </table>
-        `,
+              </thead>
+              <tbody>
+                ${category.items
+                  .map(
+                    (item) => `
+                    <tr>
+                      <td>
+                        ${item.keys.map((key) => `<kbd>${key}</kbd>`).join(' + ')}
+                      </td>
+                      <td>${item.description}</td>
+                    </tr>
+                  `,
+                  )
+                  .join('')}
+              </tbody>
+            </table>
+          `,
           )
           .join('')}
-        
+
         <div style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #dee2e6; color: #6c757d;">
           <p><small>Generováno: ${new Date().toLocaleString('cs-CZ')}</small></p>
         </div>

@@ -21,11 +21,13 @@ class NotificationSystem {
   async init() {
     try {
       // Check browser support
+
       if (!('Notification' in window)) {
         return;
       }
 
       // Get existing permission
+      // eslint-disable-next-line no-undef
       this.permission = Notification.permission;
 
       // Register service worker for push notifications
@@ -67,6 +69,7 @@ class NotificationSystem {
     }
 
     try {
+      // eslint-disable-next-line no-undef
       const result = await Notification.requestPermission();
       this.permission = result;
 
@@ -88,6 +91,7 @@ class NotificationSystem {
    * @param {string} title - Notification title
    * @param {Object} options - Notification options
    */
+  // eslint-disable-next-line require-await
   async showNotification(title, options = {}) {
     const defaultOptions = {
       body: '',
@@ -147,6 +151,7 @@ class NotificationSystem {
         this.serviceWorkerRegistration.showNotification(title, options);
       } else {
         // Fallback to regular notification
+        // eslint-disable-next-line no-undef
         const notification = new Notification(title, options);
 
         notification.onclick = () => {
@@ -360,6 +365,7 @@ class NotificationSystem {
     });
 
     document.getElementById('clearAllBtn')?.addEventListener('click', () => {
+      // eslint-disable-next-line no-alert
       if (confirm('Clear all notifications?')) {
         this.clearAll();
       }
@@ -557,12 +563,12 @@ class NotificationSystem {
       return saved
         ? JSON.parse(saved)
         : {
-            browser: false,
-            portfolio: true,
-            trade: true,
-            alert: true,
-            collaboration: true,
-          };
+          browser: false,
+          portfolio: true,
+          trade: true,
+          alert: true,
+          collaboration: true,
+        };
     } catch (_error) {
       return {
         browser: false,
