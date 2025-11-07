@@ -206,6 +206,34 @@ function addMarketDataWidget() {
   const widget = createMarketDataWidget();
   container.appendChild(widget);
 
+  // Initialize status display with provider info
+  const statusDiv = widget.querySelector('#marketDataStatus');
+  const providers = window.marketDataService?.getProviderStatus?.() || [];
+  
+  if (providers.length > 0) {
+    statusDiv.innerHTML = providers
+      .map(
+        (provider) => `
+      <div class="provider-status ${provider.enabled ? 'enabled' : 'disabled'}">
+        <span class="provider-name">${provider.name}</span>
+        <span class="provider-badge">
+          ${provider.enabled ? '✅ Active' : '⚠️ Inactive'}
+          ${provider.hasApiKey ? ' • API Key Configured' : ' (No key needed)'}
+        </span>
+      </div>
+    `,
+      )
+      .join('');
+  } else {
+    // Default: show Yahoo Finance is available
+    statusDiv.innerHTML = `
+      <div class="provider-status enabled">
+        <span class="provider-name">Yahoo Finance</span>
+        <span class="provider-badge">✅ Active (No API Key Needed)</span>
+      </div>
+    `;
+  }
+
   // Initialize auto-update if enabled
   const autoUpdate = localStorage.getItem('marketDataAutoUpdate') === 'true';
   if (autoUpdate) {

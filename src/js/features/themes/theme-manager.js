@@ -108,12 +108,28 @@ class ThemeManager {
       return;
     }
 
-    toggle.addEventListener('click', () => {
+    let isToggling = false;
+
+    toggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      // Prevent double-click toggling
+      if (isToggling) return;
+      isToggling = true;
+
       const newTheme = this.toggleTheme();
+      
+      // Update icon immediately
       this.updateToggleIcon(toggle, newTheme);
 
       // Show toast notification
       this.showThemeNotification(newTheme);
+
+      // Re-enable after transition
+      setTimeout(() => {
+        isToggling = false;
+      }, 300);
     });
 
     // Initial icon

@@ -50,12 +50,23 @@ class NotificationSystem {
    * Register service worker
    */
   async registerServiceWorker() {
-    if ('serviceWorker' in navigator && 'PushManager' in window) {
+    if ('serviceWorker' in navigator) {
       try {
-        const registration = await navigator.serviceWorker.ready;
-        this.serviceWorkerRegistration = registration;
+        // First try to register service worker for push notifications
+        if ('PushManager' in window) {
+          const registration = await navigator.serviceWorker.register('/service-worker.js', {
+            scope: '/'
+          });
+          this.serviceWorkerRegistration = registration;
+          console.log('Service Worker registered successfully');
+        } else {
+          // Fallback: just wait for ready
+          const registration = await navigator.serviceWorker.ready;
+          this.serviceWorkerRegistration = registration;
+        }
       } catch (error) {
-        console.error('Service Worker registration failed:', error);
+        console.warn('Service Worker registration failed (this is OK for development):', error.message);
+        // Continue without service worker - not critical for functionality
       }
     }
   }
