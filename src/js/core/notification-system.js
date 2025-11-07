@@ -52,32 +52,35 @@ class NotificationSystem {
   async registerServiceWorker() {
     if ('serviceWorker' in navigator) {
       try {
-        // Service Worker - pouze pro produkci (ne localhost/dev)
-        // V dev módu (Vite) se registrace přeskočí
-        const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        // Service Worker - pouze pro produkci
+        // V dev módu (localhost) se SW zcela přeskočí - Vite jej nemá k dispozici
+        const isDev = window.location.hostname === 'localhost' || 
+                      window.location.hostname === '127.0.0.1' ||
+                      window.location.hostname === '::1';
         
         if (!isDev) {
           // Production: registrovat service worker
-          if ('PushManager' in window) {
+          try {
             const registration = await navigator.serviceWorker.register('/service-worker.js', {
               scope: '/'
             });
             this.serviceWorkerRegistration = registration;
             console.log('✅ Service Worker registered for production');
+          } catch (swError) {
+            console.warn('⚠️ Service Worker registration failed (production):', swError.message);
           }
         } else {
-          // Development: přeskočit registraci, ale připravit ready state
+          // Development: SW se zcela přeskočí - Vite jej nemá
           if (navigator.serviceWorker.controller) {
             const registration = await navigator.serviceWorker.ready;
             this.serviceWorkerRegistration = registration;
-            console.log('[DEV] Service Worker already active');
           }
         }
       } catch (error) {
         // Bezpečně ignorovat - SW není kritické
         const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-        if (isDev) {
-          console.debug('[DEV] SW registration skipped (OK for development)');
+        if (!isDev) {
+          console.warn('⚠️ Service Worker error:', error.message);
         } else {
           console.warn('⚠️ Service Worker registration failed:', error.message);
         }

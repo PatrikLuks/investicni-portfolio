@@ -1673,7 +1673,7 @@ safeAddEventListener('processCSV', 'click', function () {
 // Add these styles to your CSS
 const styles = `
     .csv-import-section {
-        background: #f8f9fa;
+        background: var(--bg-secondary);
         padding: 20px;
         border-radius: 8px;
         margin-bottom: 20px;
@@ -1682,14 +1682,16 @@ const styles = `
     .csv-format-info {
         margin: 15px 0;
         padding: 10px;
-        background: #fff;
-        border-left: 4px solid #1a237e;
+        background: var(--card-background);
+        border-left: 4px solid var(--primary-blue);
+        color: var(--text-primary);
     }
 
     .csv-format-info code {
         display: block;
         padding: 10px;
-        background: #f1f1f1;
+        background: var(--background);
+        color: var(--text-primary);
         margin: 10px 0;
     }
 
