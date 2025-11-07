@@ -143,13 +143,17 @@ function saveApiSettings() {
   if (autoUpdate) {
     startAutoUpdate();
   } else {
-    window.autoUpdateService.stop();
+    if (window.autoUpdateService) {
+      window.autoUpdateService.stop();
+    }
   }
 
-  window.notificationSystem.showNotification('API Settings Saved', {
-    body: 'API settings saved successfully',
-    category: 'success',
-  });
+  if (window.notificationSystem) {
+    window.notificationSystem.showNotification('API Settings Saved', {
+      body: 'API settings saved successfully',
+      category: 'success',
+    });
+  }
   closeApiSettingsModal();
 }
 
@@ -251,10 +255,12 @@ function startAutoUpdate() {
   const symbols = getPortfolioSymbols();
 
   if (symbols.length === 0) {
-    window.notificationSystem.showNotification('No Symbols', {
-      body: 'No symbols to update',
-      category: 'warning',
-    });
+    if (window.notificationSystem) {
+      window.notificationSystem.showNotification('No Symbols', {
+        body: 'No symbols to update',
+        category: 'warning',
+      });
+    }
     return;
   }
 
@@ -277,10 +283,12 @@ async function refreshMarketData() {
   const symbols = getPortfolioSymbols();
 
   if (symbols.length === 0) {
-    window.notificationSystem.showNotification('No Investments', {
-      body: 'No investments to update',
-      category: 'warning',
-    });
+    if (window.notificationSystem) {
+      window.notificationSystem.showNotification('No Investments', {
+        body: 'No investments to update',
+        category: 'warning',
+      });
+    }
     return;
   }
 
@@ -293,16 +301,20 @@ async function refreshMarketData() {
     updatePortfolioWithQuotes(quotes);
 
     updateMarketDataStatus(quotes, 'Updated');
-    window.notificationSystem.showNotification('Market Data Updated', {
-      body: `Updated ${quotes.length} symbols`,
-      category: 'success',
-    });
+    if (window.notificationSystem) {
+      window.notificationSystem.showNotification('Market Data Updated', {
+        body: `Updated ${quotes.length} symbols`,
+        category: 'success',
+      });
+    }
   } catch (error) {
     updateMarketDataStatus(null, 'Error');
-    window.notificationSystem.showNotification('Update Failed', {
-      body: `Update failed: ${error.message}`,
-      category: 'error',
-    });
+    if (window.notificationSystem) {
+      window.notificationSystem.showNotification('Update Failed', {
+        body: `Update failed: ${error.message}`,
+        category: 'error',
+      });
+    }
   }
 }
 

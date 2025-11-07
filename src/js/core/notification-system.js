@@ -52,9 +52,11 @@ class NotificationSystem {
   async registerServiceWorker() {
     if ('serviceWorker' in navigator) {
       try {
-        // Service Worker - pouze pro produkci
+        // Service Worker - pouze pro produkci (ne localhost/dev)
         // V dev módu (Vite) se registrace přeskočí
-        if (import.meta.env.PROD) {
+        const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        
+        if (!isDev) {
           // Production: registrovat service worker
           if ('PushManager' in window) {
             const registration = await navigator.serviceWorker.register('/service-worker.js', {
@@ -73,7 +75,8 @@ class NotificationSystem {
         }
       } catch (error) {
         // Bezpečně ignorovat - SW není kritické
-        if (!import.meta.env.PROD) {
+        const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        if (isDev) {
           console.debug('[DEV] SW registration skipped (OK for development)');
         } else {
           console.warn('⚠️ Service Worker registration failed:', error.message);
