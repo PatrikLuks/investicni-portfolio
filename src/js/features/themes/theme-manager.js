@@ -10,7 +10,6 @@ class ThemeManager {
     this.THEMES = {
       LIGHT: 'light',
       DARK: 'dark',
-      AUTO: 'auto',
     };
 
     this.currentTheme = this.loadTheme();
@@ -22,13 +21,6 @@ class ThemeManager {
   init() {
     // Apply saved theme
     this.applyTheme(this.currentTheme);
-
-    // Listen for system theme changes
-    this.mediaQuery.addEventListener('change', (e) => {
-      if (this.currentTheme === this.THEMES.AUTO) {
-        this.applyTheme(this.THEMES.AUTO);
-      }
-    });
 
     // Add theme toggle to UI
     this.createThemeToggle();
@@ -46,19 +38,11 @@ class ThemeManager {
   }
 
   getEffectiveTheme() {
-    if (this.currentTheme === this.THEMES.AUTO) {
-      return this.mediaQuery.matches ? this.THEMES.DARK : this.THEMES.LIGHT;
-    }
     return this.currentTheme;
   }
 
   applyTheme(theme) {
-    const effectiveTheme =
-      theme === this.THEMES.AUTO
-        ? this.mediaQuery.matches
-          ? this.THEMES.DARK
-          : this.THEMES.LIGHT
-        : theme;
+    const effectiveTheme = theme;
 
     document.documentElement.setAttribute('data-theme', effectiveTheme);
     document.body.classList.remove('theme-light', 'theme-dark', 'dark-mode', 'light-mode');
@@ -72,7 +56,7 @@ class ThemeManager {
     }
 
     // Update meta theme-color for mobile browsers
-    const themeColor = effectiveTheme === this.THEMES.DARK ? '#1a1a1a' : '#ffffff';
+    const themeColor = effectiveTheme === this.THEMES.DARK ? '#0f172a' : '#ffffff';
     let metaThemeColor = document.querySelector('meta[name="theme-color"]');
     if (!metaThemeColor) {
       metaThemeColor = document.createElement('meta');
@@ -402,6 +386,14 @@ themeStyles.textContent = `
 `;
 
 document.head.appendChild(themeStyles);
+
+// Clean up legacy theme values from localStorage
+// Ensure only 'light' or 'dark' are stored (no 'auto')
+const STORAGE_KEY = 'portfolio-theme';
+const storedTheme = localStorage.getItem(STORAGE_KEY);
+if (storedTheme === 'auto' || !['light', 'dark'].includes(storedTheme)) {
+  localStorage.setItem(STORAGE_KEY, 'light');
+}
 
 // Initialize theme manager on DOM ready
 if (document.readyState === 'loading') {
