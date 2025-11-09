@@ -898,6 +898,75 @@ html[data-theme='light-modern'] * {
   text-shadow: none !important;
 }
 
+/* ============================================================================
+   DARK THEME LABEL & TEXT ENHANCEMENTS
+   ============================================================================ */
+
+/* Elegant Black & Dark labels - enhanced contrast */
+html[data-theme='elegant-black'] label,
+html[data-theme='dark'] label,
+html[data-theme='elegant-black'] .label,
+html[data-theme='dark'] .label {
+  color: var(--text-secondary) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px;
+}
+
+html[data-theme='elegant-black'] label:hover,
+html[data-theme='dark'] label:hover {
+  color: var(--color-primary) !important;
+}
+
+/* Form labels - extra bright for readability */
+html[data-theme='elegant-black'] .form-group label,
+html[data-theme='dark'] .form-group label,
+html[data-theme='elegant-black'] .form-label,
+html[data-theme='dark'] .form-label {
+  color: var(--text-secondary) !important;
+  font-weight: 700 !important;
+}
+
+/* Required indicator */
+html[data-theme='elegant-black'] label.required::after,
+html[data-theme='dark'] label.required::after {
+  color: var(--color-danger) !important;
+  font-weight: 800 !important;
+}
+
+/* Stat and metric labels in dark themes */
+html[data-theme='elegant-black'] .stat-label,
+html[data-theme='dark'] .stat-label,
+html[data-theme='elegant-black'] .metric-label,
+html[data-theme='dark'] .metric-label {
+  color: var(--text-secondary) !important;
+  font-weight: 700 !important;
+}
+
+/* Help text - ensure visibility in dark themes */
+html[data-theme='elegant-black'] .help-text,
+html[data-theme='dark'] .help-text,
+html[data-theme='elegant-black'] .helper-text,
+html[data-theme='dark'] .helper-text,
+html[data-theme='elegant-black'] small,
+html[data-theme='dark'] small {
+  color: var(--text-secondary) !important;
+  font-weight: 600 !important;
+}
+
+/* Form field labels */
+html[data-theme='elegant-black'] input[type='text'] + label,
+html[data-theme='elegant-black'] input[type='number'] + label,
+html[data-theme='elegant-black'] input[type='email'] + label,
+html[data-theme='elegant-black'] textarea + label,
+html[data-theme='elegant-black'] select + label,
+html[data-theme='dark'] input[type='text'] + label,
+html[data-theme='dark'] input[type='number'] + label,
+html[data-theme='dark'] input[type='email'] + label,
+html[data-theme='dark'] textarea + label,
+html[data-theme='dark'] select + label {
+  color: var(--text-secondary) !important;
+}
+
 /* Preserve placeholder opacity */
 html[data-theme='light-classic'] input::placeholder,
 html[data-theme='light-modern'] input::placeholder,
