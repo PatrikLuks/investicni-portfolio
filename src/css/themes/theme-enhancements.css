@@ -1,7 +1,7 @@
 /**
- * Premium Design Effects
+ * Premium Design Effects + Light Theme Enhancements
  * Advanced visual effects, animations, and premium styling for all themes
- * Version: 1.0.0 - High Quality Design System
+ * Version: 1.1.0 - High Quality Design System with Light Theme Support
  */
 
 /* ============================================================================
@@ -663,209 +663,248 @@ a.skip-link:focus {
 }
 
 /* ============================================================================
-   LIGHT THEME CONTRAST FIXES - Ensure maximum readability
+   LIGHT THEME CONTRAST FIXES - MAXIMUM CONTRAST FOR LIGHT THEMES
    ============================================================================ */
 
 html[data-theme="light-classic"],
 html[data-theme="light-modern"] {
-  /* Enforce strong text contrast */
-  body,
-  p,
-  span,
-  li,
-  td,
-  label,
-  .text,
-  .label {
-    color: var(--text-primary) !important;
-  }
-
-  /* Button text always visible */
-  button,
-  .btn {
-    color: #ffffff !important;
-    font-weight: 600;
-    text-shadow: none;
-  }
-
-  /* Card text contrast */
-  .card,
-  .panel,
-  .modal {
-    background-color: var(--bg-elevated) !important;
-    color: var(--text-primary) !important;
-  }
-
-  .card h1,
-  .card h2,
-  .card h3,
-  .card h4,
-  .card h5,
-  .card h6 {
-    color: var(--text-primary) !important;
-  }
-
-  /* Input text readability */
-  input,
-  textarea,
-  select {
-    color: var(--input-text) !important;
-    background-color: var(--input-bg) !important;
-  }
-
-  /* Headings always dark on light background */
-  h1, h2, h3, h4, h5, h6 {
-    color: var(--text-primary) !important;
-  }
-
-  /* Table text contrast */
-  table {
-    color: var(--text-primary) !important;
-  }
-
-  thead th {
-    background-color: var(--bg-secondary) !important;
-    color: var(--text-primary) !important;
-  }
-
-  tbody td {
-    color: var(--text-primary) !important;
-  }
-
-  /* Alert text */
-  .alert {
-    color: var(--text-primary) !important;
-  }
-
-  /* Badge text */
-  .badge {
-    color: #ffffff !important;
-    font-weight: 600;
-  }
-
-  /* Link colors for light themes */
-  a {
-    color: var(--color-primary) !important;
-    text-decoration: none;
-  }
-
-  a:hover {
-    text-decoration: underline;
-  }
+  /* Enforce strong text contrast - override everything */
+  color: #000000 !important;
+  --text-primary: #000000 !important;
+  --text-secondary: #000000 !important;
+  --text-tertiary: #1a1a1a !important;
+  --text-muted: #333333 !important;
 }
 
-/* ============================================================================
-   LIGHT THEME TEXT COLOR BOOST - Maximum contrast for all text elements
-   ============================================================================ */
+/* Force black text on all elements */
+html[data-theme="light-classic"] body,
+html[data-theme="light-modern"] body {
+  color: #000000 !important;
+  background-color: #ffffff !important;
+}
 
-html[data-theme="light-classic"],
+/* All text elements - strong contrast */
+html[data-theme="light-classic"] p,
+html[data-theme="light-modern"] p,
+html[data-theme="light-classic"] span,
+html[data-theme="light-modern"] span,
+html[data-theme="light-classic"] div,
+html[data-theme="light-modern"] div,
+html[data-theme="light-classic"] li,
+html[data-theme="light-modern"] li {
+  color: inherit !important;
+}
+
+/* Headings - always black on light background */
+html[data-theme="light-classic"] h1,
+html[data-theme="light-modern"] h1,
+html[data-theme="light-classic"] h2,
+html[data-theme="light-modern"] h2,
+html[data-theme="light-classic"] h3,
+html[data-theme="light-modern"] h3,
+html[data-theme="light-classic"] h4,
+html[data-theme="light-modern"] h4,
+html[data-theme="light-classic"] h5,
+html[data-theme="light-modern"] h5,
+html[data-theme="light-classic"] h6,
+html[data-theme="light-modern"] h6 {
+  color: #000000 !important;
+  font-weight: 700 !important;
+}
+
+/* Labels - strong contrast */
+html[data-theme="light-classic"] label,
+html[data-theme="light-modern"] label,
+html[data-theme="light-classic"] .label,
+html[data-theme="light-modern"] .label {
+  color: #000000 !important;
+  font-weight: 600 !important;
+}
+
+/* Secondary text - still black but slightly muted */
+html[data-theme="light-classic"] .text-muted,
+html[data-theme="light-modern"] .text-muted,
+html[data-theme="light-classic"] .text-secondary,
+html[data-theme="light-modern"] .text-secondary,
+html[data-theme="light-classic"] .subtitle,
+html[data-theme="light-modern"] .subtitle,
+html[data-theme="light-classic"] .description,
+html[data-theme="light-modern"] .description {
+  color: #1a1a1a !important;
+  font-weight: 500 !important;
+}
+
+/* Table elements - maximum contrast */
+html[data-theme="light-classic"] td,
+html[data-theme="light-modern"] td,
+html[data-theme="light-classic"] th,
+html[data-theme="light-modern"] th,
+html[data-theme="light-classic"] tr,
+html[data-theme="light-modern"] tr {
+  color: #000000 !important;
+}
+
+html[data-theme="light-classic"] thead th,
+html[data-theme="light-modern"] thead th {
+  background-color: var(--bg-secondary) !important;
+  color: #000000 !important;
+}
+
+html[data-theme="light-classic"] tbody td,
+html[data-theme="light-modern"] tbody td {
+  color: #000000 !important;
+}
+
+/* Stat and metric labels */
+html[data-theme="light-classic"] .stat-label,
+html[data-theme="light-modern"] .stat-label,
+html[data-theme="light-classic"] .metric-label,
+html[data-theme="light-modern"] .metric-label,
+html[data-theme="light-classic"] .value,
+html[data-theme="light-modern"] .value,
+html[data-theme="light-classic"] .kpi-card .label,
+html[data-theme="light-modern"] .kpi-card .label {
+  color: #000000 !important;
+  font-weight: 600 !important;
+}
+
+/* Help text - readable */
+html[data-theme="light-classic"] .help-text,
+html[data-theme="light-modern"] .help-text,
+html[data-theme="light-classic"] .helper-text,
+html[data-theme="light-modern"] .helper-text,
+html[data-theme="light-classic"] small,
+html[data-theme="light-modern"] small {
+  color: #333333 !important;
+  font-weight: 500 !important;
+}
+
+/* Input elements - max contrast */
+html[data-theme="light-classic"] input,
+html[data-theme="light-modern"] input,
+html[data-theme="light-classic"] textarea,
+html[data-theme="light-modern"] textarea,
+html[data-theme="light-classic"] select,
+html[data-theme="light-modern"] select {
+  color: #000000 !important;
+  background-color: #ffffff !important;
+  border-color: #8899b3 !important;
+}
+
+html[data-theme="light-classic"] input::placeholder,
+html[data-theme="light-modern"] input::placeholder,
+html[data-theme="light-classic"] textarea::placeholder,
+html[data-theme="light-modern"] textarea::placeholder {
+  color: #666666 !important;
+  opacity: 0.9 !important;
+}
+
+/* Button text always white */
+html[data-theme="light-classic"] button,
+html[data-theme="light-modern"] button,
+html[data-theme="light-classic"] .btn,
+html[data-theme="light-modern"] .btn {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  background-color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+}
+
+/* Links - use primary color */
+html[data-theme="light-classic"] a,
+html[data-theme="light-modern"] a {
+  color: var(--color-primary) !important;
+  text-decoration: none;
+}
+
+html[data-theme="light-classic"] a:hover,
+html[data-theme="light-modern"] a:hover {
+  color: var(--color-primary-hover) !important;
+  text-decoration: underline;
+}
+
+/* Badges - white text */
+html[data-theme="light-classic"] .badge,
+html[data-theme="light-modern"] .badge,
+html[data-theme="light-classic"] .tag,
+html[data-theme="light-modern"] .tag {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+/* Alerts - max contrast */
+html[data-theme="light-classic"] .alert,
+html[data-theme="light-modern"] .alert {
+  color: #000000 !important;
+}
+
+/* Cards - white background, black text */
+html[data-theme="light-classic"] .card,
+html[data-theme="light-modern"] .card,
+html[data-theme="light-classic"] .modal-content,
+html[data-theme="light-modern"] .modal-content,
+html[data-theme="light-classic"] .form-section,
+html[data-theme="light-modern"] .form-section {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+/* Portfolio-specific elements */
+html[data-theme="light-classic"] .portfolio-name,
+html[data-theme="light-modern"] .portfolio-name,
+html[data-theme="light-classic"] .fund-name,
+html[data-theme="light-modern"] .fund-name,
+html[data-theme="light-classic"] .investment-name,
+html[data-theme="light-modern"] .investment-name,
+html[data-theme="light-classic"] .amount,
+html[data-theme="light-modern"] .amount,
+html[data-theme="light-classic"] .price,
+html[data-theme="light-modern"] .price,
+html[data-theme="light-classic"] .percentage,
+html[data-theme="light-modern"] .percentage {
+  color: #000000 !important;
+  font-weight: 600 !important;
+}
+
+/* Market data & charts */
+html[data-theme="light-classic"] .market-data,
+html[data-theme="light-modern"] .market-data,
+html[data-theme="light-classic"] .chart-label,
+html[data-theme="light-modern"] .chart-label,
+html[data-theme="light-classic"] .chart-tooltip,
+html[data-theme="light-modern"] .chart-tooltip {
+  color: #000000 !important;
+}
+
+/* Remove text shadow and opacity from text elements */
+html[data-theme="light-classic"] *,
+html[data-theme="light-modern"] * {
+  text-shadow: none !important;
+}
+
+/* Preserve placeholder opacity */
+html[data-theme="light-classic"] input::placeholder,
+html[data-theme="light-modern"] input::placeholder,
+html[data-theme="light-classic"] textarea::placeholder,
+html[data-theme="light-modern"] textarea::placeholder {
+  opacity: 0.9 !important;
+}
+
+/* Scrollbars dark for light themes */
+html[data-theme="light-classic"] {
+  scrollbar-color: #001a4d #ffffff;
+}
+
 html[data-theme="light-modern"] {
-  /* Override weak secondary text with stronger primary text */
-  .label,
-  .text-secondary,
-  .subtitle,
-  .description,
-  .helper-text,
-  .help-text,
-  .stat-label,
-  .metric-label,
-  .market-label,
-  .summary-label,
-  .kpi-label,
-  small,
-  .small,
-  .caption {
-    color: var(--text-primary) !important;
-    font-weight: 500;
-  }
-
-  /* Extra boost for specific weak elements */
-  .help-block {
-    color: var(--text-primary) !important;
-  }
-
-  /* Table headers and cells - maximum contrast */
-  thead th,
-  tbody td,
-  table {
-    color: var(--text-primary) !important;
-  }
-
-  /* Form helper text - strong contrast */
-  .form-helper,
-  .form-error,
-  .form-info {
-    color: var(--text-primary) !important;
-  }
-
-  /* All text elements explicitly dark */
-  * {
-    /* Don't override if element explicitly sets color */
-    --fallback-text: var(--text-primary);
-  }
-
-  /* Placeholder text - slightly lighter but still readable */
-  ::placeholder,
-  ::-webkit-input-placeholder {
-    color: var(--text-muted) !important;
-    opacity: 1;
-  }
-
-  /* Button text always white for contrast */
-  button,
-  .btn,
-  [role="button"] {
-    color: #ffffff !important;
-    text-shadow: none;
-  }
-
-  /* Links - use primary color */
-  a:not([class*="btn"]):not([class*="button"]) {
-    color: var(--color-primary) !important;
-  }
-
-  /* Headings - darkest possible */
-  h1, h2, h3, h4, h5, h6 {
-    color: var(--text-primary) !important;
-  }
-
-  /* List items - strong contrast */
-  li,
-  dd,
-  dt {
-    color: var(--text-primary) !important;
-  }
-
-  /* Badges and tags */
-  .badge,
-  .tag,
-  .chip,
-  .label-badge {
-    color: #ffffff !important;
-    font-weight: 600;
-  }
-
-  /* Alerts and notifications */
-  .alert,
-  .notification,
-  .toast {
-    color: var(--text-primary) !important;
-  }
-
-  /* Cards and containers */
-  .card,
-  .panel,
-  .box,
-  .section {
-    color: var(--text-primary) !important;
-  }
-
-  /* Specific Portfolio UI elements */
-  [class*="portfolio"],
-  [class*="fund"],
-  [class*="investment"],
-  [class*="holding"] {
-    color: var(--text-primary) !important;
-  }
+  scrollbar-color: #001a4d #ffffff;
 }
 
+html[data-theme="light-classic"]::-webkit-scrollbar-thumb,
+html[data-theme="light-modern"]::-webkit-scrollbar-thumb {
+  background: #001a4d !important;
+}
+
+html[data-theme="light-classic"]::-webkit-scrollbar-track,
+html[data-theme="light-modern"]::-webkit-scrollbar-track {
+  background: #ffffff !important;
+}
