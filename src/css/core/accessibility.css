@@ -8,7 +8,7 @@
 
 /* Enhanced focus styles for better visibility */
 *:focus {
-  outline: 3px solid #2563eb !important;
+  outline: 3px solid var(--color-primary) !important;
   outline-offset: 2px !important;
   transition: outline-offset 0.2s ease !important;
 }
@@ -18,8 +18,8 @@
   position: absolute;
   top: -40px;
   left: 0;
-  background: #1a237e;
-  color: white;
+  background: var(--bg-primary);
+  color: var(--text-primary);
   padding: 8px 16px;
   text-decoration: none;
   border-radius: 0 0 4px 0;
@@ -27,6 +27,7 @@
   font-weight: 600;
   visibility: hidden;
   opacity: 0;
+  border: 2px solid var(--color-primary);
 }
 
 .skip-link:focus {
@@ -96,7 +97,7 @@ button:focus-visible,
 input:focus-visible,
 select:focus-visible,
 a:focus-visible {
-  outline: 3px solid #2563eb;
+  outline: 3px solid var(--color-primary);
   outline-offset: 2px;
   box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
 }
@@ -107,7 +108,7 @@ body.show-tab-order *:focus::before {
   position: absolute;
   top: -20px;
   left: 0;
-  background: #2563eb;
+  background: var(--color-primary);
   color: white;
   padding: 2px 6px;
   font-size: 12px;
@@ -144,7 +145,7 @@ select {
   position: absolute;
   top: 0;
   right: 0;
-  background: #dc2626;
+  background: var(--color-danger);
   color: white;
   font-size: 10px;
   padding: 2px 4px;
@@ -166,14 +167,14 @@ body.dark-mode {
 /* Required field indicator */
 label.required::after {
   content: ' *';
-  color: #dc2626;
+  color: var(--color-danger);
   font-weight: bold;
 }
 
 /* Error state styling */
 input:invalid,
 select:invalid {
-  border-color: #dc2626;
+  border-color: var(--color-danger);
 }
 
 input:invalid:focus,
@@ -183,7 +184,7 @@ select:invalid:focus {
 
 /* Success state styling */
 input:valid:not(:placeholder-shown) {
-  border-color: #16a34a;
+  border-color: var(--color-success);
 }
 
 /* Field hint text */
@@ -196,7 +197,7 @@ input:valid:not(:placeholder-shown) {
 
 /* Error message */
 .error-message {
-  color: #dc2626;
+  color: var(--color-danger);
   font-size: 0.875rem;
   margin-top: 4px;
   display: flex;
@@ -217,16 +218,16 @@ table {
 
 /* Striped rows for better readability */
 tbody tr:nth-child(even) {
-  background-color: rgba(0, 0, 0, 0.02);
+  background-color: var(--bg-secondary);
 }
 
 body.dark-mode tbody tr:nth-child(even) {
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: var(--bg-secondary);
 }
 
 /* Highlight row on hover */
 tbody tr:hover {
-  background-color: rgba(26, 35, 126, 0.05);
+  background-color: var(--card-background);
   transition: background-color 0.2s ease;
 }
 
@@ -240,6 +241,8 @@ tbody tr:hover {
   max-width: 90vw;
   max-height: 90vh;
   overflow: auto;
+  background: var(--bg-primary);
+  color: var(--text-primary);
 }
 
 /* Trap focus within modal */

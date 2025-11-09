@@ -206,6 +206,15 @@ themeStyles.textContent = `
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
     --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
 
+    /* Additional color variants */
+    --bg-danger: #fee2e2;
+    --bg-warning: #fef3c7;
+    --bg-success: #dcfce7;
+    --text-danger: #991b1b;
+    --text-warning: #92400e;
+    --text-success: #166534;
+    --card-background: #f0f4f8;
+
     --transition-fast: 150ms ease;
     --transition-base: 200ms ease;
     --transition-slow: 300ms ease;
@@ -237,7 +246,15 @@ themeStyles.textContent = `
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
     --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
-  }
+
+    /* Additional color variants */
+    --bg-danger: #7f1d1d;
+    --bg-warning: #78350f;
+    --bg-success: #14532d;
+    --text-danger: #fca5a5;
+    --text-warning: #fde047;
+    --text-success: #4ade80;
+    --card-background: #1e293b;
 
   /* Smooth theme transition */
   * {
