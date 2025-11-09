@@ -1719,75 +1719,22 @@ const styles = `
         border-radius: 4px;
     }
 
-    body.dark-mode .csv-format-info,
-    body.elegant-black .csv-format-info {
-        background: rgba(45, 45, 45, 0.8);
-        border-left-color: #3949ab;
-    }
-
     .csv-format-info strong {
-        color: var(--text-secondary);
         font-weight: 700;
-    }
-
-    body.dark-mode .csv-format-info strong,
-    body.elegant-black .csv-format-info strong {
-        color: #f0f3f8;
     }
 
     .csv-format-info p {
         margin: 8px 0;
-        color: var(--text-secondary);
-    }
-
-    body.dark-mode .csv-format-info p,
-    body.elegant-black .csv-format-info p {
-        color: #e2e8f0;
     }
 
     .csv-format-info code {
         display: block;
         padding: 10px;
         background: var(--background);
-        color: var(--text-secondary);
         margin: 10px 0;
         font-weight: 600;
         border-radius: 4px;
         border: 1px solid var(--border-color);
-    }
-
-    body.dark-mode .csv-format-info code,
-    body.elegant-black .csv-format-info code {
-        background: rgba(26, 26, 26, 0.9);
-        color: #f0f3f8;
-        border-color: #3a3a3a;
-    }
-
-    body.light-mode .csv-format-info,
-    body.light-classic .csv-format-info,
-    body.light-modern .csv-format-info {
-        background: #f8f9fa;
-        border-left-color: #1a237e;
-    }
-
-    body.light-mode .csv-format-info strong,
-    body.light-classic .csv-format-info strong,
-    body.light-modern .csv-format-info strong {
-        color: #1f2937;
-    }
-
-    body.light-mode .csv-format-info p,
-    body.light-classic .csv-format-info p,
-    body.light-modern .csv-format-info p {
-        color: #374151;
-    }
-
-    body.light-mode .csv-format-info code,
-    body.light-classic .csv-format-info code,
-    body.light-modern .csv-format-info code {
-        background: #e5e7eb;
-        color: #1f2937;
-        border-color: #d1d5db;
     }
 
     .csv-controls {
@@ -1852,28 +1799,6 @@ function generateCSV(data) {
 
 // Přidám event listenery na přepínače
 document.addEventListener('DOMContentLoaded', function () {
-  // Listen for theme changes
-  window.addEventListener('themechange', function (e) {
-    const theme = e.detail.theme;
-    // Force repaint of theme-dependent elements
-    const csvFormatInfo = document.querySelector('.csv-format-info');
-    const checkboxLabel = document.querySelector('.checkbox-label');
-    
-    if (csvFormatInfo) {
-      csvFormatInfo.style.display = 'none';
-      setTimeout(() => {
-        csvFormatInfo.style.display = 'block';
-      }, 10);
-    }
-    
-    if (checkboxLabel) {
-      checkboxLabel.style.display = 'none';
-      setTimeout(() => {
-        checkboxLabel.style.display = 'flex';
-      }, 10);
-    }
-  });
-
   const switchFunds = document.getElementById('switchFunds');
   const switchProducers = document.getElementById('switchProducers');
   if (switchFunds && switchProducers) {
