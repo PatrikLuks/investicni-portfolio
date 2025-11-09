@@ -18,7 +18,7 @@
 import { initializeApp } from './modules/app-core.js';
 
 // Import legacy modules loader (replaces 21 <script> tags in index.html)
-import { loadLegacyModules } from './src/js/loaders/legacy-modules-loader.js';
+import { loadLegacyModules, lazyLoadMarketplace, lazyLoadCharts } from './src/js/loaders/legacy-modules-loader.js';
 
 // Help system is lazy-loaded for better performance
 let helpSystemInitialized = false;
@@ -47,10 +47,12 @@ async function lazyInitializeHelpSystem() {
  */
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', async () => {
-    // Load all legacy modules first
+    // Load all legacy modules first (core features)
     await loadLegacyModules();
     // Initialize core app
     initializeApp();
+    // Load marketplace after 3 seconds (lower priority feature)
+    setTimeout(() => lazyLoadMarketplace(), 3000);
     // Load help system after 2 seconds (low priority)
     setTimeout(() => lazyInitializeHelpSystem(), 2000);
   });
@@ -58,6 +60,8 @@ if (document.readyState === 'loading') {
   // Load all legacy modules first
   loadLegacyModules().then(() => {
     initializeApp();
+    // Load marketplace after 3 seconds
+    setTimeout(() => lazyLoadMarketplace(), 3000);
     setTimeout(() => lazyInitializeHelpSystem(), 2000);
   });
 }

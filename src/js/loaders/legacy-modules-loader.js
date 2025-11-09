@@ -40,10 +40,11 @@ async function loadLegacyModules() {
     await import('../utilities/keyboard-shortcuts-overlay.js');
     await import('../utilities/service-worker.js');
 
-    // FEATURES: Market data
-    await import('../features/marketplace/market-data-service.js');
-    await import('../features/marketplace/market-data-ui.js');
-    await import('../features/marketplace/market-data.js');
+    // FEATURES: Market data (lazy-loaded for better performance)
+    // Marketplace loads after 3 seconds to prioritize core features
+    // await import('../features/marketplace/market-data-service.js');
+    // await import('../features/marketplace/market-data-ui.js');
+    // await import('../features/marketplace/market-data.js');
 
     // FEATURES: Portfolio management
     await import('../features/portfolio/multi-portfolio.js');
@@ -63,4 +64,37 @@ async function loadLegacyModules() {
   }
 }
 
-export { loadLegacyModules };
+/**
+ * Lazy load marketplace modules
+ * Called after main app initialization to prioritize core features
+ * Reduces initial bundle and improves Time to Interactive (TTI)
+ * 
+ * @returns {Promise<void>}
+ */
+async function lazyLoadMarketplace() {
+  try {
+    await import('../features/marketplace/market-data-service.js');
+    await import('../features/marketplace/market-data-ui.js');
+    await import('../features/marketplace/market-data.js');
+    console.info('✓ Marketplace modules loaded lazily');
+  } catch (error) {
+    console.error('✗ Failed to lazy-load marketplace modules:', error);
+  }
+}
+
+/**
+ * Lazy load advanced charts modules
+ * Called after marketplace to further optimize initial load
+ * 
+ * @returns {Promise<void>}
+ */
+async function lazyLoadCharts() {
+  try {
+    // Charts are already in main loader, but this separates them for future optimization
+    console.info('✓ Charts modules available (loaded in main initialization)');
+  } catch (error) {
+    console.error('✗ Failed to lazy-load charts modules:', error);
+  }
+}
+
+export { loadLegacyModules, lazyLoadMarketplace, lazyLoadCharts };
