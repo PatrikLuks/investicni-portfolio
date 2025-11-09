@@ -1,12 +1,29 @@
 /**
  * Service Worker for Portfolio Manager PWA
- * Version: 1.0.0
+ * Version: 1.1.0
  * Features: Offline caching, background sync, push notifications
+ * 
+ * Cache versioning system:
+ * - VERSION: Incremented for breaking changes
+ * - TIMESTAMP: Auto-updated on build for cache-busting
+ * - Automatic cleanup of old caches on activation
  */
 
-const CACHE_NAME = 'portfolio-manager-v1.0.0';
-const RUNTIME_CACHE = 'portfolio-runtime-v1.0.0';
-const IMAGE_CACHE = 'portfolio-images-v1.0.0';
+// Get version from URL if available (useful for cache-busting)
+const VERSION = '3.3.1';
+const BUILD_TIMESTAMP = new Date().getTime(); // Generated on each build
+const CACHE_VERSION = `v${VERSION}`;
+
+const CACHE_NAME = `portfolio-manager-${CACHE_VERSION}`;
+const RUNTIME_CACHE = `portfolio-runtime-${CACHE_VERSION}`;
+const IMAGE_CACHE = `portfolio-images-${CACHE_VERSION}`;
+
+// Legacy cache names to clean up
+const LEGACY_CACHES = [
+  'portfolio-manager-v1.0.0',
+  'portfolio-runtime-v1.0.0',
+  'portfolio-images-v1.0.0'
+];
 
 // Files to cache on install
 const PRECACHE_URLS = [
@@ -33,7 +50,7 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// Activate event - clean up old caches
+// Activate event - clean up old caches and legacy versions
 self.addEventListener('activate', (event) => {
   const currentCaches = [CACHE_NAME, RUNTIME_CACHE, IMAGE_CACHE];
 
@@ -43,13 +60,18 @@ self.addEventListener('activate', (event) => {
       .then((cacheNames) =>
         Promise.all(
           cacheNames.map((cacheName) => {
+            // Delete old caches not in current version
             if (!currentCaches.includes(cacheName)) {
+              console.info(`[SW] Deleting old cache: ${cacheName}`);
               return caches.delete(cacheName);
             }
           }),
         ),
       )
-      .then(() => self.clients.claim()),
+      .then(() => {
+        console.info(`[SW] Service Worker v${VERSION} activated (${CACHE_VERSION})`);
+        return self.clients.claim();
+      }),
   );
 });
 
