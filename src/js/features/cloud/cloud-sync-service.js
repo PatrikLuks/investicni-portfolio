@@ -1,3 +1,4 @@
+import { logInfo, logWarn, logError } from '../../utilities/logger.js';
 /**
  * PHASE 6: Cloud Synchronization Service
  * Firebase Firestore integration for real-time portfolio sync
@@ -28,14 +29,14 @@ class CloudSyncService {
 
     try {
       if (!this.firebaseAvailable) {
-        console.warn('[CloudSync] Firebase not available - using local storage');
+        logWarn('[CloudSync] Firebase not available - using local storage');
         this.useLocalStorageFallback();
         return;
       }
 
       // Check if auth service exists
       if (!window.authService) {
-        console.warn('[CloudSync] Auth service not available');
+        logWarn('[CloudSync] Auth service not available');
         return;
       }
 
@@ -54,9 +55,9 @@ class CloudSyncService {
       });
 
       this.isInitialized = true;
-      console.log('[CloudSync] Initialized with Firestore');
+      logInfo('[CloudSync] Initialized with Firestore');
     } catch (error) {
-      console.error('[CloudSync] Initialization failed:', error);
+      logError('[CloudSync] Initialization failed:', error);
       this.useLocalStorageFallback();
     }
   }
@@ -69,7 +70,7 @@ class CloudSyncService {
     
     this.syncEnabled = true;
     this.userId = userId;
-    console.log('[CloudSync] Sync enabled for user:', userId);
+    logInfo('[CloudSync] Sync enabled for user:', userId);
     
     // Process offline queue
     this.processOfflineQueue();
@@ -82,7 +83,7 @@ class CloudSyncService {
     this.syncEnabled = false;
     this.unsubscribers.forEach(unsubscribe => unsubscribe());
     this.unsubscribers = [];
-    console.log('[CloudSync] Sync disabled');
+    logInfo('[CloudSync] Sync disabled');
   }
 
   /**
@@ -109,10 +110,10 @@ class CloudSyncService {
         cloudSynced: true,
       });
 
-      console.log('[CloudSync] Portfolio saved:', portfolio.id);
+      logInfo('[CloudSync] Portfolio saved:', portfolio.id);
       return portfolio;
     } catch (error) {
-      console.error('[CloudSync] Save failed:', error);
+      logError('[CloudSync] Save failed:', error);
       this.queueOfflineAction('savePortfolio', portfolio);
       throw error;
     }
@@ -135,13 +136,13 @@ class CloudSyncService {
         .get();
 
       if (docSnap.exists) {
-        console.log('[CloudSync] Portfolio loaded:', portfolioId);
+        logInfo('[CloudSync] Portfolio loaded:', portfolioId);
         return docSnap.data();
       }
 
       throw new Error('Portfolio not found');
     } catch (error) {
-      console.error('[CloudSync] Load failed:', error);
+      logError('[CloudSync] Load failed:', error);
       return this.loadPortfolioLocal(portfolioId);
     }
   }
@@ -166,10 +167,10 @@ class CloudSyncService {
         portfolios.push(doc.data());
       });
 
-      console.log('[CloudSync] Loaded', portfolios.length, 'portfolios');
+      logInfo('[CloudSync] Loaded', portfolios.length, 'portfolios');
       return portfolios;
     } catch (error) {
-      console.error('[CloudSync] Load all failed:', error);
+      logError('[CloudSync] Load all failed:', error);
       return this.loadAllPortfoliosLocal();
     }
   }
@@ -191,9 +192,9 @@ class CloudSyncService {
         .doc(portfolioId)
         .delete();
 
-      console.log('[CloudSync] Portfolio deleted:', portfolioId);
+      logInfo('[CloudSync] Portfolio deleted:', portfolioId);
     } catch (error) {
-      console.error('[CloudSync] Delete failed:', error);
+      logError('[CloudSync] Delete failed:', error);
       this.queueOfflineAction('deletePortfolio', { id: portfolioId });
       throw error;
     }
@@ -204,7 +205,7 @@ class CloudSyncService {
    */
   syncPortfolios(callback) {
     if (!this.syncEnabled || !this.db) {
-      console.warn('[CloudSync] Real-time sync not available');
+      logWarn('[CloudSync] Real-time sync not available');
       return () => {};
     }
 
@@ -222,11 +223,11 @@ class CloudSyncService {
         });
 
       this.unsubscribers.push(unsubscribe);
-      console.log('[CloudSync] Real-time listener registered');
+      logInfo('[CloudSync] Real-time listener registered');
       
       return unsubscribe;
     } catch (error) {
-      console.error('[CloudSync] Real-time sync failed:', error);
+      logError('[CloudSync] Real-time sync failed:', error);
       return () => {};
     }
   }
@@ -235,7 +236,7 @@ class CloudSyncService {
    * LOCAL STORAGE FALLBACK
    */
   useLocalStorageFallback() {
-    console.log('[CloudSync] Using local storage fallback');
+    logInfo('[CloudSync] Using local storage fallback');
     this.isInitialized = true;
   }
 
@@ -280,13 +281,13 @@ class CloudSyncService {
     });
 
     localStorage.setItem('sync_queue', JSON.stringify(this.offlineQueue));
-    console.log('[CloudSync] Action queued for offline:', action);
+    logInfo('[CloudSync] Action queued for offline:', action);
   }
 
   async processOfflineQueue() {
     if (this.offlineQueue.length === 0) return;
 
-    console.log('[CloudSync] Processing', this.offlineQueue.length, 'offline actions');
+    logInfo('[CloudSync] Processing', this.offlineQueue.length, 'offline actions');
 
     for (const item of this.offlineQueue) {
       try {
@@ -296,13 +297,13 @@ class CloudSyncService {
           await this.deletePortfolio(item.data.id);
         }
       } catch (error) {
-        console.error('[CloudSync] Failed to process queued action:', error);
+        logError('[CloudSync] Failed to process queued action:', error);
       }
     }
 
     this.offlineQueue = [];
     localStorage.removeItem('sync_queue');
-    console.log('[CloudSync] Offline queue processed');
+    logInfo('[CloudSync] Offline queue processed');
   }
 
   /**
@@ -321,7 +322,7 @@ class CloudSyncService {
    * Force sync now
    */
   async forceSync() {
-    console.log('[CloudSync] Forcing sync...');
+    logInfo('[CloudSync] Forcing sync...');
     if (this.syncEnabled) {
       await this.processOfflineQueue();
     }

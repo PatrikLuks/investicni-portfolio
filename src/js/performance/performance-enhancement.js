@@ -12,6 +12,8 @@
  * @version 1.0.0
  */
 
+import { logInfo, logWarn, logError } from '../utilities/logger.js';
+
 class PerformanceEnhancement {
   constructor() {
     this.cache = new Map();
@@ -30,7 +32,7 @@ class PerformanceEnhancement {
    * Initialize performance monitoring
    */
   init() {
-    console.log('[PerformanceEnhancement] Initializing...');
+    logInfo('[PerformanceEnhancement] Initializing...');
 
     // Measure page load time
     if (window.performance && window.performance.timing) {
@@ -45,7 +47,7 @@ class PerformanceEnhancement {
     // Setup resource timing
     this.setupResourceTiming();
 
-    console.log('[PerformanceEnhancement] Initialized');
+    logInfo('[PerformanceEnhancement] Initialized');
   }
 
   /**
@@ -56,7 +58,7 @@ class PerformanceEnhancement {
     const loadTime = timing.loadEventEnd - timing.navigationStart;
     this.metrics.pageLoadTime = loadTime;
 
-    console.log(`[PerformanceEnhancement] Page load time: ${loadTime}ms`);
+    logInfo(`[PerformanceEnhancement] Page load time: ${loadTime}ms`);
 
     // Log performance metrics
     if (window.trackEvent) {
@@ -77,7 +79,7 @@ class PerformanceEnhancement {
         const lcpObserver = new PerformanceObserver((list) => {
           const entries = list.getEntries();
           const lastEntry = entries[entries.length - 1];
-          console.log(
+          logInfo(
             `[PerformanceEnhancement] LCP: ${lastEntry.renderTime || lastEntry.loadTime}ms`,
           );
 
@@ -90,7 +92,7 @@ class PerformanceEnhancement {
         });
         lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
       } catch (e) {
-        console.warn('[PerformanceEnhancement] LCP observer not supported');
+        logWarn('[PerformanceEnhancement] LCP observer not supported');
       }
 
       // Cumulative Layout Shift (CLS)
@@ -102,7 +104,7 @@ class PerformanceEnhancement {
               clsValue += entry.value;
             }
           }
-          console.log(`[PerformanceEnhancement] CLS: ${clsValue}`);
+          logInfo(`[PerformanceEnhancement] CLS: ${clsValue}`);
 
           if (window.trackEvent) {
             window.trackEvent('core_web_vitals_cls', {
@@ -113,7 +115,7 @@ class PerformanceEnhancement {
         });
         clsObserver.observe({ entryTypes: ['layout-shift'] });
       } catch (e) {
-        console.warn('[PerformanceEnhancement] CLS observer not supported');
+        logWarn('[PerformanceEnhancement] CLS observer not supported');
       }
 
       // First Input Delay (FID)
@@ -121,7 +123,7 @@ class PerformanceEnhancement {
         const fidObserver = new PerformanceObserver((list) => {
           const entries = list.getEntries();
           entries.forEach((entry) => {
-            console.log(`[PerformanceEnhancement] FID: ${entry.processingDuration}ms`);
+            logInfo(`[PerformanceEnhancement] FID: ${entry.processingDuration}ms`);
 
             if (window.trackEvent) {
               window.trackEvent('core_web_vitals_fid', {
@@ -133,7 +135,7 @@ class PerformanceEnhancement {
         });
         fidObserver.observe({ entryTypes: ['first-input'] });
       } catch (e) {
-        console.warn('[PerformanceEnhancement] FID observer not supported');
+        logWarn('[PerformanceEnhancement] FID observer not supported');
       }
     }
   }
@@ -152,19 +154,19 @@ class PerformanceEnhancement {
 
             if (duration > 1000) {
               // Log slow resources (>1s)
-              console.warn(
+              logWarn(
                 `[PerformanceEnhancement] Slow resource: ${entry.name} (${duration.toFixed(2)}ms)`,
               );
             }
 
-            console.log(
+            logInfo(
               `[PerformanceEnhancement] Resource: ${entry.name} (${size}B, ${duration.toFixed(2)}ms)`,
             );
           });
         });
         resourceObserver.observe({ entryTypes: ['resource'] });
       } catch (e) {
-        console.warn('[PerformanceEnhancement] Resource observer not supported');
+        logWarn('[PerformanceEnhancement] Resource observer not supported');
       }
     }
   }
@@ -178,7 +180,7 @@ class PerformanceEnhancement {
   setCache(key, value, ttl = 15 * 60 * 1000) {
     const expiry = Date.now() + ttl;
     this.cache.set(key, { value, expiry });
-    console.log(`[PerformanceEnhancement] Cache SET: ${key} (TTL: ${ttl}ms)`);
+    logInfo(`[PerformanceEnhancement] Cache SET: ${key} (TTL: ${ttl}ms)`);
   }
 
   /**
@@ -197,12 +199,12 @@ class PerformanceEnhancement {
     if (Date.now() > item.expiry) {
       this.cache.delete(key);
       this.metrics.cacheMisses++;
-      console.log(`[PerformanceEnhancement] Cache EXPIRED: ${key}`);
+      logInfo(`[PerformanceEnhancement] Cache EXPIRED: ${key}`);
       return null;
     }
 
     this.metrics.cacheHits++;
-    console.log(`[PerformanceEnhancement] Cache HIT: ${key}`);
+    logInfo(`[PerformanceEnhancement] Cache HIT: ${key}`);
     return item.value;
   }
 
@@ -211,7 +213,7 @@ class PerformanceEnhancement {
    */
   clearCache() {
     this.cache.clear();
-    console.log('[PerformanceEnhancement] Cache cleared');
+    logInfo('[PerformanceEnhancement] Cache cleared');
   }
 
   /**
@@ -236,7 +238,7 @@ class PerformanceEnhancement {
     this.rateLimits.set(key, recentRequests);
 
     if (recentRequests.length >= limit) {
-      console.warn(`[PerformanceEnhancement] Rate limit exceeded for ${endpoint}`);
+      logWarn(`[PerformanceEnhancement] Rate limit exceeded for ${endpoint}`);
       return false;
     }
 
@@ -250,11 +252,11 @@ class PerformanceEnhancement {
    * @returns {Promise<Object>} Imported module
    */
   async lazyLoadModule(modulePath) {
-    console.log(`[PerformanceEnhancement] Lazy loading: ${modulePath}`);
+    logInfo(`[PerformanceEnhancement] Lazy loading: ${modulePath}`);
 
     try {
       const module = await import(modulePath);
-      console.log(`[PerformanceEnhancement] Loaded: ${modulePath}`);
+      logInfo(`[PerformanceEnhancement] Loaded: ${modulePath}`);
       return module;
     } catch (error) {
       console.error(`[PerformanceEnhancement] Failed to load ${modulePath}:`, error);
@@ -273,7 +275,7 @@ class PerformanceEnhancement {
     link.href = url;
     link.as = type;
     document.head.appendChild(link);
-    console.log(`[PerformanceEnhancement] Prefetching ${type}: ${url}`);
+    logInfo(`[PerformanceEnhancement] Prefetching ${type}: ${url}`);
   }
 
   /**
@@ -287,7 +289,7 @@ class PerformanceEnhancement {
     link.href = url;
     link.as = type;
     document.head.appendChild(link);
-    console.log(`[PerformanceEnhancement] Preloading ${type}: ${url}`);
+    logInfo(`[PerformanceEnhancement] Preloading ${type}: ${url}`);
   }
 
   /**
@@ -296,11 +298,11 @@ class PerformanceEnhancement {
    * @returns {Promise<Array>} Results array
    */
   async batchRequests(requests) {
-    console.log(`[PerformanceEnhancement] Batching ${requests.length} requests`);
+    logInfo(`[PerformanceEnhancement] Batching ${requests.length} requests`);
 
     try {
       const results = await Promise.all(requests.map((req) => req()));
-      console.log(`[PerformanceEnhancement] Batch complete: ${results.length} results`);
+      logInfo(`[PerformanceEnhancement] Batch complete: ${results.length} results`);
       return results;
     } catch (error) {
       console.error('[PerformanceEnhancement] Batch request failed:', error);
@@ -375,13 +377,13 @@ class PerformanceEnhancement {
   logReport() {
     const metrics = this.getMetrics();
     console.group('[PerformanceEnhancement] REPORT');
-    console.log('Page Load Time:', metrics.pageLoadTime, 'ms');
-    console.log('API Calls:', metrics.apiCallCount);
-    console.log('Cache Hits:', metrics.cacheHits);
-    console.log('Cache Misses:', metrics.cacheMisses);
-    console.log('Cache Hit Ratio:', `${(metrics.cacheHitRatio * 100).toFixed(2)}%`);
+    logInfo('Page Load Time:', metrics.pageLoadTime, 'ms');
+    logInfo('API Calls:', metrics.apiCallCount);
+    logInfo('Cache Hits:', metrics.cacheHits);
+    logInfo('Cache Misses:', metrics.cacheMisses);
+    logInfo('Cache Hit Ratio:', `${(metrics.cacheHitRatio * 100).toFixed(2)}%`);
     if (metrics.memoryUsage) {
-      console.log('Memory Usage:', metrics.memoryUsage);
+      logInfo('Memory Usage:', metrics.memoryUsage);
     }
     console.groupEnd();
   }
@@ -395,7 +397,7 @@ class PerformanceEnhancement {
         // Only register in production - development uses Vite
         if (import.meta.env.PROD) {
           const registration = await navigator.serviceWorker.register('/service-worker.js');
-          console.log('[PerformanceEnhancement] Service Worker registered:', registration);
+          logInfo('[PerformanceEnhancement] Service Worker registered:', registration);
           return registration;
         }
       } catch (error) {

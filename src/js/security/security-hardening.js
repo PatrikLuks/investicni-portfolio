@@ -14,6 +14,8 @@
  * @version 1.0.0
  */
 
+import { logInfo, logWarn, logError } from '../utilities/logger.js';
+
 class SecurityHardening {
   constructor() {
     this.securityHeaders = {};
@@ -34,7 +36,7 @@ class SecurityHardening {
    * Initialize security hardening
    */
   init() {
-    console.log('[SecurityHardening] Initializing security measures...');
+    logInfo('[SecurityHardening] Initializing security measures...');
 
     this.setupSecurityHeaders();
     this.setupCSRFProtection();
@@ -43,7 +45,7 @@ class SecurityHardening {
     this.setupCORSValidation();
     this.setupAuthenticationMonitoring();
 
-    console.log('[SecurityHardening] Security measures initialized');
+    logInfo('[SecurityHardening] Security measures initialized');
   }
 
   /**
@@ -60,7 +62,7 @@ class SecurityHardening {
       'Content-Security-Policy': this.buildCSP(),
     };
 
-    console.log('[SecurityHardening] Security headers configured:', this.securityHeaders);
+    logInfo('[SecurityHardening] Security headers configured:', this.securityHeaders);
   }
 
   /**
@@ -90,7 +92,7 @@ class SecurityHardening {
     // Generate CSRF token for this session
     const csrfToken = this.generateToken();
     sessionStorage.setItem('csrf_token', csrfToken);
-    console.log('[SecurityHardening] CSRF token generated');
+    logInfo('[SecurityHardening] CSRF token generated');
   }
 
   /**
@@ -140,13 +142,13 @@ class SecurityHardening {
       for (const [key, value] of formData.entries()) {
         if (!this.validateInput(key, value)) {
           e.preventDefault();
-          console.warn(`[SecurityHardening] Invalid input: ${key}`);
+          logWarn(`[SecurityHardening] Invalid input: ${key}`);
           return false;
         }
       }
     });
 
-    console.log('[SecurityHardening] Input validation setup complete');
+    logInfo('[SecurityHardening] Input validation setup complete');
   }
 
   /**
@@ -204,12 +206,12 @@ class SecurityHardening {
     // Monitor for potential XSS attempts
     document.addEventListener('mousedown', (e) => {
       if (e.target.innerHTML && this.detectXSS(e.target.innerHTML)) {
-        console.warn('[SecurityHardening] Potential XSS detected:', e.target);
+        logWarn('[SecurityHardening] Potential XSS detected:', e.target);
         e.preventDefault();
       }
     });
 
-    console.log('[SecurityHardening] XSS prevention setup complete');
+    logInfo('[SecurityHardening] XSS prevention setup complete');
   }
 
   /**
@@ -241,14 +243,14 @@ class SecurityHardening {
       const url = typeof resource === 'string' ? resource : resource.url;
 
       if (!this.validateCORS(url)) {
-        console.error(`[SecurityHardening] CORS validation failed for: ${url}`);
+        logError(`[SecurityHardening] CORS validation failed for: ${url}`);
         throw new Error('CORS validation failed');
       }
 
       return originalFetch(resource, config);
     };
 
-    console.log('[SecurityHardening] CORS validation setup complete');
+    logInfo('[SecurityHardening] CORS validation setup complete');
   }
 
   /**
@@ -284,10 +286,10 @@ class SecurityHardening {
 
     // Monitor token changes
     window.addEventListener('auth:token-change', (e) => {
-      console.log('[SecurityHardening] Auth token updated');
+      logInfo('[SecurityHardening] Auth token updated');
     });
 
-    console.log('[SecurityHardening] Authentication monitoring setup');
+    logInfo('[SecurityHardening] Authentication monitoring setup');
   }
 
   /**
@@ -303,7 +305,7 @@ class SecurityHardening {
     // Lock account after 5 failed attempts
     if (attempts >= 5) {
       this.blockList.add(userId);
-      console.warn(`[SecurityHardening] Account locked after 5 failed attempts: ${userId}`);
+      logWarn(`[SecurityHardening] Account locked after 5 failed attempts: ${userId}`);
 
       if (window.trackEvent) {
         window.trackEvent('security_account_locked', {
@@ -317,7 +319,7 @@ class SecurityHardening {
         () => {
           this.failedAttempts.delete(key);
           this.blockList.delete(userId);
-          console.log(`[SecurityHardening] Account unlocked: ${userId}`);
+          logInfo(`[SecurityHardening] Account unlocked: ${userId}`);
         },
         15 * 60 * 1000,
       );
@@ -352,7 +354,7 @@ class SecurityHardening {
     const recentRequests = requests.filter((time) => time > oneMinuteAgo);
 
     if (recentRequests.length >= limit) {
-      console.warn(`[SecurityHardening] Rate limit exceeded: ${endpoint}`);
+      logWarn(`[SecurityHardening] Rate limit exceeded: ${endpoint}`);
       return false;
     }
 
@@ -372,14 +374,14 @@ class SecurityHardening {
     // Check CSRF token for state-changing requests
     if (['POST', 'PUT', 'DELETE', 'PATCH'].includes(method)) {
       if (!this.verifyCSRFToken(headers['X-CSRF-Token'])) {
-        console.error('[SecurityHardening] CSRF token invalid');
+        logError('[SecurityHardening] CSRF token invalid');
         return false;
       }
     }
 
     // Validate URL
     if (!this.validateCORS(url)) {
-      console.error('[SecurityHardening] URL not allowed:', url);
+      logError('[SecurityHardening] URL not allowed:', url);
       return false;
     }
 
@@ -390,7 +392,7 @@ class SecurityHardening {
           JSON.parse(body);
         }
       } catch (e) {
-        console.error('[SecurityHardening] Invalid JSON body');
+        logError('[SecurityHardening] Invalid JSON body');
         return false;
       }
     }
@@ -412,7 +414,7 @@ class SecurityHardening {
       userAgent: navigator.userAgent,
     };
 
-    console.log('[SecurityHardening] Security Event:', logEntry);
+    logInfo('[SecurityHardening] Security Event:', logEntry);
 
     // Send to logging service (e.g., Sentry, DataDog)
     if (window.trackEvent) {
@@ -443,20 +445,20 @@ class SecurityHardening {
 
     // Check file size
     if (file.size > maxSize) {
-      console.error('[SecurityHardening] File too large:', file.name);
+      logError('[SecurityHardening] File too large:', file.name);
       return false;
     }
 
     // Check MIME type
     if (!allowedMimeTypes.includes(file.type)) {
-      console.error('[SecurityHardening] Invalid MIME type:', file.type);
+      logError('[SecurityHardening] Invalid MIME type:', file.type);
       return false;
     }
 
     // Check file extension
     const extension = file.name.split('.').pop().toLowerCase();
     if (!allowedExtensions.includes(extension)) {
-      console.error('[SecurityHardening] Invalid file extension:', extension);
+      logError('[SecurityHardening] Invalid file extension:', extension);
       return false;
     }
 
@@ -499,11 +501,11 @@ class SecurityHardening {
   logReport() {
     const report = this.getSecurityReport();
     console.group('[SecurityHardening] SECURITY REPORT');
-    console.log('Security Headers:', report.securityHeaders);
-    console.log('Blocked Users:', report.blockedUsers.length);
-    console.log('Failed Attempts:', report.failedAttempts);
-    console.log('Rate Limits:', report.rateLimits);
-    console.log('CSRF Token Active:', report.csrfTokenActive);
+    logInfo('Security Headers:', report.securityHeaders);
+    logInfo('Blocked Users:', report.blockedUsers.length);
+    logInfo('Failed Attempts:', report.failedAttempts);
+    logInfo('Rate Limits:', report.rateLimits);
+    logInfo('CSRF Token Active:', report.csrfTokenActive);
     console.groupEnd();
   }
 }
