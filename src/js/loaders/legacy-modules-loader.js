@@ -50,9 +50,10 @@ async function loadLegacyModules() {
     await import('../features/portfolio/multi-portfolio.js');
     await import('../features/portfolio/app-portfolio.js');
 
-    // FEATURES: Charts and visualization
-    await import('../features/charts/charts-manager.js');
-    await import('../features/charts/advanced-charts.js');
+    // FEATURES: Charts and visualization (lazy-loaded for better performance)
+    // Charts load after 4 seconds to prioritize portfolio features
+    // await import('../features/charts/charts-manager.js');
+    // await import('../features/charts/advanced-charts.js');
 
     // FEATURES: Export functionality
     await import('../features/export/excel-export.js');
@@ -85,13 +86,15 @@ async function lazyLoadMarketplace() {
 /**
  * Lazy load advanced charts modules
  * Called after marketplace to further optimize initial load
+ * Charts typically not needed on first load, loaded on-demand
  * 
  * @returns {Promise<void>}
  */
 async function lazyLoadCharts() {
   try {
-    // Charts are already in main loader, but this separates them for future optimization
-    console.info('✓ Charts modules available (loaded in main initialization)');
+    await import('../features/charts/charts-manager.js');
+    await import('../features/charts/advanced-charts.js');
+    console.info('✓ Charts modules loaded lazily');
   } catch (error) {
     console.error('✗ Failed to lazy-load charts modules:', error);
   }

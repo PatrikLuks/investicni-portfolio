@@ -51,18 +51,22 @@ if (document.readyState === 'loading') {
     await loadLegacyModules();
     // Initialize core app
     initializeApp();
-    // Load marketplace after 3 seconds (lower priority feature)
-    setTimeout(() => lazyLoadMarketplace(), 3000);
     // Load help system after 2 seconds (low priority)
     setTimeout(() => lazyInitializeHelpSystem(), 2000);
+    // Load marketplace after 3 seconds (lower priority feature)
+    setTimeout(() => lazyLoadMarketplace(), 3000);
+    // Load charts after 4 seconds (visualization, typically not needed on load)
+    setTimeout(() => lazyLoadCharts(), 4000);
   });
 } else {
   // Load all legacy modules first
   loadLegacyModules().then(() => {
     initializeApp();
+    setTimeout(() => lazyInitializeHelpSystem(), 2000);
     // Load marketplace after 3 seconds
     setTimeout(() => lazyLoadMarketplace(), 3000);
-    setTimeout(() => lazyInitializeHelpSystem(), 2000);
+    // Load charts after 4 seconds
+    setTimeout(() => lazyLoadCharts(), 4000);
   });
 }
 
