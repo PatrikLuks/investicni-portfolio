@@ -1712,18 +1712,32 @@ const styles = `
 
     .csv-format-info {
         margin: 15px 0;
-        padding: 10px;
+        padding: 12px;
         background: var(--card-background);
         border-left: 4px solid var(--primary-blue);
-        color: var(--text-primary);
+        color: var(--text-secondary);
+        border-radius: 4px;
+    }
+
+    .csv-format-info strong {
+        color: var(--text-secondary);
+        font-weight: 700;
+    }
+
+    .csv-format-info p {
+        margin: 8px 0;
+        color: var(--text-secondary);
     }
 
     .csv-format-info code {
         display: block;
         padding: 10px;
         background: var(--background);
-        color: var(--text-primary);
+        color: var(--text-secondary);
         margin: 10px 0;
+        font-weight: 600;
+        border-radius: 4px;
+        border: 1px solid var(--border-color);
     }
 
     .csv-controls {
