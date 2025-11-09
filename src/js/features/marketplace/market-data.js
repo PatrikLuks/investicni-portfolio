@@ -751,22 +751,46 @@ class MarketDataFeed {
       return;
     }
 
-    const isPositive = data.change >= 0;
-    const color = isPositive ? '#2ecc71' : '#e74c3c';
+    try {
+      const isPositive = data.change >= 0;
+      const textColor = isPositive ? '#27ae60' : '#c0392b';
+      const bgColor = isPositive ? 'rgba(46, 204, 113, 0.08)' : 'rgba(231, 76, 60, 0.08)';
 
-    // Highlight on update
-    card.style.background = isPositive ? '#e8f5e9' : '#ffebee';
-    setTimeout(() => {
-      card.style.background = 'white';
-    }, 300);
+      // Update background for highlight
+      card.style.background = bgColor;
 
-    // Update values
-    card.querySelector('[style*="font-size: 1.3rem"]').textContent = `$${data.price.toFixed(2)}`;
+      // Find all text elements in the card and update appropriately
+      const allDivs = card.querySelectorAll('div');
+      
+      // Update price (find the one with $)
+      allDivs.forEach((div) => {
+        if (div.textContent.includes('$') && div.textContent.length < 20) {
+          const currentText = div.textContent;
+          if (currentText.includes('.')) {
+            div.textContent = `$${data.price.toFixed(2)}`;
+            div.style.color = textColor;
+          }
+        }
+      });
 
-    const changeEl = card.querySelector(`[style*="color: ${color}"]`);
-    if (changeEl) {
-      changeEl.textContent = `${isPositive ? '+' : ''}${data.changePercent.toFixed(2)}%`;
-      changeEl.style.color = color;
+      // Update percentage change
+      allDivs.forEach((div) => {
+        if (div.textContent.includes('%') && div.textContent.length < 15) {
+          const changeText = `${isPositive ? '▲' : '▼'} ${isPositive ? '+' : ''}${data.changePercent.toFixed(2)}%`;
+          div.textContent = changeText;
+          div.style.color = textColor;
+        }
+      });
+
+      // Update volume
+      allDivs.forEach((div) => {
+        if (div.textContent.includes('Vol:')) {
+          div.textContent = `Vol: ${this.formatVolume(data.volume)}`;
+        }
+      });
+
+    } catch (error) {
+      console.error(`❌ Error updating price for ${symbol}:`, error);
     }
   }
 
