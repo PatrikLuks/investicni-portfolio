@@ -1743,51 +1743,57 @@
       // ==================== PWA SERVICE WORKER REGISTRATION (V3 Ultra-Optimized) ====================
       // ✅ SERVICE WORKER ENABLED for production deployment
       if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          // Register V3 service worker with aggressive caching
-          navigator.serviceWorker
-            .register('./service-worker.js')
-            .then((registration) => {
-              console.log('✅ SW V3: Registered (ultra-optimized):', registration.scope);
+        // Only register Service Worker in production, skip in dev mode (localhost/Vite)
+        const isDev = window.location.hostname === 'localhost' || 
+                      window.location.hostname === '127.0.0.1' ||
+                      window.location.hostname === '::1';
+        
+        if (!isDev) {
+          window.addEventListener('load', () => {
+            // Register V3 service worker with aggressive caching
+            navigator.serviceWorker
+              .register('./service-worker.js')
+              .then((registration) => {
+                console.log('✅ SW V3: Registered (ultra-optimized):', registration.scope);
 
-              // Check for updates
-              registration.addEventListener('updatefound', () => {
-                const newWorker = registration.installing;
-                console.log('🔄 SW V3: Update found, installing...');
+                // Check for updates
+                registration.addEventListener('updatefound', () => {
+                  const newWorker = registration.installing;
+                  console.log('🔄 SW V3: Update found, installing...');
 
-                newWorker.addEventListener('statechange', () => {
-                  if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                    // New update available
-                    console.log('✅ SW V3: Update ready');
+                  newWorker.addEventListener('statechange', () => {
+                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                      // New update available
+                      console.log('✅ SW V3: Update ready');
 
-                    if (window.notificationSystem) {
-                      window.notificationSystem.showNotification(
-                        'Nová verze dostupná! Klikněte pro aktualizaci.',
-                        'info',
-                        () => {
-                          newWorker.postMessage({ action: 'SKIP_WAITING' });
-                          window.location.reload();
-                        },
-                      );
+                      if (window.notificationSystem) {
+                        window.notificationSystem.showNotification(
+                          'Nová verze dostupná! Klikněte pro aktualizaci.',
+                          'info',
+                          () => {
+                            newWorker.postMessage({ action: 'SKIP_WAITING' });
+                            window.location.reload();
+                          },
+                        );
+                      }
                     }
-                  }
+                  });
                 });
+              })
+              .catch((error) => {
+                console.error('❌ SW V3: Registration failed:', error);
               });
-            })
-            .catch((error) => {
-              console.error('❌ SW V3: Registration failed:', error);
-            });
-        });
+          });
 
-        // Listen for controller change (new SW activated)
-        navigator.serviceWorker.addEventListener('controllerchange', () => {
-          console.log('🔄 SW V3: Controller changed, reloading...');
-          window.location.reload();
-        });
+          // Listen for controller change (new SW activated)
+          navigator.serviceWorker.addEventListener('controllerchange', () => {
+            console.log('🔄 SW V3: Controller changed, reloading...');
+            window.location.reload();
+          });
 
-        // Listen for messages from Service Worker
-        navigator.serviceWorker.addEventListener('message', (event) => {
-          console.log('📨 SW V3: Message:', event.data);
+          // Listen for messages from Service Worker
+          navigator.serviceWorker.addEventListener('message', (event) => {
+            console.log('📨 SW V3: Message:', event.data);
         });
       }
 

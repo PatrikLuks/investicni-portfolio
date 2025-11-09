@@ -155,7 +155,15 @@ class MarketDataService {
   }
 
   async fetchYahooFinance(symbol) {
-    const url = `${this.providers.yahoo.baseUrl}/v8/finance/chart/${symbol}`;
+    // In development, use Vite proxy to bypass CORS
+    const isDev = window.location.hostname === 'localhost' || 
+                  window.location.hostname === '127.0.0.1';
+    
+    const baseUrl = isDev 
+      ? '/api/yahoo'  // Use Vite proxy in dev
+      : this.providers.yahoo.baseUrl;  // Use direct URL in production
+    
+    const url = `${baseUrl}/v8/finance/chart/${symbol}`;
 
     try {
       const data = await this.fetchWithRetry(url);

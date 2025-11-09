@@ -28,6 +28,20 @@ export default defineConfig({
       host: 'localhost',
       port: 3000,
     },
+    proxy: {
+      // Proxy for Yahoo Finance API to bypass CORS in dev
+      '/api/yahoo': {
+        target: 'https://query1.finance.yahoo.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/yahoo/, ''),
+      },
+      // Proxy for market data endpoints
+      '/api/market': {
+        target: 'https://query1.finance.yahoo.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/market/, ''),
+      },
+    },
   },
 
   // Build configuration
