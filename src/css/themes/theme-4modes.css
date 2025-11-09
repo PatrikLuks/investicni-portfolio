@@ -1,0 +1,273 @@
+/**
+ * 4-Theme System CSS Variables
+ * 1. Elegant Black - Luxusní černý vzhled
+ * 2. Dark - Standardní tmavý režim
+ * 3. Light Classic - Standardní světlý režim
+ * 4. Light Modern - Moderní světlý s modrou
+ */
+
+/* ===== LIGHT CLASSIC THEME (Default) ===== */
+:root,
+html[data-theme="light-classic"] {
+  /* Light Classic - Traditional clean white */
+  --color-primary: #3b82f6;
+  --color-primary-hover: #2563eb;
+  --color-secondary: #8b5cf6;
+  --color-success: #10b981;
+  --color-danger: #ef4444;
+  --color-warning: #f59e0b;
+  --color-info: #06b6d4;
+
+  --bg-primary: #ffffff;
+  --bg-secondary: #f9fafb;
+  --bg-tertiary: #f3f4f6;
+  --bg-modal: rgba(0, 0, 0, 0.5);
+  --bg-elevated: #ffffff;
+
+  --text-primary: #1f2937;
+  --text-secondary: #4b5563;
+  --text-tertiary: #6b7280;
+
+  --border-color: #e5e7eb;
+  --input-bg: #ffffff;
+  --input-border: #d1d5db;
+  --input-text: #1f2937;
+  --input-placeholder: #9ca3af;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+
+  --transition-speed: 300ms;
+}
+
+/* ===== LIGHT MODERN THEME ===== */
+html[data-theme="light-modern"] {
+  /* Light Modern - Clean white with subtle blue tint */
+  --color-primary: #2563eb;
+  --color-primary-hover: #1d4ed8;
+  --color-secondary: #7c3aed;
+  --color-success: #059669;
+  --color-danger: #dc2626;
+  --color-warning: #d97706;
+  --color-info: #0891b2;
+
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #e2e8f0;
+  --bg-modal: rgba(0, 0, 0, 0.6);
+  --bg-elevated: #ffffff;
+
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-tertiary: #64748b;
+
+  --border-color: #cbd5e1;
+  --input-bg: #f8fafc;
+  --input-border: #cbd5e1;
+  --input-text: #0f172a;
+  --input-placeholder: #94a3b8;
+
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08);
+  --shadow-md: 0 4px 8px rgba(15, 23, 42, 0.1);
+  --shadow-lg: 0 12px 20px rgba(15, 23, 42, 0.12);
+
+  --transition-speed: 250ms;
+}
+
+/* ===== DARK THEME ===== */
+html[data-theme="dark"] {
+  /* Dark - Standard dark mode */
+  --color-primary: #60a5fa;
+  --color-primary-hover: #3b82f6;
+  --color-secondary: #a78bfa;
+  --color-success: #34d399;
+  --color-danger: #f87171;
+  --color-warning: #fbbf24;
+  --color-info: #22d3ee;
+
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  --bg-modal: rgba(0, 0, 0, 0.7);
+  --bg-elevated: #1e293b;
+
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-tertiary: #64748b;
+
+  --border-color: #334155;
+  --input-bg: #1e293b;
+  --input-border: #334155;
+  --input-text: #f1f5f9;
+  --input-placeholder: #94a3b8;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+
+  --transition-speed: 300ms;
+}
+
+/* ===== ELEGANT BLACK THEME (Luxury) ===== */
+html[data-theme="elegant-black"] {
+  /* Elegant Black - Luxusní černý vzhled */
+  --color-primary: #fbbf24;
+  --color-primary-hover: #f59e0b;
+  --color-secondary: #a78bfa;
+  --color-success: #34d399;
+  --color-danger: #f87171;
+  --color-warning: #fcd34d;
+  --color-info: #22d3ee;
+
+  --bg-primary: #000000;
+  --bg-secondary: #1a1a1a;
+  --bg-tertiary: #2d2d2d;
+  --bg-modal: rgba(0, 0, 0, 0.85);
+  --bg-elevated: #1a1a1a;
+
+  --text-primary: #ffffff;
+  --text-secondary: #e5e5e5;
+  --text-tertiary: #a6a6a6;
+
+  --border-color: #404040;
+  --input-bg: #1a1a1a;
+  --input-border: #404040;
+  --input-text: #ffffff;
+  --input-placeholder: #808080;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 15px 30px rgba(0, 0, 0, 0.7);
+
+  --transition-speed: 350ms;
+}
+
+/* ===== SMOOTH TRANSITIONS ===== */
+* {
+  transition: background-color var(--transition-speed),
+              color var(--transition-speed),
+              border-color var(--transition-speed);
+}
+
+/* ===== ELEGANT BLACK SPECIFIC STYLES ===== */
+html[data-theme="elegant-black"] {
+  background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+}
+
+html[data-theme="elegant-black"] body {
+  background: #000000;
+}
+
+html[data-theme="elegant-black"] .card,
+html[data-theme="elegant-black"] .modal-content,
+html[data-theme="elegant-black"] .form-section {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  border: 1px solid #404040;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+}
+
+html[data-theme="elegant-black"] .card:hover {
+  box-shadow: 0 12px 40px rgba(251, 191, 36, 0.1);
+  border-color: #fbbf24;
+}
+
+html[data-theme="elegant-black"] h1,
+html[data-theme="elegant-black"] h2,
+html[data-theme="elegant-black"] h3 {
+  color: #ffffff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+html[data-theme="elegant-black"] input,
+html[data-theme="elegant-black"] textarea,
+html[data-theme="elegant-black"] select {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  border: 1px solid #404040;
+  color: #ffffff;
+}
+
+html[data-theme="elegant-black"] input:focus,
+html[data-theme="elegant-black"] textarea:focus,
+html[data-theme="elegant-black"] select:focus {
+  border-color: #fbbf24;
+  box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.15);
+}
+
+html[data-theme="elegant-black"] button {
+  transition: all var(--transition-speed) ease;
+}
+
+html[data-theme="elegant-black"] button:hover {
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
+}
+
+html[data-theme="elegant-black"] a {
+  color: #fbbf24;
+}
+
+html[data-theme="elegant-black"] a:hover {
+  color: #fcd34d;
+}
+
+html[data-theme="elegant-black"] #clientNameDisplay {
+  color: #fbbf24;
+  text-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+  letter-spacing: 1px;
+}
+
+html[data-theme="elegant-black"] .theme-toggle {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  border: 2px solid #fbbf24;
+  color: #fbbf24;
+  box-shadow: 0 4px 20px rgba(251, 191, 36, 0.2);
+}
+
+html[data-theme="elegant-black"] .theme-toggle:hover {
+  box-shadow: 0 6px 30px rgba(251, 191, 36, 0.3);
+  transform: scale(1.05);
+}
+
+/* ===== LIGHT MODERN SPECIFIC STYLES ===== */
+html[data-theme="light-modern"] {
+  background: linear-gradient(135deg, #f8fafc 0%, #f0f4f8 100%);
+}
+
+html[data-theme="light-modern"] .card,
+html[data-theme="light-modern"] .modal-content {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+}
+
+html[data-theme="light-modern"] .card:hover {
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.1);
+  border-color: #2563eb;
+}
+
+html[data-theme="light-modern"] #clientNameDisplay {
+  color: #2563eb;
+  text-shadow: none;
+}
+
+/* ===== ACCESSIBILITY - ENSURE FOCUS STATES ===== */
+html[data-theme="elegant-black"] input:focus,
+html[data-theme="elegant-black"] textarea:focus,
+html[data-theme="elegant-black"] select:focus {
+  outline: 2px solid #fbbf24;
+  outline-offset: 2px;
+}
+
+html[data-theme="light-modern"] input:focus,
+html[data-theme="light-modern"] textarea:focus,
+html[data-theme="light-modern"] select:focus {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+html[data-theme="dark"] input:focus,
+html[data-theme="dark"] textarea:focus,
+html[data-theme="dark"] select:focus {
+  outline: 2px solid #60a5fa;
+  outline-offset: 2px;
+}

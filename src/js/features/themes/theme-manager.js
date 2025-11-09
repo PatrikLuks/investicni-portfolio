@@ -1,19 +1,38 @@
 /**
- * Theme Manager - Dark/Light Mode System
- * Version: 3.1.0
- * Professional theme switching with persistence and system detection
+ * Theme Manager - 4-Mode Theme System
+ * Version: 4.0.0
+ * Professional theme switching with 4 distinct themes
+ * 1. Elegant Black - Luxusní černý vzhled
+ * 2. Dark - Standardní tmavý režim
+ * 3. Light Classic - Standardní světlý režim
+ * 4. Light Modern - Moderní světlý s modrou
  */
 
 class ThemeManager {
   constructor() {
     this.STORAGE_KEY = 'portfolio-theme';
     this.THEMES = {
-      LIGHT: 'light',
+      ELEGANT_BLACK: 'elegant-black',
       DARK: 'dark',
+      LIGHT_CLASSIC: 'light-classic',
+      LIGHT_MODERN: 'light-modern',
+    };
+
+    this.THEME_ORDER = [
+      this.THEMES.ELEGANT_BLACK,
+      this.THEMES.DARK,
+      this.THEMES.LIGHT_CLASSIC,
+      this.THEMES.LIGHT_MODERN,
+    ];
+
+    this.THEME_LABELS = {
+      [this.THEMES.ELEGANT_BLACK]: '⬛ Černý (Elegantní)',
+      [this.THEMES.DARK]: '🌙 Tmavý',
+      [this.THEMES.LIGHT_CLASSIC]: '☀️ Světlý Klasik',
+      [this.THEMES.LIGHT_MODERN]: '💡 Světlý Moderní',
     };
 
     this.currentTheme = this.loadTheme();
-    this.mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
     this.init();
   }
@@ -28,8 +47,11 @@ class ThemeManager {
 
   loadTheme() {
     const saved = localStorage.getItem(this.STORAGE_KEY);
-    // Default to LIGHT if no saved theme
-    return saved || this.THEMES.LIGHT;
+    // Validate theme exists, default to ELEGANT_BLACK
+    if (saved && Object.values(this.THEMES).includes(saved)) {
+      return saved;
+    }
+    return this.THEMES.ELEGANT_BLACK;
   }
 
   saveTheme(theme) {
@@ -45,25 +67,45 @@ class ThemeManager {
     const effectiveTheme = theme;
 
     document.documentElement.setAttribute('data-theme', effectiveTheme);
-    document.body.classList.remove('theme-light', 'theme-dark', 'dark-mode', 'light-mode');
+    document.body.classList.remove(
+      'theme-elegant-black',
+      'theme-dark',
+      'theme-light-classic',
+      'theme-light-modern',
+      'dark-mode',
+      'light-mode',
+      'elegant-black-mode'
+    );
     document.body.classList.add(`theme-${effectiveTheme}`);
     
-    // Add dark-mode class for CSS compatibility
-    if (effectiveTheme === this.THEMES.DARK) {
+    // Add theme-type classes for CSS compatibility
+    const isDark = ['elegant-black', 'dark'].includes(effectiveTheme);
+    if (isDark) {
       document.body.classList.add('dark-mode');
     } else {
       document.body.classList.add('light-mode');
     }
 
+    // Elegant black specific class
+    if (effectiveTheme === this.THEMES.ELEGANT_BLACK) {
+      document.body.classList.add('elegant-black-mode');
+    }
+
     // Update meta theme-color for mobile browsers
-    const themeColor = effectiveTheme === this.THEMES.DARK ? '#0f172a' : '#ffffff';
+    const themeColors = {
+      [this.THEMES.ELEGANT_BLACK]: '#000000',
+      [this.THEMES.DARK]: '#0f172a',
+      [this.THEMES.LIGHT_CLASSIC]: '#ffffff',
+      [this.THEMES.LIGHT_MODERN]: '#f0f4f8',
+    };
+
     let metaThemeColor = document.querySelector('meta[name="theme-color"]');
     if (!metaThemeColor) {
       metaThemeColor = document.createElement('meta');
       metaThemeColor.name = 'theme-color';
       document.head.appendChild(metaThemeColor);
     }
-    metaThemeColor.content = themeColor;
+    metaThemeColor.content = themeColors[effectiveTheme];
 
     // Trigger custom event for other components
     window.dispatchEvent(
@@ -74,8 +116,10 @@ class ThemeManager {
   }
 
   toggleTheme() {
-    // Toggle between LIGHT and DARK only (no AUTO mode)
-    const nextTheme = this.currentTheme === this.THEMES.LIGHT ? this.THEMES.DARK : this.THEMES.LIGHT;
+    // Cycle through all 4 themes
+    const currentIndex = this.THEME_ORDER.indexOf(this.currentTheme);
+    const nextIndex = (currentIndex + 1) % this.THEME_ORDER.length;
+    const nextTheme = this.THEME_ORDER[nextIndex];
 
     this.saveTheme(nextTheme);
     this.applyTheme(nextTheme);
@@ -116,9 +160,168 @@ class ThemeManager {
       }, 300);
     });
 
+    // Show theme selector on right-click
+    toggle.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      this.showThemeSelector(toggle);
+    });
+
     // Initial icon
     this.updateToggleIcon(toggle, this.currentTheme);
   }
+
+  showThemeSelector(buttonElement) {
+    // Remove existing menu if present
+    const existingMenu = document.getElementById('themeSelector');
+    if (existingMenu) existingMenu.remove();
+
+    // Create theme selector menu
+    const menu = document.createElement('div');
+    menu.id = 'themeSelector';
+    menu.style.cssText = `
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      background: var(--bg-secondary);
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      z-index: 10000;
+      min-width: 200px;
+      overflow: hidden;
+      animation: slideInDown 200ms ease-out;
+    `;
+
+    // Create menu items
+    this.THEME_ORDER.forEach((theme) => {
+      const item = document.createElement('button');
+      item.style.cssText = `
+        width: 100%;
+        padding: 12px 16px;
+        background: ${this.currentTheme === theme ? 'var(--color-primary)' : 'transparent'};
+        color: ${this.currentTheme === theme ? '#ffffff' : 'var(--text-primary)'};
+        border: none;
+        border-bottom: 1px solid var(--border-color);
+        font-size: 14px;
+        font-weight: ${this.currentTheme === theme ? '700' : '500'};
+        cursor: pointer;
+        transition: all 150ms ease;
+        text-align: left;
+      `;
+
+      item.textContent = this.THEME_LABELS[theme];
+
+      item.addEventListener('mouseover', () => {
+        if (this.currentTheme !== theme) {
+          item.style.backgroundColor = 'var(--bg-tertiary)';
+        }
+      });
+
+      item.addEventListener('mouseout', () => {
+        if (this.currentTheme !== theme) {
+          item.style.backgroundColor = 'transparent';
+        }
+      });
+
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.saveTheme(theme);
+        this.applyTheme(theme);
+        this.updateToggleIcon(document.getElementById('darkModeToggle'), theme);
+        this.showThemeNotification(theme);
+        menu.remove();
+      });
+
+      menu.appendChild(item);
+    });
+
+    // Add info text
+    const info = document.createElement('div');
+    info.style.cssText = `
+      padding: 8px 16px;
+      font-size: 12px;
+      color: var(--text-tertiary);
+      background: var(--bg-tertiary);
+      text-align: center;
+      border-top: 1px solid var(--border-color);
+    `;
+    info.textContent = 'Klikni pro výběr • Pravý klik pro menu';
+    menu.appendChild(info);
+
+    document.body.appendChild(menu);
+
+    // Close menu on outside click
+    const closeMenu = (e) => {
+      if (!menu.contains(e.target) && e.target !== buttonElement) {
+        menu.remove();
+        document.removeEventListener('click', closeMenu);
+      }
+    };
+
+    setTimeout(() => {
+      document.addEventListener('click', closeMenu);
+    }, 0);
+  }
+
+  updateToggleIcon(button, theme) {
+    // Show emoji for each theme
+    const icons = {
+      [this.THEMES.ELEGANT_BLACK]: '⬛',
+      [this.THEMES.DARK]: '🌙',
+      [this.THEMES.LIGHT_CLASSIC]: '☀️',
+      [this.THEMES.LIGHT_MODERN]: '💡',
+    };
+    
+    button.textContent = icons[theme] || '⬛';
+    button.title = `${this.THEME_LABELS[theme]} - Klikni pro cyklování • Pravý klik pro menu`;
+  }
+
+  showThemeNotification(theme) {
+    const messages = {
+      [this.THEMES.ELEGANT_BLACK]: '⬛ Elegantní černý vzhled aktivován',
+      [this.THEMES.DARK]: '🌙 Tmavý režim aktivován',
+      [this.THEMES.LIGHT_CLASSIC]: '☀️ Světlý Klasik aktivován',
+      [this.THEMES.LIGHT_MODERN]: '💡 Světlý Moderní aktivován',
+    };
+
+    const message = messages[theme] || 'Téma aktivováno';
+
+    if (typeof showToast === 'function') {
+      showToast('success', 'Téma', message);
+    }
+  }
+
+  // Public API
+  setTheme(theme) {
+    if (Object.values(this.THEMES).includes(theme)) {
+      this.saveTheme(theme);
+      this.applyTheme(theme);
+    }
+  }
+
+  getTheme() {
+    return this.currentTheme;
+  }
+
+  getEffectiveThemeValue() {
+    return this.getEffectiveTheme();
+  }
+}
+
+// CSS Variables for theming
+const themeStyles = document.createElement('style');
+themeStyles.textContent = `
+  }
+
+  showThemeNotification(theme) {
+    const messages = {
+      [this.THEMES.ELEGANT_BLACK]: '⬛ Elegantní černý vzhled aktivován',
+      [this.THEMES.DARK]: '🌙 Tmavý režim aktivován',
+      [this.THEMES.LIGHT_CLASSIC]: '☀️ Světlý Klasik aktivován',
+      [this.THEMES.LIGHT_MODERN]: '💡 Světlý Moderní aktivován',
+    };
+
+    const message = messages[theme] || 'Téma aktivováno';
 
   updateToggleIcon(button, theme) {
     // Show sun for light mode, moon for dark mode only
@@ -388,11 +591,12 @@ themeStyles.textContent = `
 document.head.appendChild(themeStyles);
 
 // Clean up legacy theme values from localStorage
-// Ensure only 'light' or 'dark' are stored (no 'auto')
+// Ensure only valid 4-mode themes are stored
 const STORAGE_KEY = 'portfolio-theme';
+const VALID_THEMES = ['elegant-black', 'dark', 'light-classic', 'light-modern'];
 const storedTheme = localStorage.getItem(STORAGE_KEY);
-if (storedTheme === 'auto' || !['light', 'dark'].includes(storedTheme)) {
-  localStorage.setItem(STORAGE_KEY, 'light');
+if (!storedTheme || !VALID_THEMES.includes(storedTheme)) {
+  localStorage.setItem(STORAGE_KEY, 'elegant-black');
 }
 
 // Initialize theme manager on DOM ready
