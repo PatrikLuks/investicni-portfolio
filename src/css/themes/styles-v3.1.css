@@ -39,7 +39,7 @@
 
 body.dark-mode,
 body.theme-dark,
-[data-theme='dark'] {
+html[data-theme="dark"] {
   /* Dark Theme */
   --color-primary: #60a5fa;
   --color-primary-hover: #3b82f6;
@@ -49,20 +49,20 @@ body.theme-dark,
   --color-warning: #fbbf24;
   --color-info: #22d3ee;
 
-  --bg-primary: #1a1a1a;
-  --bg-secondary: #2d2d2d;
-  --bg-tertiary: #374151;
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
   --bg-modal: rgba(0, 0, 0, 0.7);
 
-  --text-primary: #f3f4f6;
-  --text-secondary: #d1d5db;
-  --text-tertiary: #9ca3af;
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-tertiary: #64748b;
 
-  --border-color: #444444;
-  --input-bg: #2d2d2d;
-  --input-border: #4b5563;
-  --input-text: #f3f4f6;
-  --input-placeholder: #6b7280;
+  --border-color: #334155;
+  --input-bg: #1e293b;
+  --input-border: #334155;
+  --input-text: #f1f5f9;
+  --input-placeholder: #94a3b8;
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);

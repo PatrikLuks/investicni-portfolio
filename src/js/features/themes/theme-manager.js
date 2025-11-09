@@ -221,7 +221,7 @@ themeStyles.textContent = `
   }
 
   /* Dark theme */
-  [data-theme="dark"] {
+  html[data-theme="dark"] {
     --color-primary: #3b82f6;
     --color-primary-hover: #2563eb;
     --color-secondary: #94a3b8;
