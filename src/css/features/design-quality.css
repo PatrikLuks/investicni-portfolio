@@ -1,0 +1,497 @@
+/**
+ * Design Quality Improvements
+ * Professional visual hierarchy, spacing, contrast, and interactive states
+ * Ensures enterprise-grade UI/UX across all devices and themes
+ */
+
+/* ==================== FORM LABELS - PROFESSIONAL STYLING ==================== */
+
+label {
+  display: block;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+  letter-spacing: 0.25px;
+  text-transform: capitalize;
+}
+
+label:hover {
+  color: var(--color-primary);
+  transition: color 200ms ease;
+}
+
+/* Labels with icons */
+label::before {
+  margin-right: 6px;
+  font-size: 14px;
+}
+
+/* ==================== FORM GROUPS - SPACING & STRUCTURE ==================== */
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+  animation: fadeInUp 300ms ease-out;
+}
+
+.form-group:first-child {
+  margin-top: 0;
+}
+
+/* ==================== INPUT FIELDS - ENTERPRISE STYLING ==================== */
+
+input[type='text'],
+input[type='number'],
+input[type='email'],
+input[type='password'],
+input[type='search'],
+input[type='date'],
+input[type='time'],
+input[type='tel'],
+textarea,
+select {
+  font-family: inherit;
+  font-size: 14px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 2px solid var(--border-color);
+  background-color: var(--input-bg);
+  color: var(--input-text);
+  transition: all 200ms ease;
+  min-height: 44px;
+  box-sizing: border-box;
+  letter-spacing: 0.2px;
+}
+
+/* Placeholder styling */
+input::placeholder,
+textarea::placeholder {
+  color: var(--input-placeholder);
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+/* Focus state - professional */
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  background-color: var(--input-bg);
+  color: var(--input-text);
+  box-shadow: 
+    0 0 0 4px rgba(59, 130, 246, 0.1),
+    0 4px 12px rgba(59, 130, 246, 0.15);
+  transform: translateY(-1px);
+}
+
+/* Hover state */
+input:hover:not(:focus),
+textarea:hover:not(:focus),
+select:hover:not(:focus) {
+  border-color: var(--color-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+}
+
+/* Active state */
+input:active,
+textarea:active {
+  transform: translateY(0);
+}
+
+/* Disabled state */
+input:disabled,
+textarea:disabled,
+select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: var(--bg-tertiary);
+  border-color: var(--border-color);
+  color: var(--text-secondary);
+}
+
+/* ==================== TEXTAREA - SPECIFIC STYLING ==================== */
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+  max-height: 400px;
+  line-height: 1.5;
+}
+
+/* ==================== SELECT DROPDOWN ==================== */
+
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%235A6B7C' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+/* Dark mode select dropdown */
+html[data-theme='dark'] select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23CBD5E1' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+}
+
+/* ==================== FORM VALIDATION STATES ==================== */
+
+input:invalid:not(:placeholder-shown),
+textarea:invalid:not(:placeholder-shown) {
+  border-color: var(--color-danger);
+}
+
+input:invalid:focus,
+textarea:invalid:focus {
+  box-shadow: 
+    0 0 0 4px rgba(239, 68, 68, 0.1),
+    0 4px 12px rgba(239, 68, 68, 0.15);
+}
+
+input:valid:not(:placeholder-shown),
+textarea:valid:not(:placeholder-shown) {
+  border-color: var(--color-success);
+}
+
+input:valid:focus,
+textarea:valid:focus {
+  box-shadow: 
+    0 0 0 4px rgba(34, 197, 94, 0.1),
+    0 4px 12px rgba(34, 197, 94, 0.15);
+}
+
+/* ==================== HELP TEXT - IMPROVED VISIBILITY ==================== */
+
+.help-text,
+.form-hint,
+.field-description {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 6px;
+  line-height: 1.4;
+  display: block;
+}
+
+.help-text.error,
+.field-error {
+  color: var(--color-danger);
+  font-weight: 500;
+}
+
+.help-text.success {
+  color: var(--color-success);
+  font-weight: 500;
+}
+
+.help-text.warning {
+  color: var(--color-warning);
+  font-weight: 500;
+}
+
+/* ==================== VISUAL HIERARCHY - HEADINGS ==================== */
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  font-size: 32px;
+  line-height: 1.2;
+  margin-bottom: 24px;
+  color: var(--text-primary);
+}
+
+#clientNameDisplay {
+  color: var(--color-primary);
+  font-weight: 700;
+  display: inline-block;
+  margin-left: 8px;
+}
+
+html[data-theme='dark'] #clientNameDisplay {
+  color: #60a5fa;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+h2 {
+  font-size: 24px;
+  line-height: 1.3;
+  margin-bottom: 18px;
+}
+
+h3 {
+  font-size: 18px;
+  line-height: 1.4;
+  margin-bottom: 14px;
+}
+
+h4 {
+  font-size: 16px;
+  line-height: 1.4;
+  margin-bottom: 12px;
+}
+
+h5 {
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+h6 {
+  font-size: 12px;
+  line-height: 1.5;
+  margin-bottom: 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ==================== PARAGRAPH TEXT - IMPROVED READABILITY ==================== */
+
+p {
+  color: var(--text-primary);
+  line-height: 1.6;
+  margin: 0 0 16px 0;
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
+/* ==================== LINKS - PROFESSIONAL STYLING ==================== */
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 200ms ease;
+  border-radius: 4px;
+  padding: 2px 4px;
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+  background-color: rgba(59, 130, 246, 0.1);
+  text-decoration: underline;
+}
+
+a:active {
+  transform: scale(0.98);
+}
+
+/* ==================== BUTTONS - PROFESSIONAL APPEARANCE ==================== */
+
+button,
+.btn,
+input[type='button'],
+input[type='submit'],
+input[type='reset'] {
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 200ms ease;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  letter-spacing: 0.25px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Primary Button */
+button.btn-primary,
+.btn-primary,
+input[type='submit'] {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+button.btn-primary:hover,
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  transform: translateY(-2px);
+}
+
+button.btn-primary:active,
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+}
+
+/* Secondary Button */
+button.btn-secondary,
+.btn-secondary,
+button:not(.btn-primary) {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 2px solid var(--border-color);
+}
+
+button.btn-secondary:hover,
+.btn-secondary:hover {
+  background-color: var(--card-background);
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+/* Danger Button */
+button.btn-danger,
+.btn-danger {
+  background-color: var(--color-danger);
+  color: white;
+}
+
+button.btn-danger:hover,
+.btn-danger:hover {
+  background-color: #dc2626;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Success Button */
+button.btn-success,
+.btn-success {
+  background-color: var(--color-success);
+  color: white;
+}
+
+button.btn-success:hover,
+.btn-success:hover {
+  background-color: #15803d;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Button disabled state */
+button:disabled,
+.btn:disabled,
+input[type='button']:disabled,
+input[type='submit']:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* ==================== SECTION & CONTAINER SPACING ==================== */
+
+section {
+  margin-bottom: 40px;
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--border-color);
+}
+
+/* ==================== CARD CONTAINER ==================== */
+
+.card {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 200ms ease;
+}
+
+.card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+/* ==================== ANIMATIONS ==================== */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* ==================== RESPONSIVE DESIGN ==================== */
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 24px;
+    margin-bottom: 18px;
+  }
+
+  h2 {
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+
+  input,
+  textarea,
+  select,
+  button {
+    font-size: 16px;
+  }
+
+  .form-group {
+    margin-bottom: 16px;
+  }
+
+  button,
+  .btn {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
