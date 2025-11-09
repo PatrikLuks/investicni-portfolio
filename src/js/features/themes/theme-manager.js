@@ -36,7 +36,8 @@ class ThemeManager {
 
   loadTheme() {
     const saved = localStorage.getItem(this.STORAGE_KEY);
-    return saved || this.THEMES.AUTO;
+    // Default to LIGHT if no saved theme
+    return saved || this.THEMES.LIGHT;
   }
 
   saveTheme(theme) {
@@ -89,9 +90,8 @@ class ThemeManager {
   }
 
   toggleTheme() {
-    const themes = [this.THEMES.LIGHT, this.THEMES.DARK, this.THEMES.AUTO];
-    const currentIndex = themes.indexOf(this.currentTheme);
-    const nextTheme = themes[(currentIndex + 1) % themes.length];
+    // Toggle between LIGHT and DARK only (no AUTO mode)
+    const nextTheme = this.currentTheme === this.THEMES.LIGHT ? this.THEMES.DARK : this.THEMES.LIGHT;
 
     this.saveTheme(nextTheme);
     this.applyTheme(nextTheme);
@@ -137,24 +137,24 @@ class ThemeManager {
   }
 
   updateToggleIcon(button, theme) {
+    // Show sun for light mode, moon for dark mode only
     const icons = {
       light: '☀️',
       dark: '🌙',
-      auto: '🌓',
     };
-    button.textContent = icons[theme] || icons.auto;
-    button.title = `Current theme: ${theme}`;
+    const icon = icons[theme] || (theme === this.THEMES.LIGHT ? '☀️' : '�');
+    button.textContent = icon;
+    button.title = `Current theme: ${theme} - Click to toggle`;
   }
 
   showThemeNotification(theme) {
     const messages = {
-      light: 'Light mode activated',
-      dark: 'Dark mode activated',
-      auto: 'Auto mode activated (follows system)',
+      light: '☀️ Light mode activated',
+      dark: '🌙 Dark mode activated',
     };
 
     if (typeof showToast === 'function') {
-      showToast(messages[theme], 'info');
+      showToast('success', 'Theme', messages[theme] || `Theme: ${theme}`);
     }
   }
 

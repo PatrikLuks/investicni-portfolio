@@ -1359,8 +1359,8 @@
     <!-- Dark Mode Toggle -->
     <button
       id="darkModeToggle"
-      aria-label="Přepnout barevný režim (světlý/tmavý/automatický)"
-      title="Přepnout barevný režim"
+      aria-label="Toggle between light and dark mode"
+      title="Click to toggle theme"
       style="
         position: fixed;
         top: 20px;
@@ -1919,6 +1919,9 @@
 
     <!-- 🚀 ARCHITECTURE: All scripts loaded directly (no module-loader duplication) -->
     
+    <!-- THEME: Dark/Light mode system (must load first!) -->
+    <script src="src/js/features/themes/theme-manager.js" defer></script>
+
     <!-- CORE: Error handling and accessibility -->
     <script src="src/js/core/error-handler.js" defer></script>
     <script src="src/js/core/accessibility.js" defer></script>
@@ -1953,8 +1956,15 @@
     <!-- FEATURES: Export functionality -->
     <script src="src/js/features/export/excel-export.js" defer></script>
 
-    <!-- THEMES: Styling -->
-    <script src="src/js/features/themes/theme-manager.js" defer></script>
+    <!-- Initialize Theme Manager (after all scripts are loaded) -->
+    <script>
+      // Wait for theme manager to be available
+      if (typeof ThemeManager !== 'undefined' && !window.themeManager) {
+        window.themeManager = new ThemeManager();
+      } else if (typeof ThemeManager === 'undefined') {
+        console.warn('[Theme] ThemeManager not loaded yet');
+      }
+    </script>
 
     <!-- 🎯 MAIN APPLICATION: ES6 Module Entry Point (load last) -->
     <script type="module" src="main.js"></script>
