@@ -137,24 +137,6 @@ class CommandStack {
   }
 
   updateUI() {
-    // Update undo/redo button states
-    const undoBtn = document.getElementById('undoBtn');
-    const redoBtn = document.getElementById('redoBtn');
-
-    if (undoBtn) {
-      undoBtn.disabled = !this.canUndo();
-      undoBtn.title = this.canUndo()
-        ? `Vrátit: ${this.history[this.currentIndex]?.description}`
-        : 'Není co vrátit';
-    }
-
-    if (redoBtn) {
-      redoBtn.disabled = !this.canRedo();
-      redoBtn.title = this.canRedo()
-        ? `Znovu: ${this.history[this.currentIndex + 1]?.description}`
-        : 'Není co znovu provést';
-    }
-
     // Update history timeline if visible
     this.updateHistoryTimeline();
   }
@@ -390,55 +372,7 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-// Create undo/redo UI buttons
-function createUndoRedoButtons() {
-  const container = document.querySelector('.card h1');
-  if (!container) {
-    return;
-  }
 
-  const buttonGroup = document.createElement('div');
-  buttonGroup.style.cssText = `
-        display: inline-flex;
-        gap: 8px;
-        margin-left: 16px;
-        vertical-align: middle;
-    `;
-
-  const undoBtn = document.createElement('button');
-  undoBtn.id = 'undoBtn';
-  undoBtn.innerHTML = '↩️ Vrátit';
-  undoBtn.disabled = true;
-  undoBtn.style.cssText = `
-        padding: 6px 12px;
-        font-size: 0.875rem;
-        background: #6b7280;
-        color: white;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-    `;
-  undoBtn.onclick = () => window.commandStack.undo();
-
-  const redoBtn = document.createElement('button');
-  redoBtn.id = 'redoBtn';
-  redoBtn.innerHTML = '↪️ Znovu';
-  redoBtn.disabled = true;
-  redoBtn.style.cssText = undoBtn.style.cssText;
-  redoBtn.onclick = () => window.commandStack.redo();
-
-  const historyBtn = document.createElement('button');
-  historyBtn.innerHTML = '📜';
-  historyBtn.title = 'Zobrazit historii (Ctrl+H)';
-  historyBtn.style.cssText = undoBtn.style.cssText;
-  historyBtn.onclick = toggleHistoryPanel;
-
-  buttonGroup.appendChild(undoBtn);
-  buttonGroup.appendChild(redoBtn);
-  buttonGroup.appendChild(historyBtn);
-
-  container.appendChild(buttonGroup);
-}
 
 // History panel
 function toggleHistoryPanel() {
@@ -495,9 +429,11 @@ function toggleHistoryPanel() {
 
 // Initialize when DOM is ready
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', createUndoRedoButtons);
+  document.addEventListener('DOMContentLoaded', () => {
+    // Initialization if needed for other features
+  });
 } else {
-  setTimeout(createUndoRedoButtons, 1000);
+  // DOM already loaded
 }
 
 // Add history item styles
