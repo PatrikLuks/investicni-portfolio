@@ -1,7 +1,7 @@
 /**
  * PHASE 5: User Authentication Service
  * Firebase Authentication with Google, Email/Password, and GitHub sign-in
- * 
+ *
  * Setup instructions:
  * 1. Create Firebase project at firebase.google.com
  * 2. Enable Authentication (Email/Password, Google, GitHub)
@@ -11,12 +11,12 @@
 
 // Firebase configuration - REPLACE WITH YOUR CONFIG
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY_HERE",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: 'YOUR_API_KEY_HERE',
+  authDomain: 'YOUR_PROJECT.firebaseapp.com',
+  projectId: 'YOUR_PROJECT_ID',
+  storageBucket: 'YOUR_PROJECT.appspot.com',
+  messagingSenderId: 'YOUR_SENDER_ID',
+  appId: 'YOUR_APP_ID',
 };
 
 class AuthenticationService {
@@ -24,10 +24,10 @@ class AuthenticationService {
     this.currentUser = null;
     this.isInitialized = false;
     this.listeners = [];
-    
+
     // Check if Firebase is available
     this.firebaseAvailable = typeof firebase !== 'undefined';
-    
+
     if (!this.firebaseAvailable) {
       console.warn('[Auth] Firebase not available - using local storage fallback');
       this.loadLocalUser();
@@ -49,9 +49,9 @@ class AuthenticationService {
 
       // Initialize Firebase
       firebase.initializeApp(firebaseConfig);
-      
+
       const auth = firebase.auth();
-      
+
       // Listen for auth state changes
       auth.onAuthStateChanged((user) => {
         this.setCurrentUser(user);
@@ -77,7 +77,7 @@ class AuthenticationService {
 
       const auth = firebase.auth();
       const result = await auth.createUserWithEmailAndPassword(email, password);
-      
+
       if (displayName) {
         await result.user.updateProfile({ displayName });
       }
@@ -102,7 +102,7 @@ class AuthenticationService {
 
       const auth = firebase.auth();
       const result = await auth.signInWithEmailAndPassword(email, password);
-      
+
       this.setCurrentUser(result.user);
       this.notifyListeners();
       return result.user;
@@ -123,7 +123,7 @@ class AuthenticationService {
 
       const auth = firebase.auth();
       const provider = new firebase.auth.GoogleAuthProvider();
-      
+
       const result = await auth.signInWithPopup(provider);
       this.setCurrentUser(result.user);
       this.notifyListeners();
@@ -145,7 +145,7 @@ class AuthenticationService {
 
       const auth = firebase.auth();
       const provider = new firebase.auth.GithubAuthProvider();
-      
+
       const result = await auth.signInWithPopup(provider);
       this.setCurrentUser(result.user);
       this.notifyListeners();
@@ -194,11 +194,11 @@ class AuthenticationService {
    */
   async getUserToken() {
     if (!this.currentUser) return null;
-    
+
     if (this.firebaseAvailable) {
       return await this.currentUser.getIdToken();
     }
-    
+
     return localStorage.getItem('auth_token');
   }
 
@@ -251,7 +251,7 @@ class AuthenticationService {
    */
   signUpLocal(email, password, displayName) {
     const users = JSON.parse(localStorage.getItem('auth_users') || '{}');
-    
+
     if (users[email]) {
       throw new Error('User already exists');
     }
@@ -266,7 +266,7 @@ class AuthenticationService {
 
     users[email] = user;
     localStorage.setItem('auth_users', JSON.stringify(users));
-    
+
     this.setCurrentUser(user);
     this.notifyListeners();
     return user;
@@ -308,14 +308,16 @@ class AuthenticationService {
    * Internal methods
    */
   setCurrentUser(user) {
-    this.currentUser = user ? {
-      uid: user.uid,
-      email: user.email,
-      displayName: user.displayName,
-      photoURL: user.photoURL,
-      isAnonymous: user.isAnonymous,
-      emailVerified: user.emailVerified,
-    } : null;
+    this.currentUser = user
+      ? {
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+          photoURL: user.photoURL,
+          isAnonymous: user.isAnonymous,
+          emailVerified: user.emailVerified,
+        }
+      : null;
 
     if (user) {
       localStorage.setItem('auth_user', JSON.stringify(this.currentUser));
@@ -329,18 +331,18 @@ class AuthenticationService {
    */
   onAuthStateChanged(callback) {
     this.listeners.push(callback);
-    
+
     // Call immediately with current state
     callback(this.currentUser);
 
     // Return unsubscribe function
     return () => {
-      this.listeners = this.listeners.filter(listener => listener !== callback);
+      this.listeners = this.listeners.filter((listener) => listener !== callback);
     };
   }
 
   notifyListeners() {
-    this.listeners.forEach(listener => listener(this.currentUser));
+    this.listeners.forEach((listener) => listener(this.currentUser));
   }
 
   /**

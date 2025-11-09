@@ -214,7 +214,7 @@ class ExcelExportManager {
     const totalValue = data.reduce((sum, item) => sum + parseFloat(item.aktuálníHodnota || 0), 0);
     const totalCost = data.reduce(
       (sum, item) => sum + parseFloat(item.nákupníCena) * parseFloat(item.počet),
-      0,
+      0
     );
     const gainLoss = totalValue - totalCost;
     const roi = totalCost > 0 ? (gainLoss / totalCost) * 100 : 0;

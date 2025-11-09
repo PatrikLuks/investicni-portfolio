@@ -82,7 +82,7 @@ select:focus {
   border-color: var(--color-primary);
   background-color: var(--input-bg);
   color: var(--input-text);
-  box-shadow: 
+  box-shadow:
     0 0 0 4px rgba(59, 130, 246, 0.1),
     0 4px 12px rgba(59, 130, 246, 0.15);
   transform: translateY(-1px);
@@ -148,7 +148,7 @@ textarea:invalid:not(:placeholder-shown) {
 
 input:invalid:focus,
 textarea:invalid:focus {
-  box-shadow: 
+  box-shadow:
     0 0 0 4px rgba(239, 68, 68, 0.1),
     0 4px 12px rgba(239, 68, 68, 0.15);
 }
@@ -160,7 +160,7 @@ textarea:valid:not(:placeholder-shown) {
 
 input:valid:focus,
 textarea:valid:focus {
-  box-shadow: 
+  box-shadow:
     0 0 0 4px rgba(34, 197, 94, 0.1),
     0 4px 12px rgba(34, 197, 94, 0.15);
 }
@@ -195,7 +195,12 @@ textarea:valid:focus {
 
 /* ==================== VISUAL HIERARCHY - HEADINGS ==================== */
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   color: var(--text-primary);
   font-weight: 700;
   letter-spacing: -0.5px;
@@ -446,7 +451,8 @@ section {
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {

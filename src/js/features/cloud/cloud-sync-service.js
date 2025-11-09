@@ -2,7 +2,7 @@ import { logInfo, logWarn, logError } from '../../utilities/logger.js';
 /**
  * PHASE 6: Cloud Synchronization Service
  * Firebase Firestore integration for real-time portfolio sync
- * 
+ *
  * Features:
  * - Save portfolios to cloud
  * - Real-time synchronization across devices
@@ -13,7 +13,8 @@ import { logInfo, logWarn, logError } from '../../utilities/logger.js';
 
 class CloudSyncService {
   constructor() {
-    this.firebaseAvailable = typeof firebase !== 'undefined' && typeof firebase.firestore !== 'undefined';
+    this.firebaseAvailable =
+      typeof firebase !== 'undefined' && typeof firebase.firestore !== 'undefined';
     this.db = null;
     this.unsubscribers = [];
     this.isInitialized = false;
@@ -41,10 +42,10 @@ class CloudSyncService {
       }
 
       this.db = firebase.firestore();
-      
+
       // Enable offline persistence
       await this.db.enablePersistence();
-      
+
       // Listen for auth changes
       window.authService.onAuthStateChanged((user) => {
         if (user) {
@@ -67,11 +68,11 @@ class CloudSyncService {
    */
   enableSync(userId) {
     if (!this.db) return;
-    
+
     this.syncEnabled = true;
     this.userId = userId;
     logInfo('[CloudSync] Sync enabled for user:', userId);
-    
+
     // Process offline queue
     this.processOfflineQueue();
   }
@@ -81,7 +82,7 @@ class CloudSyncService {
    */
   disableSync() {
     this.syncEnabled = false;
-    this.unsubscribers.forEach(unsubscribe => unsubscribe());
+    this.unsubscribers.forEach((unsubscribe) => unsubscribe());
     this.unsubscribers = [];
     logInfo('[CloudSync] Sync disabled');
   }
@@ -103,7 +104,7 @@ class CloudSyncService {
         .doc(portfolio.id);
 
       const timestamp = new Date().toISOString();
-      
+
       await docRef.set({
         ...portfolio,
         updatedAt: timestamp,
@@ -163,7 +164,7 @@ class CloudSyncService {
         .get();
 
       const portfolios = [];
-      snapshot.forEach(doc => {
+      snapshot.forEach((doc) => {
         portfolios.push(doc.data());
       });
 
@@ -214,9 +215,9 @@ class CloudSyncService {
         .collection('users')
         .doc(this.userId)
         .collection('portfolios')
-        .onSnapshot(snapshot => {
+        .onSnapshot((snapshot) => {
           const portfolios = [];
-          snapshot.forEach(doc => {
+          snapshot.forEach((doc) => {
             portfolios.push(doc.data());
           });
           callback(portfolios);
@@ -224,7 +225,7 @@ class CloudSyncService {
 
       this.unsubscribers.push(unsubscribe);
       logInfo('[CloudSync] Real-time listener registered');
-      
+
       return unsubscribe;
     } catch (error) {
       logError('[CloudSync] Real-time sync failed:', error);
@@ -242,8 +243,8 @@ class CloudSyncService {
 
   savePortfolioLocal(portfolio) {
     const portfolios = this.loadAllPortfoliosLocal();
-    const index = portfolios.findIndex(p => p.id === portfolio.id);
-    
+    const index = portfolios.findIndex((p) => p.id === portfolio.id);
+
     if (index >= 0) {
       portfolios[index] = portfolio;
     } else {
@@ -256,7 +257,7 @@ class CloudSyncService {
 
   loadPortfolioLocal(portfolioId) {
     const portfolios = this.loadAllPortfoliosLocal();
-    return portfolios.find(p => p.id === portfolioId);
+    return portfolios.find((p) => p.id === portfolioId);
   }
 
   loadAllPortfoliosLocal() {
@@ -266,7 +267,7 @@ class CloudSyncService {
 
   deletePortfolioLocal(portfolioId) {
     const portfolios = this.loadAllPortfoliosLocal();
-    const filtered = portfolios.filter(p => p.id !== portfolioId);
+    const filtered = portfolios.filter((p) => p.id !== portfolioId);
     localStorage.setItem('portfolios', JSON.stringify(filtered));
   }
 

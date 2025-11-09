@@ -129,7 +129,7 @@ class MarketDataFeed {
     window.dispatchEvent(
       new CustomEvent('market-data-update', {
         detail: { symbol, data },
-      }),
+      })
     );
   }
 
@@ -335,7 +335,7 @@ class MarketDataFeed {
     // Read from localStorage like market-data-ui.js does
     try {
       const portfolio = JSON.parse(localStorage.getItem('investmentPortfolio') || '[]');
-      
+
       // portfolio contains: { name, producer, investmentDate, investment, value }
       // Extract symbols from fund names
       portfolio.forEach((item) => {
@@ -369,19 +369,25 @@ class MarketDataFeed {
     if (match && match[1]) {
       return match[1];
     }
-    
+
     // If no ticker found, create from first letters of words
     // e.g., "Conseq Invest Akcie Nové" -> "CIAN"
-    const words = name.split(/\s+/).filter(w => w.length > 0);
+    const words = name.split(/\s+/).filter((w) => w.length > 0);
     if (words.length > 0) {
-      let symbol = words.slice(0, 4).map(w => w[0].toUpperCase()).join('');
+      let symbol = words
+        .slice(0, 4)
+        .map((w) => w[0].toUpperCase())
+        .join('');
       if (symbol.length >= 2 && symbol.length <= 5) {
         return symbol;
       }
     }
-    
+
     // Fallback: first 2-5 characters uppercase
-    const fallback = name.substring(0, 5).toUpperCase().replace(/[^A-Z]/g, '');
+    const fallback = name
+      .substring(0, 5)
+      .toUpperCase()
+      .replace(/[^A-Z]/g, '');
     return fallback.length >= 2 ? fallback : null;
   }
 
@@ -444,7 +450,7 @@ class MarketDataFeed {
         <div style="font-weight: 600; color: var(--text-primary);">${symbol}</div>
         <div style="font-size: 0.85rem; color: var(--text-secondary);">Click to add to watchlist</div>
       </div>
-    `,
+    `
       )
       .join('');
   }

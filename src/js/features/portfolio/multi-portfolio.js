@@ -143,7 +143,7 @@ class PortfolioManager {
     window.dispatchEvent(
       new CustomEvent('portfolioSwitched', {
         detail: { portfolioId },
-      }),
+      })
     );
   }
 
@@ -414,7 +414,7 @@ class PortfolioSelector {
                   }
                 </div>
               </div>
-            `,
+            `
               )
               .join('')}
           </div>

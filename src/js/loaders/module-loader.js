@@ -52,10 +52,10 @@ class ModuleLoader {
     return new Promise((resolve, reject) => {
       this.loading.add(src);
 
-      const script = document.createElement("script");
+      const script = document.createElement('script');
       script.src = src;
       script.async = true; // Vždy async pro nižší prioritu
-      script.setAttribute("importance", "low"); // Chrome hint
+      script.setAttribute('importance', 'low'); // Chrome hint
 
       script.onload = () => {
         this.loaded.add(src);
@@ -67,9 +67,7 @@ class ModuleLoader {
         this.loading.delete(src);
         console.error(`❌ Failed to load module: ${src}`, error);
         if (critical) {
-          reject(
-            new Error(`Critical module ${src} failed - app cannot continue`),
-          );
+          reject(new Error(`Critical module ${src} failed - app cannot continue`));
         } else {
           resolve(); // Non-critical = continue
         }
@@ -110,9 +108,9 @@ class ModuleLoader {
    */
   get CRITICAL_MODULES() {
     return [
-      "src/js/core/error-handler.js",
-      "src/js/core/accessibility.js",
-      "src/js/core/notification-system.js",
+      'src/js/core/error-handler.js',
+      'src/js/core/accessibility.js',
+      'src/js/core/notification-system.js',
     ];
   }
 
@@ -122,9 +120,9 @@ class ModuleLoader {
    */
   get ESSENTIAL_MODULES() {
     return [
-      "src/js/utilities/command-stack.js",
-      "src/js/utilities/data-validation.js",
-      "src/js/utilities/calculations-engine.js",
+      'src/js/utilities/command-stack.js',
+      'src/js/utilities/data-validation.js',
+      'src/js/utilities/calculations-engine.js',
     ];
   }
 
@@ -136,49 +134,46 @@ class ModuleLoader {
     return {
       // Charts feature
       charts: [
-        "src/js/features/charts/charts-manager.js",
-        "src/css/features/charts-styles.css",
-        "src/js/features/charts/advanced-charts.js",
+        'src/js/features/charts/charts-manager.js',
+        'src/css/features/charts-styles.css',
+        'src/js/features/charts/advanced-charts.js',
       ],
 
       // Export features
-      export: ["src/js/features/export/excel-export.js"],
+      export: ['src/js/features/export/excel-export.js'],
 
       // Drag & Drop
-      dragDrop: [
-        "src/js/utilities/drag-drop.js",
-        "src/css/features/drag-drop.css",
-      ],
+      dragDrop: ['src/js/utilities/drag-drop.js', 'src/css/features/drag-drop.css'],
 
       // Help system
       help: [
-        "src/js/features/help/help-system.js",
-        "src/js/utilities/keyboard-shortcuts-overlay.js",
-        "src/css/features/quick-reference.css",
+        'src/js/features/help/help-system.js',
+        'src/js/utilities/keyboard-shortcuts-overlay.js',
+        'src/css/features/quick-reference.css',
       ],
 
       // Marketplace features
       marketplace: [
-        "src/js/features/marketplace/market-data.js",
-        "src/js/features/marketplace/market-data-service.js",
-        "src/js/features/marketplace/market-data-ui.js",
+        'src/js/features/marketplace/market-data.js',
+        'src/js/features/marketplace/market-data-service.js',
+        'src/js/features/marketplace/market-data-ui.js',
       ],
 
       // Theme management
-      themes: ["src/js/features/themes/theme-manager.js"],
+      themes: ['src/js/features/themes/theme-manager.js'],
 
       // Portfolio & Multi-portfolio
       portfolio: [
-        "src/js/features/portfolio/app-portfolio.js",
-        "src/js/features/portfolio/multi-portfolio.js",
+        'src/js/features/portfolio/app-portfolio.js',
+        'src/js/features/portfolio/multi-portfolio.js',
       ],
 
       // Utilities & Infrastructure
       utilities: [
-        "src/js/utilities/auto-save.js",
-        "src/js/utilities/calculations-engine.js",
-        "src/js/utilities/command-stack.js",
-        "src/js/utilities/data-validation.js",
+        'src/js/utilities/auto-save.js',
+        'src/js/utilities/calculations-engine.js',
+        'src/js/utilities/command-stack.js',
+        'src/js/utilities/data-validation.js',
       ],
     };
   }
@@ -197,20 +192,20 @@ class ModuleLoader {
 
     try {
       // FÁZE 1: Critical (3 moduly) - ~150ms
-      this.updateLoadingProgress("Načítání základu...", 10);
+      this.updateLoadingProgress('Načítání základu...', 10);
       await this.loadModules(this.CRITICAL_MODULES, true);
 
       // FÁZE 2: Essential (3 moduly) - ~150ms
-      this.updateLoadingProgress("Načítání funkcí...", 40);
+      this.updateLoadingProgress('Načítání funkcí...', 40);
       await this.loadModules(this.ESSENTIAL_MODULES, true);
 
       // FÁZE 3: Main app initialization done via main.js ES module
       // app.js has been removed - app-core.js is loaded directly
-      this.updateLoadingProgress("Spouštění aplikace...", 70);
+      this.updateLoadingProgress('Spouštění aplikace...', 70);
 
       // HOTOVO
       const loadTime = performance.now() - startTime;
-      this.updateLoadingProgress("Hotovo!", 100);
+      this.updateLoadingProgress('Hotovo!', 100);
 
       // Remove loading screen
       setTimeout(() => this.hideLoadingScreen(), 500);
@@ -221,7 +216,7 @@ class ModuleLoader {
       // Defer non-critical modules to idle time
       this.deferRemainingModules();
     } catch (error) {
-      console.error("💥 Critical module loading failed:", error);
+      console.error('💥 Critical module loading failed:', error);
       this.showErrorScreen(error);
     }
   }
@@ -231,8 +226,8 @@ class ModuleLoader {
    */
   setupOnDemandLoading() {
     // Click-based triggers
-    document.addEventListener("click", (e) => {
-      const target = e.target.closest("[data-feature]");
+    document.addEventListener('click', (e) => {
+      const target = e.target.closest('[data-feature]');
       if (!target) {
         return;
       }
@@ -244,10 +239,10 @@ class ModuleLoader {
     });
 
     // Keyboard shortcuts
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "F1") {
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'F1') {
         e.preventDefault();
-        this.loadFeature("help");
+        this.loadFeature('help');
       }
     });
   }
@@ -267,11 +262,7 @@ class ModuleLoader {
     } // Already loaded
 
     if (window.notificationSystem) {
-      window.notificationSystem.show(
-        `Načítání ${featureName}...`,
-        "info",
-        2000,
-      );
+      window.notificationSystem.show(`Načítání ${featureName}...`, 'info', 2000);
     }
 
     await this.loadModules(unloaded, false);
@@ -283,13 +274,13 @@ class ModuleLoader {
   deferRemainingModules() {
     const deferredLoad = () => {
       // Load UI enhancements in background (only existing files)
-      const backgroundModules = ["src/js/utilities/auto-save.js"];
+      const backgroundModules = ['src/js/utilities/auto-save.js'];
 
       this.loadModules(backgroundModules, false).then(() => {});
     };
 
     // Use requestIdleCallback if available
-    if ("requestIdleCallback" in window) {
+    if ('requestIdleCallback' in window) {
       requestIdleCallback(deferredLoad, { timeout: 10000 });
     } else {
       setTimeout(deferredLoad, 3000);
@@ -301,25 +292,25 @@ class ModuleLoader {
   // ========================================
 
   showLoadingScreen() {
-    const screen = document.getElementById("module-loader-screen");
+    const screen = document.getElementById('module-loader-screen');
     if (screen) {
-      screen.style.display = "flex";
+      screen.style.display = 'flex';
     }
   }
 
   hideLoadingScreen() {
-    const screen = document.getElementById("module-loader-screen");
+    const screen = document.getElementById('module-loader-screen');
     if (screen) {
-      screen.style.opacity = "0";
+      screen.style.opacity = '0';
       setTimeout(() => {
-        screen.style.display = "none";
+        screen.style.display = 'none';
       }, 300);
     }
   }
 
   updateLoadingProgress(message, percent) {
-    const progress = document.getElementById("loading-progress");
-    const text = document.getElementById("loading-text");
+    const progress = document.getElementById('loading-progress');
+    const text = document.getElementById('loading-text');
 
     if (progress) {
       progress.style.width = `${percent}%`;
@@ -330,8 +321,8 @@ class ModuleLoader {
   }
 
   showErrorScreen(error) {
-    const screen = document.getElementById("module-loader-screen");
-    const content = screen?.querySelector(".loader-content");
+    const screen = document.getElementById('module-loader-screen');
+    const content = screen?.querySelector('.loader-content');
 
     if (content) {
       content.innerHTML = `
@@ -362,8 +353,8 @@ const moduleLoader = new ModuleLoader();
 /**
  * Auto-start loading when DOM is ready
  */
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", () => {
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
     moduleLoader.loadApplicationModules();
   });
 } else {

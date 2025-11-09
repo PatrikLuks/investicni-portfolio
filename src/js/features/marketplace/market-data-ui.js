@@ -175,7 +175,7 @@ function updateProviderStatus() {
         ${provider.hasApiKey ? ' • API Key Configured' : ''}
       </span>
     </div>
-  `,
+  `
     )
     .join('');
 }
@@ -213,7 +213,7 @@ function addMarketDataWidget() {
   // Initialize status display with provider info
   const statusDiv = widget.querySelector('#marketDataStatus');
   const providers = window.marketDataService?.getProviderStatus?.() || [];
-  
+
   if (providers.length > 0) {
     statusDiv.innerHTML = providers
       .map(
@@ -225,7 +225,7 @@ function addMarketDataWidget() {
           ${provider.hasApiKey ? ' • API Key Configured' : ' (No key needed)'}
         </span>
       </div>
-    `,
+    `
       )
       .join('');
   } else {
@@ -432,7 +432,7 @@ function createSymbolSearchInput(inputElement) {
           <span class="result-name">${result.name}</span>
           <span class="result-type">${result.type}</span>
         </div>
-      `,
+      `
         )
         .join('');
 

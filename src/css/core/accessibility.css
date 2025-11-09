@@ -155,7 +155,7 @@ select {
 /* ==================== DARK MODE ACCESSIBILITY ==================== */
 
 body.dark-mode,
-html[data-theme="dark"] {
+html[data-theme='dark'] {
   /* Ensure sufficient contrast in dark mode */
   --text-primary: #f1f5f9;
   --text-secondary: #cbd5e1;

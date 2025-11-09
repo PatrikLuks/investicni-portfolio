@@ -295,7 +295,7 @@ class AdvancedChartsManager {
             label: 'Zisk/Ztráta',
             data: profitLossData.map((item) => item.profitLoss),
             backgroundColor: profitLossData.map((item) =>
-              item.profitLoss >= 0 ? '#4caf50' : '#f44336',
+              item.profitLoss >= 0 ? '#4caf50' : '#f44336'
             ),
             borderWidth: 0,
           },

@@ -1,7 +1,7 @@
 /**
  * PHASE 4: Real Market Data Integration
  * Real-time stock quotes from Yahoo Finance with multi-provider fallback
- * 
+ *
  * Implementation features:
  * - Live market data fetching
  * - Smart caching (15 minutes)
@@ -87,7 +87,7 @@ class RealMarketDataService {
     for (const [name, config] of providers) {
       try {
         console.log(`[Trying] ${config.name} for ${ticker}`);
-        
+
         if (name === 'yahoo') {
           return await this.fetchFromYahoo(ticker, config);
         } else if (name === 'alphavantage') {
@@ -114,10 +114,10 @@ class RealMarketDataService {
   async fetchFromYahoo(ticker, config) {
     // Option 1: Using CORS proxy (development)
     const url = `${config.corsProxy}https://query1.finance.yahoo.com/v10/finance/quoteSummary/${ticker}?modules=price`;
-    
+
     const response = await fetch(url, {
       headers: {
-        'Origin': window.location.origin,
+        Origin: window.location.origin,
       },
     });
 
@@ -153,7 +153,7 @@ class RealMarketDataService {
     }
 
     const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${ticker}&apikey=${config.apiKey}`;
-    
+
     const response = await fetch(url);
     const data = await response.json();
 
@@ -183,7 +183,7 @@ class RealMarketDataService {
     }
 
     const url = `https://finnhub.io/api/v1/quote?symbol=${ticker}&token=${config.apiKey}`;
-    
+
     const response = await fetch(url);
     const data = await response.json();
 
@@ -210,7 +210,7 @@ class RealMarketDataService {
       AAPL: { price: 234.56, change: 2.34, changePercent: 1.01 },
       GOOGL: { price: 156.78, change: -1.23, changePercent: -0.78 },
       MSFT: { price: 445.23, change: 5.67, changePercent: 1.29 },
-      TSLA: { price: 289.45, change: -8.90, changePercent: -2.98 },
+      TSLA: { price: 289.45, change: -8.9, changePercent: -2.98 },
       AMZN: { price: 198.34, change: 3.21, changePercent: 1.64 },
       META: { price: 567.89, change: 12.34, changePercent: 2.22 },
       NVDA: { price: 876.54, change: -15.67, changePercent: -1.75 },
@@ -261,7 +261,7 @@ class RealMarketDataService {
    * Get multiple quotes
    */
   async getQuotes(tickers) {
-    return Promise.all(tickers.map(ticker => this.getQuote(ticker)));
+    return Promise.all(tickers.map((ticker) => this.getQuote(ticker)));
   }
 
   /**

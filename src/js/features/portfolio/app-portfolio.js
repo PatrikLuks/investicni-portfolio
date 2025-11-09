@@ -39,7 +39,7 @@ function updateFondList() {
                             <button class="delete-btn" onclick="deleteFond(${index})">Smazat</button>
                         </td>
                     </tr>
-                `,
+                `
                   )
                   .join('')}
             </tbody>
@@ -135,23 +135,23 @@ function addNewFund(fundName) {
   try {
     // Get existing portfolio from localStorage
     const existingPortfolio = JSON.parse(localStorage.getItem('investmentPortfolio') || '[]');
-    
+
     // Check if fund already exists
-    const fundExists = existingPortfolio.some(item => item.name === fundName);
+    const fundExists = existingPortfolio.some((item) => item.name === fundName);
     if (fundExists) {
       return; // Fund already in localStorage
     }
-    
+
     // Find the fund in portfolioData
-    const fundData = portfolioData.find(item => item.name === fundName);
+    const fundData = portfolioData.find((item) => item.name === fundName);
     if (!fundData) {
       return; // Fund not found
     }
-    
+
     // Add to localStorage
     existingPortfolio.push(fundData);
     localStorage.setItem('investmentPortfolio', JSON.stringify(existingPortfolio));
-    
+
     console.log(`✅ Fund added to localStorage: ${fundName}`);
   } catch (e) {
     console.error('Failed to add fund to localStorage:', e);
@@ -514,7 +514,7 @@ function generatePortfolioHTML(portfolioData) {
           if (investmentDate.getTime() && investmentDate < currentDateObj) {
             const daysHeld = Math.max(
               1,
-              Math.floor((currentDateObj - investmentDate) / (1000 * 60 * 60 * 24)),
+              Math.floor((currentDateObj - investmentDate) / (1000 * 60 * 60 * 24))
             );
             const yearsHeld = daysHeld / 365;
 
@@ -1626,7 +1626,7 @@ safeAddEventListener('processCSV', 'click', function () {
 
       if (columns.length >= 5) {
         const [name, producer, investmentDate, investment, value] = columns.map((col) =>
-          col.replace(/^"|"$/g, ''),
+          col.replace(/^"|"$/g, '')
         );
         const investmentNum = parseFloat(investment.replace(/\s/g, ''));
         const valueNum = parseFloat(value.replace(/\s/g, ''));
@@ -1808,21 +1808,21 @@ document.addEventListener('DOMContentLoaded', function () {
   // Search functionality
   const tableSearch = document.getElementById('tableSearch');
   const clearSearch = document.getElementById('clearSearch');
-  
+
   if (tableSearch) {
     tableSearch.addEventListener('input', function (e) {
       const searchTerm = e.target.value.toLowerCase().trim();
       const rows = document.querySelectorAll('.fond-table tbody tr');
-      
+
       rows.forEach((row) => {
         const text = row.textContent.toLowerCase();
         row.style.display = text.includes(searchTerm) ? '' : 'none';
       });
-      
+
       clearSearch.style.display = searchTerm ? 'block' : 'none';
     });
   }
-  
+
   if (clearSearch) {
     clearSearch.addEventListener('click', function () {
       tableSearch.value = '';

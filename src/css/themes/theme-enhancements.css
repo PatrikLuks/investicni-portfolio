@@ -10,7 +10,7 @@
 
 button,
 .btn,
-[role="button"] {
+[role='button'] {
   position: relative;
   overflow: hidden;
   font-weight: 600;
@@ -29,7 +29,7 @@ button,
 
 button:hover:not(:disabled),
 .btn:hover:not(:disabled),
-[role="button"]:hover:not(:disabled) {
+[role='button']:hover:not(:disabled) {
   transform: translateY(-3px);
   box-shadow: var(--shadow-lg);
   background-color: var(--color-primary-hover);
@@ -37,7 +37,7 @@ button:hover:not(:disabled),
 
 button:active:not(:disabled),
 .btn:active:not(:disabled),
-[role="button"]:active:not(:disabled) {
+[role='button']:active:not(:disabled) {
   transform: translateY(-1px);
 }
 
@@ -96,7 +96,7 @@ button.btn-danger:hover,
 /* Disabled state */
 button:disabled,
 .btn:disabled,
-[role="button"]:disabled {
+[role='button']:disabled {
   opacity: 0.5;
   cursor: not-allowed;
   transform: none;
@@ -193,7 +193,9 @@ textarea:focus,
 select:focus {
   outline: none;
   border-color: var(--input-border-focus);
-  box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.1), var(--shadow-md);
+  box-shadow:
+    0 0 0 4px rgba(255, 215, 0, 0.1),
+    var(--shadow-md);
   background-color: var(--input-bg);
 }
 
@@ -236,7 +238,7 @@ label:hover {
 
 /* Required indicator */
 label.required::after {
-  content: " *";
+  content: ' *';
   color: var(--color-danger);
   font-weight: 700;
 }
@@ -321,7 +323,12 @@ label.required::after {
    PREMIUM TYPOGRAPHY - Professional text styling
    ============================================================================ */
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: 700;
   letter-spacing: 0.3px;
   margin: 0;
@@ -486,7 +493,8 @@ tbody tr:hover {
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
@@ -507,28 +515,30 @@ tbody tr:hover {
    ELEGANT BLACK THEME - PREMIUM EFFECTS
    ============================================================================ */
 
-html[data-theme="elegant-black"] {
+html[data-theme='elegant-black'] {
   /* Elegant gold gradient for headers */
   --header-gradient: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-  
+
   /* Subtle texture background */
   background-attachment: fixed;
 }
 
-html[data-theme="elegant-black"] h1,
-html[data-theme="elegant-black"] h2,
-html[data-theme="elegant-black"] h3 {
+html[data-theme='elegant-black'] h1,
+html[data-theme='elegant-black'] h2,
+html[data-theme='elegant-black'] h3 {
   background: var(--header-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-html[data-theme="elegant-black"] .premium-glow {
-  box-shadow: 0 0 30px rgba(255, 215, 0, 0.2), inset 0 0 20px rgba(255, 215, 0, 0.05);
+html[data-theme='elegant-black'] .premium-glow {
+  box-shadow:
+    0 0 30px rgba(255, 215, 0, 0.2),
+    inset 0 0 20px rgba(255, 215, 0, 0.05);
 }
 
-html[data-theme="elegant-black"] .premium-highlight {
+html[data-theme='elegant-black'] .premium-highlight {
   border-left: 4px solid #ffd700;
   padding-left: 16px;
 }
@@ -537,11 +547,13 @@ html[data-theme="elegant-black"] .premium-highlight {
    DARK THEME - PREMIUM EFFECTS
    ============================================================================ */
 
-html[data-theme="dark"] .premium-glow {
-  box-shadow: 0 0 20px rgba(96, 165, 250, 0.15), inset 0 0 15px rgba(96, 165, 250, 0.05);
+html[data-theme='dark'] .premium-glow {
+  box-shadow:
+    0 0 20px rgba(96, 165, 250, 0.15),
+    inset 0 0 15px rgba(96, 165, 250, 0.05);
 }
 
-html[data-theme="dark"] .premium-highlight {
+html[data-theme='dark'] .premium-highlight {
   border-left: 4px solid #60a5fa;
   padding-left: 16px;
 }
@@ -550,11 +562,13 @@ html[data-theme="dark"] .premium-highlight {
    LIGHT CLASSIC THEME - PREMIUM EFFECTS
    ============================================================================ */
 
-html[data-theme="light-classic"] .premium-glow {
-  box-shadow: 0 0 15px rgba(37, 99, 235, 0.1), inset 0 0 10px rgba(37, 99, 235, 0.03);
+html[data-theme='light-classic'] .premium-glow {
+  box-shadow:
+    0 0 15px rgba(37, 99, 235, 0.1),
+    inset 0 0 10px rgba(37, 99, 235, 0.03);
 }
 
-html[data-theme="light-classic"] .premium-highlight {
+html[data-theme='light-classic'] .premium-highlight {
   border-left: 4px solid #2563eb;
   padding-left: 16px;
 }
@@ -563,11 +577,13 @@ html[data-theme="light-classic"] .premium-highlight {
    LIGHT MODERN THEME - PREMIUM EFFECTS
    ============================================================================ */
 
-html[data-theme="light-modern"] .premium-glow {
-  box-shadow: 0 0 20px rgba(0, 102, 255, 0.12), inset 0 0 12px rgba(0, 102, 255, 0.04);
+html[data-theme='light-modern'] .premium-glow {
+  box-shadow:
+    0 0 20px rgba(0, 102, 255, 0.12),
+    inset 0 0 12px rgba(0, 102, 255, 0.04);
 }
 
-html[data-theme="light-modern"] .premium-highlight {
+html[data-theme='light-modern'] .premium-highlight {
   border-left: 4px solid #0066ff;
   padding-left: 16px;
 }
@@ -666,8 +682,8 @@ a.skip-link:focus {
    LIGHT THEME CONTRAST FIXES - MAXIMUM CONTRAST FOR LIGHT THEMES
    ============================================================================ */
 
-html[data-theme="light-classic"],
-html[data-theme="light-modern"] {
+html[data-theme='light-classic'],
+html[data-theme='light-modern'] {
   /* Enforce strong text contrast - override everything */
   color: #000000 !important;
   --text-primary: #000000 !important;
@@ -677,133 +693,133 @@ html[data-theme="light-modern"] {
 }
 
 /* Force black text on all elements */
-html[data-theme="light-classic"] body,
-html[data-theme="light-modern"] body {
+html[data-theme='light-classic'] body,
+html[data-theme='light-modern'] body {
   color: #000000 !important;
   background-color: #ffffff !important;
 }
 
 /* All text elements - strong contrast */
-html[data-theme="light-classic"] p,
-html[data-theme="light-modern"] p,
-html[data-theme="light-classic"] span,
-html[data-theme="light-modern"] span,
-html[data-theme="light-classic"] div,
-html[data-theme="light-modern"] div,
-html[data-theme="light-classic"] li,
-html[data-theme="light-modern"] li {
+html[data-theme='light-classic'] p,
+html[data-theme='light-modern'] p,
+html[data-theme='light-classic'] span,
+html[data-theme='light-modern'] span,
+html[data-theme='light-classic'] div,
+html[data-theme='light-modern'] div,
+html[data-theme='light-classic'] li,
+html[data-theme='light-modern'] li {
   color: inherit !important;
 }
 
 /* Headings - always black on light background */
-html[data-theme="light-classic"] h1,
-html[data-theme="light-modern"] h1,
-html[data-theme="light-classic"] h2,
-html[data-theme="light-modern"] h2,
-html[data-theme="light-classic"] h3,
-html[data-theme="light-modern"] h3,
-html[data-theme="light-classic"] h4,
-html[data-theme="light-modern"] h4,
-html[data-theme="light-classic"] h5,
-html[data-theme="light-modern"] h5,
-html[data-theme="light-classic"] h6,
-html[data-theme="light-modern"] h6 {
+html[data-theme='light-classic'] h1,
+html[data-theme='light-modern'] h1,
+html[data-theme='light-classic'] h2,
+html[data-theme='light-modern'] h2,
+html[data-theme='light-classic'] h3,
+html[data-theme='light-modern'] h3,
+html[data-theme='light-classic'] h4,
+html[data-theme='light-modern'] h4,
+html[data-theme='light-classic'] h5,
+html[data-theme='light-modern'] h5,
+html[data-theme='light-classic'] h6,
+html[data-theme='light-modern'] h6 {
   color: #000000 !important;
   font-weight: 700 !important;
 }
 
 /* Labels - strong contrast */
-html[data-theme="light-classic"] label,
-html[data-theme="light-modern"] label,
-html[data-theme="light-classic"] .label,
-html[data-theme="light-modern"] .label {
+html[data-theme='light-classic'] label,
+html[data-theme='light-modern'] label,
+html[data-theme='light-classic'] .label,
+html[data-theme='light-modern'] .label {
   color: #000000 !important;
   font-weight: 600 !important;
 }
 
 /* Secondary text - still black but slightly muted */
-html[data-theme="light-classic"] .text-muted,
-html[data-theme="light-modern"] .text-muted,
-html[data-theme="light-classic"] .text-secondary,
-html[data-theme="light-modern"] .text-secondary,
-html[data-theme="light-classic"] .subtitle,
-html[data-theme="light-modern"] .subtitle,
-html[data-theme="light-classic"] .description,
-html[data-theme="light-modern"] .description {
+html[data-theme='light-classic'] .text-muted,
+html[data-theme='light-modern'] .text-muted,
+html[data-theme='light-classic'] .text-secondary,
+html[data-theme='light-modern'] .text-secondary,
+html[data-theme='light-classic'] .subtitle,
+html[data-theme='light-modern'] .subtitle,
+html[data-theme='light-classic'] .description,
+html[data-theme='light-modern'] .description {
   color: #1a1a1a !important;
   font-weight: 500 !important;
 }
 
 /* Table elements - maximum contrast */
-html[data-theme="light-classic"] td,
-html[data-theme="light-modern"] td,
-html[data-theme="light-classic"] th,
-html[data-theme="light-modern"] th,
-html[data-theme="light-classic"] tr,
-html[data-theme="light-modern"] tr {
+html[data-theme='light-classic'] td,
+html[data-theme='light-modern'] td,
+html[data-theme='light-classic'] th,
+html[data-theme='light-modern'] th,
+html[data-theme='light-classic'] tr,
+html[data-theme='light-modern'] tr {
   color: #000000 !important;
 }
 
-html[data-theme="light-classic"] thead th,
-html[data-theme="light-modern"] thead th {
+html[data-theme='light-classic'] thead th,
+html[data-theme='light-modern'] thead th {
   background-color: var(--bg-secondary) !important;
   color: #000000 !important;
 }
 
-html[data-theme="light-classic"] tbody td,
-html[data-theme="light-modern"] tbody td {
+html[data-theme='light-classic'] tbody td,
+html[data-theme='light-modern'] tbody td {
   color: #000000 !important;
 }
 
 /* Stat and metric labels */
-html[data-theme="light-classic"] .stat-label,
-html[data-theme="light-modern"] .stat-label,
-html[data-theme="light-classic"] .metric-label,
-html[data-theme="light-modern"] .metric-label,
-html[data-theme="light-classic"] .value,
-html[data-theme="light-modern"] .value,
-html[data-theme="light-classic"] .kpi-card .label,
-html[data-theme="light-modern"] .kpi-card .label {
+html[data-theme='light-classic'] .stat-label,
+html[data-theme='light-modern'] .stat-label,
+html[data-theme='light-classic'] .metric-label,
+html[data-theme='light-modern'] .metric-label,
+html[data-theme='light-classic'] .value,
+html[data-theme='light-modern'] .value,
+html[data-theme='light-classic'] .kpi-card .label,
+html[data-theme='light-modern'] .kpi-card .label {
   color: #000000 !important;
   font-weight: 600 !important;
 }
 
 /* Help text - readable */
-html[data-theme="light-classic"] .help-text,
-html[data-theme="light-modern"] .help-text,
-html[data-theme="light-classic"] .helper-text,
-html[data-theme="light-modern"] .helper-text,
-html[data-theme="light-classic"] small,
-html[data-theme="light-modern"] small {
+html[data-theme='light-classic'] .help-text,
+html[data-theme='light-modern'] .help-text,
+html[data-theme='light-classic'] .helper-text,
+html[data-theme='light-modern'] .helper-text,
+html[data-theme='light-classic'] small,
+html[data-theme='light-modern'] small {
   color: #333333 !important;
   font-weight: 500 !important;
 }
 
 /* Input elements - max contrast */
-html[data-theme="light-classic"] input,
-html[data-theme="light-modern"] input,
-html[data-theme="light-classic"] textarea,
-html[data-theme="light-modern"] textarea,
-html[data-theme="light-classic"] select,
-html[data-theme="light-modern"] select {
+html[data-theme='light-classic'] input,
+html[data-theme='light-modern'] input,
+html[data-theme='light-classic'] textarea,
+html[data-theme='light-modern'] textarea,
+html[data-theme='light-classic'] select,
+html[data-theme='light-modern'] select {
   color: #000000 !important;
   background-color: #ffffff !important;
   border-color: #8899b3 !important;
 }
 
-html[data-theme="light-classic"] input::placeholder,
-html[data-theme="light-modern"] input::placeholder,
-html[data-theme="light-classic"] textarea::placeholder,
-html[data-theme="light-modern"] textarea::placeholder {
+html[data-theme='light-classic'] input::placeholder,
+html[data-theme='light-modern'] input::placeholder,
+html[data-theme='light-classic'] textarea::placeholder,
+html[data-theme='light-modern'] textarea::placeholder {
   color: #666666 !important;
   opacity: 0.9 !important;
 }
 
 /* Button text always white */
-html[data-theme="light-classic"] button,
-html[data-theme="light-modern"] button,
-html[data-theme="light-classic"] .btn,
-html[data-theme="light-modern"] .btn {
+html[data-theme='light-classic'] button,
+html[data-theme='light-modern'] button,
+html[data-theme='light-classic'] .btn,
+html[data-theme='light-modern'] .btn {
   color: #ffffff !important;
   font-weight: 600 !important;
   background-color: var(--color-primary) !important;
@@ -811,100 +827,100 @@ html[data-theme="light-modern"] .btn {
 }
 
 /* Links - use primary color */
-html[data-theme="light-classic"] a,
-html[data-theme="light-modern"] a {
+html[data-theme='light-classic'] a,
+html[data-theme='light-modern'] a {
   color: var(--color-primary) !important;
   text-decoration: none;
 }
 
-html[data-theme="light-classic"] a:hover,
-html[data-theme="light-modern"] a:hover {
+html[data-theme='light-classic'] a:hover,
+html[data-theme='light-modern'] a:hover {
   color: var(--color-primary-hover) !important;
   text-decoration: underline;
 }
 
 /* Badges - white text */
-html[data-theme="light-classic"] .badge,
-html[data-theme="light-modern"] .badge,
-html[data-theme="light-classic"] .tag,
-html[data-theme="light-modern"] .tag {
+html[data-theme='light-classic'] .badge,
+html[data-theme='light-modern'] .badge,
+html[data-theme='light-classic'] .tag,
+html[data-theme='light-modern'] .tag {
   color: #ffffff !important;
   font-weight: 600 !important;
 }
 
 /* Alerts - max contrast */
-html[data-theme="light-classic"] .alert,
-html[data-theme="light-modern"] .alert {
+html[data-theme='light-classic'] .alert,
+html[data-theme='light-modern'] .alert {
   color: #000000 !important;
 }
 
 /* Cards - white background, black text */
-html[data-theme="light-classic"] .card,
-html[data-theme="light-modern"] .card,
-html[data-theme="light-classic"] .modal-content,
-html[data-theme="light-modern"] .modal-content,
-html[data-theme="light-classic"] .form-section,
-html[data-theme="light-modern"] .form-section {
+html[data-theme='light-classic'] .card,
+html[data-theme='light-modern'] .card,
+html[data-theme='light-classic'] .modal-content,
+html[data-theme='light-modern'] .modal-content,
+html[data-theme='light-classic'] .form-section,
+html[data-theme='light-modern'] .form-section {
   background-color: #ffffff !important;
   color: #000000 !important;
 }
 
 /* Portfolio-specific elements */
-html[data-theme="light-classic"] .portfolio-name,
-html[data-theme="light-modern"] .portfolio-name,
-html[data-theme="light-classic"] .fund-name,
-html[data-theme="light-modern"] .fund-name,
-html[data-theme="light-classic"] .investment-name,
-html[data-theme="light-modern"] .investment-name,
-html[data-theme="light-classic"] .amount,
-html[data-theme="light-modern"] .amount,
-html[data-theme="light-classic"] .price,
-html[data-theme="light-modern"] .price,
-html[data-theme="light-classic"] .percentage,
-html[data-theme="light-modern"] .percentage {
+html[data-theme='light-classic'] .portfolio-name,
+html[data-theme='light-modern'] .portfolio-name,
+html[data-theme='light-classic'] .fund-name,
+html[data-theme='light-modern'] .fund-name,
+html[data-theme='light-classic'] .investment-name,
+html[data-theme='light-modern'] .investment-name,
+html[data-theme='light-classic'] .amount,
+html[data-theme='light-modern'] .amount,
+html[data-theme='light-classic'] .price,
+html[data-theme='light-modern'] .price,
+html[data-theme='light-classic'] .percentage,
+html[data-theme='light-modern'] .percentage {
   color: #000000 !important;
   font-weight: 600 !important;
 }
 
 /* Market data & charts */
-html[data-theme="light-classic"] .market-data,
-html[data-theme="light-modern"] .market-data,
-html[data-theme="light-classic"] .chart-label,
-html[data-theme="light-modern"] .chart-label,
-html[data-theme="light-classic"] .chart-tooltip,
-html[data-theme="light-modern"] .chart-tooltip {
+html[data-theme='light-classic'] .market-data,
+html[data-theme='light-modern'] .market-data,
+html[data-theme='light-classic'] .chart-label,
+html[data-theme='light-modern'] .chart-label,
+html[data-theme='light-classic'] .chart-tooltip,
+html[data-theme='light-modern'] .chart-tooltip {
   color: #000000 !important;
 }
 
 /* Remove text shadow and opacity from text elements */
-html[data-theme="light-classic"] *,
-html[data-theme="light-modern"] * {
+html[data-theme='light-classic'] *,
+html[data-theme='light-modern'] * {
   text-shadow: none !important;
 }
 
 /* Preserve placeholder opacity */
-html[data-theme="light-classic"] input::placeholder,
-html[data-theme="light-modern"] input::placeholder,
-html[data-theme="light-classic"] textarea::placeholder,
-html[data-theme="light-modern"] textarea::placeholder {
+html[data-theme='light-classic'] input::placeholder,
+html[data-theme='light-modern'] input::placeholder,
+html[data-theme='light-classic'] textarea::placeholder,
+html[data-theme='light-modern'] textarea::placeholder {
   opacity: 0.9 !important;
 }
 
 /* Scrollbars dark for light themes */
-html[data-theme="light-classic"] {
+html[data-theme='light-classic'] {
   scrollbar-color: #001a4d #ffffff;
 }
 
-html[data-theme="light-modern"] {
+html[data-theme='light-modern'] {
   scrollbar-color: #001a4d #ffffff;
 }
 
-html[data-theme="light-classic"]::-webkit-scrollbar-thumb,
-html[data-theme="light-modern"]::-webkit-scrollbar-thumb {
+html[data-theme='light-classic']::-webkit-scrollbar-thumb,
+html[data-theme='light-modern']::-webkit-scrollbar-thumb {
   background: #001a4d !important;
 }
 
-html[data-theme="light-classic"]::-webkit-scrollbar-track,
-html[data-theme="light-modern"]::-webkit-scrollbar-track {
+html[data-theme='light-classic']::-webkit-scrollbar-track,
+html[data-theme='light-modern']::-webkit-scrollbar-track {
   background: #ffffff !important;
 }

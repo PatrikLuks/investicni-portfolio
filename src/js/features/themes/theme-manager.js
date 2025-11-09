@@ -77,7 +77,7 @@ class ThemeManager {
       'elegant-black-mode'
     );
     document.body.classList.add(`theme-${effectiveTheme}`);
-    
+
     // Add theme-type classes for CSS compatibility
     const isDark = ['elegant-black', 'dark'].includes(effectiveTheme);
     if (isDark) {
@@ -111,7 +111,7 @@ class ThemeManager {
     window.dispatchEvent(
       new CustomEvent('themechange', {
         detail: { theme: effectiveTheme },
-      }),
+      })
     );
   }
 
@@ -130,7 +130,7 @@ class ThemeManager {
   createThemeToggle() {
     // Use existing toggle button from HTML
     const toggle = document.getElementById('darkModeToggle');
-    
+
     if (!toggle) {
       console.warn('Theme toggle button #darkModeToggle not found in HTML');
       return;
@@ -141,13 +141,13 @@ class ThemeManager {
     toggle.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
-      
+
       // Prevent double-click toggling
       if (isToggling) return;
       isToggling = true;
 
       const newTheme = this.toggleTheme();
-      
+
       // Update icon immediately
       this.updateToggleIcon(toggle, newTheme);
 
@@ -271,7 +271,7 @@ class ThemeManager {
       [this.THEMES.LIGHT_CLASSIC]: '☀️',
       [this.THEMES.LIGHT_MODERN]: '💡',
     };
-    
+
     button.textContent = icons[theme] || '⬛';
     button.title = `${this.THEME_LABELS[theme]} - Klikni pro cyklování • Pravý klik pro menu`;
   }

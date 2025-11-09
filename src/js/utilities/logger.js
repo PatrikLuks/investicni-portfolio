@@ -18,35 +18,29 @@
  */
 const DEBUG = (() => {
   // Check environment variables
-  if (
-    typeof process !== "undefined" &&
-    process.env &&
-    process.env.NODE_ENV === "production"
-  ) {
+  if (typeof process !== 'undefined' && process.env && process.env.NODE_ENV === 'production') {
     return false;
   }
 
   // Check URL query parameter (?debug=true)
-  if (typeof window !== "undefined" && window.location) {
+  if (typeof window !== 'undefined' && window.location) {
     const params = new URLSearchParams(window.location.search);
-    if (params.has("debug")) {
-      return params.get("debug") === "true";
+    if (params.has('debug')) {
+      return params.get('debug') === 'true';
     }
   }
 
   // Check localStorage preference
-  if (typeof localStorage !== "undefined") {
-    const stored = localStorage.getItem("app-debug");
+  if (typeof localStorage !== 'undefined') {
+    const stored = localStorage.getItem('app-debug');
     if (stored !== null) {
-      return stored === "true";
+      return stored === 'true';
     }
   }
 
   // Default: development mode has debug logs, production doesn't
   // In Vite dev server: use debug, in built version: no debug
-  return (
-    typeof import.meta !== "undefined" && import.meta.env && import.meta.env.DEV
-  );
+  return typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.DEV;
 })();
 
 /**
@@ -55,7 +49,7 @@ const DEBUG = (() => {
  */
 function logInfo(...args) {
   if (DEBUG) {
-    console.log("[DEBUG]", ...args);
+    console.log('[DEBUG]', ...args);
   }
 }
 
@@ -65,7 +59,7 @@ function logInfo(...args) {
  */
 function logDebug(...args) {
   if (DEBUG) {
-    console.debug("[DEBUG]", ...args);
+    console.debug('[DEBUG]', ...args);
   }
 }
 
@@ -74,7 +68,7 @@ function logDebug(...args) {
  * @param {...any} args - Arguments to log
  */
 function logWarn(...args) {
-  console.warn("[WARNING]", ...args);
+  console.warn('[WARNING]', ...args);
 }
 
 /**
@@ -82,7 +76,7 @@ function logWarn(...args) {
  * @param {...any} args - Arguments to log
  */
 function logError(...args) {
-  console.error("[ERROR]", ...args);
+  console.error('[ERROR]', ...args);
 }
 
 /**
@@ -90,8 +84,8 @@ function logError(...args) {
  * @param {boolean} enabled - Enable or disable debug mode
  */
 function setDebugMode(enabled) {
-  if (typeof localStorage !== "undefined") {
-    localStorage.setItem("app-debug", enabled ? "true" : "false");
+  if (typeof localStorage !== 'undefined') {
+    localStorage.setItem('app-debug', enabled ? 'true' : 'false');
   }
   location.reload();
 }
@@ -104,12 +98,4 @@ function isDebugMode() {
   return DEBUG;
 }
 
-export {
-  DEBUG,
-  logInfo,
-  logDebug,
-  logWarn,
-  logError,
-  setDebugMode,
-  isDebugMode,
-};
+export { DEBUG, logInfo, logDebug, logWarn, logError, setDebugMode, isDebugMode };

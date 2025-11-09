@@ -4,7 +4,7 @@
     <!-- PROPRIETARY SOFTWARE NOTICE: © 2025 Portfolio Manager Pro. All Rights Reserved. -->
     <!-- This software is proprietary and confidential. Unauthorized use is prohibited. -->
     <!-- See LICENSE file for complete license terms. -->
-    
+
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
@@ -43,25 +43,27 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
+      function gtag() {
+        dataLayer.push(arguments);
+      }
       gtag('js', new Date());
       gtag('config', 'G-XXXXXXXXXX', {
-        'cookie_flags': 'SameSite=None;Secure',
-        'anonymize_ip': true,
-        'allow_google_signals': false
+        cookie_flags: 'SameSite=None;Secure',
+        anonymize_ip: true,
+        allow_google_signals: false,
       });
-      
+
       // Track page views
       gtag('event', 'page_view', {
-        'page_path': window.location.pathname,
-        'page_title': document.title
+        page_path: window.location.pathname,
+        page_title: document.title,
       });
-      
+
       // Track feature usage
-      window.trackEvent = function(eventName, eventParams = {}) {
+      window.trackEvent = function (eventName, eventParams = {}) {
         gtag('event', eventName, {
-          'event_category': 'portfolio_app',
-          ...eventParams
+          event_category: 'portfolio_app',
+          ...eventParams,
         });
       };
     </script>
@@ -1517,10 +1519,34 @@
           </div>
         </div>
         <div class="color-picker">
-          <button type="button" class="scheme-button blue-scheme" aria-label="Nastavit modré barevné schéma grafu">Modrá</button>
-          <button type="button" class="scheme-button red-scheme" aria-label="Nastavit červené barevné schéma grafu">Červená</button>
-          <button type="button" class="scheme-button green-scheme" aria-label="Nastavit zelené barevné schéma grafu">Zelená</button>
-          <button type="button" class="scheme-button yellow-scheme" aria-label="Nastavit žluté barevné schéma grafu">Žlutá</button>
+          <button
+            type="button"
+            class="scheme-button blue-scheme"
+            aria-label="Nastavit modré barevné schéma grafu"
+          >
+            Modrá
+          </button>
+          <button
+            type="button"
+            class="scheme-button red-scheme"
+            aria-label="Nastavit červené barevné schéma grafu"
+          >
+            Červená
+          </button>
+          <button
+            type="button"
+            class="scheme-button green-scheme"
+            aria-label="Nastavit zelené barevné schéma grafu"
+          >
+            Zelená
+          </button>
+          <button
+            type="button"
+            class="scheme-button yellow-scheme"
+            aria-label="Nastavit žluté barevné schéma grafu"
+          >
+            Žlutá
+          </button>
         </div>
         <div class="currency-switch">
           <label class="checkbox-label">
@@ -1626,7 +1652,14 @@
           </div>
           <div class="button-group">
             <button type="submit" aria-label="Přidat nový fond do portfolia">Přidat fond</button>
-            <button type="button" id="generateReport" class="secondary" aria-label="Generovat PDF report portfolia">Generovat report</button>
+            <button
+              type="button"
+              id="generateReport"
+              class="secondary"
+              aria-label="Generovat PDF report portfolia"
+            >
+              Generovat report
+            </button>
             <button
               type="button"
               id="exportExcel"
@@ -1641,8 +1674,22 @@
       </div>
       <div class="card" id="fondListCard" style="display: none">
         <div class="view-switch" style="display: flex; gap: 10px; margin-bottom: 16px">
-          <button id="switchFunds" class="switch-btn active" type="button" aria-label="Zobrazit seznam fondů">Fondy</button>
-          <button id="switchProducers" class="switch-btn" type="button" aria-label="Zobrazit seznam producentů">Producenti</button>
+          <button
+            id="switchFunds"
+            class="switch-btn active"
+            type="button"
+            aria-label="Zobrazit seznam fondů"
+          >
+            Fondy
+          </button>
+          <button
+            id="switchProducers"
+            class="switch-btn"
+            type="button"
+            aria-label="Zobrazit seznam producentů"
+          >
+            Producenti
+          </button>
         </div>
         <h2>Přidané fondy</h2>
 
@@ -1650,9 +1697,23 @@
         <div class="bulk-actions-bar" id="bulkActionsBar">
           <div class="bulk-actions-info"><span id="selectedCount">0</span> vybraných fondů</div>
           <div class="bulk-actions-buttons">
-            <button class="bulk-action-btn" id="bulkExport" aria-label="Exportovat vybrané fondy do CSV">📥 Export vybraných</button>
-            <button class="bulk-action-btn danger" id="bulkDelete" aria-label="Smazat vybrané fondy">🗑️ Smazat vybrané</button>
-            <button class="bulk-action-btn" id="bulkDeselect" aria-label="Zrušit výběr fondů">✕ Zrušit výběr</button>
+            <button
+              class="bulk-action-btn"
+              id="bulkExport"
+              aria-label="Exportovat vybrané fondy do CSV"
+            >
+              📥 Export vybraných
+            </button>
+            <button
+              class="bulk-action-btn danger"
+              id="bulkDelete"
+              aria-label="Smazat vybrané fondy"
+            >
+              🗑️ Smazat vybrané
+            </button>
+            <button class="bulk-action-btn" id="bulkDeselect" aria-label="Zrušit výběr fondů">
+              ✕ Zrušit výběr
+            </button>
           </div>
         </div>
 
@@ -1665,7 +1726,9 @@
               placeholder="Hledat podle názvu nebo producenta..."
               aria-label="Vyhledat fond podle názvu nebo producenta"
             />
-            <button class="clear-search" id="clearSearch" aria-label="Vymazat vyhledávání">×</button>
+            <button class="clear-search" id="clearSearch" aria-label="Vymazat vyhledávání">
+              ×
+            </button>
           </div>
         </div>
 
@@ -1681,11 +1744,29 @@
         <table class="fond-table" id="fondTable">
           <thead id="fondTableHead">
             <tr>
-              <th class="sortable" data-column="name" aria-label="Seřadit podle názvu fondu">Název fondu</th>
-              <th class="sortable" data-column="producer" aria-label="Seřadit podle producenta">Producent</th>
-              <th class="sortable" data-column="investmentDate" aria-label="Seřadit podle data investice">Datum investice</th>
-              <th class="sortable" data-column="investment" aria-label="Seřadit podle čisté investice">Čistá investice</th>
-              <th class="sortable" data-column="value" aria-label="Seřadit podle aktuální hodnoty">Aktuální hodnota</th>
+              <th class="sortable" data-column="name" aria-label="Seřadit podle názvu fondu">
+                Název fondu
+              </th>
+              <th class="sortable" data-column="producer" aria-label="Seřadit podle producenta">
+                Producent
+              </th>
+              <th
+                class="sortable"
+                data-column="investmentDate"
+                aria-label="Seřadit podle data investice"
+              >
+                Datum investice
+              </th>
+              <th
+                class="sortable"
+                data-column="investment"
+                aria-label="Seřadit podle čisté investice"
+              >
+                Čistá investice
+              </th>
+              <th class="sortable" data-column="value" aria-label="Seřadit podle aktuální hodnoty">
+                Aktuální hodnota
+              </th>
               <th>Akce</th>
             </tr>
           </thead>
@@ -1748,10 +1829,11 @@
       // ✅ SERVICE WORKER ENABLED for production deployment
       if ('serviceWorker' in navigator) {
         // Only register Service Worker in production, skip in dev mode (localhost/Vite)
-        const isDev = window.location.hostname === 'localhost' || 
-                      window.location.hostname === '127.0.0.1' ||
-                      window.location.hostname === '::1';
-        
+        const isDev =
+          window.location.hostname === 'localhost' ||
+          window.location.hostname === '127.0.0.1' ||
+          window.location.hostname === '::1';
+
         if (!isDev) {
           window.addEventListener('load', () => {
             // Register V3 service worker with aggressive caching
@@ -1777,7 +1859,7 @@
                           () => {
                             newWorker.postMessage({ action: 'SKIP_WAITING' });
                             window.location.reload();
-                          },
+                          }
                         );
                       }
                     }
@@ -1924,7 +2006,6 @@
 
     <!-- 🚀 ARCHITECTURE: All scripts loaded via main.js ES6 module system -->
     <!-- See src/js/loaders/legacy-modules-loader.js for module loading -->
-
 
     <!-- Initialize Theme Manager (after all scripts are loaded) -->
     <script>

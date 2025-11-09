@@ -28,141 +28,133 @@ class DataValidationManager {
   defineSchema() {
     return {
       fond: {
-        type: "string",
+        type: 'string',
         required: true,
         minLength: 1,
         maxLength: 200,
         pattern: /^[a-zA-Z0-9\s\-\_\(\)\.]+$/,
         messages: {
-          required: "Název fondu je povinný",
-          minLength: "Název fondu nesmí být prázdný",
-          maxLength: "Název fondu je příliš dlouhý (max 200 znaků)",
-          pattern: "Název fondu obsahuje nepovolené znaky",
+          required: 'Název fondu je povinný',
+          minLength: 'Název fondu nesmí být prázdný',
+          maxLength: 'Název fondu je příliš dlouhý (max 200 znaků)',
+          pattern: 'Název fondu obsahuje nepovolené znaky',
         },
       },
       kategorie: {
-        type: "string",
+        type: 'string',
         required: true,
-        enum: [
-          "Akcie",
-          "Dluhopisy",
-          "Komodity",
-          "Nemovitosti",
-          "Hotovost",
-          "Jiné",
-        ],
+        enum: ['Akcie', 'Dluhopisy', 'Komodity', 'Nemovitosti', 'Hotovost', 'Jiné'],
         messages: {
-          required: "Kategorie je povinná",
-          enum: "Neplatná kategorie",
+          required: 'Kategorie je povinná',
+          enum: 'Neplatná kategorie',
         },
       },
       ticker: {
-        type: "string",
+        type: 'string',
         required: false,
         minLength: 1,
         maxLength: 20,
         pattern: /^[A-Z0-9\.\-]+$/,
         messages: {
-          maxLength: "Ticker je příliš dlouhý (max 20 znaků)",
-          pattern:
-            "Ticker musí obsahovat pouze velká písmena, čísla, tečky a pomlčky",
+          maxLength: 'Ticker je příliš dlouhý (max 20 znaků)',
+          pattern: 'Ticker musí obsahovat pouze velká písmena, čísla, tečky a pomlčky',
         },
       },
       aktuálníCena: {
-        type: "number",
+        type: 'number',
         required: true,
         min: 0,
         max: 1000000000,
         precision: 2,
         messages: {
-          required: "Aktuální cena je povinná",
-          type: "Cena musí být číslo",
-          min: "Cena nesmí být záporná",
-          max: "Cena je příliš vysoká",
+          required: 'Aktuální cena je povinná',
+          type: 'Cena musí být číslo',
+          min: 'Cena nesmí být záporná',
+          max: 'Cena je příliš vysoká',
         },
       },
       počet: {
-        type: "number",
+        type: 'number',
         required: true,
         min: 0.000001,
         max: 1000000000,
         messages: {
-          required: "Počet je povinný",
-          type: "Počet musí být číslo",
-          min: "Počet musí být kladný",
-          max: "Počet je příliš vysoký",
+          required: 'Počet je povinný',
+          type: 'Počet musí být číslo',
+          min: 'Počet musí být kladný',
+          max: 'Počet je příliš vysoký',
         },
       },
       nákupníCena: {
-        type: "number",
+        type: 'number',
         required: true,
         min: 0,
         max: 1000000000,
         precision: 2,
         messages: {
-          required: "Nákupní cena je povinná",
-          type: "Cena musí být číslo",
-          min: "Cena nesmí být záporná",
-          max: "Cena je příliš vysoká",
+          required: 'Nákupní cena je povinná',
+          type: 'Cena musí být číslo',
+          min: 'Cena nesmí být záporná',
+          max: 'Cena je příliš vysoká',
         },
       },
       aktuálníHodnota: {
-        type: "number",
+        type: 'number',
         required: true,
         min: 0,
         computed: true,
         messages: {
-          required: "Aktuální hodnota je povinná",
-          type: "Hodnota musí být číslo",
-          min: "Hodnota nesmí být záporná",
+          required: 'Aktuální hodnota je povinná',
+          type: 'Hodnota musí být číslo',
+          min: 'Hodnota nesmí být záporná',
         },
       },
       změnaProcenta: {
-        type: "number",
+        type: 'number',
         required: true,
         min: -100,
         max: 100000,
         precision: 2,
         computed: true,
         messages: {
-          type: "Změna musí být číslo",
-          min: "Změna je příliš nízká",
-          max: "Změna je příliš vysoká",
+          type: 'Změna musí být číslo',
+          min: 'Změna je příliš nízká',
+          max: 'Změna je příliš vysoká',
         },
       },
       měna: {
-        type: "string",
+        type: 'string',
         required: true,
-        enum: ["CZK", "EUR", "USD", "GBP"],
-        default: "CZK",
+        enum: ['CZK', 'EUR', 'USD', 'GBP'],
+        default: 'CZK',
         messages: {
-          required: "Měna je povinná",
-          enum: "Neplatná měna",
+          required: 'Měna je povinná',
+          enum: 'Neplatná měna',
         },
       },
       datumNákupu: {
-        type: "date",
+        type: 'date',
         required: false,
-        maxDate: "today",
+        maxDate: 'today',
         messages: {
-          type: "Neplatné datum",
-          maxDate: "Datum nákupu nemůže být v budoucnosti",
+          type: 'Neplatné datum',
+          maxDate: 'Datum nákupu nemůže být v budoucnosti',
         },
       },
       poznámka: {
-        type: "string",
+        type: 'string',
         required: false,
         maxLength: 500,
         messages: {
-          maxLength: "Poznámka je příliš dlouhá (max 500 znaků)",
+          maxLength: 'Poznámka je příliš dlouhá (max 500 znaků)',
         },
       },
       správce: {
-        type: "string",
+        type: 'string',
         required: false,
         maxLength: 100,
         messages: {
-          maxLength: "Název správce je příliš dlouhý (max 100 znaků)",
+          maxLength: 'Název správce je příliš dlouhý (max 100 znaků)',
         },
       },
     };
@@ -184,100 +176,78 @@ class DataValidationManager {
     const errors = [];
 
     // Required validation
-    if (
-      fieldSchema.required &&
-      (value === null || value === undefined || value === "")
-    ) {
-      errors.push(
-        fieldSchema.messages.required || `${fieldName} je povinné pole`,
-      );
+    if (fieldSchema.required && (value === null || value === undefined || value === '')) {
+      errors.push(fieldSchema.messages.required || `${fieldName} je povinné pole`);
       return { valid: false, errors };
     }
 
     // Skip further validation if not required and empty
-    if (
-      !fieldSchema.required &&
-      (value === null || value === undefined || value === "")
-    ) {
+    if (!fieldSchema.required && (value === null || value === undefined || value === '')) {
       return { valid: true, errors: [] };
     }
 
     // Type validation
     const actualType = this.getType(value);
     if (fieldSchema.type !== actualType) {
-      errors.push(
-        fieldSchema.messages.type ||
-          `${fieldName} musí být typu ${fieldSchema.type}`,
-      );
+      errors.push(fieldSchema.messages.type || `${fieldName} musí být typu ${fieldSchema.type}`);
       return { valid: false, errors };
     }
 
     // String validations
-    if (fieldSchema.type === "string") {
+    if (fieldSchema.type === 'string') {
       if (fieldSchema.minLength && value.length < fieldSchema.minLength) {
         errors.push(
-          fieldSchema.messages.minLength ||
-            `Minimální délka je ${fieldSchema.minLength}`,
+          fieldSchema.messages.minLength || `Minimální délka je ${fieldSchema.minLength}`,
         );
       }
       if (fieldSchema.maxLength && value.length > fieldSchema.maxLength) {
         errors.push(
-          fieldSchema.messages.maxLength ||
-            `Maximální délka je ${fieldSchema.maxLength}`,
+          fieldSchema.messages.maxLength || `Maximální délka je ${fieldSchema.maxLength}`,
         );
       }
       if (fieldSchema.pattern && !fieldSchema.pattern.test(value)) {
-        errors.push(fieldSchema.messages.pattern || "Neplatný formát");
+        errors.push(fieldSchema.messages.pattern || 'Neplatný formát');
       }
       if (fieldSchema.enum && !fieldSchema.enum.includes(value)) {
         errors.push(
-          fieldSchema.messages.enum ||
-            `Povolené hodnoty: ${fieldSchema.enum.join(", ")}`,
+          fieldSchema.messages.enum || `Povolené hodnoty: ${fieldSchema.enum.join(', ')}`,
         );
       }
     }
 
     // Number validations
-    if (fieldSchema.type === "number") {
+    if (fieldSchema.type === 'number') {
       const numValue = parseFloat(value);
 
       if (isNaN(numValue)) {
-        errors.push(fieldSchema.messages.type || "Musí být číslo");
+        errors.push(fieldSchema.messages.type || 'Musí být číslo');
         return { valid: false, errors };
       }
 
       if (fieldSchema.min !== undefined && numValue < fieldSchema.min) {
-        errors.push(
-          fieldSchema.messages.min || `Minimální hodnota je ${fieldSchema.min}`,
-        );
+        errors.push(fieldSchema.messages.min || `Minimální hodnota je ${fieldSchema.min}`);
       }
       if (fieldSchema.max !== undefined && numValue > fieldSchema.max) {
-        errors.push(
-          fieldSchema.messages.max || `Maximální hodnota je ${fieldSchema.max}`,
-        );
+        errors.push(fieldSchema.messages.max || `Maximální hodnota je ${fieldSchema.max}`);
       }
       if (fieldSchema.precision !== undefined) {
-        const decimalPlaces = (value.toString().split(".")[1] || "").length;
+        const decimalPlaces = (value.toString().split('.')[1] || '').length;
         if (decimalPlaces > fieldSchema.precision) {
-          errors.push(
-            `Maximální počet desetinných míst je ${fieldSchema.precision}`,
-          );
+          errors.push(`Maximální počet desetinných míst je ${fieldSchema.precision}`);
         }
       }
     }
 
     // Date validations
-    if (fieldSchema.type === "date") {
+    if (fieldSchema.type === 'date') {
       const date = new Date(value);
       if (isNaN(date.getTime())) {
-        errors.push(fieldSchema.messages.type || "Neplatné datum");
+        errors.push(fieldSchema.messages.type || 'Neplatné datum');
         return { valid: false, errors };
       }
 
-      if (fieldSchema.maxDate === "today" && date > new Date()) {
-        errors.push(
-          fieldSchema.messages.maxDate || "Datum nemůže být v budoucnosti",
-        );
+      if (fieldSchema.maxDate === 'today' && date > new Date()) {
+        errors.push(fieldSchema.messages.maxDate || 'Datum nemůže být v budoucnosti');
       }
     }
 
@@ -345,23 +315,18 @@ class DataValidationManager {
 
       // Allow 1% tolerance for rounding
       if (Math.abs(computed - actual) > computed * 0.01) {
-        errors.push("Aktuální hodnota neodpovídá výpočtu (cena × počet)");
+        errors.push('Aktuální hodnota neodpovídá výpočtu (cena × počet)');
       }
     }
 
     // Změna procenta calculation
-    if (
-      record.nákupníCena &&
-      record.aktuálníCena &&
-      record.změnaProcenta !== undefined
-    ) {
-      const computed =
-        ((record.aktuálníCena - record.nákupníCena) / record.nákupníCena) * 100;
+    if (record.nákupníCena && record.aktuálníCena && record.změnaProcenta !== undefined) {
+      const computed = ((record.aktuálníCena - record.nákupníCena) / record.nákupníCena) * 100;
       const actual = parseFloat(record.změnaProcenta);
 
       // Allow 0.1% tolerance
       if (Math.abs(computed - actual) > 0.1) {
-        errors.push("Změna procent neodpovídá výpočtu");
+        errors.push('Změna procent neodpovídá výpočtu');
       }
     }
 
@@ -413,30 +378,30 @@ class DataValidationManager {
    */
   getType(value) {
     if (value === null) {
-      return "null";
+      return 'null';
     }
     if (value === undefined) {
-      return "undefined";
+      return 'undefined';
     }
-    if (typeof value === "number" && !isNaN(value)) {
-      return "number";
+    if (typeof value === 'number' && !isNaN(value)) {
+      return 'number';
     }
-    if (typeof value === "string") {
+    if (typeof value === 'string') {
       // Check if it's a date string
       const date = new Date(value);
       if (!isNaN(date.getTime()) && /^\d{4}-\d{2}-\d{2}/.test(value)) {
-        return "date";
+        return 'date';
       }
-      return "string";
+      return 'string';
     }
-    if (typeof value === "boolean") {
-      return "boolean";
+    if (typeof value === 'boolean') {
+      return 'boolean';
     }
     if (Array.isArray(value)) {
-      return "array";
+      return 'array';
     }
-    if (typeof value === "object") {
-      return "object";
+    if (typeof value === 'object') {
+      return 'object';
     }
     return typeof value;
   }
@@ -449,7 +414,7 @@ class DataValidationManager {
       return;
     }
 
-    document.addEventListener("input", (e) => {
+    document.addEventListener('input', (e) => {
       const input = e.target;
       if (!input.dataset.fieldName) {
         return;
@@ -461,8 +426,8 @@ class DataValidationManager {
       // Convert value based on field type
       const fieldSchema = this.schema[fieldName];
       if (fieldSchema) {
-        if (fieldSchema.type === "number") {
-          value = value === "" ? null : parseFloat(value);
+        if (fieldSchema.type === 'number') {
+          value = value === '' ? null : parseFloat(value);
         }
       }
 
@@ -478,24 +443,23 @@ class DataValidationManager {
    */
   displayFieldValidation(input, result) {
     // Remove existing validation messages
-    const existingError =
-      input.parentElement.querySelector(".validation-error");
+    const existingError = input.parentElement.querySelector('.validation-error');
     if (existingError) {
       existingError.remove();
     }
 
-    input.classList.remove("valid", "invalid");
+    input.classList.remove('valid', 'invalid');
 
     if (!result.valid) {
-      input.classList.add("invalid");
+      input.classList.add('invalid');
 
       // Create error message
-      const errorEl = document.createElement("div");
-      errorEl.className = "validation-error";
+      const errorEl = document.createElement('div');
+      errorEl.className = 'validation-error';
       errorEl.textContent = result.errors[0]; // Show first error
       input.parentElement.appendChild(errorEl);
     } else {
-      input.classList.add("valid");
+      input.classList.add('valid');
     }
   }
 
@@ -512,25 +476,25 @@ class DataValidationManager {
     }
 
     // String sanitization
-    if (fieldSchema.type === "string" && typeof value === "string") {
+    if (fieldSchema.type === 'string' && typeof value === 'string') {
       // Trim whitespace
       value = value.trim();
 
       // Remove control characters
-      value = value.replace(/[\x00-\x1F\x7F]/g, "");
+      value = value.replace(/[\x00-\x1F\x7F]/g, '');
 
       // XSS protection - escape HTML
       value = value
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#x27;")
-        .replace(/\//g, "&#x2F;");
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#x27;')
+        .replace(/\//g, '&#x2F;');
     }
 
     // Number sanitization
-    if (fieldSchema.type === "number") {
+    if (fieldSchema.type === 'number') {
       const num = parseFloat(value);
       if (!isNaN(num)) {
         // Apply precision
@@ -601,7 +565,7 @@ class DataValidationManager {
 window.dataValidationManager = new DataValidationManager();
 
 // Example custom rule
-window.dataValidationManager.addCustomRule("ticker", (value, context) => {
+window.dataValidationManager.addCustomRule('ticker', (value, context) => {
   // Example: Check if ticker is unique
   const errors = [];
 

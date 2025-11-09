@@ -11,17 +11,17 @@
    Černá pozadí, zlaté akcenty, elegantní atmosféra
    ============================================================================ */
 
-html[data-theme="elegant-black"] {
+html[data-theme='elegant-black'] {
   /* PRIMARY: Rich Gold for luxury accent */
   --color-primary: #ffd700;
   --color-primary-hover: #ffed4e;
   --color-primary-light: #ffeb3b;
   --color-primary-dark: #daa520;
-  
+
   /* SECONDARY: Deep Purple for contrast */
   --color-secondary: #9d4edd;
   --color-secondary-hover: #b366ff;
-  
+
   /* STATUS COLORS - Refined palette */
   --color-success: #2ecc71;
   --color-danger: #ff6b6b;
@@ -64,17 +64,17 @@ html[data-theme="elegant-black"] {
    Tmavá pozadí, modrá akcenta, moderní vzhled
    ============================================================================ */
 
-html[data-theme="dark"] {
+html[data-theme='dark'] {
   /* PRIMARY: Vibrant Blue */
   --color-primary: #60a5fa;
   --color-primary-hover: #93c5fd;
   --color-primary-light: #bfdbfe;
   --color-primary-dark: #3b82f6;
-  
+
   /* SECONDARY: Purple accent */
   --color-secondary: #a78bfa;
   --color-secondary-hover: #c4b5fd;
-  
+
   /* STATUS COLORS */
   --color-success: #34d399;
   --color-danger: #f87171;
@@ -118,17 +118,17 @@ html[data-theme="dark"] {
    ============================================================================ */
 
 :root,
-html[data-theme="light-classic"] {
+html[data-theme='light-classic'] {
   /* PRIMARY: Deep Professional Blue - Maximum contrast */
   --color-primary: #001a4d;
   --color-primary-hover: #0d2966;
   --color-primary-light: #1a3a7a;
   --color-primary-dark: #000f2e;
-  
+
   /* SECONDARY: Rich Purple */
   --color-secondary: #4a148c;
   --color-secondary-hover: #6a1b9a;
-  
+
   /* STATUS COLORS - High contrast & saturated */
   --color-success: #0d3d00;
   --color-danger: #7f0000;
@@ -171,17 +171,17 @@ html[data-theme="light-classic"] {
    Ledově modrá pozadí, vibrantní modrá akcenta, vysoký kontrast
    ============================================================================ */
 
-html[data-theme="light-modern"] {
+html[data-theme='light-modern'] {
   /* PRIMARY: Vibrant Saturated Blue - More dominant & modern */
   --color-primary: #0033cc;
   --color-primary-hover: #0052ff;
   --color-primary-light: #3366ff;
   --color-primary-dark: #001a7a;
-  
+
   /* SECONDARY: Bright Cyan - Complementary to blue */
   --color-secondary: #0099ff;
   --color-secondary-hover: #00b3ff;
-  
+
   /* STATUS COLORS - High contrast */
   --color-success: #005511;
   --color-danger: #b30000;
@@ -192,7 +192,7 @@ html[data-theme="light-modern"] {
   --bg-primary: #f5f9ff;
   --bg-secondary: #eef4ff;
   --bg-tertiary: #e8ecff;
-  --bg-modal: rgba(0, 26, 77, 0.50);
+  --bg-modal: rgba(0, 26, 77, 0.5);
   --bg-elevated: #ffffff;
   --bg-light-accent: #d6e4f0;
 
@@ -211,7 +211,7 @@ html[data-theme="light-modern"] {
   --input-placeholder: #666666;
 
   /* SHADOWS - Modern depth */
-  --shadow-sm: 0 1px 3px rgba(0, 26, 77, 0.10);
+  --shadow-sm: 0 1px 3px rgba(0, 26, 77, 0.1);
   --shadow-md: 0 4px 12px rgba(0, 26, 77, 0.12);
   --shadow-lg: 0 12px 32px rgba(0, 26, 77, 0.15);
   --shadow-glow: 0 0 16px rgba(0, 26, 77, 0.12);
@@ -224,98 +224,103 @@ html[data-theme="light-modern"] {
    ============================================================================ */
 
 * {
-  transition: background-color var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1),
-              color var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1),
-              border-color var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1),
-              box-shadow var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1),
-              transform var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    background-color var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1),
+    color var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1),
+    border-color var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1),
+    transform var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ============================================================================
    1️⃣ ELEGANT BLACK THEME - PREMIUM STYLING
    ============================================================================ */
 
-html[data-theme="elegant-black"] {
+html[data-theme='elegant-black'] {
   background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
   scrollbar-color: #ffd700 #1a1f3a;
 }
 
-html[data-theme="elegant-black"] body {
+html[data-theme='elegant-black'] body {
   background: #0a0e27;
   color: #ffffff;
 }
 
-html[data-theme="elegant-black"] .card,
-html[data-theme="elegant-black"] .modal-content,
-html[data-theme="elegant-black"] .form-section {
+html[data-theme='elegant-black'] .card,
+html[data-theme='elegant-black'] .modal-content,
+html[data-theme='elegant-black'] .form-section {
   background: linear-gradient(135deg, #1a1f3a 0%, #2d3561 100%);
   border: 2px solid #4a5580;
   box-shadow: var(--shadow-lg);
 }
 
-html[data-theme="elegant-black"] .card:hover,
-html[data-theme="elegant-black"] .modal-content:hover,
-html[data-theme="elegant-black"] .form-section:hover {
+html[data-theme='elegant-black'] .card:hover,
+html[data-theme='elegant-black'] .modal-content:hover,
+html[data-theme='elegant-black'] .form-section:hover {
   border-color: #ffd700;
-  box-shadow: var(--shadow-lg), 0 0 20px rgba(255, 215, 0, 0.2);
+  box-shadow:
+    var(--shadow-lg),
+    0 0 20px rgba(255, 215, 0, 0.2);
   transform: translateY(-2px);
 }
 
-html[data-theme="elegant-black"] h1,
-html[data-theme="elegant-black"] h2,
-html[data-theme="elegant-black"] h3,
-html[data-theme="elegant-black"] h4,
-html[data-theme="elegant-black"] h5,
-html[data-theme="elegant-black"] h6 {
+html[data-theme='elegant-black'] h1,
+html[data-theme='elegant-black'] h2,
+html[data-theme='elegant-black'] h3,
+html[data-theme='elegant-black'] h4,
+html[data-theme='elegant-black'] h5,
+html[data-theme='elegant-black'] h6 {
   color: #ffd700;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
   font-weight: 700;
   letter-spacing: 0.5px;
 }
 
-html[data-theme="elegant-black"] input,
-html[data-theme="elegant-black"] textarea,
-html[data-theme="elegant-black"] select {
+html[data-theme='elegant-black'] input,
+html[data-theme='elegant-black'] textarea,
+html[data-theme='elegant-black'] select {
   background: linear-gradient(135deg, #1a1f3a 0%, #2d3561 100%);
   border: 2px solid #4a5580;
   color: #ffffff;
   font-size: 14px;
 }
 
-html[data-theme="elegant-black"] input::placeholder,
-html[data-theme="elegant-black"] textarea::placeholder {
+html[data-theme='elegant-black'] input::placeholder,
+html[data-theme='elegant-black'] textarea::placeholder {
   color: #6b7590;
 }
 
-html[data-theme="elegant-black"] input:focus,
-html[data-theme="elegant-black"] textarea:focus,
-html[data-theme="elegant-black"] select:focus {
+html[data-theme='elegant-black'] input:focus,
+html[data-theme='elegant-black'] textarea:focus,
+html[data-theme='elegant-black'] select:focus {
   border-color: #ffd700;
-  box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.15), var(--shadow-md);
+  box-shadow:
+    0 0 0 4px rgba(255, 215, 0, 0.15),
+    var(--shadow-md);
   outline: none;
 }
 
-html[data-theme="elegant-black"] button {
+html[data-theme='elegant-black'] button {
   transition: all var(--transition-speed) ease;
 }
 
-html[data-theme="elegant-black"] button:hover:not(:disabled) {
+html[data-theme='elegant-black'] button:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(255, 215, 0, 0.2);
 }
 
-html[data-theme="elegant-black"] a {
+html[data-theme='elegant-black'] a {
   color: #ffd700;
   text-decoration: none;
   transition: all 200ms ease;
 }
 
-html[data-theme="elegant-black"] a:hover {
+html[data-theme='elegant-black'] a:hover {
   color: #ffed4e;
   text-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
 }
 
-html[data-theme="elegant-black"] #clientNameDisplay {
+html[data-theme='elegant-black'] #clientNameDisplay {
   color: #ffd700;
   text-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
   letter-spacing: 1.2px;
@@ -323,7 +328,7 @@ html[data-theme="elegant-black"] #clientNameDisplay {
   font-weight: 600;
 }
 
-html[data-theme="elegant-black"] .theme-toggle {
+html[data-theme='elegant-black'] .theme-toggle {
   background: linear-gradient(135deg, #1a1f3a 0%, #2d3561 100%);
   border: 2px solid #ffd700;
   color: #ffd700;
@@ -331,7 +336,7 @@ html[data-theme="elegant-black"] .theme-toggle {
   font-weight: 600;
 }
 
-html[data-theme="elegant-black"] .theme-toggle:hover {
+html[data-theme='elegant-black'] .theme-toggle:hover {
   box-shadow: 0 6px 30px rgba(255, 215, 0, 0.35);
   transform: scale(1.05);
   background: linear-gradient(135deg, #2d3561 0%, #3a4577 100%);
@@ -341,69 +346,73 @@ html[data-theme="elegant-black"] .theme-toggle:hover {
    2️⃣ DARK THEME - MODERN BLUE
    ============================================================================ */
 
-html[data-theme="dark"] {
+html[data-theme='dark'] {
   background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
   scrollbar-color: #60a5fa #1e293b;
 }
 
-html[data-theme="dark"] body {
+html[data-theme='dark'] body {
   background: #0f172a;
   color: #f1f5f9;
 }
 
-html[data-theme="dark"] .card,
-html[data-theme="dark"] .modal-content,
-html[data-theme="dark"] .form-section {
+html[data-theme='dark'] .card,
+html[data-theme='dark'] .modal-content,
+html[data-theme='dark'] .form-section {
   background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
   border: 1px solid #475569;
   box-shadow: var(--shadow-lg);
 }
 
-html[data-theme="dark"] .card:hover,
-html[data-theme="dark"] .modal-content:hover,
-html[data-theme="dark"] .form-section:hover {
+html[data-theme='dark'] .card:hover,
+html[data-theme='dark'] .modal-content:hover,
+html[data-theme='dark'] .form-section:hover {
   border-color: #60a5fa;
-  box-shadow: var(--shadow-lg), 0 0 15px rgba(96, 165, 250, 0.15);
+  box-shadow:
+    var(--shadow-lg),
+    0 0 15px rgba(96, 165, 250, 0.15);
   transform: translateY(-2px);
 }
 
-html[data-theme="dark"] h1,
-html[data-theme="dark"] h2,
-html[data-theme="dark"] h3,
-html[data-theme="dark"] h4,
-html[data-theme="dark"] h5,
-html[data-theme="dark"] h6 {
+html[data-theme='dark'] h1,
+html[data-theme='dark'] h2,
+html[data-theme='dark'] h3,
+html[data-theme='dark'] h4,
+html[data-theme='dark'] h5,
+html[data-theme='dark'] h6 {
   color: #93c5fd;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
   font-weight: 700;
   letter-spacing: 0.3px;
 }
 
-html[data-theme="dark"] input,
-html[data-theme="dark"] textarea,
-html[data-theme="dark"] select {
+html[data-theme='dark'] input,
+html[data-theme='dark'] textarea,
+html[data-theme='dark'] select {
   background: #1e293b;
   border: 1px solid #475569;
   color: #f1f5f9;
 }
 
-html[data-theme="dark"] input:focus,
-html[data-theme="dark"] textarea:focus,
-html[data-theme="dark"] select:focus {
+html[data-theme='dark'] input:focus,
+html[data-theme='dark'] textarea:focus,
+html[data-theme='dark'] select:focus {
   border-color: #60a5fa;
-  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1), var(--shadow-md);
+  box-shadow:
+    0 0 0 3px rgba(96, 165, 250, 0.1),
+    var(--shadow-md);
   outline: none;
 }
 
-html[data-theme="dark"] a {
+html[data-theme='dark'] a {
   color: #93c5fd;
 }
 
-html[data-theme="dark"] a:hover {
+html[data-theme='dark'] a:hover {
   color: #bfdbfe;
 }
 
-html[data-theme="dark"] #clientNameDisplay {
+html[data-theme='dark'] #clientNameDisplay {
   color: #93c5fd;
   text-shadow: 0 2px 8px rgba(96, 165, 250, 0.2);
   letter-spacing: 0.5px;
@@ -413,70 +422,74 @@ html[data-theme="dark"] #clientNameDisplay {
    3️⃣ LIGHT CLASSIC THEME - PROFESSIONAL CLEAN
    ============================================================================ */
 
-html[data-theme="light-classic"] {
+html[data-theme='light-classic'] {
   background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
   scrollbar-color: #001a4d #ffffff;
 }
 
-html[data-theme="light-classic"] body {
+html[data-theme='light-classic'] body {
   background: #ffffff;
   color: #000000;
 }
 
-html[data-theme="light-classic"] .card,
-html[data-theme="light-classic"] .modal-content,
-html[data-theme="light-classic"] .form-section {
+html[data-theme='light-classic'] .card,
+html[data-theme='light-classic'] .modal-content,
+html[data-theme='light-classic'] .form-section {
   background: #ffffff;
   border: 1px solid #a8b5c8;
   box-shadow: var(--shadow-md);
 }
 
-html[data-theme="light-classic"] .card:hover,
-html[data-theme="light-classic"] .modal-content:hover,
-html[data-theme="light-classic"] .form-section:hover {
+html[data-theme='light-classic'] .card:hover,
+html[data-theme='light-classic'] .modal-content:hover,
+html[data-theme='light-classic'] .form-section:hover {
   border-color: #001a4d;
-  box-shadow: var(--shadow-lg), 0 0 16px rgba(0, 26, 77, 0.15);
+  box-shadow:
+    var(--shadow-lg),
+    0 0 16px rgba(0, 26, 77, 0.15);
   transform: translateY(-2px);
 }
 
-html[data-theme="light-classic"] h1,
-html[data-theme="light-classic"] h2,
-html[data-theme="light-classic"] h3,
-html[data-theme="light-classic"] h4,
-html[data-theme="light-classic"] h5,
-html[data-theme="light-classic"] h6 {
+html[data-theme='light-classic'] h1,
+html[data-theme='light-classic'] h2,
+html[data-theme='light-classic'] h3,
+html[data-theme='light-classic'] h4,
+html[data-theme='light-classic'] h5,
+html[data-theme='light-classic'] h6 {
   color: #001a4d;
   text-shadow: none;
   font-weight: 700;
   letter-spacing: 0.3px;
 }
 
-html[data-theme="light-classic"] input,
-html[data-theme="light-classic"] textarea,
-html[data-theme="light-classic"] select {
+html[data-theme='light-classic'] input,
+html[data-theme='light-classic'] textarea,
+html[data-theme='light-classic'] select {
   background: #ffffff;
   border: 1px solid #8899b3;
   color: #000000;
 }
 
-html[data-theme="light-classic"] input:focus,
-html[data-theme="light-classic"] textarea:focus,
-html[data-theme="light-classic"] select:focus {
+html[data-theme='light-classic'] input:focus,
+html[data-theme='light-classic'] textarea:focus,
+html[data-theme='light-classic'] select:focus {
   border-color: #001a4d;
-  box-shadow: 0 0 0 3px rgba(0, 26, 77, 0.10), var(--shadow-md);
+  box-shadow:
+    0 0 0 3px rgba(0, 26, 77, 0.1),
+    var(--shadow-md);
   outline: none;
 }
 
-html[data-theme="light-classic"] a {
+html[data-theme='light-classic'] a {
   color: #001a4d;
 }
 
-html[data-theme="light-classic"] a:hover {
+html[data-theme='light-classic'] a:hover {
   color: #0d2966;
   text-decoration: underline;
 }
 
-html[data-theme="light-classic"] #clientNameDisplay {
+html[data-theme='light-classic'] #clientNameDisplay {
   color: #001a4d;
   font-weight: 700;
   letter-spacing: 0.5px;
@@ -486,70 +499,76 @@ html[data-theme="light-classic"] #clientNameDisplay {
    4️⃣ LIGHT MODERN THEME - CONTEMPORARY FRESH
    ============================================================================ */
 
-html[data-theme="light-modern"] {
+html[data-theme='light-modern'] {
   background: linear-gradient(135deg, #f0f5ff 0%, #e6ecff 100%);
   scrollbar-color: #0033cc #ffffff;
 }
 
-html[data-theme="light-modern"] body {
+html[data-theme='light-modern'] body {
   background: #f0f5ff;
   color: #000000;
 }
 
-html[data-theme="light-modern"] .card,
-html[data-theme="light-modern"] .modal-content,
-html[data-theme="light-modern"] .form-section {
+html[data-theme='light-modern'] .card,
+html[data-theme='light-modern'] .modal-content,
+html[data-theme='light-modern'] .form-section {
   background: #ffffff;
   border: 2px solid #3366ff;
-  box-shadow: var(--shadow-md), 0 0 8px rgba(0, 51, 204, 0.08);
+  box-shadow:
+    var(--shadow-md),
+    0 0 8px rgba(0, 51, 204, 0.08);
 }
 
-html[data-theme="light-modern"] .card:hover,
-html[data-theme="light-modern"] .modal-content:hover,
-html[data-theme="light-modern"] .form-section:hover {
+html[data-theme='light-modern'] .card:hover,
+html[data-theme='light-modern'] .modal-content:hover,
+html[data-theme='light-modern'] .form-section:hover {
   border-color: #0033cc;
-  box-shadow: var(--shadow-lg), 0 0 16px rgba(0, 51, 204, 0.20);
+  box-shadow:
+    var(--shadow-lg),
+    0 0 16px rgba(0, 51, 204, 0.2);
   transform: translateY(-2px);
 }
 
-html[data-theme="light-modern"] h1,
-html[data-theme="light-modern"] h2,
-html[data-theme="light-modern"] h3,
-html[data-theme="light-modern"] h4,
-html[data-theme="light-modern"] h5,
-html[data-theme="light-modern"] h6 {
+html[data-theme='light-modern'] h1,
+html[data-theme='light-modern'] h2,
+html[data-theme='light-modern'] h3,
+html[data-theme='light-modern'] h4,
+html[data-theme='light-modern'] h5,
+html[data-theme='light-modern'] h6 {
   color: #0033cc;
   text-shadow: none;
   font-weight: 700;
   letter-spacing: 0.3px;
 }
 
-html[data-theme="light-modern"] input,
-html[data-theme="light-modern"] textarea,
-html[data-theme="light-modern"] select {
+html[data-theme='light-modern'] input,
+html[data-theme='light-modern'] textarea,
+html[data-theme='light-modern'] select {
   background: #ffffff;
   border: 2px solid #3366ff;
   color: #000000;
 }
 
-html[data-theme="light-modern"] input:focus,
-html[data-theme="light-modern"] textarea:focus,
-html[data-theme="light-modern"] select:focus {
+html[data-theme='light-modern'] input:focus,
+html[data-theme='light-modern'] textarea:focus,
+html[data-theme='light-modern'] select:focus {
   border-color: #0033cc;
-  box-shadow: 0 0 0 3px rgba(0, 51, 204, 0.15), var(--shadow-md);
+  box-shadow:
+    0 0 0 3px rgba(0, 51, 204, 0.15),
+    var(--shadow-md);
   outline: none;
 }
 
-html[data-theme="light-modern"] a {
+html[data-theme='light-modern'] a {
   color: #0033cc;
 }
 
-html[data-theme="light-modern"] a:hover {
+html[data-theme='light-modern'] a:hover {
   color: #0052ff;
   text-decoration: underline;
 }
 
-html[data-theme="light-modern"] #clientNameDisplay {
+html[data-theme='light-modern'] #clientNameDisplay {
   color: #0033cc;
   font-weight: 700;
   letter-spacing: 0.5px;

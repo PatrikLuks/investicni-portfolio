@@ -36,7 +36,7 @@ class MarketDataService {
     this.RETRY_DELAY = 1000;
 
     this.loadApiKeys();
-    
+
     // Show CORS warning once
     if (!localStorage.getItem('corsWarningShown')) {
       setTimeout(() => {
@@ -156,13 +156,13 @@ class MarketDataService {
 
   async fetchYahooFinance(symbol) {
     // In development, use Vite proxy to bypass CORS
-    const isDev = window.location.hostname === 'localhost' || 
-                  window.location.hostname === '127.0.0.1';
-    
-    const baseUrl = isDev 
-      ? '/api/yahoo'  // Use Vite proxy in dev
-      : this.providers.yahoo.baseUrl;  // Use direct URL in production
-    
+    const isDev =
+      window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+    const baseUrl = isDev
+      ? '/api/yahoo' // Use Vite proxy in dev
+      : this.providers.yahoo.baseUrl; // Use direct URL in production
+
     const url = `${baseUrl}/v8/finance/chart/${symbol}`;
 
     try {
@@ -311,7 +311,7 @@ class MarketDataService {
       this.getQuote(symbol).catch((error) => ({
         symbol,
         error: error.message,
-      })),
+      }))
     );
 
     return Promise.all(promises);
@@ -321,63 +321,54 @@ class MarketDataService {
     // Note: Yahoo Finance API has CORS restrictions
     // For production, use a backend proxy server
     // For now, return mock data for development
-    
+
     // Log warning only once per session
     if (!window._marketDataWarningShown) {
       console.warn('⚠️ Yahoo Finance API blocked by CORS. Using mock data for development.');
       console.info('💡 For production: Set up a backend proxy server to access Yahoo Finance API');
       window._marketDataWarningShown = true;
     }
-    
+
     // Mock data for common symbols
     const mockResults = {
-      'aapl': [
-        { symbol: 'AAPL', name: 'Apple Inc.', type: 'EQUITY', exchange: 'NASDAQ' }
-      ],
-      'google': [
+      aapl: [{ symbol: 'AAPL', name: 'Apple Inc.', type: 'EQUITY', exchange: 'NASDAQ' }],
+      google: [
         { symbol: 'GOOGL', name: 'Alphabet Inc. Class A', type: 'EQUITY', exchange: 'NASDAQ' },
-        { symbol: 'GOOG', name: 'Alphabet Inc. Class C', type: 'EQUITY', exchange: 'NASDAQ' }
+        { symbol: 'GOOG', name: 'Alphabet Inc. Class C', type: 'EQUITY', exchange: 'NASDAQ' },
       ],
-      'msft': [
-        { symbol: 'MSFT', name: 'Microsoft Corporation', type: 'EQUITY', exchange: 'NASDAQ' }
-      ],
-      'tsla': [
-        { symbol: 'TSLA', name: 'Tesla, Inc.', type: 'EQUITY', exchange: 'NASDAQ' }
-      ],
-      'amzn': [
-        { symbol: 'AMZN', name: 'Amazon.com, Inc.', type: 'EQUITY', exchange: 'NASDAQ' }
-      ],
-      'meta': [
-        { symbol: 'META', name: 'Meta Platforms, Inc.', type: 'EQUITY', exchange: 'NASDAQ' }
-      ],
-      'nvda': [
-        { symbol: 'NVDA', name: 'NVIDIA Corporation', type: 'EQUITY', exchange: 'NASDAQ' }
-      ]
+      msft: [{ symbol: 'MSFT', name: 'Microsoft Corporation', type: 'EQUITY', exchange: 'NASDAQ' }],
+      tsla: [{ symbol: 'TSLA', name: 'Tesla, Inc.', type: 'EQUITY', exchange: 'NASDAQ' }],
+      amzn: [{ symbol: 'AMZN', name: 'Amazon.com, Inc.', type: 'EQUITY', exchange: 'NASDAQ' }],
+      meta: [{ symbol: 'META', name: 'Meta Platforms, Inc.', type: 'EQUITY', exchange: 'NASDAQ' }],
+      nvda: [{ symbol: 'NVDA', name: 'NVIDIA Corporation', type: 'EQUITY', exchange: 'NASDAQ' }],
     };
-    
+
     const searchKey = query.toLowerCase();
-    
+
     // Try exact match first
     if (mockResults[searchKey]) {
       return mockResults[searchKey];
     }
-    
+
     // Try partial match
     const matches = [];
     for (const [key, value] of Object.entries(mockResults)) {
-      if (key.includes(searchKey) || 
-          value.some(item => 
+      if (
+        key.includes(searchKey) ||
+        value.some(
+          (item) =>
             item.symbol.toLowerCase().includes(searchKey) ||
             item.name.toLowerCase().includes(searchKey)
-          )) {
+        )
+      ) {
         matches.push(...value);
       }
     }
-    
+
     if (matches.length > 0) {
       return matches;
     }
-    
+
     // Return empty if no match
     return [];
   }
@@ -442,7 +433,7 @@ class AutoUpdateService {
       window.dispatchEvent(
         new CustomEvent('marketDataUpdate', {
           detail: { quotes },
-        }),
+        })
       );
 
       // Show notification

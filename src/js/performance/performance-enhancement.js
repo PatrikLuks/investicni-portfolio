@@ -12,7 +12,7 @@
  * @version 1.0.0
  */
 
-import { logInfo, logWarn, logError } from "../utilities/logger.js";
+import { logInfo, logWarn, logError } from '../utilities/logger.js';
 
 class PerformanceEnhancement {
   constructor() {
@@ -32,11 +32,11 @@ class PerformanceEnhancement {
    * Initialize performance monitoring
    */
   init() {
-    logInfo("[PerformanceEnhancement] Initializing...");
+    logInfo('[PerformanceEnhancement] Initializing...');
 
     // Measure page load time
     if (window.performance && window.performance.timing) {
-      window.addEventListener("load", () => {
+      window.addEventListener('load', () => {
         this.measurePageLoadTime();
       });
     }
@@ -47,7 +47,7 @@ class PerformanceEnhancement {
     // Setup resource timing
     this.setupResourceTiming();
 
-    logInfo("[PerformanceEnhancement] Initialized");
+    logInfo('[PerformanceEnhancement] Initialized');
   }
 
   /**
@@ -62,9 +62,9 @@ class PerformanceEnhancement {
 
     // Log performance metrics
     if (window.trackEvent) {
-      window.trackEvent("performance_page_load", {
+      window.trackEvent('performance_page_load', {
         value: loadTime,
-        label: "page_load_time_ms",
+        label: 'page_load_time_ms',
       });
     }
   }
@@ -74,25 +74,23 @@ class PerformanceEnhancement {
    */
   observeCoreWebVitals() {
     // Largest Contentful Paint (LCP)
-    if ("PerformanceObserver" in window) {
+    if ('PerformanceObserver' in window) {
       try {
         const lcpObserver = new PerformanceObserver((list) => {
           const entries = list.getEntries();
           const lastEntry = entries[entries.length - 1];
-          logInfo(
-            `[PerformanceEnhancement] LCP: ${lastEntry.renderTime || lastEntry.loadTime}ms`,
-          );
+          logInfo(`[PerformanceEnhancement] LCP: ${lastEntry.renderTime || lastEntry.loadTime}ms`);
 
           if (window.trackEvent) {
-            window.trackEvent("core_web_vitals_lcp", {
+            window.trackEvent('core_web_vitals_lcp', {
               value: lastEntry.renderTime || lastEntry.loadTime,
-              label: "largest_contentful_paint",
+              label: 'largest_contentful_paint',
             });
           }
         });
-        lcpObserver.observe({ entryTypes: ["largest-contentful-paint"] });
+        lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
       } catch (e) {
-        logWarn("[PerformanceEnhancement] LCP observer not supported");
+        logWarn('[PerformanceEnhancement] LCP observer not supported');
       }
 
       // Cumulative Layout Shift (CLS)
@@ -107,15 +105,15 @@ class PerformanceEnhancement {
           logInfo(`[PerformanceEnhancement] CLS: ${clsValue}`);
 
           if (window.trackEvent) {
-            window.trackEvent("core_web_vitals_cls", {
+            window.trackEvent('core_web_vitals_cls', {
               value: clsValue,
-              label: "cumulative_layout_shift",
+              label: 'cumulative_layout_shift',
             });
           }
         });
-        clsObserver.observe({ entryTypes: ["layout-shift"] });
+        clsObserver.observe({ entryTypes: ['layout-shift'] });
       } catch (e) {
-        logWarn("[PerformanceEnhancement] CLS observer not supported");
+        logWarn('[PerformanceEnhancement] CLS observer not supported');
       }
 
       // First Input Delay (FID)
@@ -123,21 +121,19 @@ class PerformanceEnhancement {
         const fidObserver = new PerformanceObserver((list) => {
           const entries = list.getEntries();
           entries.forEach((entry) => {
-            logInfo(
-              `[PerformanceEnhancement] FID: ${entry.processingDuration}ms`,
-            );
+            logInfo(`[PerformanceEnhancement] FID: ${entry.processingDuration}ms`);
 
             if (window.trackEvent) {
-              window.trackEvent("core_web_vitals_fid", {
+              window.trackEvent('core_web_vitals_fid', {
                 value: entry.processingDuration,
-                label: "first_input_delay",
+                label: 'first_input_delay',
               });
             }
           });
         });
-        fidObserver.observe({ entryTypes: ["first-input"] });
+        fidObserver.observe({ entryTypes: ['first-input'] });
       } catch (e) {
-        logWarn("[PerformanceEnhancement] FID observer not supported");
+        logWarn('[PerformanceEnhancement] FID observer not supported');
       }
     }
   }
@@ -146,7 +142,7 @@ class PerformanceEnhancement {
    * Setup resource timing analysis
    */
   setupResourceTiming() {
-    if ("PerformanceObserver" in window) {
+    if ('PerformanceObserver' in window) {
       try {
         const resourceObserver = new PerformanceObserver((list) => {
           const entries = list.getEntries();
@@ -166,9 +162,9 @@ class PerformanceEnhancement {
             );
           });
         });
-        resourceObserver.observe({ entryTypes: ["resource"] });
+        resourceObserver.observe({ entryTypes: ['resource'] });
       } catch (e) {
-        logWarn("[PerformanceEnhancement] Resource observer not supported");
+        logWarn('[PerformanceEnhancement] Resource observer not supported');
       }
     }
   }
@@ -215,7 +211,7 @@ class PerformanceEnhancement {
    */
   clearCache() {
     this.cache.clear();
-    logInfo("[PerformanceEnhancement] Cache cleared");
+    logInfo('[PerformanceEnhancement] Cache cleared');
   }
 
   /**
@@ -261,10 +257,7 @@ class PerformanceEnhancement {
       logInfo(`[PerformanceEnhancement] Loaded: ${modulePath}`);
       return module;
     } catch (error) {
-      console.error(
-        `[PerformanceEnhancement] Failed to load ${modulePath}:`,
-        error,
-      );
+      console.error(`[PerformanceEnhancement] Failed to load ${modulePath}:`, error);
       throw error;
     }
   }
@@ -274,9 +267,9 @@ class PerformanceEnhancement {
    * @param {string} url - Resource URL
    * @param {string} type - Resource type (script, style, image, etc.)
    */
-  prefetchResource(url, type = "script") {
-    const link = document.createElement("link");
-    link.rel = "prefetch";
+  prefetchResource(url, type = 'script') {
+    const link = document.createElement('link');
+    link.rel = 'prefetch';
     link.href = url;
     link.as = type;
     document.head.appendChild(link);
@@ -288,9 +281,9 @@ class PerformanceEnhancement {
    * @param {string} url - Resource URL
    * @param {string} type - Resource type
    */
-  preloadResource(url, type = "script") {
-    const link = document.createElement("link");
-    link.rel = "preload";
+  preloadResource(url, type = 'script') {
+    const link = document.createElement('link');
+    link.rel = 'preload';
     link.href = url;
     link.as = type;
     document.head.appendChild(link);
@@ -307,12 +300,10 @@ class PerformanceEnhancement {
 
     try {
       const results = await Promise.all(requests.map((req) => req()));
-      logInfo(
-        `[PerformanceEnhancement] Batch complete: ${results.length} results`,
-      );
+      logInfo(`[PerformanceEnhancement] Batch complete: ${results.length} results`);
       return results;
     } catch (error) {
-      console.error("[PerformanceEnhancement] Batch request failed:", error);
+      console.error('[PerformanceEnhancement] Batch request failed:', error);
       throw error;
     }
   }
@@ -367,8 +358,7 @@ class PerformanceEnhancement {
     return {
       ...this.metrics,
       cacheHitRatio:
-        this.metrics.cacheHits /
-        (this.metrics.cacheHits + this.metrics.cacheMisses || 1),
+        this.metrics.cacheHits / (this.metrics.cacheHits + this.metrics.cacheMisses || 1),
       memoryUsage: performance.memory
         ? {
           usedJSHeapSize: `${(performance.memory.usedJSHeapSize / 1048576).toFixed(2)}MB`,
@@ -384,14 +374,14 @@ class PerformanceEnhancement {
    */
   logReport() {
     const metrics = this.getMetrics();
-    console.group("[PerformanceEnhancement] REPORT");
-    logInfo("Page Load Time:", metrics.pageLoadTime, "ms");
-    logInfo("API Calls:", metrics.apiCallCount);
-    logInfo("Cache Hits:", metrics.cacheHits);
-    logInfo("Cache Misses:", metrics.cacheMisses);
-    logInfo("Cache Hit Ratio:", `${(metrics.cacheHitRatio * 100).toFixed(2)}%`);
+    console.group('[PerformanceEnhancement] REPORT');
+    logInfo('Page Load Time:', metrics.pageLoadTime, 'ms');
+    logInfo('API Calls:', metrics.apiCallCount);
+    logInfo('Cache Hits:', metrics.cacheHits);
+    logInfo('Cache Misses:', metrics.cacheMisses);
+    logInfo('Cache Hit Ratio:', `${(metrics.cacheHitRatio * 100).toFixed(2)}%`);
     if (metrics.memoryUsage) {
-      logInfo("Memory Usage:", metrics.memoryUsage);
+      logInfo('Memory Usage:', metrics.memoryUsage);
     }
     console.groupEnd();
   }
@@ -400,23 +390,16 @@ class PerformanceEnhancement {
    * Initialize Service Worker for caching
    */
   async initServiceWorker() {
-    if ("serviceWorker" in navigator) {
+    if ('serviceWorker' in navigator) {
       try {
         // Only register in production - development uses Vite
         if (import.meta.env.PROD) {
-          const registration =
-            await navigator.serviceWorker.register("/service-worker.js");
-          logInfo(
-            "[PerformanceEnhancement] Service Worker registered:",
-            registration,
-          );
+          const registration = await navigator.serviceWorker.register('/service-worker.js');
+          logInfo('[PerformanceEnhancement] Service Worker registered:', registration);
           return registration;
         }
       } catch (error) {
-        console.error(
-          "[PerformanceEnhancement] Service Worker registration failed:",
-          error,
-        );
+        console.error('[PerformanceEnhancement] Service Worker registration failed:', error);
       }
     }
   }

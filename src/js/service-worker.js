@@ -30,7 +30,7 @@ self.addEventListener('install', (event) => {
       .then(() => self.skipWaiting())
       .catch((error) => {
         console.error('❌ SW: Installation failed:', error);
-      }),
+      })
   );
 });
 
@@ -47,23 +47,23 @@ self.addEventListener('activate', (event) => {
               console.log('🗑️ SW: Deleting old cache:', cacheName);
               return caches.delete(cacheName);
             }
-          }),
+          })
         );
       })
-      .then(() => self.clients.claim()),
+      .then(() => self.clients.claim())
   );
 });
 
 // Fetch event - network first, fallback to cache
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
-  
+
   // Skip service worker completely for external APIs (Yahoo Finance, etc.)
-  const isExternalAPI = 
+  const isExternalAPI =
     url.origin !== self.location.origin &&
     (url.hostname.includes('finance.yahoo.com') ||
-     url.hostname.includes('alphavantage.co') ||
-     url.hostname.includes('finnhub.io'));
+      url.hostname.includes('alphavantage.co') ||
+      url.hostname.includes('finnhub.io'));
 
   if (isExternalAPI) {
     // Don't intercept external API requests at all - let browser handle them
@@ -77,7 +77,7 @@ self.addEventListener('fetch', (event) => {
         // Only cache successful responses
         if (response && response.status === 200) {
           const responseToCache = response.clone();
-          
+
           caches.open(CACHE_NAME).then((cache) => {
             cache.put(event.request, responseToCache);
           });
@@ -96,14 +96,14 @@ self.addEventListener('fetch', (event) => {
           if (event.request.mode === 'navigate') {
             return caches.match('/index.html');
           }
-          
+
           // For other failed requests, return a basic error response
           return new Response('Network error', {
             status: 408,
-            headers: { 'Content-Type': 'text/plain' }
+            headers: { 'Content-Type': 'text/plain' },
           });
         });
-      }),
+      })
   );
 });
 

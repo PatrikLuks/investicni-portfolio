@@ -20,25 +20,25 @@
 async function loadLegacyModules() {
   try {
     // THEME: Dark/Light mode system (must load first!)
-    await import("../features/themes/theme-manager.js");
+    await import('../features/themes/theme-manager.js');
 
     // CORE: Error handling and accessibility
-    await import("../core/error-handler.js");
-    await import("../core/accessibility.js");
-    await import("../core/notification-system.js");
+    await import('../core/error-handler.js');
+    await import('../core/accessibility.js');
+    await import('../core/notification-system.js');
 
     // LOADERS: Library loading system
-    await import("./library-loader.js");
+    await import('./library-loader.js');
 
     // UTILITIES: Core utilities
-    await import("../utilities/dom-safety.js");
-    await import("../utilities/command-stack.js");
-    await import("../utilities/data-validation.js");
-    await import("../utilities/calculations-engine.js");
-    await import("../utilities/auto-save.js");
-    await import("../utilities/drag-drop.js");
-    await import("../utilities/keyboard-shortcuts-overlay.js");
-    await import("../utilities/service-worker.js");
+    await import('../utilities/dom-safety.js');
+    await import('../utilities/command-stack.js');
+    await import('../utilities/data-validation.js');
+    await import('../utilities/calculations-engine.js');
+    await import('../utilities/auto-save.js');
+    await import('../utilities/drag-drop.js');
+    await import('../utilities/keyboard-shortcuts-overlay.js');
+    await import('../utilities/service-worker.js');
 
     // FEATURES: Market data (lazy-loaded for better performance)
     // Marketplace loads after 3 seconds to prioritize core features
@@ -47,8 +47,8 @@ async function loadLegacyModules() {
     // await import('../features/marketplace/market-data.js');
 
     // FEATURES: Portfolio management
-    await import("../features/portfolio/multi-portfolio.js");
-    await import("../features/portfolio/app-portfolio.js");
+    await import('../features/portfolio/multi-portfolio.js');
+    await import('../features/portfolio/app-portfolio.js');
 
     // FEATURES: Charts and visualization (lazy-loaded for better performance)
     // Charts load after 4 seconds to prioritize portfolio features
@@ -56,11 +56,11 @@ async function loadLegacyModules() {
     // await import('../features/charts/advanced-charts.js');
 
     // FEATURES: Export functionality
-    await import("../features/export/excel-export.js");
+    await import('../features/export/excel-export.js');
 
-    console.info("✓ All legacy modules loaded and initialized as ES6 imports");
+    console.info('✓ All legacy modules loaded and initialized as ES6 imports');
   } catch (error) {
-    console.error("✗ Failed to load legacy modules:", error);
+    console.error('✗ Failed to load legacy modules:', error);
     throw error;
   }
 }
@@ -74,12 +74,12 @@ async function loadLegacyModules() {
  */
 async function lazyLoadMarketplace() {
   try {
-    await import("../features/marketplace/market-data-service.js");
-    await import("../features/marketplace/market-data-ui.js");
-    await import("../features/marketplace/market-data.js");
-    console.info("✓ Marketplace modules loaded lazily");
+    await import('../features/marketplace/market-data-service.js');
+    await import('../features/marketplace/market-data-ui.js');
+    await import('../features/marketplace/market-data.js');
+    console.info('✓ Marketplace modules loaded lazily');
   } catch (error) {
-    console.error("✗ Failed to lazy-load marketplace modules:", error);
+    console.error('✗ Failed to lazy-load marketplace modules:', error);
   }
 }
 
@@ -92,11 +92,11 @@ async function lazyLoadMarketplace() {
  */
 async function lazyLoadCharts() {
   try {
-    await import("../features/charts/charts-manager.js");
-    await import("../features/charts/advanced-charts.js");
-    console.info("✓ Charts modules loaded lazily");
+    await import('../features/charts/charts-manager.js');
+    await import('../features/charts/advanced-charts.js');
+    console.info('✓ Charts modules loaded lazily');
   } catch (error) {
-    console.error("✗ Failed to lazy-load charts modules:", error);
+    console.error('✗ Failed to lazy-load charts modules:', error);
   }
 }
 

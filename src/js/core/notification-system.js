@@ -7,7 +7,7 @@ class NotificationSystem {
   constructor() {
     this.notifications = [];
     this.maxNotifications = 50;
-    this.permission = "default";
+    this.permission = 'default';
     this.preferences = this.loadPreferences();
     this.unreadCount = 0;
     this.serviceWorkerRegistration = null;
@@ -22,7 +22,7 @@ class NotificationSystem {
     try {
       // Check browser support
 
-      if (!("Notification" in window)) {
+      if (!('Notification' in window)) {
         return;
       }
 
@@ -42,7 +42,7 @@ class NotificationSystem {
       // Setup event listeners
       this.setupEventListeners();
     } catch (error) {
-      console.error("❌ Notification System initialization failed:", error);
+      console.error('❌ Notification System initialization failed:', error);
     }
   }
 
@@ -50,31 +50,25 @@ class NotificationSystem {
    * Register service worker
    */
   async registerServiceWorker() {
-    if ("serviceWorker" in navigator) {
+    if ('serviceWorker' in navigator) {
       try {
         // Service Worker - pouze pro produkci
         // V dev módu (localhost) se SW zcela přeskočí - Vite jej nemá k dispozici
         const isDev =
-          window.location.hostname === "localhost" ||
-          window.location.hostname === "127.0.0.1" ||
-          window.location.hostname === "::1";
+          window.location.hostname === 'localhost' ||
+          window.location.hostname === '127.0.0.1' ||
+          window.location.hostname === '::1';
 
         if (!isDev) {
           // Production: registrovat service worker
           try {
-            const registration = await navigator.serviceWorker.register(
-              "/service-worker.js",
-              {
-                scope: "/",
-              },
-            );
+            const registration = await navigator.serviceWorker.register('/service-worker.js', {
+              scope: '/',
+            });
             this.serviceWorkerRegistration = registration;
-            console.log("✅ Service Worker registered for production");
+            console.log('✅ Service Worker registered for production');
           } catch (swError) {
-            console.warn(
-              "⚠️ Service Worker registration failed (production):",
-              swError.message,
-            );
+            console.warn('⚠️ Service Worker registration failed (production):', swError.message);
           }
         } else {
           // Development: SW se zcela přeskočí - Vite jej nemá
@@ -86,12 +80,11 @@ class NotificationSystem {
       } catch (error) {
         // Bezpečně ignorovat - SW není kritické
         const isDev =
-          window.location.hostname === "localhost" ||
-          window.location.hostname === "127.0.0.1";
+          window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
         if (!isDev) {
-          console.warn("⚠️ Service Worker error:", error.message);
+          console.warn('⚠️ Service Worker error:', error.message);
         } else {
-          console.warn("⚠️ Service Worker registration failed:", error.message);
+          console.warn('⚠️ Service Worker registration failed:', error.message);
         }
       }
     }
@@ -101,7 +94,7 @@ class NotificationSystem {
    * Request notification permission
    */
   async requestPermission() {
-    if (this.permission === "granted") {
+    if (this.permission === 'granted') {
       return true;
     }
 
@@ -110,15 +103,15 @@ class NotificationSystem {
       const result = await Notification.requestPermission();
       this.permission = result;
 
-      if (result === "granted") {
-        this.showInAppNotification("Notifications enabled!", "success");
+      if (result === 'granted') {
+        this.showInAppNotification('Notifications enabled!', 'success');
         return true;
       } else {
-        this.showInAppNotification("Notifications blocked", "warning");
+        this.showInAppNotification('Notifications blocked', 'warning');
         return false;
       }
     } catch (error) {
-      console.error("Permission request failed:", error);
+      console.error('Permission request failed:', error);
       return false;
     }
   }
@@ -131,10 +124,10 @@ class NotificationSystem {
   // eslint-disable-next-line require-await
   async showNotification(title, options = {}) {
     const defaultOptions = {
-      body: "",
-      icon: "/icons/icon-192x192.png",
-      badge: "/icons/icon-96x96.png",
-      tag: "portfolio-notification",
+      body: '',
+      icon: '/icons/icon-192x192.png',
+      badge: '/icons/icon-96x96.png',
+      tag: 'portfolio-notification',
       requireInteraction: false,
       silent: false,
       ...options,
@@ -170,14 +163,10 @@ class NotificationSystem {
     this.renderNotifications();
 
     // Show in-app notification
-    this.showInAppNotification(
-      title,
-      options.category || "info",
-      defaultOptions.body,
-    );
+    this.showInAppNotification(title, options.category || 'info', defaultOptions.body);
 
     // Show browser notification if permitted
-    if (this.permission === "granted") {
+    if (this.permission === 'granted') {
       this.showBrowserNotification(title, defaultOptions);
     }
   }
@@ -201,35 +190,35 @@ class NotificationSystem {
         };
       }
     } catch (error) {
-      console.error("Failed to show browser notification:", error);
+      console.error('Failed to show browser notification:', error);
     }
   }
 
   /**
    * Show in-app notification (toast)
    */
-  showInAppNotification(title, category = "info", body = "") {
-    const toast = document.createElement("div");
-    toast.className = "notification-toast";
+  showInAppNotification(title, category = 'info', body = '') {
+    const toast = document.createElement('div');
+    toast.className = 'notification-toast';
 
     const icons = {
-      info: "ℹ️",
-      success: "✅",
-      warning: "⚠️",
-      error: "❌",
-      portfolio: "💼",
-      trade: "📊",
-      alert: "🔔",
+      info: 'ℹ️',
+      success: '✅',
+      warning: '⚠️',
+      error: '❌',
+      portfolio: '💼',
+      trade: '📊',
+      alert: '🔔',
     };
 
     const colors = {
-      info: "#3498db",
-      success: "#2ecc71",
-      warning: "#f39c12",
-      error: "#e74c3c",
-      portfolio: "#667eea",
-      trade: "#764ba2",
-      alert: "#e74c3c",
+      info: '#3498db',
+      success: '#2ecc71',
+      warning: '#f39c12',
+      error: '#e74c3c',
+      portfolio: '#667eea',
+      trade: '#764ba2',
+      alert: '#e74c3c',
     };
 
     toast.style.cssText = `
@@ -253,7 +242,7 @@ class NotificationSystem {
         <span style="font-size: 1.5rem;">${icons[category] || icons.info}</span>
         <div style="flex: 1;">
           <div style="font-weight: 600; color: #333; margin-bottom: 4px;">${title}</div>
-          ${body ? `<div style="font-size: 0.9rem; color: #666;">${body}</div>` : ""}
+          ${body ? `<div style="font-size: 0.9rem; color: #666;">${body}</div>` : ''}
         </div>
         <button class="toast-close-btn" style="background: none; border: none; color: #999; cursor: pointer; font-size: 1.2rem; padding: 0;">×</button>
       </div>
@@ -262,19 +251,17 @@ class NotificationSystem {
     document.body.appendChild(toast);
 
     // Add close button handler
-    toast
-      .querySelector(".toast-close-btn")
-      .addEventListener("click", () => toast.remove());
+    toast.querySelector('.toast-close-btn').addEventListener('click', () => toast.remove());
 
     // Auto remove after 5 seconds
     setTimeout(() => {
-      toast.style.animation = "slideOutRight 0.3s ease";
+      toast.style.animation = 'slideOutRight 0.3s ease';
       setTimeout(() => toast.remove(), 300);
     }, 5000);
 
     // Click to dismiss
-    toast.addEventListener("click", (e) => {
-      if (!e.target.closest("button")) {
+    toast.addEventListener('click', (e) => {
+      if (!e.target.closest('button')) {
         toast.remove();
       }
     });
@@ -285,14 +272,12 @@ class NotificationSystem {
    */
   createNotificationUI() {
     // Add notification bell button
-    const portfolioCard = document.getElementById("portfolioCard");
+    const portfolioCard = document.getElementById('portfolioCard');
     if (!portfolioCard) {
       return;
     }
 
-    const headerDiv = portfolioCard.querySelector(
-      'div[style*="justify-content: space-between"]',
-    );
+    const headerDiv = portfolioCard.querySelector('div[style*="justify-content: space-between"]');
     if (!headerDiv) {
       return;
     }
@@ -302,17 +287,17 @@ class NotificationSystem {
       return;
     }
 
-    const notifBtn = document.createElement("button");
-    notifBtn.id = "notificationBtn";
-    notifBtn.className = "btn-icon";
-    notifBtn.title = "Notifications";
-    notifBtn.setAttribute("aria-label", "Notifikace");
+    const notifBtn = document.createElement('button');
+    notifBtn.id = 'notificationBtn';
+    notifBtn.className = 'btn-icon';
+    notifBtn.title = 'Notifications';
+    notifBtn.setAttribute('aria-label', 'Notifikace');
     notifBtn.style.cssText =
-      "font-size: 1.5rem; padding: 8px 16px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border: none; border-radius: 8px; cursor: pointer; position: relative;";
+      'font-size: 1.5rem; padding: 8px 16px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border: none; border-radius: 8px; cursor: pointer; position: relative;';
     notifBtn.innerHTML =
       '🔔 <span id="notificationBadge" style="display: none; position: absolute; top: -8px; right: -8px; background: #e74c3c; color: white; border-radius: 50%; min-width: 20px; height: 20px; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; padding: 0 4px;"></span>';
 
-    notifBtn.addEventListener("click", () => this.toggleNotificationPanel());
+    notifBtn.addEventListener('click', () => this.toggleNotificationPanel());
 
     buttonContainer.appendChild(notifBtn);
 
@@ -324,9 +309,9 @@ class NotificationSystem {
    * Create notification panel
    */
   createNotificationPanel() {
-    const panel = document.createElement("div");
-    panel.id = "notificationPanel";
-    panel.className = "notification-panel";
+    const panel = document.createElement('div');
+    panel.id = 'notificationPanel';
+    panel.className = 'notification-panel';
     panel.style.cssText = `
       position: fixed;
       top: 80px;
@@ -361,29 +346,29 @@ class NotificationSystem {
         <h4 style="margin: 0 0 12px 0; font-size: 1rem;">Notification Preferences</h4>
         
         <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px; cursor: pointer;">
-          <input type="checkbox" id="enableBrowserNotif" ${this.preferences.browser ? "checked" : ""}>
+          <input type="checkbox" id="enableBrowserNotif" ${this.preferences.browser ? 'checked' : ''}>
           <span>Enable browser notifications</span>
         </label>
         
         <div style="margin-top: 16px; margin-bottom: 12px; font-weight: 600; font-size: 0.9rem;">Categories:</div>
         
         <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px; cursor: pointer;">
-          <input type="checkbox" id="notifPortfolio" ${this.preferences.portfolio ? "checked" : ""}>
+          <input type="checkbox" id="notifPortfolio" ${this.preferences.portfolio ? 'checked' : ''}>
           <span>💼 Portfolio updates</span>
         </label>
         
         <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px; cursor: pointer;">
-          <input type="checkbox" id="notifTrade" ${this.preferences.trade ? "checked" : ""}>
+          <input type="checkbox" id="notifTrade" ${this.preferences.trade ? 'checked' : ''}>
           <span>📊 Trade alerts</span>
         </label>
         
         <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px; cursor: pointer;">
-          <input type="checkbox" id="notifAlert" ${this.preferences.alert ? "checked" : ""}>
+          <input type="checkbox" id="notifAlert" ${this.preferences.alert ? 'checked' : ''}>
           <span>🔔 Price alerts</span>
         </label>
         
         <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px; cursor: pointer;">
-          <input type="checkbox" id="notifCollab" ${this.preferences.collaboration ? "checked" : ""}>
+          <input type="checkbox" id="notifCollab" ${this.preferences.collaboration ? 'checked' : ''}>
           <span>👥 Collaboration</span>
         </label>
         
@@ -401,57 +386,49 @@ class NotificationSystem {
    * Setup panel event listeners
    */
   setupPanelListeners() {
-    document
-      .getElementById("closeNotifPanel")
-      ?.addEventListener("click", () => {
-        this.toggleNotificationPanel();
-      });
+    document.getElementById('closeNotifPanel')?.addEventListener('click', () => {
+      this.toggleNotificationPanel();
+    });
 
-    document.getElementById("markAllReadBtn")?.addEventListener("click", () => {
+    document.getElementById('markAllReadBtn')?.addEventListener('click', () => {
       this.markAllAsRead();
     });
 
-    document.getElementById("clearAllBtn")?.addEventListener("click", () => {
+    document.getElementById('clearAllBtn')?.addEventListener('click', () => {
       // eslint-disable-next-line no-alert
-      if (confirm("Clear all notifications?")) {
+      if (confirm('Clear all notifications?')) {
         this.clearAll();
       }
     });
 
-    document
-      .getElementById("notificationSettingsBtn")
-      ?.addEventListener("click", () => {
-        this.toggleSettings();
-      });
+    document.getElementById('notificationSettingsBtn')?.addEventListener('click', () => {
+      this.toggleSettings();
+    });
 
-    document
-      .getElementById("enableBrowserNotif")
-      ?.addEventListener("change", async (e) => {
-        if (e.target.checked) {
-          await this.requestPermission();
-        }
-      });
+    document.getElementById('enableBrowserNotif')?.addEventListener('change', async (e) => {
+      if (e.target.checked) {
+        await this.requestPermission();
+      }
+    });
 
-    document
-      .getElementById("saveNotifPreferences")
-      ?.addEventListener("click", () => {
-        this.savePreferences();
-      });
+    document.getElementById('saveNotifPreferences')?.addEventListener('click', () => {
+      this.savePreferences();
+    });
   }
 
   /**
    * Toggle notification panel
    */
   toggleNotificationPanel() {
-    const panel = document.getElementById("notificationPanel");
-    const isVisible = panel.style.display !== "none";
+    const panel = document.getElementById('notificationPanel');
+    const isVisible = panel.style.display !== 'none';
 
-    panel.style.display = isVisible ? "none" : "block";
+    panel.style.display = isVisible ? 'none' : 'block';
 
     if (!isVisible) {
       this.renderNotifications();
       // Hide settings if open
-      document.getElementById("notificationSettings").style.display = "none";
+      document.getElementById('notificationSettings').style.display = 'none';
     }
   }
 
@@ -459,19 +436,19 @@ class NotificationSystem {
    * Toggle settings
    */
   toggleSettings() {
-    const settings = document.getElementById("notificationSettings");
-    const list = document.getElementById("notificationsList");
+    const settings = document.getElementById('notificationSettings');
+    const list = document.getElementById('notificationsList');
 
-    const isVisible = settings.style.display !== "none";
-    settings.style.display = isVisible ? "none" : "block";
-    list.style.display = isVisible ? "block" : "none";
+    const isVisible = settings.style.display !== 'none';
+    settings.style.display = isVisible ? 'none' : 'block';
+    list.style.display = isVisible ? 'block' : 'none';
   }
 
   /**
    * Render notifications
    */
   renderNotifications() {
-    const container = document.getElementById("notificationsList");
+    const container = document.getElementById('notificationsList');
     if (!container) {
       return;
     }
@@ -494,15 +471,15 @@ class NotificationSystem {
         border-bottom: 1px solid #f0f0f0;
         cursor: pointer;
         transition: background 0.2s;
-        ${notif.read ? "opacity: 0.6;" : "background: #f8f9fa;"}
+        ${notif.read ? 'opacity: 0.6;' : 'background: #f8f9fa;'}
       ">
         <div style="display: flex; justify-content: space-between; align-items: start; gap: 12px;">
           <div style="flex: 1;">
             <div style="font-weight: 600; color: #333; margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
-              ${!notif.read ? '<div style="width: 8px; height: 8px; border-radius: 50%; background: #3498db;"></div>' : ""}
+              ${!notif.read ? '<div style="width: 8px; height: 8px; border-radius: 50%; background: #3498db;"></div>' : ''}
               ${notif.title}
             </div>
-            ${notif.body ? `<div style="font-size: 0.9rem; color: #666; margin-bottom: 6px;">${notif.body}</div>` : ""}
+            ${notif.body ? `<div style="font-size: 0.9rem; color: #666; margin-bottom: 6px;">${notif.body}</div>` : ''}
             <div style="font-size: 0.8rem; color: #999;">${this.formatTimestamp(notif.timestamp)}</div>
           </div>
           <button class="delete-notif-btn" data-notif-id="${notif.id}" style="background: none; border: none; color: #999; cursor: pointer; font-size: 1rem; padding: 0;">×</button>
@@ -510,11 +487,11 @@ class NotificationSystem {
       </div>
     `,
       )
-      .join("");
+      .join('');
 
     // Add click handlers to mark as read
-    container.querySelectorAll(".notification-item").forEach((item) => {
-      item.addEventListener("click", () => {
+    container.querySelectorAll('.notification-item').forEach((item) => {
+      item.addEventListener('click', () => {
         const id = parseInt(item.dataset.id);
         this.markAsRead(id);
       });
@@ -577,16 +554,16 @@ class NotificationSystem {
    * Update unread badge
    */
   updateUnreadBadge() {
-    const badge = document.getElementById("notificationBadge");
+    const badge = document.getElementById('notificationBadge');
     if (!badge) {
       return;
     }
 
     if (this.unreadCount > 0) {
-      badge.textContent = this.unreadCount > 99 ? "99+" : this.unreadCount;
-      badge.style.display = "flex";
+      badge.textContent = this.unreadCount > 99 ? '99+' : this.unreadCount;
+      badge.style.display = 'flex';
     } else {
-      badge.style.display = "none";
+      badge.style.display = 'none';
     }
   }
 
@@ -595,18 +572,15 @@ class NotificationSystem {
    */
   savePreferences() {
     this.preferences = {
-      browser: document.getElementById("enableBrowserNotif")?.checked || false,
-      portfolio: document.getElementById("notifPortfolio")?.checked || false,
-      trade: document.getElementById("notifTrade")?.checked || false,
-      alert: document.getElementById("notifAlert")?.checked || false,
-      collaboration: document.getElementById("notifCollab")?.checked || false,
+      browser: document.getElementById('enableBrowserNotif')?.checked || false,
+      portfolio: document.getElementById('notifPortfolio')?.checked || false,
+      trade: document.getElementById('notifTrade')?.checked || false,
+      alert: document.getElementById('notifAlert')?.checked || false,
+      collaboration: document.getElementById('notifCollab')?.checked || false,
     };
 
-    localStorage.setItem(
-      "notification-preferences",
-      JSON.stringify(this.preferences),
-    );
-    this.showInAppNotification("Preferences saved!", "success");
+    localStorage.setItem('notification-preferences', JSON.stringify(this.preferences));
+    this.showInAppNotification('Preferences saved!', 'success');
     this.toggleSettings();
   }
 
@@ -615,16 +589,16 @@ class NotificationSystem {
    */
   loadPreferences() {
     try {
-      const saved = localStorage.getItem("notification-preferences");
+      const saved = localStorage.getItem('notification-preferences');
       return saved
         ? JSON.parse(saved)
         : {
-            browser: false,
-            portfolio: true,
-            trade: true,
-            alert: true,
-            collaboration: true,
-          };
+          browser: false,
+          portfolio: true,
+          trade: true,
+          alert: true,
+          collaboration: true,
+        };
     } catch (_error) {
       return {
         browser: false,
@@ -652,11 +626,11 @@ class NotificationSystem {
   saveNotifications() {
     try {
       localStorage.setItem(
-        "notifications",
+        'notifications',
         JSON.stringify(this.notifications.slice(0, this.maxNotifications)),
       );
     } catch (error) {
-      console.error("Failed to save notifications:", error);
+      console.error('Failed to save notifications:', error);
     }
   }
 
@@ -665,7 +639,7 @@ class NotificationSystem {
    */
   loadNotifications() {
     try {
-      const saved = localStorage.getItem("notifications");
+      const saved = localStorage.getItem('notifications');
       if (saved) {
         this.notifications = JSON.parse(saved).map((n) => ({
           ...n,
@@ -675,7 +649,7 @@ class NotificationSystem {
         this.updateUnreadBadge();
       }
     } catch (error) {
-      console.error("Failed to load notifications:", error);
+      console.error('Failed to load notifications:', error);
     }
   }
 
@@ -684,26 +658,26 @@ class NotificationSystem {
    */
   setupEventListeners() {
     // Portfolio change notifications
-    window.addEventListener("portfolio-updated", () => {
-      this.showNotification("Portfolio Updated", {
-        body: "Your portfolio data has been updated",
-        category: "portfolio",
+    window.addEventListener('portfolio-updated', () => {
+      this.showNotification('Portfolio Updated', {
+        body: 'Your portfolio data has been updated',
+        category: 'portfolio',
       });
     });
 
     // Trade notifications
-    window.addEventListener("trade-executed", (e) => {
-      this.showNotification("Trade Executed", {
+    window.addEventListener('trade-executed', (e) => {
+      this.showNotification('Trade Executed', {
         body: `${e.detail.type}: ${e.detail.asset}`,
-        category: "trade",
+        category: 'trade',
       });
     });
 
     // Collaboration notifications
-    window.addEventListener("user-joined", (e) => {
-      this.showNotification("User Joined", {
+    window.addEventListener('user-joined', (e) => {
+      this.showNotification('User Joined', {
         body: `${e.detail.userName} joined the session`,
-        category: "collaboration",
+        category: 'collaboration',
       });
     });
   }
@@ -716,7 +690,7 @@ class NotificationSystem {
     const diff = now - timestamp;
 
     if (diff < 60000) {
-      return "Just now";
+      return 'Just now';
     }
     if (diff < 3600000) {
       return `${Math.floor(diff / 60000)}m ago`;
@@ -728,7 +702,7 @@ class NotificationSystem {
       return `${Math.floor(diff / 86400000)}d ago`;
     }
 
-    return timestamp.toLocaleDateString("cs-CZ");
+    return timestamp.toLocaleDateString('cs-CZ');
   }
 }
 
@@ -736,7 +710,7 @@ class NotificationSystem {
 window.notificationSystem = new NotificationSystem();
 
 // Add animation styles
-const notificationStyle = document.createElement("style");
+const notificationStyle = document.createElement('style');
 notificationStyle.textContent = `
   @keyframes slideInRight {
     from {

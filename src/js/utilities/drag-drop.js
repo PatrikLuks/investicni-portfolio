@@ -32,8 +32,8 @@ class DragDropManager {
    * Create drop indicator element
    */
   createDropIndicator() {
-    this.dropIndicator = document.createElement("div");
-    this.dropIndicator.className = "drop-indicator";
+    this.dropIndicator = document.createElement('div');
+    this.dropIndicator.className = 'drop-indicator';
     this.dropIndicator.style.cssText = `
       position: absolute;
       left: 0;
@@ -54,8 +54,8 @@ class DragDropManager {
    * Create ghost element for drag preview
    */
   createGhostElement() {
-    this.ghostElement = document.createElement("div");
-    this.ghostElement.className = "drag-ghost";
+    this.ghostElement = document.createElement('div');
+    this.ghostElement.className = 'drag-ghost';
     this.ghostElement.style.cssText = `
       position: fixed;
       pointer-events: none;
@@ -78,7 +78,7 @@ class DragDropManager {
    */
   enableOnTable(tableBody, onReorder) {
     if (!tableBody) {
-      console.error("Table body element not found");
+      console.error('Table body element not found');
       return;
     }
 
@@ -91,7 +91,7 @@ class DragDropManager {
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         mutation.addedNodes.forEach((node) => {
-          if (node.nodeName === "TR" && !node.querySelector(".drag-handle")) {
+          if (node.nodeName === 'TR' && !node.querySelector('.drag-handle')) {
             this.addDragHandle(node);
           }
         });
@@ -106,9 +106,9 @@ class DragDropManager {
    * @param {HTMLElement} tableBody - Table body element
    */
   addDragHandlesToRows(tableBody) {
-    const rows = tableBody.querySelectorAll("tr");
+    const rows = tableBody.querySelectorAll('tr');
     rows.forEach((row) => {
-      if (!row.querySelector(".drag-handle")) {
+      if (!row.querySelector('.drag-handle')) {
         this.addDragHandle(row);
       }
     });
@@ -120,8 +120,8 @@ class DragDropManager {
    */
   addDragHandle(row) {
     // Create drag handle cell
-    const handleCell = document.createElement("td");
-    handleCell.className = "drag-handle-cell";
+    const handleCell = document.createElement('td');
+    handleCell.className = 'drag-handle-cell';
     handleCell.style.cssText = `
       width: 40px;
       text-align: center;
@@ -130,13 +130,13 @@ class DragDropManager {
       padding: 0;
     `;
 
-    const handleIcon = document.createElement("span");
-    handleIcon.className = "drag-handle";
-    handleIcon.textContent = "⋮⋮";
-    handleIcon.setAttribute("draggable", "true");
-    handleIcon.setAttribute("role", "button");
-    handleIcon.setAttribute("aria-label", "Přetáhnout řádek");
-    handleIcon.setAttribute("tabindex", "0");
+    const handleIcon = document.createElement('span');
+    handleIcon.className = 'drag-handle';
+    handleIcon.textContent = '⋮⋮';
+    handleIcon.setAttribute('draggable', 'true');
+    handleIcon.setAttribute('role', 'button');
+    handleIcon.setAttribute('aria-label', 'Přetáhnout řádek');
+    handleIcon.setAttribute('tabindex', '0');
     handleIcon.style.cssText = `
       display: inline-block;
       font-size: 1.2rem;
@@ -165,27 +165,27 @@ class DragDropManager {
    * @param {HTMLElement} handle - Drag handle
    */
   attachDragListeners(row, handle) {
-    handle.addEventListener("dragstart", (e) => {
+    handle.addEventListener('dragstart', (e) => {
       this.handleDragStart(e, row);
     });
 
-    row.addEventListener("dragend", (e) => {
+    row.addEventListener('dragend', (e) => {
       this.handleDragEnd(e);
     });
 
-    row.addEventListener("dragover", (e) => {
+    row.addEventListener('dragover', (e) => {
       this.handleDragOver(e, row);
     });
 
-    row.addEventListener("dragenter", (e) => {
+    row.addEventListener('dragenter', (e) => {
       this.handleDragEnter(e, row);
     });
 
-    row.addEventListener("dragleave", (e) => {
+    row.addEventListener('dragleave', (e) => {
       this.handleDragLeave(e);
     });
 
-    row.addEventListener("drop", (e) => {
+    row.addEventListener('drop', (e) => {
       this.handleDrop(e, row);
     });
   }
@@ -197,7 +197,7 @@ class DragDropManager {
    */
   attachTouchListeners(row, handle) {
     handle.addEventListener(
-      "touchstart",
+      'touchstart',
       (e) => {
         this.handleTouchStart(e, row);
       },
@@ -205,7 +205,7 @@ class DragDropManager {
     );
 
     handle.addEventListener(
-      "touchmove",
+      'touchmove',
       (e) => {
         this.handleTouchMove(e, row);
       },
@@ -213,14 +213,14 @@ class DragDropManager {
     );
 
     handle.addEventListener(
-      "touchend",
+      'touchend',
       (e) => {
         this.handleTouchEnd(e);
       },
       { passive: false },
     );
 
-    handle.addEventListener("touchcancel", (e) => {
+    handle.addEventListener('touchcancel', (e) => {
       this.handleTouchEnd(e);
     });
   }
@@ -231,14 +231,14 @@ class DragDropManager {
    * @param {HTMLElement} handle - Drag handle
    */
   attachKeyboardListeners(row, handle) {
-    handle.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") {
+    handle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         this.toggleKeyboardDrag(row);
-      } else if (e.key === "ArrowUp") {
+      } else if (e.key === 'ArrowUp') {
         e.preventDefault();
         this.moveRowUp(row);
-      } else if (e.key === "ArrowDown") {
+      } else if (e.key === 'ArrowDown') {
         e.preventDefault();
         this.moveRowDown(row);
       }
@@ -256,16 +256,16 @@ class DragDropManager {
     this.isDragging = true;
 
     // Set drag data
-    e.dataTransfer.effectAllowed = "move";
-    e.dataTransfer.setData("text/html", row.innerHTML);
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/html', row.innerHTML);
 
     // Add dragging class
-    row.classList.add("dragging");
+    row.classList.add('dragging');
 
     // Change cursor
-    const handle = row.querySelector(".drag-handle");
+    const handle = row.querySelector('.drag-handle');
     if (handle) {
-      handle.style.cursor = "grabbing";
+      handle.style.cursor = 'grabbing';
     }
 
     // Create drag image
@@ -279,7 +279,7 @@ class DragDropManager {
    */
   handleDragOver(e) {
     e.preventDefault();
-    e.dataTransfer.dropEffect = "move";
+    e.dataTransfer.dropEffect = 'move';
   }
 
   /**
@@ -304,7 +304,7 @@ class DragDropManager {
    */
   handleDragLeave(e) {
     // Hide drop indicator when leaving
-    if (e.target.tagName === "TR") {
+    if (e.target.tagName === 'TR') {
       this.hideDropIndicator();
     }
   }
@@ -339,11 +339,11 @@ class DragDropManager {
    */
   handleDragEnd(e) {
     if (this.draggedElement) {
-      this.draggedElement.classList.remove("dragging");
+      this.draggedElement.classList.remove('dragging');
 
-      const handle = this.draggedElement.querySelector(".drag-handle");
+      const handle = this.draggedElement.querySelector('.drag-handle');
       if (handle) {
-        handle.style.cursor = "grab";
+        handle.style.cursor = 'grab';
       }
     }
 
@@ -369,7 +369,7 @@ class DragDropManager {
     this.isDragging = true;
     this.touchStartY = e.touches[0].clientY;
 
-    row.classList.add("dragging");
+    row.classList.add('dragging');
 
     // Show ghost element
     this.showGhostElement(row, e.touches[0].clientX, e.touches[0].clientY);
@@ -393,12 +393,9 @@ class DragDropManager {
     this.moveGhostElement(e.touches[0].clientX, e.touches[0].clientY);
 
     // Find element under touch
-    const elementBelow = document.elementFromPoint(
-      e.touches[0].clientX,
-      e.touches[0].clientY,
-    );
+    const elementBelow = document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY);
 
-    const targetRow = elementBelow?.closest("tr");
+    const targetRow = elementBelow?.closest('tr');
     if (targetRow && targetRow !== this.draggedElement) {
       this.showDropIndicator(targetRow);
     }
@@ -422,7 +419,7 @@ class DragDropManager {
       e.changedTouches[0].clientY,
     );
 
-    const targetRow = elementBelow?.closest("tr");
+    const targetRow = elementBelow?.closest('tr');
     if (targetRow && targetRow !== this.draggedElement) {
       const targetIndex = this.getRowIndex(targetRow);
       this.reorderRows(this.draggedIndex, targetIndex);
@@ -434,7 +431,7 @@ class DragDropManager {
 
     // Clean up
     if (this.draggedElement) {
-      this.draggedElement.classList.remove("dragging");
+      this.draggedElement.classList.remove('dragging');
     }
 
     this.hideDropIndicator();
@@ -480,7 +477,7 @@ class DragDropManager {
     this.ghostElement.style.width = `${row.offsetWidth}px`;
     this.ghostElement.style.left = `${x - row.offsetWidth / 2}px`;
     this.ghostElement.style.top = `${y - 30}px`;
-    this.ghostElement.style.opacity = "0.8";
+    this.ghostElement.style.opacity = '0.8';
   }
 
   /**
@@ -497,7 +494,7 @@ class DragDropManager {
    * Hide ghost element
    */
   hideGhostElement() {
-    this.ghostElement.style.opacity = "0";
+    this.ghostElement.style.opacity = '0';
   }
 
   /**
@@ -509,14 +506,14 @@ class DragDropManager {
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
     this.dropIndicator.style.top = `${rect.top + scrollTop - 2}px`;
-    this.dropIndicator.style.opacity = "1";
+    this.dropIndicator.style.opacity = '1';
   }
 
   /**
    * Hide drop indicator
    */
   hideDropIndicator() {
-    this.dropIndicator.style.opacity = "0";
+    this.dropIndicator.style.opacity = '0';
   }
 
   /**
@@ -544,7 +541,7 @@ class DragDropManager {
     }
 
     // Add animation
-    rows[fromIndex].style.animation = "slideIn 0.3s ease";
+    rows[fromIndex].style.animation = 'slideIn 0.3s ease';
   }
 
   /**
@@ -564,7 +561,7 @@ class DragDropManager {
       }
 
       // Keep focus on handle
-      row.querySelector(".drag-handle")?.focus();
+      row.querySelector('.drag-handle')?.focus();
     }
   }
 
@@ -585,7 +582,7 @@ class DragDropManager {
       }
 
       // Keep focus on handle
-      row.querySelector(".drag-handle")?.focus();
+      row.querySelector('.drag-handle')?.focus();
     }
   }
 
@@ -594,17 +591,17 @@ class DragDropManager {
    * @param {HTMLElement} row - Table row
    */
   toggleKeyboardDrag(row) {
-    const isSelected = row.classList.contains("keyboard-selected");
+    const isSelected = row.classList.contains('keyboard-selected');
 
     if (isSelected) {
-      row.classList.remove("keyboard-selected");
+      row.classList.remove('keyboard-selected');
     } else {
       // Remove selection from other rows
-      document.querySelectorAll(".keyboard-selected").forEach((r) => {
-        r.classList.remove("keyboard-selected");
+      document.querySelectorAll('.keyboard-selected').forEach((r) => {
+        r.classList.remove('keyboard-selected');
       });
 
-      row.classList.add("keyboard-selected");
+      row.classList.add('keyboard-selected');
     }
   }
 
@@ -630,10 +627,7 @@ class DragDropManager {
       this.startAutoScroll();
     } else if (y > viewportHeight - threshold) {
       // Scroll down
-      this.scrollSpeed = Math.min(
-        maxSpeed,
-        (y - (viewportHeight - threshold)) / 10,
-      );
+      this.scrollSpeed = Math.min(maxSpeed, (y - (viewportHeight - threshold)) / 10);
       this.startAutoScroll();
     } else {
       this.stopAutoScroll();
@@ -668,10 +662,10 @@ class DragDropManager {
    * Disable drag & drop
    */
   disable() {
-    document.querySelectorAll(".drag-handle").forEach((handle) => {
-      handle.setAttribute("draggable", "false");
-      handle.style.cursor = "not-allowed";
-      handle.style.opacity = "0.5";
+    document.querySelectorAll('.drag-handle').forEach((handle) => {
+      handle.setAttribute('draggable', 'false');
+      handle.style.cursor = 'not-allowed';
+      handle.style.opacity = '0.5';
     });
   }
 
@@ -679,10 +673,10 @@ class DragDropManager {
    * Enable drag & drop
    */
   enable() {
-    document.querySelectorAll(".drag-handle").forEach((handle) => {
-      handle.setAttribute("draggable", "true");
-      handle.style.cursor = "grab";
-      handle.style.opacity = "1";
+    document.querySelectorAll('.drag-handle').forEach((handle) => {
+      handle.setAttribute('draggable', 'true');
+      handle.style.cursor = 'grab';
+      handle.style.opacity = '1';
     });
   }
 
@@ -700,21 +694,18 @@ class DragDropManager {
 window.dragDropManager = new DragDropManager();
 
 // Auto-initialize on table if it exists
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", initDragDrop);
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initDragDrop);
 } else {
   initDragDrop();
 }
 
 function initDragDrop() {
-  const tableBody = document.querySelector("#portfolioTable tbody");
+  const tableBody = document.querySelector('#portfolioTable tbody');
   if (tableBody) {
     window.dragDropManager.enableOnTable(tableBody, (fromIndex, toIndex) => {
       // Update portfolio data order
-      if (
-        typeof window.getFondyData === "function" &&
-        typeof window.saveFondy === "function"
-      ) {
+      if (typeof window.getFondyData === 'function' && typeof window.saveFondy === 'function') {
         const data = window.getFondyData();
         const [movedItem] = data.splice(fromIndex, 1);
         data.splice(toIndex, 0, movedItem);

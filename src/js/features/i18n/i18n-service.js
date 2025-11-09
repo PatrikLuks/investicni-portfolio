@@ -1,7 +1,7 @@
 /**
  * PHASE 7: Internationalization (i18n) Service
  * Multi-language support for 10+ languages
- * 
+ *
  * Supported languages:
  * - English (en)
  * - Czech (cs)
@@ -61,13 +61,13 @@ class I18nService {
       this.translations = await response.json();
       this.currentLanguage = lang;
       localStorage.setItem('language', lang);
-      
+
       // Update HTML lang attribute
       document.documentElement.lang = lang;
-      
+
       // Notify listeners
       this.notifyListeners();
-      
+
       console.log('[i18n] Language loaded:', lang);
     } catch (error) {
       console.warn('[i18n] Failed to load language:', error);
@@ -82,7 +82,7 @@ class I18nService {
     let value = this.translations[key] || key;
 
     // Replace parameters
-    Object.keys(params).forEach(param => {
+    Object.keys(params).forEach((param) => {
       value = value.replace(`{${param}}`, params[param]);
     });
 
@@ -93,10 +93,10 @@ class I18nService {
    * Translate all elements with data-i18n attribute
    */
   applyTranslations() {
-    document.querySelectorAll('[data-i18n]').forEach(element => {
+    document.querySelectorAll('[data-i18n]').forEach((element) => {
       const key = element.getAttribute('data-i18n');
       const text = this.t(key);
-      
+
       // Check for attributes (e.g., placeholder, title)
       const attr = element.getAttribute('data-i18n-attr');
       if (attr) {
@@ -142,12 +142,12 @@ class I18nService {
   onChange(callback) {
     this.listeners.push(callback);
     return () => {
-      this.listeners = this.listeners.filter(l => l !== callback);
+      this.listeners = this.listeners.filter((l) => l !== callback);
     };
   }
 
   notifyListeners() {
-    this.listeners.forEach(listener => listener(this.currentLanguage));
+    this.listeners.forEach((listener) => listener(this.currentLanguage));
   }
 
   /**
@@ -166,14 +166,14 @@ class I18nService {
       'app.title': 'Portfolio Manager Pro',
       'app.subtitle': 'Professional Investment Portfolio Management',
       'app.version': 'v3.3.0',
-      
+
       // Navigation
       'nav.dashboard': 'Dashboard',
       'nav.portfolio': 'Portfolio',
       'nav.analytics': 'Analytics',
       'nav.settings': 'Settings',
       'nav.help': 'Help',
-      
+
       // Buttons
       'button.add': 'Add',
       'button.edit': 'Edit',
@@ -184,7 +184,7 @@ class I18nService {
       'button.import': 'Import',
       'button.submit': 'Submit',
       'button.close': 'Close',
-      
+
       // Forms
       'form.fundName': 'Fund Name',
       'form.ticker': 'Ticker Symbol',
@@ -194,21 +194,21 @@ class I18nService {
       'form.currency': 'Currency',
       'form.category': 'Category',
       'form.notes': 'Notes',
-      
+
       // Messages
       'message.success': 'Operation successful!',
       'message.error': 'An error occurred',
       'message.confirm': 'Are you sure?',
       'message.noData': 'No data available',
       'message.loading': 'Loading...',
-      
+
       // Analytics
       'analytics.totalValue': 'Total Value',
       'analytics.totalGain': 'Total Gain',
       'analytics.gainPercent': 'Gain %',
       'analytics.distribution': 'Distribution',
       'analytics.performance': 'Performance',
-      
+
       // Auth
       'auth.login': 'Login',
       'auth.logout': 'Logout',
@@ -219,7 +219,7 @@ class I18nService {
       'auth.forgotPassword': 'Forgot password?',
       'auth.createAccount': 'Create account',
       'auth.alreadyAccount': 'Already have an account?',
-      
+
       // Errors
       'error.invalidEmail': 'Invalid email address',
       'error.weakPassword': 'Password is too weak',
