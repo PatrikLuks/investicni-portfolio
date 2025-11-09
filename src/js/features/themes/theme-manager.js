@@ -311,60 +311,6 @@ class ThemeManager {
 // CSS Variables for theming
 const themeStyles = document.createElement('style');
 themeStyles.textContent = `
-  }
-
-  showThemeNotification(theme) {
-    const messages = {
-      [this.THEMES.ELEGANT_BLACK]: '⬛ Elegantní černý vzhled aktivován',
-      [this.THEMES.DARK]: '🌙 Tmavý režim aktivován',
-      [this.THEMES.LIGHT_CLASSIC]: '☀️ Světlý Klasik aktivován',
-      [this.THEMES.LIGHT_MODERN]: '💡 Světlý Moderní aktivován',
-    };
-
-    const message = messages[theme] || 'Téma aktivováno';
-
-  updateToggleIcon(button, theme) {
-    // Show sun for light mode, moon for dark mode only
-    const icons = {
-      light: '☀️',
-      dark: '🌙',
-    };
-    const icon = icons[theme] || (theme === this.THEMES.LIGHT ? '☀️' : '�');
-    button.textContent = icon;
-    button.title = `Current theme: ${theme} - Click to toggle`;
-  }
-
-  showThemeNotification(theme) {
-    const messages = {
-      light: '☀️ Light mode activated',
-      dark: '🌙 Dark mode activated',
-    };
-
-    if (typeof showToast === 'function') {
-      showToast('success', 'Theme', messages[theme] || `Theme: ${theme}`);
-    }
-  }
-
-  // Public API
-  setTheme(theme) {
-    if (Object.values(this.THEMES).includes(theme)) {
-      this.saveTheme(theme);
-      this.applyTheme(theme);
-    }
-  }
-
-  getTheme() {
-    return this.currentTheme;
-  }
-
-  getEffectiveThemeValue() {
-    return this.getEffectiveTheme();
-  }
-}
-
-// CSS Variables for theming
-const themeStyles = document.createElement('style');
-themeStyles.textContent = `
   /* Theme Variables */
   :root {
     /* Light theme (default) */

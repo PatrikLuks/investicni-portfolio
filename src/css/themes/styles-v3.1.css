@@ -1,81 +1,12 @@
 /**
  * Investment Portfolio Manager Pro - v3.1.0 Styles
  * Premium UI components styling for dark mode, charts, and new features
+ * 
+ * NOTE: CSS Variables are now defined in theme-4modes.css
+ * This file contains component-specific styling only
  */
 
-/* ===== Dark Mode Theme Variables ===== */
-:root {
-  /* Light Theme (default) */
-  --color-primary: #3b82f6;
-  --color-primary-hover: #2563eb;
-  --color-secondary: #8b5cf6;
-  --color-success: #10b981;
-  --color-danger: #ef4444;
-  --color-warning: #f59e0b;
-  --color-info: #06b6d4;
-
-  --bg-primary: #ffffff;
-  --bg-secondary: #f3f4f6;
-  --bg-tertiary: #e5e7eb;
-  --bg-modal: rgba(0, 0, 0, 0.5);
-
-  /* Light mode text colors */
-  --text-primary: #1f2937;
-  --text-secondary: #4b5563;
-  --text-tertiary: #6b7280;
-
-  --border-color: #e0e0e0;
-  --input-bg: #ffffff;
-  --input-border: #d1d5db;
-  --input-text: #1f2937;
-  --input-placeholder: #9ca3af;
-  
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-
-  --transition-speed: 300ms;
-}
-
-body.dark-mode,
-body.theme-dark,
-html[data-theme="dark"] {
-  /* Dark Theme */
-  --color-primary: #60a5fa;
-  --color-primary-hover: #3b82f6;
-  --color-secondary: #a78bfa;
-  --color-success: #34d399;
-  --color-danger: #f87171;
-  --color-warning: #fbbf24;
-  --color-info: #22d3ee;
-
-  --bg-primary: #0f172a;
-  --bg-secondary: #1e293b;
-  --bg-tertiary: #334155;
-  --bg-modal: rgba(0, 0, 0, 0.7);
-
-  --text-primary: #f1f5f9;
-  --text-secondary: #cbd5e1;
-  --text-tertiary: #64748b;
-
-  --border-color: #334155;
-  --input-bg: #1e293b;
-  --input-border: #334155;
-  --input-text: #f1f5f9;
-  --input-placeholder: #94a3b8;
-
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
-}
-
-/* Smooth transitions for theme switching */
-* {
-  transition:
-    background-color var(--transition-speed),
-    color var(--transition-speed),
-    border-color var(--transition-speed);
-}
+/* Theme variables are now defined in theme-4modes.css */
 
 /* ===== Theme Toggle Button ===== */
 .theme-toggle {

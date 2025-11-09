@@ -1,273 +1,589 @@
 /**
- * 4-Theme System CSS Variables
- * 1. Elegant Black - Luxusní černý vzhled
- * 2. Dark - Standardní tmavý režim
- * 3. Light Classic - Standardní světlý režim
- * 4. Light Modern - Moderní světlý s modrou
+ * 4-Theme System CSS Variables - PREMIUM DESIGN
+ * 1. Elegant Black - Luxusní černý vzhled (zlatá + fialová)
+ * 2. Dark - Standardní tmavý režim (modrý)
+ * 3. Light Classic - Klasický světlý vzhled (čistý bílý)
+ * 4. Light Modern - Moderní světlý vzhled (ledově modrý)
  */
 
-/* ===== LIGHT CLASSIC THEME (Default) ===== */
-:root,
-html[data-theme="light-classic"] {
-  /* Light Classic - Traditional clean white */
-  --color-primary: #3b82f6;
-  --color-primary-hover: #2563eb;
-  --color-secondary: #8b5cf6;
-  --color-success: #10b981;
-  --color-danger: #ef4444;
-  --color-warning: #f59e0b;
-  --color-info: #06b6d4;
+/* ============================================================================
+   1️⃣ ELEGANT BLACK THEME - PREMIUM LUXURIOUS DESIGN
+   Černá pozadí, zlaté akcenty, elegantní atmosféra
+   ============================================================================ */
 
-  --bg-primary: #ffffff;
-  --bg-secondary: #f9fafb;
-  --bg-tertiary: #f3f4f6;
-  --bg-modal: rgba(0, 0, 0, 0.5);
-  --bg-elevated: #ffffff;
+html[data-theme="elegant-black"] {
+  /* PRIMARY: Rich Gold for luxury accent */
+  --color-primary: #ffd700;
+  --color-primary-hover: #ffed4e;
+  --color-primary-light: #ffeb3b;
+  --color-primary-dark: #daa520;
+  
+  /* SECONDARY: Deep Purple for contrast */
+  --color-secondary: #9d4edd;
+  --color-secondary-hover: #b366ff;
+  
+  /* STATUS COLORS - Refined palette */
+  --color-success: #2ecc71;
+  --color-danger: #ff6b6b;
+  --color-warning: #ffb347;
+  --color-info: #00d4ff;
 
-  --text-primary: #1f2937;
-  --text-secondary: #4b5563;
-  --text-tertiary: #6b7280;
+  /* BACKGROUNDS - Pure elegance */
+  --bg-primary: #0a0e27;
+  --bg-secondary: #1a1f3a;
+  --bg-tertiary: #2d3561;
+  --bg-modal: rgba(10, 14, 39, 0.95);
+  --bg-elevated: #1f2a4a;
+  --bg-light-accent: #3a4577;
 
-  --border-color: #e5e7eb;
-  --input-bg: #ffffff;
-  --input-border: #d1d5db;
-  --input-text: #1f2937;
-  --input-placeholder: #9ca3af;
+  /* TEXT - Premium contrast */
+  --text-primary: #ffffff;
+  --text-secondary: #e8eef7;
+  --text-tertiary: #a8b5cc;
+  --text-muted: #6b7590;
 
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  /* INPUTS - Deep elegant styling */
+  --border-color: #4a5580;
+  --input-bg: #1a1f3a;
+  --input-border: #3a4577;
+  --input-border-focus: #ffd700;
+  --input-text: #ffffff;
+  --input-placeholder: #8a92a8;
 
-  --transition-speed: 300ms;
+  /* SHADOWS - Sophisticated depth */
+  --shadow-sm: 0 2px 8px rgba(255, 215, 0, 0.05);
+  --shadow-md: 0 6px 20px rgba(255, 215, 0, 0.08);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.4);
+  --shadow-glow: 0 0 20px rgba(255, 215, 0, 0.15);
+
+  --transition-speed: 350ms;
 }
 
-/* ===== LIGHT MODERN THEME ===== */
-html[data-theme="light-modern"] {
-  /* Light Modern - Clean white with subtle blue tint */
-  --color-primary: #2563eb;
-  --color-primary-hover: #1d4ed8;
-  --color-secondary: #7c3aed;
-  --color-success: #059669;
-  --color-danger: #dc2626;
-  --color-warning: #d97706;
-  --color-info: #0891b2;
+/* ============================================================================
+   2️⃣ DARK THEME - MODERN BLUE DARK MODE
+   Tmavá pozadí, modrá akcenta, moderní vzhled
+   ============================================================================ */
 
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
-  --bg-tertiary: #e2e8f0;
-  --bg-modal: rgba(0, 0, 0, 0.6);
-  --bg-elevated: #ffffff;
-
-  --text-primary: #0f172a;
-  --text-secondary: #334155;
-  --text-tertiary: #64748b;
-
-  --border-color: #cbd5e1;
-  --input-bg: #f8fafc;
-  --input-border: #cbd5e1;
-  --input-text: #0f172a;
-  --input-placeholder: #94a3b8;
-
-  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08);
-  --shadow-md: 0 4px 8px rgba(15, 23, 42, 0.1);
-  --shadow-lg: 0 12px 20px rgba(15, 23, 42, 0.12);
-
-  --transition-speed: 250ms;
-}
-
-/* ===== DARK THEME ===== */
 html[data-theme="dark"] {
-  /* Dark - Standard dark mode */
+  /* PRIMARY: Vibrant Blue */
   --color-primary: #60a5fa;
-  --color-primary-hover: #3b82f6;
+  --color-primary-hover: #93c5fd;
+  --color-primary-light: #bfdbfe;
+  --color-primary-dark: #3b82f6;
+  
+  /* SECONDARY: Purple accent */
   --color-secondary: #a78bfa;
+  --color-secondary-hover: #c4b5fd;
+  
+  /* STATUS COLORS */
   --color-success: #34d399;
   --color-danger: #f87171;
   --color-warning: #fbbf24;
   --color-info: #22d3ee;
 
+  /* BACKGROUNDS - Modern dark */
   --bg-primary: #0f172a;
   --bg-secondary: #1e293b;
   --bg-tertiary: #334155;
-  --bg-modal: rgba(0, 0, 0, 0.7);
+  --bg-modal: rgba(15, 23, 42, 0.9);
   --bg-elevated: #1e293b;
+  --bg-light-accent: #475569;
 
+  /* TEXT - Clear contrast */
   --text-primary: #f1f5f9;
   --text-secondary: #cbd5e1;
-  --text-tertiary: #64748b;
+  --text-tertiary: #94a3b8;
+  --text-muted: #64748b;
 
+  /* INPUTS */
   --border-color: #334155;
   --input-bg: #1e293b;
   --input-border: #334155;
+  --input-border-focus: #60a5fa;
   --input-text: #f1f5f9;
-  --input-placeholder: #94a3b8;
+  --input-placeholder: #64748b;
 
+  /* SHADOWS */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 12px 30px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 15px rgba(96, 165, 250, 0.1);
 
   --transition-speed: 300ms;
 }
 
-/* ===== ELEGANT BLACK THEME (Luxury) ===== */
-html[data-theme="elegant-black"] {
-  /* Elegant Black - Luxusní černý vzhled */
-  --color-primary: #fbbf24;
-  --color-primary-hover: #f59e0b;
-  --color-secondary: #a78bfa;
-  --color-success: #34d399;
-  --color-danger: #f87171;
-  --color-warning: #fcd34d;
-  --color-info: #22d3ee;
+/* ============================================================================
+   3️⃣ LIGHT CLASSIC THEME - PREMIUM PROFESSIONAL
+   Bílá pozadí, tmavě modrá akcenta, excelentní kontrast
+   ============================================================================ */
 
-  --bg-primary: #000000;
-  --bg-secondary: #1a1a1a;
-  --bg-tertiary: #2d2d2d;
-  --bg-modal: rgba(0, 0, 0, 0.85);
-  --bg-elevated: #1a1a1a;
+:root,
+html[data-theme="light-classic"] {
+  /* PRIMARY: Deep Professional Blue - Maximum contrast */
+  --color-primary: #001a4d;
+  --color-primary-hover: #0d2966;
+  --color-primary-light: #1a3a7a;
+  --color-primary-dark: #000f2e;
+  
+  /* SECONDARY: Rich Purple */
+  --color-secondary: #4a148c;
+  --color-secondary-hover: #6a1b9a;
+  
+  /* STATUS COLORS - High contrast & saturated */
+  --color-success: #0d3d00;
+  --color-danger: #7f0000;
+  --color-warning: #7f5000;
+  --color-info: #003d7a;
 
-  --text-primary: #ffffff;
-  --text-secondary: #e5e5e5;
-  --text-tertiary: #a6a6a6;
+  /* BACKGROUNDS - Clean with subtle depth */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-tertiary: #eef0f4;
+  --bg-modal: rgba(0, 0, 0, 0.55);
+  --bg-elevated: #ffffff;
+  --bg-light-accent: #e0e5eb;
 
-  --border-color: #404040;
-  --input-bg: #1a1a1a;
-  --input-border: #404040;
-  --input-text: #ffffff;
-  --input-placeholder: #808080;
+  /* TEXT - Maximum readability */
+  --text-primary: #000000;
+  --text-secondary: #1a1a1a;
+  --text-tertiary: #333333;
+  --text-muted: #555555;
 
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.5);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.6);
-  --shadow-lg: 0 15px 30px rgba(0, 0, 0, 0.7);
+  /* INPUTS - High contrast */
+  --border-color: #a8b5c8;
+  --input-bg: #ffffff;
+  --input-border: #8899b3;
+  --input-border-focus: #001a4d;
+  --input-text: #000000;
+  --input-placeholder: #666666;
 
-  --transition-speed: 350ms;
+  /* SHADOWS - Professional depth */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 10px 24px rgba(0, 0, 0, 0.15);
+  --shadow-glow: 0 0 16px rgba(0, 26, 77, 0.12);
+
+  --transition-speed: 280ms;
 }
 
-/* ===== SMOOTH TRANSITIONS ===== */
+/* ============================================================================
+   4️⃣ LIGHT MODERN THEME - CONTEMPORARY & FRESH
+   Ledově modrá pozadí, vibrantní modrá akcenta, vysoký kontrast
+   ============================================================================ */
+
+html[data-theme="light-modern"] {
+  /* PRIMARY: Vibrant Saturated Blue - More dominant & modern */
+  --color-primary: #0033cc;
+  --color-primary-hover: #0052ff;
+  --color-primary-light: #3366ff;
+  --color-primary-dark: #001a7a;
+  
+  /* SECONDARY: Bright Cyan - Complementary to blue */
+  --color-secondary: #0099ff;
+  --color-secondary-hover: #00b3ff;
+  
+  /* STATUS COLORS - High contrast */
+  --color-success: #005511;
+  --color-danger: #b30000;
+  --color-warning: #b35900;
+  --color-info: #004d99;
+
+  /* BACKGROUNDS - Fresh & clean */
+  --bg-primary: #f5f9ff;
+  --bg-secondary: #eef4ff;
+  --bg-tertiary: #e8ecff;
+  --bg-modal: rgba(0, 26, 77, 0.50);
+  --bg-elevated: #ffffff;
+  --bg-light-accent: #d6e4f0;
+
+  /* TEXT - Strong readable colors */
+  --text-primary: #000000;
+  --text-secondary: #001a4d;
+  --text-tertiary: #003d99;
+  --text-muted: #556688;
+
+  /* INPUTS - Premium styling */
+  --border-color: #8899cc;
+  --input-bg: #ffffff;
+  --input-border: #7788bb;
+  --input-border-focus: #001a4d;
+  --input-text: #000000;
+  --input-placeholder: #666666;
+
+  /* SHADOWS - Modern depth */
+  --shadow-sm: 0 1px 3px rgba(0, 26, 77, 0.10);
+  --shadow-md: 0 4px 12px rgba(0, 26, 77, 0.12);
+  --shadow-lg: 0 12px 32px rgba(0, 26, 77, 0.15);
+  --shadow-glow: 0 0 16px rgba(0, 26, 77, 0.12);
+
+  --transition-speed: 280ms;
+}
+
+/* ============================================================================
+   SMOOTH TRANSITIONS - All elements transition smoothly
+   ============================================================================ */
+
 * {
-  transition: background-color var(--transition-speed),
-              color var(--transition-speed),
-              border-color var(--transition-speed);
+  transition: background-color var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1),
+              color var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1),
+              border-color var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1),
+              transform var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ===== ELEGANT BLACK SPECIFIC STYLES ===== */
+/* ============================================================================
+   1️⃣ ELEGANT BLACK THEME - PREMIUM STYLING
+   ============================================================================ */
+
 html[data-theme="elegant-black"] {
-  background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+  background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+  scrollbar-color: #ffd700 #1a1f3a;
 }
 
 html[data-theme="elegant-black"] body {
-  background: #000000;
+  background: #0a0e27;
+  color: #ffffff;
 }
 
 html[data-theme="elegant-black"] .card,
 html[data-theme="elegant-black"] .modal-content,
 html[data-theme="elegant-black"] .form-section {
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-  border: 1px solid #404040;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+  background: linear-gradient(135deg, #1a1f3a 0%, #2d3561 100%);
+  border: 2px solid #4a5580;
+  box-shadow: var(--shadow-lg);
 }
 
-html[data-theme="elegant-black"] .card:hover {
-  box-shadow: 0 12px 40px rgba(251, 191, 36, 0.1);
-  border-color: #fbbf24;
+html[data-theme="elegant-black"] .card:hover,
+html[data-theme="elegant-black"] .modal-content:hover,
+html[data-theme="elegant-black"] .form-section:hover {
+  border-color: #ffd700;
+  box-shadow: var(--shadow-lg), 0 0 20px rgba(255, 215, 0, 0.2);
+  transform: translateY(-2px);
 }
 
 html[data-theme="elegant-black"] h1,
 html[data-theme="elegant-black"] h2,
-html[data-theme="elegant-black"] h3 {
-  color: #ffffff;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+html[data-theme="elegant-black"] h3,
+html[data-theme="elegant-black"] h4,
+html[data-theme="elegant-black"] h5,
+html[data-theme="elegant-black"] h6 {
+  color: #ffd700;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 
 html[data-theme="elegant-black"] input,
 html[data-theme="elegant-black"] textarea,
 html[data-theme="elegant-black"] select {
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-  border: 1px solid #404040;
+  background: linear-gradient(135deg, #1a1f3a 0%, #2d3561 100%);
+  border: 2px solid #4a5580;
   color: #ffffff;
+  font-size: 14px;
+}
+
+html[data-theme="elegant-black"] input::placeholder,
+html[data-theme="elegant-black"] textarea::placeholder {
+  color: #6b7590;
 }
 
 html[data-theme="elegant-black"] input:focus,
 html[data-theme="elegant-black"] textarea:focus,
 html[data-theme="elegant-black"] select:focus {
-  border-color: #fbbf24;
-  box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.15);
+  border-color: #ffd700;
+  box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.15), var(--shadow-md);
+  outline: none;
 }
 
 html[data-theme="elegant-black"] button {
   transition: all var(--transition-speed) ease;
 }
 
-html[data-theme="elegant-black"] button:hover {
-  text-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
+html[data-theme="elegant-black"] button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255, 215, 0, 0.2);
 }
 
 html[data-theme="elegant-black"] a {
-  color: #fbbf24;
+  color: #ffd700;
+  text-decoration: none;
+  transition: all 200ms ease;
 }
 
 html[data-theme="elegant-black"] a:hover {
-  color: #fcd34d;
+  color: #ffed4e;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
 }
 
 html[data-theme="elegant-black"] #clientNameDisplay {
-  color: #fbbf24;
-  text-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
-  letter-spacing: 1px;
+  color: #ffd700;
+  text-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+  letter-spacing: 1.2px;
+  font-size: 1.1em;
+  font-weight: 600;
 }
 
 html[data-theme="elegant-black"] .theme-toggle {
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-  border: 2px solid #fbbf24;
-  color: #fbbf24;
-  box-shadow: 0 4px 20px rgba(251, 191, 36, 0.2);
+  background: linear-gradient(135deg, #1a1f3a 0%, #2d3561 100%);
+  border: 2px solid #ffd700;
+  color: #ffd700;
+  box-shadow: 0 4px 20px rgba(255, 215, 0, 0.2);
+  font-weight: 600;
 }
 
 html[data-theme="elegant-black"] .theme-toggle:hover {
-  box-shadow: 0 6px 30px rgba(251, 191, 36, 0.3);
+  box-shadow: 0 6px 30px rgba(255, 215, 0, 0.35);
   transform: scale(1.05);
+  background: linear-gradient(135deg, #2d3561 0%, #3a4577 100%);
 }
 
-/* ===== LIGHT MODERN SPECIFIC STYLES ===== */
-html[data-theme="light-modern"] {
-  background: linear-gradient(135deg, #f8fafc 0%, #f0f4f8 100%);
+/* ============================================================================
+   2️⃣ DARK THEME - MODERN BLUE
+   ============================================================================ */
+
+html[data-theme="dark"] {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  scrollbar-color: #60a5fa #1e293b;
 }
 
-html[data-theme="light-modern"] .card,
-html[data-theme="light-modern"] .modal-content {
-  background: #ffffff;
-  border: 1px solid #cbd5e1;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+html[data-theme="dark"] body {
+  background: #0f172a;
+  color: #f1f5f9;
 }
 
-html[data-theme="light-modern"] .card:hover {
-  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.1);
-  border-color: #2563eb;
+html[data-theme="dark"] .card,
+html[data-theme="dark"] .modal-content,
+html[data-theme="dark"] .form-section {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  border: 1px solid #475569;
+  box-shadow: var(--shadow-lg);
 }
 
-html[data-theme="light-modern"] #clientNameDisplay {
-  color: #2563eb;
-  text-shadow: none;
+html[data-theme="dark"] .card:hover,
+html[data-theme="dark"] .modal-content:hover,
+html[data-theme="dark"] .form-section:hover {
+  border-color: #60a5fa;
+  box-shadow: var(--shadow-lg), 0 0 15px rgba(96, 165, 250, 0.15);
+  transform: translateY(-2px);
 }
 
-/* ===== ACCESSIBILITY - ENSURE FOCUS STATES ===== */
-html[data-theme="elegant-black"] input:focus,
-html[data-theme="elegant-black"] textarea:focus,
-html[data-theme="elegant-black"] select:focus {
-  outline: 2px solid #fbbf24;
-  outline-offset: 2px;
+html[data-theme="dark"] h1,
+html[data-theme="dark"] h2,
+html[data-theme="dark"] h3,
+html[data-theme="dark"] h4,
+html[data-theme="dark"] h5,
+html[data-theme="dark"] h6 {
+  color: #93c5fd;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  font-weight: 700;
+  letter-spacing: 0.3px;
 }
 
-html[data-theme="light-modern"] input:focus,
-html[data-theme="light-modern"] textarea:focus,
-html[data-theme="light-modern"] select:focus {
-  outline: 2px solid #2563eb;
-  outline-offset: 2px;
+html[data-theme="dark"] input,
+html[data-theme="dark"] textarea,
+html[data-theme="dark"] select {
+  background: #1e293b;
+  border: 1px solid #475569;
+  color: #f1f5f9;
 }
 
 html[data-theme="dark"] input:focus,
 html[data-theme="dark"] textarea:focus,
 html[data-theme="dark"] select:focus {
-  outline: 2px solid #60a5fa;
-  outline-offset: 2px;
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1), var(--shadow-md);
+  outline: none;
+}
+
+html[data-theme="dark"] a {
+  color: #93c5fd;
+}
+
+html[data-theme="dark"] a:hover {
+  color: #bfdbfe;
+}
+
+html[data-theme="dark"] #clientNameDisplay {
+  color: #93c5fd;
+  text-shadow: 0 2px 8px rgba(96, 165, 250, 0.2);
+  letter-spacing: 0.5px;
+}
+
+/* ============================================================================
+   3️⃣ LIGHT CLASSIC THEME - PROFESSIONAL CLEAN
+   ============================================================================ */
+
+html[data-theme="light-classic"] {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  scrollbar-color: #001a4d #ffffff;
+}
+
+html[data-theme="light-classic"] body {
+  background: #ffffff;
+  color: #000000;
+}
+
+html[data-theme="light-classic"] .card,
+html[data-theme="light-classic"] .modal-content,
+html[data-theme="light-classic"] .form-section {
+  background: #ffffff;
+  border: 1px solid #a8b5c8;
+  box-shadow: var(--shadow-md);
+}
+
+html[data-theme="light-classic"] .card:hover,
+html[data-theme="light-classic"] .modal-content:hover,
+html[data-theme="light-classic"] .form-section:hover {
+  border-color: #001a4d;
+  box-shadow: var(--shadow-lg), 0 0 16px rgba(0, 26, 77, 0.15);
+  transform: translateY(-2px);
+}
+
+html[data-theme="light-classic"] h1,
+html[data-theme="light-classic"] h2,
+html[data-theme="light-classic"] h3,
+html[data-theme="light-classic"] h4,
+html[data-theme="light-classic"] h5,
+html[data-theme="light-classic"] h6 {
+  color: #001a4d;
+  text-shadow: none;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+html[data-theme="light-classic"] input,
+html[data-theme="light-classic"] textarea,
+html[data-theme="light-classic"] select {
+  background: #ffffff;
+  border: 1px solid #8899b3;
+  color: #000000;
+}
+
+html[data-theme="light-classic"] input:focus,
+html[data-theme="light-classic"] textarea:focus,
+html[data-theme="light-classic"] select:focus {
+  border-color: #001a4d;
+  box-shadow: 0 0 0 3px rgba(0, 26, 77, 0.10), var(--shadow-md);
+  outline: none;
+}
+
+html[data-theme="light-classic"] a {
+  color: #001a4d;
+}
+
+html[data-theme="light-classic"] a:hover {
+  color: #0d2966;
+  text-decoration: underline;
+}
+
+html[data-theme="light-classic"] #clientNameDisplay {
+  color: #001a4d;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================================================
+   4️⃣ LIGHT MODERN THEME - CONTEMPORARY FRESH
+   ============================================================================ */
+
+html[data-theme="light-modern"] {
+  background: linear-gradient(135deg, #f0f5ff 0%, #e6ecff 100%);
+  scrollbar-color: #0033cc #ffffff;
+}
+
+html[data-theme="light-modern"] body {
+  background: #f0f5ff;
+  color: #000000;
+}
+
+html[data-theme="light-modern"] .card,
+html[data-theme="light-modern"] .modal-content,
+html[data-theme="light-modern"] .form-section {
+  background: #ffffff;
+  border: 2px solid #3366ff;
+  box-shadow: var(--shadow-md), 0 0 8px rgba(0, 51, 204, 0.08);
+}
+
+html[data-theme="light-modern"] .card:hover,
+html[data-theme="light-modern"] .modal-content:hover,
+html[data-theme="light-modern"] .form-section:hover {
+  border-color: #0033cc;
+  box-shadow: var(--shadow-lg), 0 0 16px rgba(0, 51, 204, 0.20);
+  transform: translateY(-2px);
+}
+
+html[data-theme="light-modern"] h1,
+html[data-theme="light-modern"] h2,
+html[data-theme="light-modern"] h3,
+html[data-theme="light-modern"] h4,
+html[data-theme="light-modern"] h5,
+html[data-theme="light-modern"] h6 {
+  color: #0033cc;
+  text-shadow: none;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+html[data-theme="light-modern"] input,
+html[data-theme="light-modern"] textarea,
+html[data-theme="light-modern"] select {
+  background: #ffffff;
+  border: 2px solid #3366ff;
+  color: #000000;
+}
+
+html[data-theme="light-modern"] input:focus,
+html[data-theme="light-modern"] textarea:focus,
+html[data-theme="light-modern"] select:focus {
+  border-color: #0033cc;
+  box-shadow: 0 0 0 3px rgba(0, 51, 204, 0.15), var(--shadow-md);
+  outline: none;
+}
+
+html[data-theme="light-modern"] a {
+  color: #0033cc;
+}
+
+html[data-theme="light-modern"] a:hover {
+  color: #0052ff;
+  text-decoration: underline;
+}
+
+html[data-theme="light-modern"] #clientNameDisplay {
+  color: #0033cc;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================================================
+   UNIVERSAL STYLES - Apply to all themes
+   ============================================================================ */
+
+button {
+  transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 600;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary-hover);
 }
