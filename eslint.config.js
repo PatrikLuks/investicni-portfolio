@@ -164,7 +164,9 @@ export default [
       'template-curly-spacing': 'error',
 
       // ===== PRETTIER INTEGRATION =====
-      'prettier/prettier': 'error',
+      // Note: Prettier/ESLint integration disabled to avoid circular fixes
+      // Use 'npm run format' to run Prettier separately
+      // 'prettier/prettier': 'error',
     },
   },
 
