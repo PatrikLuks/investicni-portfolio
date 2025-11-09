@@ -49,28 +49,63 @@ class MarketDataFeed {
   }
 
   /**
-   * Start simulated market data feed
+   * Start simulated market data feed with realistic price movements
    */
   startSimulatedFeed() {
+    // Track previous prices for momentum
+    const priceHistory = new Map();
+
     // Simulate real-time price updates
     this.simulationInterval = setInterval(() => {
       this.subscriptions.forEach((symbol) => {
-        const currentPrice = this.priceData.get(symbol)?.price || this.generateInitialPrice();
-        const change = (Math.random() - 0.5) * 2; // -1% to +1%
-        const newPrice = currentPrice * (1 + change / 100);
+        const currentData = this.priceData.get(symbol);
+        const currentPrice = currentData?.price || this.generateInitialPrice();
+        
+        // Initialize history if needed
+        if (!priceHistory.has(symbol)) {
+          priceHistory.set(symbol, {
+            prices: [currentPrice],
+            momentum: 0,
+            volatility: 0.02 + Math.random() * 0.03, // 2-5% volatility
+          });
+        }
+
+        const history = priceHistory.get(symbol);
+        
+        // Realistic price movement using Brownian motion
+        const drift = history.momentum * 0.1; // Small drift from momentum
+        const shock = (Math.random() - 0.5) * 2 * history.volatility;
+        const percentChange = drift + shock;
+        const newPrice = currentPrice * (1 + percentChange);
+
+        // Update momentum (mean reversion)
+        history.momentum = percentChange * 0.7 + history.momentum * 0.3;
+        history.prices.push(newPrice);
+        if (history.prices.length > 100) {
+          history.prices.shift();
+        }
+
+        // Calculate OHLC data
+        const prices = history.prices;
+        const open = prices[Math.max(0, prices.length - 10)];
+        const close = newPrice;
+        const high = Math.max(...prices);
+        const low = Math.min(...prices);
 
         const priceUpdate = {
           symbol,
           price: newPrice,
-          change: change,
-          changePercent: change,
-          volume: Math.floor(Math.random() * 1000000),
+          change: newPrice - open,
+          changePercent: ((newPrice - open) / open) * 100,
+          volume: Math.floor(Math.random() * 2000000 + 500000), // 0.5M - 2.5M
           timestamp: new Date(),
           bid: newPrice * 0.999,
           ask: newPrice * 1.001,
-          high: newPrice * 1.02,
-          low: newPrice * 0.98,
-          open: newPrice * 0.99,
+          high: high,
+          low: low,
+          open: open,
+          close: close,
+          volatility: history.volatility,
         };
 
         this.priceData.set(symbol, priceUpdate);
@@ -80,10 +115,36 @@ class MarketDataFeed {
   }
 
   /**
-   * Generate initial price for symbol
+   * Generate initial price for symbol (realistic ranges)
    */
-  generateInitialPrice() {
-    return 50 + Math.random() * 950; // $50 - $1000
+  generateInitialPrice(symbol) {
+    // Simulate realistic price ranges for different companies
+    const priceRanges = {
+      // Tech giants
+      'AAPL': [150, 200],
+      'GOOGL': [100, 150],
+      'MSFT': [350, 450],
+      'AMZN': [150, 200],
+      'TSLA': [200, 300],
+      'NVDA': [400, 600],
+      'META': [300, 400],
+      'NFLX': [200, 300],
+      // Financial
+      'JPM': [150, 200],
+      'BAC': [30, 50],
+      'GS': [350, 450],
+      // Healthcare
+      'JNJ': [150, 200],
+      'PFE': [25, 35],
+      // Energy
+      'XOM': [100, 150],
+      'CVX': [150, 200],
+      // Default range
+      'DEFAULT': [50, 200],
+    };
+
+    const range = priceRanges[symbol?.toUpperCase()] || priceRanges.DEFAULT;
+    return range[0] + Math.random() * (range[1] - range[0]);
   }
 
   /**
@@ -762,14 +823,20 @@ class MarketDataFeed {
   }
 
   /**
-   * Render price card
+   * Render price card with OHLC data
    */
   renderPriceCard(symbol) {
     const priceData = this.priceData.get(symbol) || {
-      price: this.generateInitialPrice(),
+      price: this.generateInitialPrice(symbol),
       change: 0,
       changePercent: 0,
       volume: 0,
+      bid: 0,
+      ask: 0,
+      high: 0,
+      low: 0,
+      open: 0,
+      volatility: 0.02,
     };
 
     const isPositive = priceData.change >= 0;
@@ -800,29 +867,21 @@ class MarketDataFeed {
           pointer-events: none;
         "></div>
         
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; position: relative; z-index: 1;">
-          <div style="flex: 1;">
+        <!-- Header: Symbol & Price -->
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; position: relative; z-index: 1; margin-bottom: 12px;">
+          <div>
             <div style="
               font-weight: 700;
               font-size: 1.2rem;
               color: var(--text-primary);
               letter-spacing: 0.5px;
             ">${symbol}</div>
-            <div style="
-              font-size: 0.8rem;
-              color: var(--text-secondary);
-              margin-top: 4px;
-              display: flex;
-              gap: 12px;
-            ">
-              <span>Vol: ${this.formatVolume(priceData.volume)}</span>
-            </div>
           </div>
           
           <div style="text-align: right;">
             <div style="
               font-weight: 700;
-              font-size: 1.4rem;
+              font-size: 1.5rem;
               color: ${textColor};
               letter-spacing: -0.5px;
             ">
@@ -832,7 +891,7 @@ class MarketDataFeed {
               font-size: 0.95rem;
               font-weight: 600;
               color: ${textColor};
-              margin-top: 4px;
+              margin-top: 2px;
               display: flex;
               align-items: center;
               gap: 4px;
@@ -843,33 +902,58 @@ class MarketDataFeed {
             </div>
           </div>
         </div>
-        
+
+        <!-- OHLC Data Grid -->
         <div style="
           display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: repeat(2, 1fr);
           gap: 12px;
-          margin-top: 12px;
-          padding-top: 12px;
+          padding: 12px 0;
           border-top: 1px solid ${borderColor}33;
+          border-bottom: 1px solid ${borderColor}33;
+          margin: 12px 0;
           font-size: 0.8rem;
-          color: var(--text-secondary);
           position: relative;
           z-index: 1;
         ">
           <div>
-            <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 2px;">Bid</div>
-            <div style="color: ${textColor}; font-weight: 500;">$${priceData.bid?.toFixed(2) || '-'}</div>
+            <div style="font-weight: 600; color: var(--text-secondary); margin-bottom: 4px;">Open</div>
+            <div style="color: var(--text-primary); font-weight: 500;">$${(priceData.open || priceData.price).toFixed(2)}</div>
           </div>
           <div>
-            <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 2px;">Ask</div>
-            <div style="color: ${textColor}; font-weight: 500;">$${priceData.ask?.toFixed(2) || '-'}</div>
+            <div style="font-weight: 600; color: var(--text-secondary); margin-bottom: 4px;">High</div>
+            <div style="color: var(--text-primary); font-weight: 500;">$${(priceData.high || priceData.price).toFixed(2)}</div>
+          </div>
+          <div>
+            <div style="font-weight: 600; color: var(--text-secondary); margin-bottom: 4px;">Low</div>
+            <div style="color: var(--text-primary); font-weight: 500;">$${(priceData.low || priceData.price).toFixed(2)}</div>
+          </div>
+          <div>
+            <div style="font-weight: 600; color: var(--text-secondary); margin-bottom: 4px;">Bid-Ask</div>
+            <div style="color: var(--text-primary); font-weight: 500; font-size: 0.75rem;">
+              ${(priceData.bid || priceData.price * 0.999).toFixed(2)} / ${(priceData.ask || priceData.price * 1.001).toFixed(2)}
+            </div>
           </div>
         </div>
+
+        <!-- Volume & Volatility -->
+        <div style="
+          display: flex;
+          justify-content: space-between;
+          font-size: 0.8rem;
+          color: var(--text-secondary);
+          position: relative;
+          z-index: 1;
+          margin-bottom: 12px;
+        ">
+          <span>Vol: <strong>${this.formatVolume(priceData.volume)}</strong></span>
+          <span>Vol: <strong>${((priceData.volatility || 0.02) * 100).toFixed(1)}%</strong></span>
+        </div>
         
+        <!-- Remove Button -->
         <button 
           onclick="window.marketDataFeed.unsubscribe('${symbol}'); window.marketDataFeed.renderWatchlist();"
           style="
-            margin-top: 12px;
             padding: 8px 14px;
             background: ${textColor};
             color: white;
