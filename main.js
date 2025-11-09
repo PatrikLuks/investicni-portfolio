@@ -17,6 +17,9 @@
 // Import core application module
 import { initializeApp } from './modules/app-core.js';
 
+// Import legacy modules loader (replaces 21 <script> tags in index.html)
+import { loadLegacyModules } from './src/js/loaders/legacy-modules-loader.js';
+
 // Help system is lazy-loaded for better performance
 let helpSystemInitialized = false;
 
@@ -43,14 +46,20 @@ async function lazyInitializeHelpSystem() {
  * Handles both loading and interactive/complete states
  */
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', async () => {
+    // Load all legacy modules first
+    await loadLegacyModules();
+    // Initialize core app
     initializeApp();
     // Load help system after 2 seconds (low priority)
     setTimeout(() => lazyInitializeHelpSystem(), 2000);
   });
 } else {
-  initializeApp();
-  setTimeout(() => lazyInitializeHelpSystem(), 2000);
+  // Load all legacy modules first
+  loadLegacyModules().then(() => {
+    initializeApp();
+    setTimeout(() => lazyInitializeHelpSystem(), 2000);
+  });
 }
 
 // Export for debugging purposes

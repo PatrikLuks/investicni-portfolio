@@ -1924,44 +1924,9 @@
       });
     </script>
 
-    <!-- 🚀 ARCHITECTURE: All scripts loaded directly (no module-loader duplication) -->
-    
-    <!-- THEME: Dark/Light mode system (must load first!) -->
-    <script src="src/js/features/themes/theme-manager.js" defer></script>
+    <!-- 🚀 ARCHITECTURE: All scripts loaded via main.js ES6 module system -->
+    <!-- See src/js/loaders/legacy-modules-loader.js for module loading -->
 
-    <!-- CORE: Error handling and accessibility -->
-    <script src="src/js/core/error-handler.js" defer></script>
-    <script src="src/js/core/accessibility.js" defer></script>
-    <script src="src/js/core/notification-system.js" defer></script>
-
-    <!-- LOADERS: Library loading system -->
-    <script src="src/js/loaders/library-loader.js?v=3.2.1" defer></script>
-
-    <!-- UTILITIES: Core utilities -->
-    <script src="src/js/utilities/dom-safety.js" defer></script>
-    <script src="src/js/utilities/command-stack.js" defer></script>
-    <script src="src/js/utilities/data-validation.js" defer></script>
-    <script src="src/js/utilities/calculations-engine.js" defer></script>
-    <script src="src/js/utilities/auto-save.js" defer></script>
-    <script src="src/js/utilities/drag-drop.js" defer></script>
-    <script src="src/js/utilities/keyboard-shortcuts-overlay.js" defer></script>
-    <script src="src/js/utilities/service-worker.js" defer></script>
-
-    <!-- FEATURES: Market data -->
-    <script src="src/js/features/marketplace/market-data-service.js" defer></script>
-    <script src="src/js/features/marketplace/market-data-ui.js" defer></script>
-    <script src="src/js/features/marketplace/market-data.js" defer></script>
-
-    <!-- FEATURES: Portfolio management -->
-    <script src="src/js/features/portfolio/multi-portfolio.js" defer></script>
-    <script src="src/js/features/portfolio/app-portfolio.js" defer></script>
-
-    <!-- FEATURES: Charts and visualization -->
-    <script src="src/js/features/charts/charts-manager.js" defer></script>
-    <script src="src/js/features/charts/advanced-charts.js" defer></script>
-
-    <!-- FEATURES: Export functionality -->
-    <script src="src/js/features/export/excel-export.js" defer></script>
 
     <!-- Initialize Theme Manager (after all scripts are loaded) -->
     <script>
