@@ -97,7 +97,7 @@ class SmartAutoSaveManager {
       // Check online status
       if (!navigator.onLine) {
         this.addToOfflineQueue(data);
-        this.updateSaveIndicator('offline');
+        this.updateSaveIndicator("offline");
         return false;
       }
 
@@ -109,7 +109,7 @@ class SmartAutoSaveManager {
         this.lastSavedData = JSON.parse(JSON.stringify(data)); // Deep clone
         this.lastSavedTime = new Date().toISOString();
         this.addToSaveHistory(data);
-        this.updateSaveIndicator('success');
+        this.updateSaveIndicator("success");
 
         if (this.onSaveCallback) {
           this.onSaveCallback(data);
@@ -117,11 +117,11 @@ class SmartAutoSaveManager {
 
         return true;
       } else {
-        throw new Error('Save failed');
+        throw new Error("Save failed");
       }
     } catch (error) {
-      console.error('❌ Save error:', error);
-      this.updateSaveIndicator('error');
+      console.error("❌ Save error:", error);
+      this.updateSaveIndicator("error");
 
       // Add to offline queue as fallback
       this.addToOfflineQueue(data);
@@ -158,7 +158,7 @@ class SmartAutoSaveManager {
   async performSave(data) {
     try {
       // Use localStorage as primary storage
-      localStorage.setItem('portfolio_data', JSON.stringify(data));
+      localStorage.setItem("portfolio_data", JSON.stringify(data));
 
       // Also save to IndexedDB for larger data
       if (window.indexedDB) {
@@ -167,7 +167,7 @@ class SmartAutoSaveManager {
 
       return true;
     } catch (error) {
-      console.error('Save operation failed:', error);
+      console.error("Save operation failed:", error);
       throw error;
     }
   }
@@ -179,17 +179,17 @@ class SmartAutoSaveManager {
    */
   saveToIndexedDB(data) {
     return new Promise((resolve, reject) => {
-      const request = indexedDB.open('PortfolioManagerDB', 1);
+      const request = indexedDB.open("PortfolioManagerDB", 1);
 
       request.onerror = () => reject(request.error);
 
       request.onsuccess = () => {
         const db = request.result;
-        const transaction = db.transaction(['portfolios'], 'readwrite');
-        const store = transaction.objectStore('portfolios');
+        const transaction = db.transaction(["portfolios"], "readwrite");
+        const store = transaction.objectStore("portfolios");
 
         const saveRequest = store.put({
-          id: 'current',
+          id: "current",
           data: data,
           timestamp: new Date().toISOString(),
         });
@@ -200,8 +200,8 @@ class SmartAutoSaveManager {
 
       request.onupgradeneeded = (event) => {
         const db = event.target.result;
-        if (!db.objectStoreNames.contains('portfolios')) {
-          db.createObjectStore('portfolios', { keyPath: 'id' });
+        if (!db.objectStoreNames.contains("portfolios")) {
+          db.createObjectStore("portfolios", { keyPath: "id" });
         }
       };
     });
@@ -213,15 +213,15 @@ class SmartAutoSaveManager {
    */
   loadFromIndexedDB() {
     return new Promise((resolve, reject) => {
-      const request = indexedDB.open('PortfolioManagerDB', 1);
+      const request = indexedDB.open("PortfolioManagerDB", 1);
 
       request.onerror = () => reject(request.error);
 
       request.onsuccess = () => {
         const db = request.result;
-        const transaction = db.transaction(['portfolios'], 'readonly');
-        const store = transaction.objectStore('portfolios');
-        const getRequest = store.get('current');
+        const transaction = db.transaction(["portfolios"], "readonly");
+        const store = transaction.objectStore("portfolios");
+        const getRequest = store.get("current");
 
         getRequest.onsuccess = () => {
           resolve(getRequest.result?.data || null);
@@ -232,8 +232,8 @@ class SmartAutoSaveManager {
 
       request.onupgradeneeded = (event) => {
         const db = event.target.result;
-        if (!db.objectStoreNames.contains('portfolios')) {
-          db.createObjectStore('portfolios', { keyPath: 'id' });
+        if (!db.objectStoreNames.contains("portfolios")) {
+          db.createObjectStore("portfolios", { keyPath: "id" });
         }
       };
     });
@@ -251,7 +251,9 @@ class SmartAutoSaveManager {
 
     try {
       // Load latest data from storage
-      const latestData = JSON.parse(localStorage.getItem('portfolio_data') || 'null');
+      const latestData = JSON.parse(
+        localStorage.getItem("portfolio_data") || "null",
+      );
       if (!latestData) {
         return false;
       }
@@ -262,14 +264,15 @@ class SmartAutoSaveManager {
       const latestHash = this.hashData(latestData);
 
       // Conflict if saved version differs from both current and last known
-      const hasConflict = savedHash !== latestHash && currentHash !== latestHash;
+      const hasConflict =
+        savedHash !== latestHash && currentHash !== latestHash;
 
       if (hasConflict) {
       }
 
       return hasConflict;
     } catch (error) {
-      console.error('Error checking for conflicts:', error);
+      console.error("Error checking for conflicts:", error);
       return false;
     }
   }
@@ -281,23 +284,29 @@ class SmartAutoSaveManager {
    */
   async resolveConflict(currentData) {
     try {
-      const savedData = JSON.parse(localStorage.getItem('portfolio_data') || 'null');
+      const savedData = JSON.parse(
+        localStorage.getItem("portfolio_data") || "null",
+      );
 
       if (this.conflictResolver) {
         // Use custom resolver
-        return await this.conflictResolver(currentData, savedData, this.lastSavedData);
+        return await this.conflictResolver(
+          currentData,
+          savedData,
+          this.lastSavedData,
+        );
       }
 
       // Default: Prompt user
       const choice = confirm(
-        'Data byla změněna externě. Chcete přepsat uložená data?\n\n' +
-          'OK = Použít aktuální verzi\n' +
-          'Cancel = Ponechat uloženou verzi',
+        "Data byla změněna externě. Chcete přepsat uložená data?\n\n" +
+          "OK = Použít aktuální verzi\n" +
+          "Cancel = Ponechat uloženou verzi",
       );
 
       if (!choice) {
         // User chose to keep saved version - reload it
-        if (typeof window.renderTable === 'function' && savedData) {
+        if (typeof window.renderTable === "function" && savedData) {
           window.renderTable(savedData);
         }
         return false;
@@ -305,7 +314,7 @@ class SmartAutoSaveManager {
 
       return true;
     } catch (error) {
-      console.error('Error resolving conflict:', error);
+      console.error("Error resolving conflict:", error);
       return false;
     }
   }
@@ -317,7 +326,7 @@ class SmartAutoSaveManager {
    */
   hashData(data) {
     return JSON.stringify(data)
-      .split('')
+      .split("")
       .reduce((hash, char) => {
         hash = (hash << 5) - hash + char.charCodeAt(0);
         return hash & hash;
@@ -361,7 +370,7 @@ class SmartAutoSaveManager {
           break;
         }
       } catch (error) {
-        console.error('Error processing offline item:', error);
+        console.error("Error processing offline item:", error);
         break;
       }
     }
@@ -416,38 +425,38 @@ class SmartAutoSaveManager {
    * @param {string} status - Status: 'success', 'error', 'offline', 'saving'
    */
   updateSaveIndicator(status) {
-    const indicator = document.getElementById('lastSaveIndicator');
-    const timeEl = document.getElementById('lastSaveTime');
+    const indicator = document.getElementById("lastSaveIndicator");
+    const timeEl = document.getElementById("lastSaveTime");
 
     if (!indicator || !timeEl) {
       return;
     }
 
-    indicator.style.opacity = '1';
+    indicator.style.opacity = "1";
 
     switch (status) {
-      case 'success':
-        timeEl.textContent = `Uloženo ${new Date().toLocaleTimeString('cs-CZ')}`;
-        indicator.style.color = '#4caf50';
+      case "success":
+        timeEl.textContent = `Uloženo ${new Date().toLocaleTimeString("cs-CZ")}`;
+        indicator.style.color = "#4caf50";
         break;
-      case 'error':
-        timeEl.textContent = 'Chyba uložení';
-        indicator.style.color = '#f44336';
+      case "error":
+        timeEl.textContent = "Chyba uložení";
+        indicator.style.color = "#f44336";
         break;
-      case 'offline':
-        timeEl.textContent = 'Offline - zařazeno do fronty';
-        indicator.style.color = '#ff9800';
+      case "offline":
+        timeEl.textContent = "Offline - zařazeno do fronty";
+        indicator.style.color = "#ff9800";
         break;
-      case 'saving':
-        timeEl.textContent = 'Ukládám...';
-        indicator.style.color = '#2196f3';
+      case "saving":
+        timeEl.textContent = "Ukládám...";
+        indicator.style.color = "#2196f3";
         break;
     }
 
     // Fade out after 3 seconds (except for error/offline)
-    if (status === 'success') {
+    if (status === "success") {
       setTimeout(() => {
-        indicator.style.opacity = '0';
+        indicator.style.opacity = "0";
       }, 3000);
     }
   }
@@ -456,11 +465,15 @@ class SmartAutoSaveManager {
    * Setup online event listener
    */
   setupOnlineListener() {
-    window.addEventListener('online', async () => {
+    window.addEventListener("online", async () => {
       const processed = await this.processOfflineQueue();
 
-      if (processed > 0 && typeof showToast === 'function') {
-        showToast('success', 'Synchronizace', `Synchronizováno ${processed} změn`);
+      if (processed > 0 && typeof showToast === "function") {
+        showToast(
+          "success",
+          "Synchronizace",
+          `Synchronizováno ${processed} změn`,
+        );
       }
     });
   }
@@ -469,11 +482,11 @@ class SmartAutoSaveManager {
    * Setup beforeunload listener to warn about unsaved changes
    */
   setupUnloadListener() {
-    window.addEventListener('beforeunload', (e) => {
+    window.addEventListener("beforeunload", (e) => {
       if (this.isDirty) {
         e.preventDefault();
-        e.returnValue = '';
-        return 'Máte neuložené změny. Opravdu chcete opustit stránku?';
+        e.returnValue = "";
+        return "Máte neuložené změny. Opravdu chcete opustit stránku?";
       }
     });
   }
@@ -483,13 +496,13 @@ class SmartAutoSaveManager {
    */
   loadOfflineQueue() {
     try {
-      const stored = localStorage.getItem('auto_save_offline_queue');
+      const stored = localStorage.getItem("auto_save_offline_queue");
       this.offlineQueue = stored ? JSON.parse(stored) : [];
 
       if (this.offlineQueue.length > 0) {
       }
     } catch (error) {
-      console.error('Failed to load offline queue:', error);
+      console.error("Failed to load offline queue:", error);
       this.offlineQueue = [];
     }
   }
@@ -499,9 +512,12 @@ class SmartAutoSaveManager {
    */
   persistOfflineQueue() {
     try {
-      localStorage.setItem('auto_save_offline_queue', JSON.stringify(this.offlineQueue));
+      localStorage.setItem(
+        "auto_save_offline_queue",
+        JSON.stringify(this.offlineQueue),
+      );
     } catch (error) {
-      console.error('Failed to persist offline queue:', error);
+      console.error("Failed to persist offline queue:", error);
     }
   }
 
@@ -510,10 +526,10 @@ class SmartAutoSaveManager {
    */
   loadLastSavedData() {
     try {
-      const stored = localStorage.getItem('portfolio_data');
+      const stored = localStorage.getItem("portfolio_data");
       this.lastSavedData = stored ? JSON.parse(stored) : null;
     } catch (error) {
-      console.error('Failed to load last saved data:', error);
+      console.error("Failed to load last saved data:", error);
     }
   }
 
@@ -562,8 +578,8 @@ class SmartAutoSaveManager {
 window.smartAutoSaveManager = new SmartAutoSaveManager();
 
 // Auto-initialize
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initSmartAutoSave);
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initSmartAutoSave);
 } else {
   initSmartAutoSave();
 }

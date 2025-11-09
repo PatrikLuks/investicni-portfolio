@@ -12,11 +12,13 @@
  * @param {string} context - Context for error logging
  * @returns {HTMLElement|null} Element or null if not found
  */
-function safeGetElement(id, context = '') {
+function safeGetElement(id, context = "") {
   try {
     const element = document.getElementById(id);
     if (!element) {
-      console.warn(`DOM Safety: Element '${id}' not found${context ? ` in ${context}` : ''}`);
+      console.warn(
+        `DOM Safety: Element '${id}' not found${context ? ` in ${context}` : ""}`,
+      );
       return null;
     }
     return element;
@@ -32,7 +34,7 @@ function safeGetElement(id, context = '') {
  * @param {*} defaultValue - Default value if element not found
  * @returns {*} Element value or default value
  */
-function safeGetValue(id, defaultValue = '') {
+function safeGetValue(id, defaultValue = "") {
   const element = safeGetElement(id);
   if (!element) {
     return defaultValue;
@@ -107,8 +109,8 @@ function safeSetStyle(id, property, value) {
  * @param {string} display - Display value (block, none, flex, etc.)
  * @returns {boolean} Success or failure
  */
-function safeSetDisplay(id, display = 'block') {
-  return safeSetStyle(id, 'display', display);
+function safeSetDisplay(id, display = "block") {
+  return safeSetStyle(id, "display", display);
 }
 
 /**
@@ -117,7 +119,7 @@ function safeSetDisplay(id, display = 'block') {
  * @returns {boolean} Success or failure
  */
 function safeHide(id) {
-  return safeSetDisplay(id, 'none');
+  return safeSetDisplay(id, "none");
 }
 
 /**
@@ -126,7 +128,7 @@ function safeHide(id) {
  * @param {string} display - Display value (default: 'block')
  * @returns {boolean} Success or failure
  */
-function safeShow(id, display = 'block') {
+function safeShow(id, display = "block") {
   return safeSetDisplay(id, display);
 }
 
@@ -157,7 +159,7 @@ function safeAddEventListener(id, event, handler) {
  * @param {string} context - Context for error logging
  * @returns {HTMLElement|null} Element or null if not found
  */
-function safeQuerySelector(selector, context = '') {
+function safeQuerySelector(selector, context = "") {
   try {
     const element = document.querySelector(selector);
     if (!element) {
@@ -177,18 +179,21 @@ function safeQuerySelector(selector, context = '') {
  * @param {string} context - Context for error logging
  * @returns {HTMLElement[]} Array of elements (empty array if none found)
  */
-function safeQuerySelectorAll(selector, context = '') {
+function safeQuerySelectorAll(selector, context = "") {
   try {
     const elements = document.querySelectorAll(selector);
     if (!elements || elements.length === 0) {
       console.warn(
-        `DOM Safety: Selector '${selector}' found 0 elements${context ? ` in ${context}` : ''}`,
+        `DOM Safety: Selector '${selector}' found 0 elements${context ? ` in ${context}` : ""}`,
       );
       return [];
     }
     return Array.from(elements);
   } catch (error) {
-    console.error(`DOM Safety: Error querying selector all '${selector}':`, error);
+    console.error(
+      `DOM Safety: Error querying selector all '${selector}':`,
+      error,
+    );
     return [];
   }
 }
@@ -326,7 +331,10 @@ function safeGetFormData(formId) {
   try {
     return new FormData(form);
   } catch (error) {
-    console.error(`DOM Safety: Error getting form data from '${formId}':`, error);
+    console.error(
+      `DOM Safety: Error getting form data from '${formId}':`,
+      error,
+    );
     return null;
   }
 }
@@ -338,7 +346,7 @@ function safeGetFormData(formId) {
  */
 function safeResetForm(formId) {
   const form = safeGetElement(formId);
-  if (!form || typeof form.reset !== 'function') {
+  if (!form || typeof form.reset !== "function") {
     return false;
   }
   try {
@@ -351,7 +359,7 @@ function safeResetForm(formId) {
 }
 
 // Export all functions to window object for defer script compatibility
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   Object.assign(window, {
     safeGetElement,
     safeGetValue,

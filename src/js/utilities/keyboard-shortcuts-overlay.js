@@ -8,37 +8,40 @@ class KeyboardShortcutsOverlay {
   constructor() {
     this.shortcuts = [
       {
-        category: 'Základní',
+        category: "Základní",
         items: [
-          { keys: ['Ctrl', 'Z'], description: 'Vrátit zpět poslední akci' },
-          { keys: ['Ctrl', 'Y'], description: 'Znovu provést akci' },
-          { keys: ['Ctrl', 'S'], description: 'Manuální uložení' },
-          { keys: ['Ctrl', 'F'], description: 'Otevřít vyhledávání' },
-          { keys: ['Escape'], description: 'Zavřít aktivní panel' },
-          { keys: ['Enter'], description: 'Potvrdit formulář' },
-          { keys: ['Tab'], description: 'Navigace formulářem' },
+          { keys: ["Ctrl", "Z"], description: "Vrátit zpět poslední akci" },
+          { keys: ["Ctrl", "Y"], description: "Znovu provést akci" },
+          { keys: ["Ctrl", "S"], description: "Manuální uložení" },
+          { keys: ["Ctrl", "F"], description: "Otevřít vyhledávání" },
+          { keys: ["Escape"], description: "Zavřít aktivní panel" },
+          { keys: ["Enter"], description: "Potvrdit formulář" },
+          { keys: ["Tab"], description: "Navigace formulářem" },
         ],
       },
       {
-        category: 'Nápověda',
+        category: "Nápověda",
         items: [
-          { keys: ['F1'], description: 'Otevřít nápovědu' },
-          { keys: ['?'], description: 'Zobrazit klávesové zkratky' },
-          { keys: ['Ctrl', ','], description: 'Otevřít nastavení' },
+          { keys: ["F1"], description: "Otevřít nápovědu" },
+          { keys: ["?"], description: "Zobrazit klávesové zkratky" },
+          { keys: ["Ctrl", ","], description: "Otevřít nastavení" },
         ],
       },
       {
-        category: 'Výkon & Debug',
+        category: "Výkon & Debug",
         items: [
-          { keys: ['Ctrl', 'Shift', 'P'], description: 'Performance monitor' },
-          { keys: ['Ctrl', 'Shift', 'D'], description: 'Developer console (připraveno)' },
+          { keys: ["Ctrl", "Shift", "P"], description: "Performance monitor" },
+          {
+            keys: ["Ctrl", "Shift", "D"],
+            description: "Developer console (připraveno)",
+          },
         ],
       },
       {
-        category: 'Export',
+        category: "Export",
         items: [
-          { keys: ['Ctrl', 'P'], description: 'PDF export (připraveno)' },
-          { keys: ['Ctrl', 'E'], description: 'Excel export (připraveno)' },
+          { keys: ["Ctrl", "P"], description: "PDF export (připraveno)" },
+          { keys: ["Ctrl", "E"], description: "Excel export (připraveno)" },
         ],
       },
     ];
@@ -53,11 +56,11 @@ class KeyboardShortcutsOverlay {
   init() {
     try {
       // Listen for ? key
-      document.addEventListener('keydown', (e) => {
+      document.addEventListener("keydown", (e) => {
         // ? key (Shift + /)
-        if (e.key === '?' && !e.ctrlKey && !e.altKey && !e.metaKey) {
+        if (e.key === "?" && !e.ctrlKey && !e.altKey && !e.metaKey) {
           // Don't trigger if user is typing in input
-          if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+          if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") {
             return;
           }
 
@@ -66,12 +69,12 @@ class KeyboardShortcutsOverlay {
         }
 
         // Escape to close
-        if (e.key === 'Escape' && this.visible) {
+        if (e.key === "Escape" && this.visible) {
           this.hide();
         }
       });
     } catch (error) {
-      console.error('❌ Shortcuts overlay initialization failed:', error);
+      console.error("❌ Shortcuts overlay initialization failed:", error);
     }
   }
 
@@ -97,8 +100,8 @@ class KeyboardShortcutsOverlay {
     this.visible = true;
 
     // Create backdrop
-    const backdrop = document.createElement('div');
-    backdrop.id = 'shortcutsBackdrop';
+    const backdrop = document.createElement("div");
+    backdrop.id = "shortcutsBackdrop";
     backdrop.style.cssText = `
       position: fixed;
       top: 0;
@@ -110,11 +113,11 @@ class KeyboardShortcutsOverlay {
       animation: fadeIn 0.2s ease;
     `;
 
-    backdrop.addEventListener('click', () => this.hide());
+    backdrop.addEventListener("click", () => this.hide());
 
     // Create overlay
-    const overlay = document.createElement('div');
-    overlay.id = 'shortcutsOverlay';
+    const overlay = document.createElement("div");
+    overlay.id = "shortcutsOverlay";
     overlay.style.cssText = `
       position: fixed;
       top: 50%;
@@ -180,13 +183,13 @@ class KeyboardShortcutsOverlay {
 
         <div style="background: #f8f9fa; border-radius: 8px; padding: 16px;">
           ${category.items
-            .map(
-              (item) => `
+    .map(
+      (item) => `
               <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #e9ecef;">
                 <div style="display: flex; gap: 6px;">
                   ${item.keys
-                    .map(
-                      (key) => `
+    .map(
+      (key) => `
                       <kbd style="
                         display: inline-block;
                         padding: 6px 10px;
@@ -200,32 +203,34 @@ class KeyboardShortcutsOverlay {
                         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
                       ">${key}</kbd>
                       `,
-                    )
-                    .join('<span style="margin: 0 4px; color: #adb5bd;">+</span>')}
+    )
+    .join(
+                      '<span style="margin: 0 4px; color: #adb5bd;">+</span>',
+                    )}
                 </div>
                 <div style="color: #6c757d; font-size: 0.9rem; text-align: right; max-width: 60%;">
                   ${item.description}
                 </div>
               </div>
             `,
-            )
-            .join('')}
+    )
+    .join("")}
         </div>
       </div>
     `,
-    )
-    .join('');
+      )
+      .join('');
   }
 
   /**
    * Setup event listeners
    */
   setupListeners() {
-    document.getElementById('closeShortcuts')?.addEventListener('click', () => {
+    document.getElementById("closeShortcuts")?.addEventListener("click", () => {
       this.hide();
     });
 
-    document.getElementById('printShortcuts')?.addEventListener('click', () => {
+    document.getElementById("printShortcuts")?.addEventListener("click", () => {
       this.print();
     });
   }
@@ -235,15 +240,15 @@ class KeyboardShortcutsOverlay {
    */
   hide() {
     this.visible = false;
-    document.getElementById('shortcutsOverlay')?.remove();
-    document.getElementById('shortcutsBackdrop')?.remove();
+    document.getElementById("shortcutsOverlay")?.remove();
+    document.getElementById("shortcutsBackdrop")?.remove();
   }
 
   /**
    * Print shortcuts
    */
   print() {
-    const printWindow = window.open('', '_blank');
+    const printWindow = window.open("", "_blank");
 
     printWindow.document.write(`
       <!DOCTYPE html>
@@ -301,8 +306,8 @@ class KeyboardShortcutsOverlay {
         <p><strong>Portfolio Manager Pro v3.0</strong> - Kompletní přehled</p>
 
         ${this.shortcuts
-          .map(
-            (category) => `
+    .map(
+      (category) => `
             <h2>${category.category}</h2>
             <table>
               <thead>
@@ -313,25 +318,25 @@ class KeyboardShortcutsOverlay {
               </thead>
               <tbody>
                 ${category.items
-                  .map(
-                    (item) => `
+    .map(
+      (item) => `
                     <tr>
                       <td>
-                        ${item.keys.map((key) => `<kbd>${key}</kbd>`).join(' + ')}
+                        ${item.keys.map((key) => `<kbd>${key}</kbd>`).join(" + ")}
                       </td>
                       <td>${item.description}</td>
                     </tr>
                   `,
-                  )
-                  .join('')}
+    )
+    .join("")}
               </tbody>
             </table>
           `,
-          )
-          .join('')}
+    )
+    .join("")}
 
         <div style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #dee2e6; color: #6c757d;">
-          <p><small>Generováno: ${new Date().toLocaleString('cs-CZ')}</small></p>
+          <p><small>Generováno: ${new Date().toLocaleString("cs-CZ")}</small></p>
         </div>
       </body>
       </html>
@@ -362,7 +367,7 @@ class KeyboardShortcutsOverlay {
 window.keyboardShortcuts = new KeyboardShortcutsOverlay();
 
 // Add animation styles
-const style = document.createElement('style');
+const style = document.createElement("style");
 style.textContent = `
   @keyframes fadeIn {
     from { opacity: 0; }

@@ -5,7 +5,7 @@
  */
 
 class Command {
-  constructor(execute, undo, description = '') {
+  constructor(execute, undo, description = "") {
     this.execute = execute;
     this.undo = undo;
     this.description = description;
@@ -47,7 +47,7 @@ class CommandStack {
 
       this.updateUI();
     } catch (error) {
-      console.error('Command execution failed:', error);
+      console.error("Command execution failed:", error);
       if (window.errorHandler) {
         window.errorHandler.handleError({
           message: `Command failed: ${error.message}`,
@@ -73,13 +73,13 @@ class CommandStack {
 
       this.updateUI();
 
-      if (typeof announce === 'function') {
+      if (typeof announce === "function") {
         announce(`Vráceno: ${command.description}`);
       }
 
       return true;
     } catch (error) {
-      console.error('Undo failed:', error);
+      console.error("Undo failed:", error);
       return false;
     } finally {
       this.isExecuting = false;
@@ -100,13 +100,13 @@ class CommandStack {
 
       this.updateUI();
 
-      if (typeof announce === 'function') {
+      if (typeof announce === "function") {
         announce(`Znovu provedeno: ${command.description}`);
       }
 
       return true;
     } catch (error) {
-      console.error('Redo failed:', error);
+      console.error("Redo failed:", error);
       this.currentIndex--;
       return false;
     } finally {
@@ -138,21 +138,21 @@ class CommandStack {
 
   updateUI() {
     // Update undo/redo button states
-    const undoBtn = document.getElementById('undoBtn');
-    const redoBtn = document.getElementById('redoBtn');
+    const undoBtn = document.getElementById("undoBtn");
+    const redoBtn = document.getElementById("redoBtn");
 
     if (undoBtn) {
       undoBtn.disabled = !this.canUndo();
       undoBtn.title = this.canUndo()
         ? `Vrátit: ${this.history[this.currentIndex]?.description}`
-        : 'Není co vrátit';
+        : "Není co vrátit";
     }
 
     if (redoBtn) {
       redoBtn.disabled = !this.canRedo();
       redoBtn.title = this.canRedo()
         ? `Znovu: ${this.history[this.currentIndex + 1]?.description}`
-        : 'Není co znovu provést';
+        : "Není co znovu provést";
     }
 
     // Update history timeline if visible
@@ -160,25 +160,25 @@ class CommandStack {
   }
 
   updateHistoryTimeline() {
-    const timeline = document.getElementById('historyTimeline');
+    const timeline = document.getElementById("historyTimeline");
     if (!timeline) {
       return;
     }
 
-    timeline.innerHTML = '';
+    timeline.innerHTML = "";
 
     this.history.forEach((cmd, index) => {
-      const item = document.createElement('div');
-      item.className = `history-item ${index === this.currentIndex ? 'current' : ''} ${index > this.currentIndex ? 'future' : 'past'}`;
+      const item = document.createElement("div");
+      item.className = `history-item ${index === this.currentIndex ? "current" : ""} ${index > this.currentIndex ? "future" : "past"}`;
       item.innerHTML = `
-                <div class="history-icon">${index === this.currentIndex ? '●' : '○'}</div>
+                <div class="history-icon">${index === this.currentIndex ? "●" : "○"}</div>
                 <div class="history-content">
                     <div class="history-description">${cmd.description}</div>
                     <div class="history-time">${this.formatTime(cmd.timestamp)}</div>
                 </div>
             `;
 
-      item.addEventListener('click', () => {
+      item.addEventListener("click", () => {
         this.jumpToIndex(index);
       });
 
@@ -205,7 +205,7 @@ class CommandStack {
     const diff = now - date;
 
     if (diff < 60000) {
-      return 'Právě teď';
+      return "Právě teď";
     }
     if (diff < 3600000) {
       return `${Math.floor(diff / 60000)} min. zpět`;
@@ -213,7 +213,7 @@ class CommandStack {
     if (diff < 86400000) {
       return `${Math.floor(diff / 3600000)} hod. zpět`;
     }
-    return date.toLocaleString('cs-CZ');
+    return date.toLocaleString("cs-CZ");
   }
 }
 
@@ -222,13 +222,13 @@ class AddFondCommand extends Command {
   constructor(fondData) {
     const execute = () => {
       portfolioData.push(fondData);
-      if (typeof updateFondTable === 'function') {
+      if (typeof updateFondTable === "function") {
         updateFondTable();
       }
-      if (typeof updateDashboard === 'function') {
+      if (typeof updateDashboard === "function") {
         updateDashboard();
       }
-      if (typeof storage !== 'undefined') {
+      if (typeof storage !== "undefined") {
         storage.saveData(portfolioData);
       }
     };
@@ -237,13 +237,13 @@ class AddFondCommand extends Command {
       const index = portfolioData.findIndex((f) => f === fondData);
       if (index > -1) {
         portfolioData.splice(index, 1);
-        if (typeof updateFondTable === 'function') {
+        if (typeof updateFondTable === "function") {
           updateFondTable();
         }
-        if (typeof updateDashboard === 'function') {
+        if (typeof updateDashboard === "function") {
           updateDashboard();
         }
-        if (typeof storage !== 'undefined') {
+        if (typeof storage !== "undefined") {
           storage.saveData(portfolioData);
         }
       }
@@ -260,26 +260,26 @@ class DeleteFondCommand extends Command {
 
     const execute = () => {
       portfolioData.splice(index, 1);
-      if (typeof updateFondTable === 'function') {
+      if (typeof updateFondTable === "function") {
         updateFondTable();
       }
-      if (typeof updateDashboard === 'function') {
+      if (typeof updateDashboard === "function") {
         updateDashboard();
       }
-      if (typeof storage !== 'undefined') {
+      if (typeof storage !== "undefined") {
         storage.saveData(portfolioData);
       }
     };
 
     const undo = () => {
       portfolioData.splice(index, 0, fondData);
-      if (typeof updateFondTable === 'function') {
+      if (typeof updateFondTable === "function") {
         updateFondTable();
       }
-      if (typeof updateDashboard === 'function') {
+      if (typeof updateDashboard === "function") {
         updateDashboard();
       }
-      if (typeof storage !== 'undefined') {
+      if (typeof storage !== "undefined") {
         storage.saveData(portfolioData);
       }
     };
@@ -294,26 +294,26 @@ class EditFondCommand extends Command {
   constructor(index, oldData, newData) {
     const execute = () => {
       portfolioData[index] = { ...newData };
-      if (typeof updateFondTable === 'function') {
+      if (typeof updateFondTable === "function") {
         updateFondTable();
       }
-      if (typeof updateDashboard === 'function') {
+      if (typeof updateDashboard === "function") {
         updateDashboard();
       }
-      if (typeof storage !== 'undefined') {
+      if (typeof storage !== "undefined") {
         storage.saveData(portfolioData);
       }
     };
 
     const undo = () => {
       portfolioData[index] = { ...oldData };
-      if (typeof updateFondTable === 'function') {
+      if (typeof updateFondTable === "function") {
         updateFondTable();
       }
-      if (typeof updateDashboard === 'function') {
+      if (typeof updateDashboard === "function") {
         updateDashboard();
       }
-      if (typeof storage !== 'undefined') {
+      if (typeof storage !== "undefined") {
         storage.saveData(portfolioData);
       }
     };
@@ -335,13 +335,13 @@ class BulkDeleteCommand extends Command {
       fondsToDelete.forEach(({ index }) => {
         portfolioData.splice(index, 1);
       });
-      if (typeof updateFondTable === 'function') {
+      if (typeof updateFondTable === "function") {
         updateFondTable();
       }
-      if (typeof updateDashboard === 'function') {
+      if (typeof updateDashboard === "function") {
         updateDashboard();
       }
-      if (typeof storage !== 'undefined') {
+      if (typeof storage !== "undefined") {
         storage.saveData(portfolioData);
       }
     };
@@ -350,13 +350,13 @@ class BulkDeleteCommand extends Command {
       fondsToDelete.reverse().forEach(({ index, data }) => {
         portfolioData.splice(index, 0, data);
       });
-      if (typeof updateFondTable === 'function') {
+      if (typeof updateFondTable === "function") {
         updateFondTable();
       }
-      if (typeof updateDashboard === 'function') {
+      if (typeof updateDashboard === "function") {
         updateDashboard();
       }
-      if (typeof storage !== 'undefined') {
+      if (typeof storage !== "undefined") {
         storage.saveData(portfolioData);
       }
     };
@@ -370,21 +370,24 @@ class BulkDeleteCommand extends Command {
 window.commandStack = new CommandStack();
 
 // Keyboard shortcuts
-document.addEventListener('keydown', (e) => {
+document.addEventListener("keydown", (e) => {
   // Ctrl+Z or Cmd+Z - Undo
-  if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
+  if ((e.ctrlKey || e.metaKey) && e.key === "z" && !e.shiftKey) {
     e.preventDefault();
     window.commandStack.undo();
   }
 
   // Ctrl+Y or Ctrl+Shift+Z or Cmd+Shift+Z - Redo
-  if ((e.ctrlKey || e.metaKey) && (e.key === 'y' || (e.shiftKey && e.key === 'z'))) {
+  if (
+    (e.ctrlKey || e.metaKey) &&
+    (e.key === "y" || (e.shiftKey && e.key === "z"))
+  ) {
     e.preventDefault();
     window.commandStack.redo();
   }
 
   // Ctrl+H - Show history
-  if ((e.ctrlKey || e.metaKey) && e.key === 'h' && !e.shiftKey) {
+  if ((e.ctrlKey || e.metaKey) && e.key === "h" && !e.shiftKey) {
     e.preventDefault();
     toggleHistoryPanel();
   }
@@ -392,12 +395,12 @@ document.addEventListener('keydown', (e) => {
 
 // Create undo/redo UI buttons
 function createUndoRedoButtons() {
-  const container = document.querySelector('.card h1');
+  const container = document.querySelector(".card h1");
   if (!container) {
     return;
   }
 
-  const buttonGroup = document.createElement('div');
+  const buttonGroup = document.createElement("div");
   buttonGroup.style.cssText = `
         display: inline-flex;
         gap: 8px;
@@ -405,9 +408,9 @@ function createUndoRedoButtons() {
         vertical-align: middle;
     `;
 
-  const undoBtn = document.createElement('button');
-  undoBtn.id = 'undoBtn';
-  undoBtn.innerHTML = '↩️ Vrátit';
+  const undoBtn = document.createElement("button");
+  undoBtn.id = "undoBtn";
+  undoBtn.innerHTML = "↩️ Vrátit";
   undoBtn.disabled = true;
   undoBtn.style.cssText = `
         padding: 6px 12px;
@@ -420,16 +423,16 @@ function createUndoRedoButtons() {
     `;
   undoBtn.onclick = () => window.commandStack.undo();
 
-  const redoBtn = document.createElement('button');
-  redoBtn.id = 'redoBtn';
-  redoBtn.innerHTML = '↪️ Znovu';
+  const redoBtn = document.createElement("button");
+  redoBtn.id = "redoBtn";
+  redoBtn.innerHTML = "↪️ Znovu";
   redoBtn.disabled = true;
   redoBtn.style.cssText = undoBtn.style.cssText;
   redoBtn.onclick = () => window.commandStack.redo();
 
-  const historyBtn = document.createElement('button');
-  historyBtn.innerHTML = '📜';
-  historyBtn.title = 'Zobrazit historii (Ctrl+H)';
+  const historyBtn = document.createElement("button");
+  historyBtn.innerHTML = "📜";
+  historyBtn.title = "Zobrazit historii (Ctrl+H)";
   historyBtn.style.cssText = undoBtn.style.cssText;
   historyBtn.onclick = toggleHistoryPanel;
 
@@ -442,15 +445,15 @@ function createUndoRedoButtons() {
 
 // History panel
 function toggleHistoryPanel() {
-  let panel = document.getElementById('historyPanel');
+  let panel = document.getElementById("historyPanel");
 
   if (panel) {
     panel.remove();
     return;
   }
 
-  panel = document.createElement('div');
-  panel.id = 'historyPanel';
+  panel = document.createElement("div");
+  panel.id = "historyPanel";
   panel.style.cssText = `
         position: fixed;
         top: 80px;
@@ -484,8 +487,10 @@ function toggleHistoryPanel() {
   document.body.appendChild(panel);
 
   // Add event listeners
-  panel.querySelector('.close-history-btn').addEventListener('click', () => panel.remove());
-  panel.querySelector('.clear-history-btn').addEventListener('click', () => {
+  panel
+    .querySelector(".close-history-btn")
+    .addEventListener("click", () => panel.remove());
+  panel.querySelector(".clear-history-btn").addEventListener("click", () => {
     window.commandStack.clear();
     panel.remove();
   });
@@ -494,14 +499,14 @@ function toggleHistoryPanel() {
 }
 
 // Initialize when DOM is ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', createUndoRedoButtons);
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", createUndoRedoButtons);
 } else {
   setTimeout(createUndoRedoButtons, 1000);
 }
 
 // Add history item styles
-const commandStackStyle = document.createElement('style');
+const commandStackStyle = document.createElement("style");
 commandStackStyle.textContent = `
     .history-item {
         display: flex;
