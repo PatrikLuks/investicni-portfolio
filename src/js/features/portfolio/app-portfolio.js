@@ -1719,14 +1719,30 @@ const styles = `
         border-radius: 4px;
     }
 
+    body.dark-mode .csv-format-info,
+    body.elegant-black .csv-format-info {
+        background: rgba(45, 45, 45, 0.8);
+        border-left-color: #3949ab;
+    }
+
     .csv-format-info strong {
         color: var(--text-secondary);
         font-weight: 700;
     }
 
+    body.dark-mode .csv-format-info strong,
+    body.elegant-black .csv-format-info strong {
+        color: #f0f3f8;
+    }
+
     .csv-format-info p {
         margin: 8px 0;
         color: var(--text-secondary);
+    }
+
+    body.dark-mode .csv-format-info p,
+    body.elegant-black .csv-format-info p {
+        color: #e2e8f0;
     }
 
     .csv-format-info code {
@@ -1738,6 +1754,13 @@ const styles = `
         font-weight: 600;
         border-radius: 4px;
         border: 1px solid var(--border-color);
+    }
+
+    body.dark-mode .csv-format-info code,
+    body.elegant-black .csv-format-info code {
+        background: rgba(26, 26, 26, 0.9);
+        color: #f0f3f8;
+        border-color: #3a3a3a;
     }
 
     .csv-controls {
