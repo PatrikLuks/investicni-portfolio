@@ -159,6 +159,49 @@ class MarketDataFeed {
   }
 
   /**
+   * Get top gainers
+   */
+  getTopGainers(limit = 5) {
+    return Array.from(this.priceData.entries())
+      .sort((a, b) => (b[1].changePercent || 0) - (a[1].changePercent || 0))
+      .slice(0, limit)
+      .map(([symbol, data]) => ({ symbol, ...data }));
+  }
+
+  /**
+   * Get top losers
+   */
+  getTopLosers(limit = 5) {
+    return Array.from(this.priceData.entries())
+      .sort((a, b) => (a[1].changePercent || 0) - (b[1].changePercent || 0))
+      .slice(0, limit)
+      .map(([symbol, data]) => ({ symbol, ...data }));
+  }
+
+  /**
+   * Get market statistics
+   */
+  getMarketStats() {
+    if (this.priceData.size === 0) {
+      return null;
+    }
+
+    const prices = Array.from(this.priceData.values());
+    const avgChange = prices.reduce((sum, p) => sum + (p.changePercent || 0), 0) / prices.length;
+    const gainers = prices.filter((p) => p.changePercent > 0).length;
+    const losers = prices.filter((p) => p.changePercent < 0).length;
+    const totalVolume = prices.reduce((sum, p) => sum + (p.volume || 0), 0);
+
+    return {
+      avgChange,
+      gainers,
+      losers,
+      totalVolume,
+      total: prices.length,
+    };
+  }
+
+  /**
    * Create market data UI
    */
   createMarketDataUI() {
@@ -183,10 +226,44 @@ class MarketDataFeed {
     marketBtn.className = 'btn-icon';
     marketBtn.title = 'Live Market Data';
     marketBtn.setAttribute('aria-label', 'Živá data trhu');
-    marketBtn.style.cssText =
-      'font-size: 1.5rem; padding: 8px 16px; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; border: none; border-radius: 8px; cursor: pointer; position: relative;';
-    marketBtn.innerHTML =
-      '📡 <span id="liveIndicator" style="position: absolute; top: 8px; right: 8px; width: 8px; height: 8px; background: #2ecc71; border-radius: 50%; animation: pulse 2s infinite;"></span>';
+    marketBtn.style.cssText = `
+      font-size: 1rem;
+      padding: 10px 18px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      position: relative;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    `;
+    marketBtn.innerHTML = `
+      <span>�</span>
+      <span>Market</span>
+      <div id="liveIndicator" style="
+        width: 8px;
+        height: 8px;
+        background: #2ecc71;
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+        margin-left: 4px;
+      "></div>
+    `;
+
+    marketBtn.addEventListener('mouseenter', () => {
+      marketBtn.style.transform = 'translateY(-2px)';
+      marketBtn.style.boxShadow = '0 8px 25px rgba(102, 126, 234, 0.4)';
+    });
+
+    marketBtn.addEventListener('mouseleave', () => {
+      marketBtn.style.transform = 'translateY(0)';
+      marketBtn.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.3)';
+    });
 
     marketBtn.addEventListener('click', () => this.toggleMarketPanel());
 
@@ -343,13 +420,44 @@ class MarketDataFeed {
         background: var(--background);
       ">
         <div style="
-          padding: 60px 20px;
+          padding: 40px 20px;
           text-align: center;
           color: var(--text-secondary);
         ">
-          <div style="font-size: 4rem; margin-bottom: 16px; opacity: 0.3;">📡</div>
-          <div style="font-size: 1rem; font-weight: 500;">Search for symbols or watch portfolio prices</div>
-          <div style="font-size: 0.85rem; margin-top: 8px; opacity: 0.7;">Popular: AAPL, GOOGL, MSFT, AMZN, TSLA</div>
+          <div style="font-size: 3.5rem; margin-bottom: 16px; opacity: 0.3;">�</div>
+          <div style="font-size: 1rem; font-weight: 600;">Market Ready</div>
+          <div style="font-size: 0.9rem; margin-top: 8px; opacity: 0.7;">Search symbols or browse trending assets</div>
+          <div style="
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 20px;
+          ">
+            <button onclick="window.marketDataFeed.showTrendingSymbols()" style="
+              padding: 12px;
+              background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+              color: white;
+              border: none;
+              border-radius: 8px;
+              cursor: pointer;
+              font-weight: 600;
+              transition: all 0.2s;
+            " onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+              🔥 Trending
+            </button>
+            <button onclick="window.marketDataFeed.showTopGainers()" style="
+              padding: 12px;
+              background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+              color: white;
+              border: none;
+              border-radius: 8px;
+              cursor: pointer;
+              font-weight: 600;
+              transition: all 0.2s;
+            " onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+              📈 Top Gainers
+            </button>
+          </div>
         </div>
       </div>
     `;
@@ -580,6 +688,48 @@ class MarketDataFeed {
     if (window.notificationSystem) {
       window.notificationSystem.showInAppNotification(`Added ${symbol} to watchlist`, 'success');
     }
+  }
+
+  /**
+   * Show trending symbols
+   */
+  showTrendingSymbols() {
+    const trending = ['AAPL', 'GOOGL', 'MSFT', 'AMZN', 'TSLA', 'NVDA', 'META', 'NFLX'];
+    trending.forEach((symbol) => {
+      if (!this.priceData.has(symbol)) {
+        this.priceData.set(symbol, {
+          symbol,
+          price: this.generateInitialPrice(),
+          change: (Math.random() - 0.5) * 5,
+          changePercent: (Math.random() - 0.5) * 5,
+          volume: Math.floor(Math.random() * 5000000),
+          bid: 0,
+          ask: 0,
+          high: 0,
+          low: 0,
+          open: 0,
+        });
+      }
+    });
+
+    this.renderSearchResults(trending);
+  }
+
+  /**
+   * Show top gainers
+   */
+  showTopGainers() {
+    const gainers = this.getTopGainers(8);
+    const list = document.getElementById('marketDataList');
+    
+    if (!list || gainers.length === 0) {
+      this.showTrendingSymbols();
+      return;
+    }
+
+    list.innerHTML = gainers
+      .map((data) => this.renderPriceCard(data.symbol))
+      .join('');
   }
 
   /**
