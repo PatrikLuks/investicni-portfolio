@@ -195,12 +195,45 @@ class MarketDataFeed {
     // Create market data panel
     this.createMarketPanel();
 
-    // Add pulse animation
+    // Add animations
     const style = document.createElement('style');
     style.textContent = `
       @keyframes pulse {
         0%, 100% { opacity: 1; }
         50% { opacity: 0.3; }
+      }
+      
+      @keyframes shimmer {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+      }
+      
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      @keyframes glow {
+        0%, 100% { box-shadow: 0 0 5px rgba(102, 126, 234, 0); }
+        50% { box-shadow: 0 0 20px rgba(102, 126, 234, 0.3); }
+      }
+      
+      #marketDataPanel {
+        animation: slideIn 0.3s ease-out;
+      }
+      
+      #marketDataPanel [id^="price-"] {
+        animation: slideIn 0.3s ease-out;
+      }
+      
+      #marketDataPanel #symbolSearch:focus {
+        animation: glow 2s ease-in-out;
       }
     `;
     document.head.appendChild(style);
@@ -216,48 +249,107 @@ class MarketDataFeed {
       position: fixed;
       top: 80px;
       right: 20px;
-      width: 400px;
-      max-height: 600px;
+      width: 420px;
+      max-height: 680px;
       background: var(--card-background);
       color: var(--text-primary);
-      border-radius: 12px;
+      border-radius: 16px;
       border: 1px solid var(--border-color);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
       z-index: 1002;
       display: none;
       overflow: hidden;
+      backdrop-filter: blur(10px);
     `;
 
     panel.innerHTML = `
-      <div style="padding: 16px; border-bottom: 1px solid var(--border-color); background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white;">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <h3 style="margin: 0; display: flex; align-items: center; gap: 8px;">
-            <span>📡</span>
+      <div style="
+        padding: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-bottom: 2px solid rgba(255,255,255,0.1);
+      ">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h3 style="margin: 0; display: flex; align-items: center; gap: 12px; font-size: 1.3rem; font-weight: 700;">
+            <span style="font-size: 1.5rem;">�</span>
             <span>Live Market Data</span>
           </h3>
-          <div style="display: flex; gap: 8px; align-items: center;">
-            <div id="marketStatus" style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem;">
-              <div style="width: 8px; height: 8px; background: #2ecc71; border-radius: 50%;"></div>
-              <span>Live</span>
-            </div>
-            <button id="closeMarketPanel" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: white;">✕</button>
-          </div>
+          <button id="closeMarketPanel" style="
+            background: rgba(255,255,255,0.2);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: white;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          " onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">✕</button>
+        </div>
+        <div id="marketStatus" style="
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 0.9rem;
+          opacity: 0.95;
+        ">
+          <div style="
+            width: 10px;
+            height: 10px;
+            background: #2ecc71;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+          "></div>
+          <span>Live Updates • 2s refresh</span>
         </div>
       </div>
       
-      <div style="padding: 12px;">
-        <input 
-          type="text" 
-          id="symbolSearch" 
-          placeholder="Search symbol (e.g., AAPL, GOOGL)..."
-          style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.9rem;"
-        >
+      <div style="padding: 16px; background: var(--background);">
+        <div style="position: relative;">
+          <input 
+            type="text" 
+            id="symbolSearch" 
+            placeholder="Search symbol (AAPL, GOOGL, BTC...)..."
+            style="
+              width: 100%;
+              padding: 12px 16px 12px 40px;
+              border: 2px solid var(--border-color);
+              border-radius: 10px;
+              font-size: 0.95rem;
+              background: var(--card-background);
+              color: var(--text-primary);
+              transition: all 0.2s;
+            "
+            onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 3px rgba(102,126,234,0.1)'"
+            onblur="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none'"
+          >
+          <span style="
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1rem;
+          ">🔍</span>
+        </div>
       </div>
       
-      <div id="marketDataList" style="max-height: 450px; overflow-y: auto; padding: 8px;">
-        <div style="padding: 40px 20px; text-align: center; color: #999;">
-          <div style="font-size: 3rem; margin-bottom: 12px;">📡</div>
-          <div>Search for symbols or view portfolio prices</div>
+      <div id="marketDataList" style="
+        max-height: 520px;
+        overflow-y: auto;
+        padding: 12px;
+        background: var(--background);
+      ">
+        <div style="
+          padding: 60px 20px;
+          text-align: center;
+          color: var(--text-secondary);
+        ">
+          <div style="font-size: 4rem; margin-bottom: 16px; opacity: 0.3;">📡</div>
+          <div style="font-size: 1rem; font-weight: 500;">Search for symbols or watch portfolio prices</div>
+          <div style="font-size: 0.85rem; margin-top: 8px; opacity: 0.7;">Popular: AAPL, GOOGL, MSFT, AMZN, TSLA</div>
         </div>
       </div>
     `;
@@ -423,8 +515,14 @@ class MarketDataFeed {
 
     if (suggestions.length === 0) {
       list.innerHTML = `
-        <div style="padding: 20px; text-align: center; color: var(--text-secondary);">
-          No symbols found
+        <div style="
+          padding: 40px 20px;
+          text-align: center;
+          color: var(--text-secondary);
+        ">
+          <div style="font-size: 2.5rem; margin-bottom: 12px; opacity: 0.4;">🔍</div>
+          <div style="font-weight: 500;">No symbols found</div>
+          <div style="font-size: 0.85rem; margin-top: 8px; opacity: 0.6;">Try a different search term</div>
         </div>
       `;
       return;
@@ -434,21 +532,38 @@ class MarketDataFeed {
       .map(
         (symbol) => `
       <div 
-        data-action="add-symbol" data-symbol="${symbol}"
+        onclick="window.marketDataFeed.addSymbolToWatch('${symbol}');"
         style="
-          padding: 12px;
-          margin: 4px;
-          background: var(--bg-secondary);
-          border: 1px solid var(--border-color);
-          border-radius: 8px;
+          padding: 14px 16px;
+          margin: 6px 0;
+          background: var(--card-background);
+          border: 2px solid var(--border-color);
+          border-radius: 10px;
           cursor: pointer;
-          transition: all 0.2s;
+          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+          display: flex;
+          align-items: center;
+          gap: 12px;
         "
-        onmouseover="this.style.background='var(--card-background)'"
-        onmouseout="this.style.background='var(--bg-secondary)'"
+        onmouseover="this.style.borderColor='#667eea'; this.style.background='rgba(102, 126, 234, 0.05)'; this.style.transform='translateX(4px)'"
+        onmouseout="this.style.borderColor='var(--border-color)'; this.style.background='var(--card-background)'; this.style.transform='translateX(0)'"
       >
-        <div style="font-weight: 600; color: var(--text-primary);">${symbol}</div>
-        <div style="font-size: 0.85rem; color: var(--text-secondary);">Click to add to watchlist</div>
+        <span style="font-size: 1.2rem;">📊</span>
+        <div style="flex: 1;">
+          <div style="font-weight: 700; color: var(--text-primary); font-size: 1rem; letter-spacing: 0.5px;">${symbol}</div>
+          <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px;">Click to add to watchlist</div>
+        </div>
+        <span style="
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 32px;
+          height: 32px;
+          background: #667eea;
+          color: white;
+          border-radius: 50%;
+          font-size: 1.2rem;
+        ">+</span>
       </div>
     `
       )
@@ -478,9 +593,14 @@ class MarketDataFeed {
 
     if (this.subscriptions.size === 0) {
       list.innerHTML = `
-        <div style="padding: 40px 20px; text-align: center; color: #999;">
-          <div style="font-size: 3rem; margin-bottom: 12px;">📡</div>
-          <div>No symbols in watchlist</div>
+        <div style="
+          padding: 60px 20px;
+          text-align: center;
+          color: var(--text-secondary);
+        ">
+          <div style="font-size: 4rem; margin-bottom: 16px; opacity: 0.3;">�</div>
+          <div style="font-size: 1rem; font-weight: 500;">No symbols in watchlist</div>
+          <div style="font-size: 0.85rem; margin-top: 8px; opacity: 0.7;">Search and add symbols above to get started</div>
         </div>
       `;
       return;
@@ -503,54 +623,120 @@ class MarketDataFeed {
     };
 
     const isPositive = priceData.change >= 0;
-    const color = isPositive ? '#2ecc71' : '#e74c3c';
+    const bgColor = isPositive ? 'rgba(46, 204, 113, 0.08)' : 'rgba(231, 76, 60, 0.08)';
+    const borderColor = isPositive ? '#2ecc71' : '#e74c3c';
+    const textColor = isPositive ? '#27ae60' : '#c0392b';
 
     return `
       <div id="price-${symbol}" style="
         padding: 16px;
-        margin: 8px;
-        background: var(--bg-secondary);
-        border: 1px solid var(--border-color);
-        border-left: 4px solid ${color};
-        border-radius: 8px;
-        transition: all 0.3s;
+        margin: 8px 0;
+        background: ${bgColor};
+        border: 2px solid ${borderColor};
+        border-radius: 12px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         color: var(--text-primary);
+        position: relative;
+        overflow: hidden;
       ">
-        <div style="display: flex; justify-content: space-between; align-items: start;">
-          <div>
-            <div style="font-weight: 600; font-size: 1.1rem; color: var(--text-primary);">${symbol}</div>
-            <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 2px;">
-              Vol: ${this.formatVolume(priceData.volume)}
+        <div style="
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+          animation: shimmer 2s infinite;
+          pointer-events: none;
+        "></div>
+        
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; position: relative; z-index: 1;">
+          <div style="flex: 1;">
+            <div style="
+              font-weight: 700;
+              font-size: 1.2rem;
+              color: var(--text-primary);
+              letter-spacing: 0.5px;
+            ">${symbol}</div>
+            <div style="
+              font-size: 0.8rem;
+              color: var(--text-secondary);
+              margin-top: 4px;
+              display: flex;
+              gap: 12px;
+            ">
+              <span>Vol: ${this.formatVolume(priceData.volume)}</span>
             </div>
           </div>
+          
           <div style="text-align: right;">
-            <div style="font-weight: bold; font-size: 1.3rem; color: var(--text-primary);">
+            <div style="
+              font-weight: 700;
+              font-size: 1.4rem;
+              color: ${textColor};
+              letter-spacing: -0.5px;
+            ">
               $${priceData.price.toFixed(2)}
             </div>
-            <div style="font-size: 0.9rem; color: ${color}; margin-top: 2px;">
-              ${isPositive ? '+' : ''}${priceData.changePercent.toFixed(2)}%
+            <div style="
+              font-size: 0.95rem;
+              font-weight: 600;
+              color: ${textColor};
+              margin-top: 4px;
+              display: flex;
+              align-items: center;
+              gap: 4px;
+              justify-content: flex-end;
+            ">
+              <span>${isPositive ? '▲' : '▼'}</span>
+              <span>${isPositive ? '+' : ''}${priceData.changePercent.toFixed(2)}%</span>
             </div>
           </div>
         </div>
-        <div style="display: flex; justify-content: space-between; margin-top: 12px; font-size: 0.8rem; color: var(--text-secondary);">
-          <span>Bid: $${priceData.bid?.toFixed(2) || '-'}</span>
-          <span>Ask: $${priceData.ask?.toFixed(2) || '-'}</span>
+        
+        <div style="
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 12px;
+          margin-top: 12px;
+          padding-top: 12px;
+          border-top: 1px solid ${borderColor}33;
+          font-size: 0.8rem;
+          color: var(--text-secondary);
+          position: relative;
+          z-index: 1;
+        ">
+          <div>
+            <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 2px;">Bid</div>
+            <div style="color: ${textColor}; font-weight: 500;">$${priceData.bid?.toFixed(2) || '-'}</div>
+          </div>
+          <div>
+            <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 2px;">Ask</div>
+            <div style="color: ${textColor}; font-weight: 500;">$${priceData.ask?.toFixed(2) || '-'}</div>
+          </div>
         </div>
+        
         <button 
-          data-action="unsubscribe" data-symbol('${symbol}'); window.marketDataFeed.renderWatchlist();"
+          onclick="window.marketDataFeed.unsubscribe('${symbol}'); window.marketDataFeed.renderWatchlist();"
           style="
-            margin-top: 8px;
-            padding: 6px 12px;
-            background: #e74c3c;
+            margin-top: 12px;
+            padding: 8px 14px;
+            background: ${textColor};
             color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 0.85rem;
+            font-weight: 600;
             width: 100%;
+            transition: all 0.2s;
+            position: relative;
+            z-index: 2;
           "
+          onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px ${textColor}40'"
+          onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'"
         >
-          Remove
+          × Remove from watchlist
         </button>
       </div>
     `;
