@@ -255,6 +255,7 @@ themeStyles.textContent = `
     --text-warning: #fde047;
     --text-success: #4ade80;
     --card-background: #1e293b;
+  }
 
   /* Smooth theme transition */
   * {
