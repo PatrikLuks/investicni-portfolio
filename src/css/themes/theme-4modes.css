@@ -38,9 +38,9 @@ html[data-theme='elegant-black'] {
 
   /* TEXT - Premium contrast */
   --text-primary: #ffffff;
-  --text-secondary: #e8eef7;
-  --text-tertiary: #a8b5cc;
-  --text-muted: #6b7590;
+  --text-secondary: #f0f3f8; /* Increased brightness from #e8eef7 */
+  --text-tertiary: #c8d0e0; /* Increased brightness from #a8b5cc */
+  --text-muted: #8a92a8; /* Increased brightness from #6b7590 */
 
   /* INPUTS - Deep elegant styling */
   --border-color: #4a5580;
@@ -48,7 +48,7 @@ html[data-theme='elegant-black'] {
   --input-border: #3a4577;
   --input-border-focus: #ffd700;
   --input-text: #ffffff;
-  --input-placeholder: #8a92a8;
+  --input-placeholder: #9fa5bb; /* Increased from #8a92a8 for better visibility */
 
   /* SHADOWS - Sophisticated depth */
   --shadow-sm: 0 2px 8px rgba(255, 215, 0, 0.05);
@@ -91,9 +91,9 @@ html[data-theme='dark'] {
 
   /* TEXT - Clear contrast */
   --text-primary: #f1f5f9;
-  --text-secondary: #cbd5e1;
-  --text-tertiary: #94a3b8;
-  --text-muted: #64748b;
+  --text-secondary: #e2e8f0; /* Increased brightness for better readability */
+  --text-tertiary: #cbd5e1; /* Was #94a3b8 - too dim */
+  --text-muted: #94a3b8; /* Adjusted for proper muted text */
 
   /* INPUTS */
   --border-color: #334155;
@@ -199,8 +199,8 @@ html[data-theme='light-modern'] {
   /* TEXT - Strong readable colors */
   --text-primary: #000000;
   --text-secondary: #001a4d;
-  --text-tertiary: #003d99;
-  --text-muted: #556688;
+  --text-tertiary: #0052cc; /* Slightly lighter blue for better readability */
+  --text-muted: #444466; /* Increased contrast from #556688 */
 
   /* INPUTS - Premium styling */
   --border-color: #8899cc;

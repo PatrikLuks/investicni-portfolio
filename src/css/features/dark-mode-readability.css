@@ -85,7 +85,7 @@ html[data-theme='dark'] select {
 
 html[data-theme='dark'] input::placeholder,
 html[data-theme='dark'] textarea::placeholder {
-  color: #cbd5e1;
+  color: #94a3b8; /* Increased brightness for better placeholder visibility */
   opacity: 1;
   font-weight: 400;
 }
@@ -147,8 +147,9 @@ html[data-theme='dark'] button.secondary:hover {
 html[data-theme='dark'] .help-text,
 html[data-theme='dark'] .form-hint,
 html[data-theme='dark'] .field-description {
-  color: #cbd5e1;
+  color: #e2e8f0; /* Increased from #cbd5e1 for better readability */
   font-size: 13px;
+  font-weight: 500;
 }
 
 html[data-theme='dark'] .help-text.error,
@@ -217,31 +218,42 @@ html[data-theme='dark'] a:visited {
 
 /* ===== GENERAL TEXT - DARK MODE SAFETY NET ===== */
 
-html[data-theme='dark'] * {
-  color: #f1f5f9 !important;
+/* Apply text color to main content areas without forcing everything */
+html[data-theme='dark'] body,
+html[data-theme='dark'] main,
+html[data-theme='dark'] .container,
+html[data-theme='dark'] .content {
+  color: #f1f5f9;
 }
 
-/* Exceptions for elements that should NOT be forced white */
+/* Specific exceptions for semantic text levels */
 html[data-theme='dark'] .text-muted,
 html[data-theme='dark'] .text-secondary,
 html[data-theme='dark'] .text-tertiary {
-  color: #cbd5e1 !important;
+  color: #cbd5e1;
 }
 
 html[data-theme='dark'] .text-danger {
-  color: #fca5a5 !important;
+  color: #fca5a5;
 }
 
 html[data-theme='dark'] .text-success {
-  color: #86efac !important;
+  color: #86efac;
 }
 
 html[data-theme='dark'] .text-warning {
-  color: #fcd34d !important;
+  color: #fcd34d;
 }
 
 html[data-theme='dark'] .text-primary {
-  color: #60a5fa !important;
+  color: #60a5fa;
+}
+
+/* Ensure secondary level text is readable */
+html[data-theme='dark'] .secondary-text,
+html[data-theme='dark'] .subtitle,
+html[data-theme='dark'] .description {
+  color: #e2e8f0;
 }
 
 /* ===== METRIC/STAT DISPLAYS - DARK MODE ===== */
@@ -254,8 +266,9 @@ html[data-theme='dark'] .statistic {
 
 html[data-theme='dark'] .metric-label,
 html[data-theme='dark'] .stat-label {
-  color: #cbd5e1;
-  font-weight: 600;
+  color: #e2e8f0; /* Increased from #cbd5e1 for better readability */
+  font-weight: 700; /* Increased from 600 */
+  font-size: 14px;
 }
 
 html[data-theme='dark'] .metric-value {
@@ -284,7 +297,8 @@ html[data-theme='dark'] .input-group {
 }
 
 html[data-theme='dark'] .form-text {
-  color: #cbd5e1;
+  color: #e2e8f0; /* Increased from #cbd5e1 for better visibility */
+  font-weight: 500;
 }
 
 /* ===== TOOLTIPS / POPOVERS - DARK MODE ===== */
