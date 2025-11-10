@@ -82,13 +82,13 @@ export default defineConfig({
           // Core application
           'app-core': [
             './modules/app-core.js',
-            './modules/data-manager.js',
-            './modules/utilities.js',
+            './src/js/utilities/data-manager.js',
+            './src/js/utilities/legacy-utilities.js',
           ],
           // UI components
           'ui-components': ['./modules/ui-manager.js', './modules/event-handlers.js'],
           // Business logic
-          'portfolio-logic': ['./modules/portfolio-calculator.js'],
+          'portfolio-logic': ['./src/js/utilities/portfolio-calculator.js'],
           // Help system (lazy loaded separately)
           'help-system': ['./modules/help-system.js'],
         },
@@ -153,9 +153,9 @@ export default defineConfig({
   optimizeDeps: {
     include: [
       'modules/app-core',
-      'modules/data-manager',
-      'modules/ui-manager',
-      'modules/utilities',
+      'src/js/utilities/data-manager',
+      'src/js/utilities/ui-manager',
+      'src/js/utilities/legacy-utilities',
     ],
     exclude: [
       'modules/help-system', // Lazy loaded
