@@ -26,7 +26,11 @@ __tests__/
 test-results/
 playwright-report/
 *.spec.js
-*.test.js
+# Note: *.test.js EXCLUDED for tests/ directory (tests/ are committed)
+# Only ignore spec files and other temporary test files
+!tests/
+!tests/*.test.js
+!tests/.skipped/
 
 # =======================
 # IDE & Editors
