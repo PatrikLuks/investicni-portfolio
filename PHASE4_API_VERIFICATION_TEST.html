@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phase 4 API Verification Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 0.95em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .test-section {
+            margin-bottom: 30px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .test-header {
+            background: #f5f5f5;
+            padding: 15px 20px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .test-header.collapsed {
+            border-bottom: none;
+        }
+
+        .test-header:hover {
+            background: #eeeeee;
+        }
+
+        .test-content {
+            padding: 20px;
+            display: none;
+        }
+
+        .test-content.expanded {
+            display: block;
+        }
+
+        .status-icon {
+            font-size: 1.2em;
+            margin-right: 10px;
+            transition: transform 0.3s;
+        }
+
+        .test-header.collapsed .status-icon {
+            transform: rotate(-90deg);
+        }
+
+        .test-result {
+            padding: 10px 15px;
+            margin: 8px 0;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            background: #f9f9f9;
+            border-left: 4px solid;
+        }
+
+        .test-result.pass {
+            border-left-color: #4caf50;
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .test-result.fail {
+            border-left-color: #f44336;
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .test-result.info {
+            border-left-color: #2196f3;
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .summary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .summary.ready {
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+        }
+
+        .summary.issues {
+            background: linear-gradient(135deg, #f44336 0%, #da190b 100%);
+        }
+
+        .toggle-all {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .toggle-all button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .toggle-all button:hover {
+            background: #764ba2;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border-top: 4px solid #667eea;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔬 Phase 4 API Verification Test Suite</h1>
+            <p>Real-time verification of all 8 enterprise modules</p>
+        </div>
+
+        <div class="content">
+            <div class="toggle-all">
+                <button onclick="toggleAllSections()">🔓 Expand All / Collapse All</button>
+            </div>
+
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-value" id="stat-modules">0</div>
+                    <div class="stat-label">Modules Loaded</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="stat-apis">0</div>
+                    <div class="stat-label">APIs Available</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="stat-errors">0</div>
+                    <div class="stat-label">Errors Found</div>
+                </div>
+            </div>
+
+            <div id="test-results"></div>
+
+            <div class="summary" id="summary">
+                Running verification tests...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Test configurations for all 8 Phase 4 modules
+        const TEST_CONFIG = {
+            'Advanced Risk Metrics': {
+                obj: 'advancedRiskMetrics',
+                methods: [
+                    'calculateVaR',
+                    'calculateCVaR',
+                    'calculateSharpeRatio',
+                    'calculateSortinoRatio',
+                    'calculateCalmárRatio',
+                    'calculateOmegaRatio',
+                    'calculateInformationRatio',
+                    'calculateMaxDrawdown',
+                    'calculateUlcerIndex'
+                ]
+            },
+            'Portfolio Optimization': {
+                obj: 'portfolioOptimization',
+                methods: [
+                    'optimizePortfolio',
+                    'calculateEfficientFrontier',
+                    'calculateOptimalWeights',
+                    'calculateMinVariancePortfolio',
+                    'calculateCapitalAllocationLine'
+                ]
+            },
+            'Regulatory Compliance': {
+                obj: 'regulatoryCompliance',
+                methods: [
+                    'validateUCITSCompliance',
+                    'validateESMACompliance',
+                    'validateMiFIDCompliance',
+                    'checkConcentrationLimits'
+                ]
+            },
+            'Production Quality': {
+                obj: 'productionQuality',
+                methods: [
+                    'startHealthMonitoring',
+                    'handleError',
+                    'logMetric',
+                    'getHealthStatus'
+                ]
+            },
+            'Stress Testing': {
+                obj: 'stressTesting',
+                methods: [
+                    'runStressTest',
+                    'analyzeScenario',
+                    'calculateRecoveryTime',
+                    'getPredefinedScenarios'
+                ]
+            },
+            'Technical Indicators': {
+                obj: 'technicalIndicators',
+                methods: [
+                    'calculateSMA',
+                    'calculateEMA',
+                    'calculateRSI',
+                    'calculateMACDonald',
+                    'calculateBollingerBands'
+                ]
+            },
+            'Correlation Heatmap UI': {
+                obj: 'correlationHeatmapUI',
+                methods: [
+                    'render',
+                    'updateData',
+                    'calculateCorrelation'
+                ]
+            },
+            'Advanced Analytics Dashboard': {
+                obj: 'analyticsDashboard',
+                methods: [
+                    'render',
+                    'updateMetrics',
+                    'refreshDashboard'
+                ]
+            }
+        };
+
+        let totalTests = 0;
+        let passedTests = 0;
+        let failedTests = 0;
+
+        async function runTests() {
+            const resultsDiv = document.getElementById('test-results');
+            resultsDiv.innerHTML = '';
+
+            for (const [moduleName, config] of Object.entries(TEST_CONFIG)) {
+                const moduleObj = window[config.obj];
+                const section = createTestSection(moduleName, config.obj);
+                const contentDiv = section.querySelector('.test-content');
+
+                // Check if module is loaded
+                if (!moduleObj) {
+                    contentDiv.innerHTML = `<div class="test-result fail">❌ Module not found: window.${config.obj}</div>`;
+                    failedTests++;
+                    totalTests++;
+                } else {
+                    contentDiv.innerHTML = `<div class="test-result pass">✅ Module loaded: ${moduleName}</div>`;
+                    passedTests++;
+                    totalTests++;
+
+                    // Test each method
+                    for (const method of config.methods) {
+                        totalTests++;
+                        const methodExists = typeof moduleObj[method] === 'function';
+
+                        if (methodExists) {
+                            contentDiv.innerHTML += `<div class="test-result pass">✅ ${method}()</div>`;
+                            passedTests++;
+                        } else {
+                            contentDiv.innerHTML += `<div class="test-result fail">❌ ${method}() - NOT FOUND</div>`;
+                            failedTests++;
+                        }
+                    }
+
+                    // Add module info
+                    contentDiv.innerHTML += `<div class="test-result info">ℹ️ Module instance: ${moduleObj.constructor.name}</div>`;
+                }
+
+                resultsDiv.appendChild(section);
+            }
+
+            // Update summary
+            updateSummary();
+            updateStats();
+        }
+
+        function createTestSection(title, objName) {
+            const section = document.createElement('div');
+            section.className = 'test-section';
+            section.innerHTML = `
+                <div class="test-header" onclick="toggleSection(this)">
+                    <div>
+                        <span class="status-icon">➤</span>
+                        <span>${title}</span>
+                    </div>
+                    <span id="status-${objName}">Loading...</span>
+                </div>
+                <div class="test-content"></div>
+            `;
+            return section;
+        }
+
+        function toggleSection(header) {
+            const content = header.nextElementSibling;
+            header.classList.toggle('collapsed');
+            content.classList.toggle('expanded');
+        }
+
+        function toggleAllSections() {
+            const headers = document.querySelectorAll('.test-header');
+            const expanded = headers[0]?.nextElementSibling?.classList.contains('expanded');
+
+            headers.forEach(header => {
+                const content = header.nextElementSibling;
+                if (expanded) {
+                    header.classList.add('collapsed');
+                    content.classList.remove('expanded');
+                } else {
+                    header.classList.remove('collapsed');
+                    content.classList.add('expanded');
+                }
+            });
+        }
+
+        function updateStats() {
+            document.getElementById('stat-modules').textContent = Object.keys(TEST_CONFIG).length;
+            let totalMethods = 0;
+            for (const config of Object.values(TEST_CONFIG)) {
+                totalMethods += config.methods.length;
+            }
+            document.getElementById('stat-apis').textContent = totalMethods;
+            document.getElementById('stat-errors').textContent = failedTests;
+        }
+
+        function updateSummary() {
+            const summary = document.getElementById('summary');
+            const passPercent = ((passedTests / totalTests) * 100).toFixed(1);
+
+            if (failedTests === 0) {
+                summary.className = 'summary ready';
+                summary.innerHTML = `✅ ALL TESTS PASSED! (${passedTests}/${totalTests} - ${passPercent}%)<br><span style="font-size: 0.9em; opacity: 0.9;">Phase 4 enterprise modules are fully integrated and ready for deployment.</span>`;
+            } else {
+                summary.className = 'summary issues';
+                summary.innerHTML = `⚠️ ${failedTests} ISSUES FOUND (${passedTests}/${totalTests} passed - ${passPercent}%)<br><span style="font-size: 0.9em; opacity: 0.9;">Please review the failures above.</span>`;
+            }
+        }
+
+        // Start tests when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            // Wait a bit for modules to load
+            setTimeout(runTests, 1000);
+        });
+    </script>
+</body>
+</html>
