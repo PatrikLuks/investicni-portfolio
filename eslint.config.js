@@ -9,6 +9,31 @@ import js from '@eslint/js';
 import prettier from 'eslint-plugin-prettier';
 
 export default [
+  // Global ignores (replaces .eslintignore)
+  {
+    ignores: [
+      'node_modules/',
+      '.git/',
+      'dist/',
+      'build/',
+      'coverage/',
+      '.next/',
+      '.vite/',
+      'vendor/',
+      'lib/external/',
+      '*.min.js',
+      '*.bundle.js',
+      '.env',
+      '.env.local',
+      '.env.*.local',
+      '.vscode/',
+      '.idea/',
+      '.tmp/',
+      'docs/',
+      '*.md',
+    ],
+  },
+
   // Apply recommended rules
   js.configs.recommended,
 
