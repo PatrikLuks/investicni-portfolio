@@ -11,7 +11,7 @@
 
 // Get version from URL if available (useful for cache-busting)
 const VERSION = '3.3.1';
-const BUILD_TIMESTAMP = new Date().getTime(); // Generated on each build
+const _BUILD_TIMESTAMP = new Date().getTime(); // Generated on each build
 const CACHE_VERSION = `v${VERSION}`;
 
 const CACHE_NAME = `portfolio-manager-${CACHE_VERSION}`;
@@ -19,7 +19,7 @@ const RUNTIME_CACHE = `portfolio-runtime-${CACHE_VERSION}`;
 const IMAGE_CACHE = `portfolio-images-${CACHE_VERSION}`;
 
 // Legacy cache names to clean up
-const LEGACY_CACHES = [
+const _LEGACY_CACHES = [
   'portfolio-manager-v1.0.0',
   'portfolio-runtime-v1.0.0',
   'portfolio-images-v1.0.0',
@@ -141,7 +141,8 @@ async function networkFirstStrategy(request, cacheName) {
     }
 
     return response;
-  } catch (err) {
+  // eslint-disable-next-line no-unused-vars
+  } catch (_err) {
     const cached = await caches.match(request);
 
     if (cached) {

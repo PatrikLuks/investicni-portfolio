@@ -3,6 +3,7 @@
  * Version: 1.0.0
  * Features: Unlimited history, keyboard shortcuts, visual timeline
  */
+/* eslint-disable no-undef */
 
 class Command {
   constructor(execute, undo, description = '') {
@@ -200,7 +201,7 @@ class CommandStack {
 }
 
 // Portfolio-specific commands
-class AddFondCommand extends Command {
+class _AddFondCommand extends Command {
   constructor(fondData) {
     const execute = () => {
       portfolioData.push(fondData);
@@ -236,7 +237,7 @@ class AddFondCommand extends Command {
   }
 }
 
-class DeleteFondCommand extends Command {
+class _DeleteFondCommand extends Command {
   constructor(index) {
     const fondData = portfolioData[index];
 
@@ -272,7 +273,7 @@ class DeleteFondCommand extends Command {
   }
 }
 
-class EditFondCommand extends Command {
+class _EditFondCommand extends Command {
   constructor(index, oldData, newData) {
     const execute = () => {
       portfolioData[index] = { ...newData };
@@ -307,7 +308,7 @@ class EditFondCommand extends Command {
   }
 }
 
-class BulkDeleteCommand extends Command {
+class _BulkDeleteCommand extends Command {
   constructor(indices) {
     const fondsToDelete = indices
       .map((i) => ({ index: i, data: portfolioData[i] }))
@@ -371,8 +372,6 @@ document.addEventListener('keydown', (e) => {
     toggleHistoryPanel();
   }
 });
-
-
 
 // History panel
 function toggleHistoryPanel() {

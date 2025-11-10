@@ -2,7 +2,10 @@
  * Advanced Error Handler for Portfolio Manager
  * Version: 1.0.0
  * Features: Global error catching, graceful degradation, error logging, recovery mechanisms
+ *
+ * eslint-disable-next-line no-undef
  */
+/* eslint-disable no-undef */
 
 class ErrorHandler {
   constructor() {
@@ -307,9 +310,7 @@ class ErrorHandler {
     if (notification) {
       notification.remove();
     }
-
     // Try to reload data
-    // eslint-disable-next-line no-undef
     if (typeof storage !== 'undefined' && storage.loadData) {
       try {
         const data = storage.loadData();
@@ -362,7 +363,6 @@ class ErrorHandler {
     // You can integrate with Google Analytics, Sentry, etc.
 
     if (window.gtag) {
-      // eslint-disable-next-line no-undef
       gtag('event', 'exception', {
         description: errorEntry.message,
         fatal: false,

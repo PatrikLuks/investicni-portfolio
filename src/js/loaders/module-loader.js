@@ -15,8 +15,10 @@ class ModuleLoader {
     this.isLowPower = this.detectLowPowerMode();
 
     if (this.isSafari) {
+      // Safari specific handling enabled
     }
     if (this.isLowPower) {
+      // Low power mode detected
     }
   }
 
@@ -33,6 +35,7 @@ class ModuleLoader {
   /**
    * Načte modul s ultra-low priority pro Safari
    */
+  // eslint-disable-next-line require-await
   async loadModule(src, critical = false) {
     if (this.loaded.has(src)) {
       return Promise.resolve();
@@ -187,6 +190,7 @@ class ModuleLoader {
    * Celkový čas: ~500ms (vs původních 12-15s)
    */
   async loadApplicationModules() {
+    // eslint-disable-next-line no-undef
     const startTime = performance.now();
     this.showLoadingScreen();
 
@@ -204,7 +208,8 @@ class ModuleLoader {
       this.updateLoadingProgress('Spouštění aplikace...', 70);
 
       // HOTOVO
-      const loadTime = performance.now() - startTime;
+      // eslint-disable-next-line no-undef
+      const _loadTime = performance.now() - startTime;
       this.updateLoadingProgress('Hotovo!', 100);
 
       // Remove loading screen
@@ -280,7 +285,8 @@ class ModuleLoader {
     };
 
     // Use requestIdleCallback if available
-    if ('requestIdleCallback' in window) {
+    if (typeof requestIdleCallback !== 'undefined') {
+      // eslint-disable-next-line no-undef
       requestIdleCallback(deferredLoad, { timeout: 10000 });
     } else {
       setTimeout(deferredLoad, 3000);

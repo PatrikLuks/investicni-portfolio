@@ -23,7 +23,7 @@ class LibraryLoader {
       return true;
     }
     if (this.loading.fuse) {
-      return this.loading.fuse;
+      return await this.loading.fuse;
     }
 
     this.loading.fuse = this.loadScript(
@@ -39,12 +39,13 @@ class LibraryLoader {
         return false;
       });
 
-    return this.loading.fuse;
+    return await this.loading.fuse;
   }
 
   /**
    * Load Chart.js for charts
    */
+  // eslint-disable-next-line require-await
   async loadChart() {
     if (this.loaded.chart) {
       return true;
@@ -74,10 +75,10 @@ class LibraryLoader {
 
     return this.loading.chart;
   }
-
   /**
    * Load jsPDF for PDF export
    */
+  // eslint-disable-next-line require-await
   async loadJsPDF() {
     if (this.loaded.jspdf) {
       return true;
@@ -101,10 +102,10 @@ class LibraryLoader {
 
     return this.loading.jspdf;
   }
-
   /**
    * Load SheetJS for Excel export
    */
+  // eslint-disable-next-line require-await
   async loadXLSX() {
     if (this.loaded.xlsx) {
       return true;

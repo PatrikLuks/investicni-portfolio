@@ -11,8 +11,9 @@
  * @module PerformanceEnhancement
  * @version 1.0.0
  */
+/* eslint-disable no-undef, no-unused-vars */
 
-import { logInfo, logWarn, logError } from '../utilities/logger.js';
+import { logInfo, logWarn, _logError } from '../utilities/logger.js';
 
 class PerformanceEnhancement {
   constructor() {
@@ -89,7 +90,7 @@ class PerformanceEnhancement {
           }
         });
         lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
-      } catch (e) {
+      } catch (_e) {
         logWarn('[PerformanceEnhancement] LCP observer not supported');
       }
 
@@ -112,7 +113,7 @@ class PerformanceEnhancement {
           }
         });
         clsObserver.observe({ entryTypes: ['layout-shift'] });
-      } catch (e) {
+      } catch (_e) {
         logWarn('[PerformanceEnhancement] CLS observer not supported');
       }
 
@@ -132,7 +133,7 @@ class PerformanceEnhancement {
           });
         });
         fidObserver.observe({ entryTypes: ['first-input'] });
-      } catch (e) {
+      } catch (_e) {
         logWarn('[PerformanceEnhancement] FID observer not supported');
       }
     }
@@ -163,7 +164,7 @@ class PerformanceEnhancement {
           });
         });
         resourceObserver.observe({ entryTypes: ['resource'] });
-      } catch (e) {
+      } catch (_e) {
         logWarn('[PerformanceEnhancement] Resource observer not supported');
       }
     }

@@ -640,6 +640,7 @@ function updateMetricsPanel() {
   }
 
   if (!data || data.length === 0) {
+    // eslint-disable-next-line no-alert
     alert('Žádná data k výpočtu metrik');
     return;
   }

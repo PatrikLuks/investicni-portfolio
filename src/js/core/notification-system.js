@@ -599,6 +599,7 @@ class NotificationSystem {
           alert: true,
           collaboration: true,
         };
+    // eslint-disable-next-line no-unused-vars
     } catch (_error) {
       return {
         browser: false,

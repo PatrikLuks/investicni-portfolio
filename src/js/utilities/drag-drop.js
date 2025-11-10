@@ -88,6 +88,7 @@ class DragDropManager {
     this.addDragHandlesToRows(tableBody);
 
     // Observe for new rows
+    // eslint-disable-next-line no-undef
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         mutation.addedNodes.forEach((node) => {
@@ -335,9 +336,9 @@ class DragDropManager {
 
   /**
    * Handle drag end event
-   * @param {DragEvent} e - Drag event
+   * @param {DragEvent} _e - Drag event
    */
-  handleDragEnd(e) {
+  handleDragEnd(_e) {
     if (this.draggedElement) {
       this.draggedElement.classList.remove('dragging');
 
@@ -378,9 +379,9 @@ class DragDropManager {
   /**
    * Handle touch move event
    * @param {TouchEvent} e - Touch event
-   * @param {HTMLElement} row - Table row
+   * @param {HTMLElement} _row - Table row
    */
-  handleTouchMove(e, row) {
+  handleTouchMove(e, _row) {
     if (!this.isDragging) {
       return;
     }

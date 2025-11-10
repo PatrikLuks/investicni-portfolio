@@ -154,10 +154,10 @@ function safeAddEventListener(id, event, handler) {
 /**
  * Safely query selector
  * @param {string} selector - CSS selector
- * @param {string} context - Context for error logging
+ * @param {string} _context - Context for error logging
  * @returns {HTMLElement|null} Element or null if not found
  */
-function safeQuerySelector(selector, context = '') {
+function safeQuerySelector(selector, _context = '') {
   try {
     const element = document.querySelector(selector);
     if (!element) {

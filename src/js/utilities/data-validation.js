@@ -32,7 +32,7 @@ class DataValidationManager {
         required: true,
         minLength: 1,
         maxLength: 200,
-        pattern: /^[a-zA-Z0-9\s\-\_\(\)\.]+$/,
+        pattern: /^[a-zA-Z0-9\s_()\-.]+$/,
         messages: {
           required: 'Název fondu je povinný',
           minLength: 'Název fondu nesmí být prázdný',
@@ -54,7 +54,7 @@ class DataValidationManager {
         required: false,
         minLength: 1,
         maxLength: 20,
-        pattern: /^[A-Z0-9\.\-]+$/,
+        pattern: /^[A-Z0-9.-]+$/,
         messages: {
           maxLength: 'Ticker je příliš dlouhý (max 20 znaků)',
           pattern: 'Ticker musí obsahovat pouze velká písmena, čísla, tečky a pomlčky',
@@ -276,7 +276,7 @@ class DataValidationManager {
     let isValid = true;
 
     // Validate each field
-    for (const [fieldName, fieldSchema] of Object.entries(this.schema)) {
+    for (const [fieldName, _fieldSchema] of Object.entries(this.schema)) {
       const value = record[fieldName];
       const result = this.validateField(fieldName, value, record);
 
@@ -481,6 +481,7 @@ class DataValidationManager {
       value = value.trim();
 
       // Remove control characters
+      // eslint-disable-next-line no-control-regex
       value = value.replace(/[\x00-\x1F\x7F]/g, '');
 
       // XSS protection - escape HTML
@@ -565,7 +566,7 @@ class DataValidationManager {
 window.dataValidationManager = new DataValidationManager();
 
 // Example custom rule
-window.dataValidationManager.addCustomRule('ticker', (value, context) => {
+window.dataValidationManager.addCustomRule('ticker', (_value, _context) => {
   // Example: Check if ticker is unique
   const errors = [];
 

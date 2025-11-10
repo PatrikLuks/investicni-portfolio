@@ -24,6 +24,7 @@ const DEBUG = (() => {
 
   // Check URL query parameter (?debug=true)
   if (typeof window !== 'undefined' && window.location) {
+    // eslint-disable-next-line no-undef
     const params = new URLSearchParams(window.location.search);
     if (params.has('debug')) {
       return params.get('debug') === 'true';

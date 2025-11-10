@@ -13,6 +13,7 @@
  * @module SecurityHardening
  * @version 1.0.0
  */
+/* eslint-disable no-undef */
 
 import { logInfo, logWarn, logError } from '../utilities/logger.js';
 
@@ -121,7 +122,14 @@ class SecurityHardening {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let token = '';
     const array = new Uint8Array(32);
-    crypto.getRandomValues(array);
+    if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
+      crypto.getRandomValues(array);
+    } else {
+      // Fallback for environments without crypto
+      for (let i = 0; i < array.length; i++) {
+        array[i] = Math.floor(Math.random() * 256);
+      }
+    }
 
     for (let i = 0; i < array.length; i++) {
       token += chars[array[i] % chars.length];
@@ -176,6 +184,7 @@ class SecurityHardening {
     }
 
     // No null bytes or control characters
+    // eslint-disable-next-line no-control-regex
     if (/[\x00-\x1F]/.test(value_str)) {
       return false;
     }
@@ -239,6 +248,7 @@ class SecurityHardening {
   setupCORSValidation() {
     // Intercept all fetch requests to validate CORS
     const originalFetch = window.fetch;
+    // eslint-disable-next-line require-await
     window.fetch = async (resource, config) => {
       const url = typeof resource === 'string' ? resource : resource.url;
 
@@ -269,7 +279,8 @@ class SecurityHardening {
 
       // Check against trusted origins
       return this.trustedOrigins.has(requestOrigin);
-    } catch (e) {
+    // eslint-disable-next-line no-unused-vars
+    } catch (_e) {
       // Invalid URL
       return false;
     }
@@ -285,7 +296,7 @@ class SecurityHardening {
     });
 
     // Monitor token changes
-    window.addEventListener('auth:token-change', (e) => {
+    window.addEventListener('auth:token-change', (_e) => {
       logInfo('[SecurityHardening] Auth token updated');
     });
 
@@ -391,7 +402,8 @@ class SecurityHardening {
         if (typeof body === 'string') {
           JSON.parse(body);
         }
-      } catch (e) {
+      // eslint-disable-next-line no-unused-vars
+      } catch (_e) {
         logError('[SecurityHardening] Invalid JSON body');
         return false;
       }

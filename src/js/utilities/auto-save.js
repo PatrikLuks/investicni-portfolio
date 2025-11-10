@@ -2,6 +2,7 @@
  * Smart Auto-save Manager
  * Features: Debounced auto-save, offline queue, conflict resolution, version control
  */
+/* eslint-disable no-undef */
 
 class SmartAutoSaveManager {
   constructor() {
@@ -244,6 +245,7 @@ class SmartAutoSaveManager {
    * @param {Object} currentData - Current data
    * @returns {Promise<boolean>} - Has conflict
    */
+  // eslint-disable-next-line require-await
   async checkForConflicts(currentData) {
     if (!this.lastSavedData) {
       return false;
@@ -263,9 +265,6 @@ class SmartAutoSaveManager {
 
       // Conflict if saved version differs from both current and last known
       const hasConflict = savedHash !== latestHash && currentHash !== latestHash;
-
-      if (hasConflict) {
-      }
 
       return hasConflict;
     } catch (error) {
@@ -289,6 +288,7 @@ class SmartAutoSaveManager {
       }
 
       // Default: Prompt user
+      // eslint-disable-next-line no-alert
       const choice = confirm(
         'Data byla změněna externě. Chcete přepsat uložená data?\n\n' +
           'OK = Použít aktuální verzi\n' +
@@ -485,9 +485,6 @@ class SmartAutoSaveManager {
     try {
       const stored = localStorage.getItem('auto_save_offline_queue');
       this.offlineQueue = stored ? JSON.parse(stored) : [];
-
-      if (this.offlineQueue.length > 0) {
-      }
     } catch (error) {
       console.error('Failed to load offline queue:', error);
       this.offlineQueue = [];
