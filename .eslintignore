@@ -1,0 +1,50 @@
+# ESLint Ignore Configuration
+# ============================
+
+# Dependencies
+node_modules/
+.git/
+
+# Build outputs
+dist/
+build/
+coverage/
+.next/
+.vite/
+
+# Third-party libraries
+vendor/
+lib/external/
+
+# Generated files
+*.min.js
+*.bundle.js
+*.config.js  # Most config files don't need linting
+
+# Test files (linted separately)
+# *.test.js  # Actually, we DO lint these
+# *.spec.js
+
+# Configuration (handled by eslint.config.js)
+.env
+.env.local
+.env.*.local
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Documentation
+docs/
+*.md
+
+# Temporary
+.tmp/
+temp/
+*.temp

@@ -6,15 +6,12 @@ If you are an authorized contributor, please follow the guidelines below. Unauth
 
 ---
 
-## 📋 Obsah
+## 📋 Quick Links
 
-1. [Git workflow](#git-workflow)
-2. [Branching strategy](#branching-strategy)
-3. [Conventional Commits](#conventional-commits)
-4. [Pull Request proces](#pull-request-proces)
-5. [Code review](#code-review)
-6. [Testing & CI](#testing--ci)
-7. [Bezpečnost](#bezpečnost)
+- 🎯 **[Quality Gates](./QUALITY_GATES.md)** - CI/CD standards & enforcement
+- 📊 **[Metrics](./METRICS.md)** - Current project status
+- 🏗️ **[Architecture](./architecture/ARCHITECTURE.md)** - System design
+- 👨‍💻 **[Developer Guide](../DEVELOPER_GUIDE.md)** - Development workflow
 
 ---
 
