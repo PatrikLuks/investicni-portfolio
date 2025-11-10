@@ -118,8 +118,8 @@ class ModuleLoader {
   }
 
   /**
-   * TIER 2: ESSENTIAL (8 moduly) - Načte se po critical
-   * Základní funkčnost aplikace + Enterprise-grade financial precision + Analytics & Monitoring
+   * TIER 2: ESSENTIAL (10 moduly) - Načte se po critical
+   * Základní funkčnost aplikace + Enterprise-grade financial precision + Analytics & Monitoring + Risk & Testing
    */
   get ESSENTIAL_MODULES() {
     return [
@@ -131,6 +131,8 @@ class ModuleLoader {
       'src/js/utilities/portfolio-optimization.js', // Modern Portfolio Theory
       'src/js/utilities/regulatory-compliance.js', // UCITS/ESMA/MiFID2 compliance
       'src/js/utilities/production-quality.js', // Enterprise error handling & monitoring
+      'src/js/utilities/stress-testing.js', // Comprehensive stress testing framework
+      'src/js/utilities/technical-indicators.js', // Technical analysis engine
     ];
   }
 
