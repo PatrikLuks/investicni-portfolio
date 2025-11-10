@@ -34,8 +34,10 @@ class AdvancedRiskMetricsEngine {
    * Initialize metrics engine
    */
   init() {
-    this.useDecimal = typeof Decimal !== 'undefined';
-    console.log(`[AdvancedRiskMetrics] Using ${this.useDecimal ? 'Decimal.js' : 'native Math'}`);
+    this.useDecimal = typeof Decimal !== "undefined";
+    console.log(
+      `[AdvancedRiskMetrics] Using ${this.useDecimal ? "Decimal.js" : "native Math"}`,
+    );
   }
 
   // ==================== VALUE AT RISK ====================
@@ -82,7 +84,9 @@ class AdvancedRiskMetricsEngine {
     const sortedReturns = [...returns].sort((a, b) => a - b);
 
     // Calculate the percentile index
-    const percentileIndex = Math.ceil((1 - confidenceLevel) * sortedReturns.length);
+    const percentileIndex = Math.ceil(
+      (1 - confidenceLevel) * sortedReturns.length,
+    );
     const varReturn = sortedReturns[percentileIndex];
 
     return parseFloat((Math.abs(varReturn) * 100).toFixed(2));
@@ -97,7 +101,11 @@ class AdvancedRiskMetricsEngine {
    * @param {number} confidenceLevel - Confidence level
    * @returns {number} - VaR value (loss threshold percentage)
    */
-  calculateMonteCarloVaR(returns, simulations = 10000, confidenceLevel = this.confidenceLevel) {
+  calculateMonteCarloVaR(
+    returns,
+    simulations = 10000,
+    confidenceLevel = this.confidenceLevel,
+  ) {
     if (!returns || returns.length < 30) {
       return 0;
     }
@@ -139,7 +147,8 @@ class AdvancedRiskMetricsEngine {
       return 0;
     }
 
-    const var_value = this.calculateHistoricalVaR(returns, confidenceLevel) / 100;
+    const var_value =
+      this.calculateHistoricalVaR(returns, confidenceLevel) / 100;
 
     // Find all returns worse than VaR
     const worseThanVaR = returns.filter((r) => r < -var_value);
@@ -149,7 +158,8 @@ class AdvancedRiskMetricsEngine {
     }
 
     // Calculate average of returns worse than VaR
-    const cvar = (worseThanVaR.reduce((a, b) => a + b, 0) / worseThanVaR.length) * 100;
+    const cvar =
+      (worseThanVaR.reduce((a, b) => a + b, 0) / worseThanVaR.length) * 100;
 
     return parseFloat(Math.abs(cvar).toFixed(2));
   }
@@ -171,7 +181,10 @@ class AdvancedRiskMetricsEngine {
     }
 
     const mean = this._calculateMean(returns);
-    const downsideDeviation = this._calculateDownsideDeviation(returns, targetReturn);
+    const downsideDeviation = this._calculateDownsideDeviation(
+      returns,
+      targetReturn,
+    );
 
     if (downsideDeviation === 0) {
       return 0;
@@ -179,9 +192,11 @@ class AdvancedRiskMetricsEngine {
 
     // Annualize return and downside deviation
     const annualizedReturn = mean * this.tradingDaysPerYear;
-    const annualizedDownsideDev = downsideDeviation * Math.sqrt(this.tradingDaysPerYear);
+    const annualizedDownsideDev =
+      downsideDeviation * Math.sqrt(this.tradingDaysPerYear);
 
-    const sortino = (annualizedReturn - this.riskFreeRate) / annualizedDownsideDev;
+    const sortino =
+      (annualizedReturn - this.riskFreeRate) / annualizedDownsideDev;
 
     return parseFloat(sortino.toFixed(2));
   }
@@ -202,9 +217,11 @@ class AdvancedRiskMetricsEngine {
       return 0;
     }
 
-    const mean = downsideReturns.reduce((a, b) => a + b, 0) / downsideReturns.length;
+    const mean =
+      downsideReturns.reduce((a, b) => a + b, 0) / downsideReturns.length;
     const variance =
-      downsideReturns.reduce((sum, r) => sum + Math.pow(r - mean, 2), 0) / downsideReturns.length;
+      downsideReturns.reduce((sum, r) => sum + Math.pow(r - mean, 2), 0) /
+      downsideReturns.length;
 
     return Math.sqrt(variance);
   }
@@ -274,14 +291,17 @@ class AdvancedRiskMetricsEngine {
 
     const portfolioReturn = this._calculateMean(portfolioReturns);
     const benchmarkReturn = this._calculateMean(benchmarkReturns);
-    const excessReturns = portfolioReturns.map((r, i) => r - benchmarkReturns[i]);
+    const excessReturns = portfolioReturns.map(
+      (r, i) => r - benchmarkReturns[i],
+    );
     const trackingError = this._calculateStandardDeviation(excessReturns);
 
     if (trackingError === 0) {
       return 0;
     }
 
-    const informationRatio = (portfolioReturn - benchmarkReturn) / trackingError;
+    const informationRatio =
+      (portfolioReturn - benchmarkReturn) / trackingError;
 
     return parseFloat(informationRatio.toFixed(2));
   }
@@ -310,14 +330,11 @@ class AdvancedRiskMetricsEngine {
     }
 
     const avgGain =
-      returns
-        .filter((r) => r > targetReturn)
-        .reduce((a, b) => a + b, 0) / (gainsCount || 1);
+      returns.filter((r) => r > targetReturn).reduce((a, b) => a + b, 0) /
+      (gainsCount || 1);
     const avgLoss =
       Math.abs(
-        returns
-          .filter((r) => r < targetReturn)
-          .reduce((a, b) => a + b, 0),
+        returns.filter((r) => r < targetReturn).reduce((a, b) => a + b, 0),
       ) / (lossesCount || 1);
 
     if (avgLoss === 0) {
@@ -450,7 +467,8 @@ class AdvancedRiskMetricsEngine {
       drawdowns.push(Math.pow(drawdown, 2));
     }
 
-    const meanSquaredDrawdown = drawdowns.reduce((a, b) => a + b, 0) / drawdowns.length;
+    const meanSquaredDrawdown =
+      drawdowns.reduce((a, b) => a + b, 0) / drawdowns.length;
     const ulcerIndex = Math.sqrt(meanSquaredDrawdown);
 
     return parseFloat(ulcerIndex.toFixed(2));
@@ -479,7 +497,9 @@ class AdvancedRiskMetricsEngine {
     }
 
     const mean = this._calculateMean(returns);
-    const variance = returns.reduce((sum, r) => sum + Math.pow(r - mean, 2), 0) / returns.length;
+    const variance =
+      returns.reduce((sum, r) => sum + Math.pow(r - mean, 2), 0) /
+      returns.length;
 
     return Math.sqrt(variance);
   }
@@ -524,7 +544,10 @@ class AdvancedRiskMetricsEngine {
         sortino: this.calculateSortino(returns),
         calmar: this.calculateCalmarRatio(values),
         omega: this.calculateOmegaRatio(returns),
-        information: this.calculateInformationRatio(returns, returns.map(() => 0.001)), // Default benchmark
+        information: this.calculateInformationRatio(
+          returns,
+          returns.map(() => 0.001),
+        ), // Default benchmark
       },
       drawdownMetrics: {
         ulcerIndex: this.calculateUlcerIndex(values),
@@ -539,6 +562,9 @@ class AdvancedRiskMetricsEngine {
 window.advancedRiskMetrics = new AdvancedRiskMetricsEngine();
 
 // Export for module systems
-if (typeof module !== 'undefined' && module.exports) {
+export default AdvancedRiskMetricsEngine;
+
+// Also support CommonJS for compatibility
+if (typeof module !== "undefined" && module.exports) {
   module.exports = AdvancedRiskMetricsEngine;
 }
