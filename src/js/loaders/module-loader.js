@@ -118,8 +118,8 @@ class ModuleLoader {
   }
 
   /**
-   * TIER 2: ESSENTIAL (4 moduly) - Načte se po critical
-   * Základní funkčnost aplikace + Enterprise-grade financial precision
+   * TIER 2: ESSENTIAL (8 moduly) - Načte se po critical
+   * Základní funkčnost aplikace + Enterprise-grade financial precision + Analytics & Monitoring
    */
   get ESSENTIAL_MODULES() {
     return [
@@ -127,6 +127,10 @@ class ModuleLoader {
       'src/js/utilities/data-validation.js',
       'src/js/utilities/financial-precision-engine.js', // Enterprise financial calculations
       'src/js/utilities/calculations-engine.js',
+      'src/js/utilities/advanced-risk-metrics.js', // Professional risk analytics
+      'src/js/utilities/portfolio-optimization.js', // Modern Portfolio Theory
+      'src/js/utilities/regulatory-compliance.js', // UCITS/ESMA/MiFID2 compliance
+      'src/js/utilities/production-quality.js', // Enterprise error handling & monitoring
     ];
   }
 
