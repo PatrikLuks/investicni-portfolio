@@ -1,0 +1,279 @@
+/**
+ * Live Market Data - Premium Quality UI Styles
+ * Version: 1.0.0
+ * High-quality, professional trading data visualization
+ */
+
+/* Market Data Panel */
+#marketDataPanel {
+  animation: slideInPanel 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+@keyframes slideInPanel {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Price Cards */
+.market-price-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.market-price-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.15));
+}
+
+/* Pulse Animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 currentColor;
+  }
+  50% {
+    opacity: 0.6;
+    box-shadow: 0 0 0 8px rgba(255, 255, 255, 0);
+  }
+}
+
+/* Shimmer Animation */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Glow Animation for Focus */
+@keyframes glowFocus {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(102, 126, 234, 0);
+    border-color: currentColor;
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(102, 126, 234, 0.4);
+    border-color: rgb(102, 126, 234);
+  }
+}
+
+/* Search Input Styling */
+#symbolSearch {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#symbolSearch:focus {
+  animation: glowFocus 1.5s ease-in-out;
+}
+
+/* Market Status Indicator */
+#marketStatus {
+  animation: fadeInStatus 0.6s ease-out 0.3s both;
+}
+
+@keyframes fadeInStatus {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Live Indicator */
+#liveIndicator {
+  animation: liveIndicatorPulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes liveIndicatorPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.8);
+    opacity: 1;
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(46, 204, 113, 0);
+    opacity: 0.7;
+  }
+}
+
+/* Premium Button Styling */
+.market-price-card button {
+  position: relative;
+  overflow: hidden;
+}
+
+.market-price-card button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s;
+  pointer-events: none;
+}
+
+.market-price-card button:hover::before {
+  left: 100%;
+}
+
+/* OHLC Data Grid - Premium Spacing */
+.market-price-card [style*="grid-template-columns: repeat(2, 1fr)"] {
+  transition: all 0.2s ease-out;
+}
+
+/* Price Change Colors */
+.market-price-positive {
+  color: #27ae60;
+  font-weight: 700;
+}
+
+.market-price-negative {
+  color: #c0392b;
+  font-weight: 700;
+}
+
+/* Volume Formatting */
+.market-volume {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+/* Volatility Badge */
+.market-volatility {
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.market-volatility.low {
+  background: rgba(46, 204, 113, 0.2);
+  color: #27ae60;
+}
+
+.market-volatility.medium {
+  background: rgba(241, 196, 15, 0.2);
+  color: #f39c12;
+}
+
+.market-volatility.high {
+  background: rgba(231, 76, 60, 0.2);
+  color: #e74c3c;
+}
+
+/* Market Data List Scrolling */
+#marketDataList {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(102, 126, 234, 0.3) transparent;
+}
+
+#marketDataList::-webkit-scrollbar {
+  width: 6px;
+}
+
+#marketDataList::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#marketDataList::-webkit-scrollbar-thumb {
+  background: rgba(102, 126, 234, 0.3);
+  border-radius: 3px;
+  transition: background 0.2s;
+}
+
+#marketDataList::-webkit-scrollbar-thumb:hover {
+  background: rgba(102, 126, 234, 0.6);
+}
+
+/* Empty State Styling */
+.market-empty-state {
+  animation: fadeInEmpty 0.4s ease-out;
+}
+
+@keyframes fadeInEmpty {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Premium Responsive Design */
+@media (max-width: 768px) {
+  #marketDataPanel {
+    width: 95vw !important;
+    max-width: 500px !important;
+    right: auto !important;
+    left: 50% !important;
+    transform: translateX(-50%);
+    top: 60px !important;
+  }
+
+  #marketDataPanel button:not(.market-price-card button) {
+    padding: 10px 12px;
+    font-size: 0.8rem;
+  }
+}
+
+/* Dark Mode Enhancement */
+@media (prefers-color-scheme: dark) {
+  .market-price-card {
+    background: rgba(102, 126, 234, 0.08) !important;
+  }
+
+  #symbolSearch {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  #symbolSearch:focus {
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: more) {
+  .market-price-card {
+    border-width: 2px !important;
+  }
+
+  .market-price-card button {
+    font-weight: 800;
+  }
+}
+
+/* Reduced Motion Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Print Styles */
+@media print {
+  #marketDataPanel {
+    display: none;
+  }
+}

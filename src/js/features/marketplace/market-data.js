@@ -823,7 +823,7 @@ class MarketDataFeed {
   }
 
   /**
-   * Render price card with OHLC data
+   * Render price card with OHLC data - Premium Quality UI
    */
   renderPriceCard(symbol) {
     const priceData = this.priceData.get(symbol) || {
@@ -840,137 +840,157 @@ class MarketDataFeed {
     };
 
     const isPositive = priceData.change >= 0;
-    const bgColor = isPositive ? 'rgba(46, 204, 113, 0.08)' : 'rgba(231, 76, 60, 0.08)';
-    const borderColor = isPositive ? '#2ecc71' : '#e74c3c';
+    const bgColor = isPositive ? 'rgba(46, 204, 113, 0.12)' : 'rgba(231, 76, 60, 0.12)';
+    const borderColor = isPositive ? 'rgba(46, 204, 113, 0.5)' : 'rgba(231, 76, 60, 0.5)';
     const textColor = isPositive ? '#27ae60' : '#c0392b';
+    const accentColor = isPositive ? '#2ecc71' : '#e74c3c';
 
     return `
       <div id="price-${symbol}" style="
         padding: 16px;
-        margin: 8px 0;
+        margin: 10px 0;
         background: ${bgColor};
-        border: 2px solid ${borderColor};
-        border-radius: 12px;
+        border: 1.5px solid ${borderColor};
+        border-radius: 14px;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         color: var(--text-primary);
         position: relative;
         overflow: hidden;
-      ">
+        backdrop-filter: blur(8px);
+      " class="market-price-card">
         <div style="
           position: absolute;
           top: 0;
           left: 0;
           right: 0;
           bottom: 0;
-          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-          animation: shimmer 2s infinite;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+          animation: shimmer 2.5s infinite;
           pointer-events: none;
         "></div>
         
         <!-- Header: Symbol & Price -->
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; position: relative; z-index: 1; margin-bottom: 12px;">
-          <div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; position: relative; z-index: 1; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="
+              width: 8px;
+              height: 8px;
+              background: ${accentColor};
+              border-radius: 50%;
+              animation: pulse 2s infinite;
+            "></div>
             <div style="
               font-weight: 700;
-              font-size: 1.2rem;
+              font-size: 1.15rem;
               color: var(--text-primary);
-              letter-spacing: 0.5px;
+              letter-spacing: 0.3px;
             ">${symbol}</div>
           </div>
           
           <div style="text-align: right;">
             <div style="
-              font-weight: 700;
-              font-size: 1.5rem;
+              font-weight: 800;
+              font-size: 1.6rem;
               color: ${textColor};
-              letter-spacing: -0.5px;
+              letter-spacing: -0.8px;
+              line-height: 1;
             ">
               $${priceData.price.toFixed(2)}
             </div>
             <div style="
-              font-size: 0.95rem;
-              font-weight: 600;
+              font-size: 0.92rem;
+              font-weight: 700;
               color: ${textColor};
-              margin-top: 2px;
+              margin-top: 4px;
               display: flex;
               align-items: center;
-              gap: 4px;
+              gap: 5px;
               justify-content: flex-end;
             ">
-              <span>${isPositive ? '▲' : '▼'}</span>
+              <span style="font-size: 1.1rem;">${isPositive ? '▲' : '▼'}</span>
               <span>${isPositive ? '+' : ''}${priceData.changePercent.toFixed(2)}%</span>
             </div>
           </div>
         </div>
 
-        <!-- OHLC Data Grid -->
+        <!-- OHLC Data Grid - Premium Layout -->
         <div style="
           display: grid;
           grid-template-columns: repeat(2, 1fr);
-          gap: 12px;
-          padding: 12px 0;
-          border-top: 1px solid ${borderColor}33;
-          border-bottom: 1px solid ${borderColor}33;
-          margin: 12px 0;
+          gap: 14px;
+          padding: 14px 0;
+          border-top: 1px solid ${borderColor};
+          border-bottom: 1px solid ${borderColor};
+          margin: 14px 0;
           font-size: 0.8rem;
           position: relative;
           z-index: 1;
         ">
-          <div>
-            <div style="font-weight: 600; color: var(--text-secondary); margin-bottom: 4px;">Open</div>
-            <div style="color: var(--text-primary); font-weight: 500;">$${(priceData.open || priceData.price).toFixed(2)}</div>
+          <div style="padding: 8px 0;">
+            <div style="font-weight: 700; color: var(--text-secondary); margin-bottom: 6px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Open</div>
+            <div style="color: var(--text-primary); font-weight: 600; font-size: 1rem;">$${(priceData.open || priceData.price).toFixed(2)}</div>
           </div>
-          <div>
-            <div style="font-weight: 600; color: var(--text-secondary); margin-bottom: 4px;">High</div>
-            <div style="color: var(--text-primary); font-weight: 500;">$${(priceData.high || priceData.price).toFixed(2)}</div>
+          <div style="padding: 8px 0;">
+            <div style="font-weight: 700; color: var(--text-secondary); margin-bottom: 6px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">High</div>
+            <div style="color: ${accentColor}; font-weight: 600; font-size: 1rem;">$${(priceData.high || priceData.price).toFixed(2)}</div>
           </div>
-          <div>
-            <div style="font-weight: 600; color: var(--text-secondary); margin-bottom: 4px;">Low</div>
-            <div style="color: var(--text-primary); font-weight: 500;">$${(priceData.low || priceData.price).toFixed(2)}</div>
+          <div style="padding: 8px 0;">
+            <div style="font-weight: 700; color: var(--text-secondary); margin-bottom: 6px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Low</div>
+            <div style="color: var(--text-primary); font-weight: 600; font-size: 1rem;">$${(priceData.low || priceData.price).toFixed(2)}</div>
           </div>
-          <div>
-            <div style="font-weight: 600; color: var(--text-secondary); margin-bottom: 4px;">Bid-Ask</div>
-            <div style="color: var(--text-primary); font-weight: 500; font-size: 0.75rem;">
+          <div style="padding: 8px 0;">
+            <div style="font-weight: 700; color: var(--text-secondary); margin-bottom: 6px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Bid-Ask</div>
+            <div style="color: var(--text-primary); font-weight: 600; font-size: 0.9rem; letter-spacing: -0.3px;">
               ${(priceData.bid || priceData.price * 0.999).toFixed(2)} / ${(priceData.ask || priceData.price * 1.001).toFixed(2)}
             </div>
           </div>
         </div>
 
-        <!-- Volume & Volatility -->
+        <!-- Volume & Volatility Stats -->
         <div style="
           display: flex;
           justify-content: space-between;
+          align-items: center;
           font-size: 0.8rem;
           color: var(--text-secondary);
           position: relative;
           z-index: 1;
-          margin-bottom: 12px;
+          margin-bottom: 14px;
+          padding: 8px 0;
         ">
-          <span>Vol: <strong>${this.formatVolume(priceData.volume)}</strong></span>
-          <span>Vol: <strong>${((priceData.volatility || 0.02) * 100).toFixed(1)}%</strong></span>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-weight: 600;">Volume:</span>
+            <span style="color: var(--text-primary); font-weight: 700;">${this.formatVolume(priceData.volume)}</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-weight: 600;">Volatility:</span>
+            <span style="color: ${accentColor}; font-weight: 700;">${((priceData.volatility || 0.02) * 100).toFixed(1)}%</span>
+          </div>
         </div>
         
-        <!-- Remove Button -->
+        <!-- Remove Button - Premium Style -->
         <button 
           onclick="window.marketDataFeed.unsubscribe('${symbol}'); window.marketDataFeed.renderWatchlist();"
           style="
-            padding: 8px 14px;
-            background: ${textColor};
+            padding: 10px 16px;
+            background: linear-gradient(135deg, ${textColor} 0%, ${accentColor} 100%);
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             font-size: 0.85rem;
-            font-weight: 600;
+            font-weight: 700;
             width: 100%;
-            transition: all 0.2s;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             z-index: 2;
+            letter-spacing: 0.3px;
+            box-shadow: 0 4px 12px ${textColor}30;
           "
-          onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px ${textColor}40'"
-          onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'"
+          onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 20px ${textColor}45'; this.style.letterSpacing='0.5px';"
+          onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px ${textColor}30'; this.style.letterSpacing='0.3px';"
         >
-          × Remove from watchlist
+          ✕ Remove from watchlist
         </button>
       </div>
     `;
