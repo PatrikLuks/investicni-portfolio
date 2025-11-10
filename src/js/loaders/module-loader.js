@@ -118,13 +118,14 @@ class ModuleLoader {
   }
 
   /**
-   * TIER 2: ESSENTIAL (3 moduly) - Načte se po critical
-   * Základní funkčnost aplikace
+   * TIER 2: ESSENTIAL (4 moduly) - Načte se po critical
+   * Základní funkčnost aplikace + Enterprise-grade financial precision
    */
   get ESSENTIAL_MODULES() {
     return [
       'src/js/utilities/command-stack.js',
       'src/js/utilities/data-validation.js',
+      'src/js/utilities/financial-precision-engine.js', // Enterprise financial calculations
       'src/js/utilities/calculations-engine.js',
     ];
   }

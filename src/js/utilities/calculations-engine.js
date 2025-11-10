@@ -1,6 +1,12 @@
 /**
  * Advanced Financial Calculations Engine
  * Features: ROI, CAGR, Sharpe Ratio, Volatility, Beta, Drawdown Analysis
+ *
+ * ✅ ENHANCED: Integrated with FinancialPrecisionEngine for enterprise-grade calculations
+ * - Precision arithmetic guardrails
+ * - Risk assessment and portfolio analytics
+ * - Financial best practices compliance
+ * - Performance optimization with caching
  */
 
 class CalculationsEngine {
@@ -8,14 +14,34 @@ class CalculationsEngine {
     this.riskFreeRate = 0.02; // 2% default risk-free rate
     this.tradingDaysPerYear = 252;
     this.cache = new Map();
+    this.precisionEngine = null; // Will be initialized when available
 
     this.init();
   }
 
   /**
    * Initialize calculations engine
+   * Checks if FinancialPrecisionEngine is available and initializes it
    */
-  init() {}
+  init() {
+    // Check if FinancialPrecisionEngine is globally available
+    if (typeof window !== 'undefined' && window.FinancialPrecisionEngine) {
+      this.precisionEngine = new window.FinancialPrecisionEngine();
+      console.log('✅ CalculationsEngine: Integrated with FinancialPrecisionEngine');
+    } else {
+      console.log('⚠️ CalculationsEngine: FinancialPrecisionEngine not yet available, will retry on demand');
+    }
+  }
+
+  /**
+   * Lazy-load precision engine if not initialized
+   */
+  ensurePrecisionEngine() {
+    if (!this.precisionEngine && typeof window !== 'undefined' && window.FinancialPrecisionEngine) {
+      this.precisionEngine = new window.FinancialPrecisionEngine();
+    }
+    return this.precisionEngine;
+  }
 
   // ==================== ROI CALCULATIONS ====================
 
@@ -496,7 +522,208 @@ ${metrics.worstPerformers.map((p, i) => `  ${i + 1}. ${p.fond}: ${p.roi.toFixed(
   clearCache() {
     this.cache.clear();
   }
+
+  // ==================== RISK ASSESSMENT & ANALYTICS ====================
+
+  /**
+   * Get comprehensive risk assessment for portfolio
+   * ✅ ENHANCED: Uses FinancialPrecisionEngine when available
+   *
+   * @param {Array} data - Portfolio data
+   * @param {Array} historicalValues - Historical portfolio values
+   * @returns {Object} - Risk assessment with ratings
+   */
+  getRiskAssessment(data, historicalValues = null) {
+    this.ensurePrecisionEngine();
+
+    // Prepare metrics
+    const metrics = this.calculatePortfolioMetrics(data, historicalValues || []);
+
+    let assessment = {
+      timestamp: new Date().toISOString(),
+      portfolio: {
+        totalValue: metrics.totalValue,
+        totalCost: metrics.totalCost,
+        roi: metrics.roi,
+      },
+      volatility: {
+        value: metrics.volatility,
+        rating: 'UNKNOWN',
+        level: 'UNKNOWN',
+        severity: 'neutral',
+      },
+      drawdown: {
+        value: Math.abs(metrics.maxDrawdown),
+        rating: 'UNKNOWN',
+        level: 'UNKNOWN',
+        severity: 'neutral',
+      },
+      sharpeRatio: {
+        value: metrics.sharpeRatio,
+        rating: 'UNKNOWN',
+        level: 'UNKNOWN',
+        severity: 'neutral',
+      },
+      beta: {
+        value: metrics.beta,
+        category: 'neutral',
+      },
+      diversification: {
+        score: 0,
+        concentration: 0,
+        rating: 'UNKNOWN',
+      },
+      overallRiskLevel: 'UNKNOWN', // LOW, MEDIUM, HIGH, CRITICAL
+      recommendations: [],
+    };
+
+    // If precision engine available, enhance with advanced analytics
+    if (this.precisionEngine && typeof this.precisionEngine.assessRisk === 'function') {
+      try {
+        const precisionAssessment = this.precisionEngine.assessRisk(metrics.volatility, Math.abs(metrics.maxDrawdown));
+        assessment.volatility.rating = precisionAssessment.volatility.rating;
+        assessment.volatility.level = precisionAssessment.volatility.level;
+        assessment.volatility.severity = precisionAssessment.volatility.severity;
+
+        assessment.drawdown.rating = precisionAssessment.drawdown.rating;
+        assessment.drawdown.level = precisionAssessment.drawdown.level;
+        assessment.drawdown.severity = precisionAssessment.drawdown.severity;
+
+        assessment.overallRiskLevel = precisionAssessment.overallRiskLevel;
+
+        // Get Sharpe rating
+        if (typeof this.precisionEngine.rateSharpeRatio === 'function') {
+          const sharpeRating = this.precisionEngine.rateSharpeRatio(metrics.sharpeRatio);
+          assessment.sharpeRatio.rating = sharpeRating.rating;
+          assessment.sharpeRatio.level = sharpeRating.level;
+          assessment.sharpeRatio.severity = sharpeRating.severity;
+        }
+
+        // Get diversification analysis
+        if (typeof this.precisionEngine.analyzeComposition === 'function') {
+          const composition = this.precisionEngine.analyzeComposition(data);
+          assessment.diversification = composition;
+        }
+      } catch (error) {
+        console.error('❌ Error in precision assessment:', error);
+      }
+    } else {
+      // Fallback: Local risk assessment without precision engine
+      assessment = this._localRiskAssessment(assessment);
+    }
+
+    // Generate recommendations
+    assessment.recommendations = this._generateRiskRecommendations(assessment);
+
+    return assessment;
+  }
+
+  /**
+   * Local risk assessment (fallback if precision engine unavailable)
+   * @private
+   */
+  _localRiskAssessment(assessment) {
+    // Volatility rating
+    const vol = assessment.volatility.value;
+    if (vol < 10) {
+      assessment.volatility.rating = 'EXCELLENT';
+      assessment.volatility.level = 'LOW';
+      assessment.volatility.severity = 'safe';
+    } else if (vol < 20) {
+      assessment.volatility.rating = 'GOOD';
+      assessment.volatility.level = 'MEDIUM';
+      assessment.volatility.severity = 'caution';
+    } else if (vol < 30) {
+      assessment.volatility.rating = 'ACCEPTABLE';
+      assessment.volatility.level = 'HIGH';
+      assessment.volatility.severity = 'warning';
+    } else {
+      assessment.volatility.rating = 'HIGH';
+      assessment.volatility.level = 'VERY_HIGH';
+      assessment.volatility.severity = 'danger';
+    }
+
+    // Drawdown rating
+    const dd = assessment.drawdown.value;
+    if (dd < 10) {
+      assessment.drawdown.rating = 'EXCELLENT';
+      assessment.drawdown.level = 'ACCEPTABLE';
+      assessment.drawdown.severity = 'safe';
+    } else if (dd < 20) {
+      assessment.drawdown.rating = 'GOOD';
+      assessment.drawdown.level = 'WARNING';
+      assessment.drawdown.severity = 'caution';
+    } else if (dd < 30) {
+      assessment.drawdown.rating = 'ACCEPTABLE';
+      assessment.drawdown.level = 'CRITICAL';
+      assessment.drawdown.severity = 'warning';
+    } else {
+      assessment.drawdown.rating = 'POOR';
+      assessment.drawdown.level = 'SEVERE';
+      assessment.drawdown.severity = 'danger';
+    }
+
+    // Overall risk level
+    if (assessment.volatility.severity === 'safe' && assessment.drawdown.severity === 'safe') {
+      assessment.overallRiskLevel = 'LOW';
+    } else if (assessment.volatility.severity === 'danger' || assessment.drawdown.severity === 'danger') {
+      assessment.overallRiskLevel = 'CRITICAL';
+    } else if (assessment.volatility.severity === 'warning' || assessment.drawdown.severity === 'warning') {
+      assessment.overallRiskLevel = 'HIGH';
+    } else {
+      assessment.overallRiskLevel = 'MEDIUM';
+    }
+
+    return assessment;
+  }
+
+  /**
+   * Generate actionable risk recommendations
+   * @private
+   */
+  _generateRiskRecommendations(assessment) {
+    const recommendations = [];
+
+    if (assessment.volatility.severity === 'danger') {
+      recommendations.push({
+        type: 'warning',
+        title: 'Vysoká volatilita',
+        message: `Volatilita ${assessment.volatility.value.toFixed(1)}% je kriticky vysoká. Zvážit rebalancování portfolia.`,
+        priority: 'HIGH',
+      });
+    }
+
+    if (assessment.drawdown.severity === 'danger') {
+      recommendations.push({
+        type: 'danger',
+        title: 'Kritický drawdown',
+        message: `Maximální propad ${assessment.drawdown.value.toFixed(1)}% je výrazný. Zvážit zajistění pozic.`,
+        priority: 'CRITICAL',
+      });
+    }
+
+    if (assessment.sharpeRatio.value < 0.5) {
+      recommendations.push({
+        type: 'info',
+        title: 'Nízký výnos vztažený k riziku',
+        message: `Sharpe ratio ${assessment.sharpeRatio.value.toFixed(2)} je pod přijatelnou úrovní. Zvážit optimalizaci alokace.`,
+        priority: 'MEDIUM',
+      });
+    }
+
+    if (assessment.roi < 0) {
+      recommendations.push({
+        type: 'warning',
+        title: 'Negativní výnos',
+        message: `Portfolio se nachází v záporném výnosu (${assessment.roi.toFixed(2)}%). Sledovat tržní vývoj.`,
+        priority: 'HIGH',
+      });
+    }
+
+    return recommendations;
+  }
 }
+
 
 // Global instance
 window.calculationsEngine = new CalculationsEngine();

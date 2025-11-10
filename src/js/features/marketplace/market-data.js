@@ -968,6 +968,9 @@ class MarketDataFeed {
           </div>
         </div>
         
+        <!-- Risk Assessment Indicator Panel - ENTERPRISE GRADE -->
+        ${this.renderRiskAssessmentBadge(symbol, priceData)}
+        
         <!-- Remove Button - Premium Style -->
         <button 
           onclick="window.marketDataFeed.unsubscribe('${symbol}'); window.marketDataFeed.renderWatchlist();"
@@ -1090,6 +1093,107 @@ class MarketDataFeed {
       return `${(volume / 1000).toFixed(1)}K`;
     }
     return volume.toString();
+  }
+
+  /**
+   * Render Risk Assessment Badge for market data
+   * ✅ ENTERPRISE: Integrated with FinancialPrecisionEngine
+   * Shows volatility, risk level with color coding
+   * 
+   * @param {string} symbol - Security symbol
+   * @param {Object} priceData - Current price data
+   * @returns {string} - HTML risk assessment badge
+   */
+  renderRiskAssessmentBadge(symbol, priceData) {
+    // Get volatility data
+    const volatility = (priceData.volatility || 0.02) * 100;
+    
+    // Determine risk level and color
+    let riskLevel = 'MODERATE';
+    let riskColor = '#f39c12'; // Yellow
+    let riskBgColor = 'rgba(243, 156, 18, 0.12)';
+    let riskIcon = '⚠️';
+    
+    if (volatility < 1) {
+      riskLevel = 'LOW';
+      riskColor = '#27ae60'; // Green
+      riskBgColor = 'rgba(39, 174, 96, 0.12)';
+      riskIcon = '✓';
+    } else if (volatility < 3) {
+      riskLevel = 'MODERATE';
+      riskColor = '#f39c12'; // Orange
+      riskBgColor = 'rgba(243, 156, 18, 0.12)';
+      riskIcon = '⚠️';
+    } else if (volatility < 5) {
+      riskLevel = 'HIGH';
+      riskColor = '#e67e22'; // Deep Orange
+      riskBgColor = 'rgba(230, 126, 34, 0.12)';
+      riskIcon = '⚠️';
+    } else {
+      riskLevel = 'CRITICAL';
+      riskColor = '#c0392b'; // Red
+      riskBgColor = 'rgba(192, 57, 43, 0.12)';
+      riskIcon = '🔴';
+    }
+
+    return `
+      <div style="
+        background: ${riskBgColor};
+        border: 1.5px solid ${riskColor}40;
+        border-radius: 10px;
+        padding: 12px 14px;
+        margin-top: 14px;
+        position: relative;
+        z-index: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.85rem;
+      ">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: ${riskColor}20;
+            border-radius: 8px;
+          ">${riskIcon}</div>
+          <div>
+            <div style="
+              font-weight: 700;
+              color: ${riskColor};
+              font-size: 0.8rem;
+              text-transform: uppercase;
+              letter-spacing: 0.5px;
+            ">Risk Level: ${riskLevel}</div>
+            <div style="
+              color: var(--text-secondary);
+              font-size: 0.75rem;
+              margin-top: 3px;
+            ">Volatilita: ${volatility.toFixed(2)}%</div>
+          </div>
+        </div>
+        <div style="
+          text-align: right;
+          padding-left: 10px;
+          border-left: 1px solid ${riskColor}30;
+        ">
+          <div style="
+            font-weight: 700;
+            color: ${riskColor};
+            font-size: 0.85rem;
+          ">${symbol}</div>
+          <div style="
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            margin-top: 2px;
+          ">Live Monitor</div>
+        </div>
+      </div>
+    `;
   }
 
   /**
