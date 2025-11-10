@@ -27,16 +27,29 @@
 
 ## 🎯 Quick Navigation
 
-- � **[QUICKSTART.md](./QUICKSTART.md)** - Start here! 60-second setup
-- 📖 **[SETUP.md](./SETUP.md)** - Complete installation & all 6 deployment options
-- 📁 **[docs/](./docs/)** - Full documentation index & all resources
-- � **[SECURITY.md](./SECURITY.md)** - Security policies & features
+### Start Here
+- 🚀 **[QUICKSTART.md](./docs/guides/QUICKSTART.md)** - 60-second setup & first steps
+- 📖 **[SETUP.md](./docs/deployment/SETUP.md)** - Complete installation guide
 
-**Key Documentation Files:**
-- 👨‍💻 **[DEVELOPER_GUIDE.md](./docs/DEVELOPER_GUIDE.md)** - Architecture & development
-- 👥 **[USER_GUIDE.md](./docs/USER_GUIDE.md)** - How to use the app
-- 📊 **[PROJECT_STRUCTURE.md](./docs/PROJECT_STRUCTURE.md)** - Folder organization
-- 🚀 **[DEPLOYMENT.md](./docs/DEPLOYMENT.md)** - Detailed deployment guide
+### Documentation Hub
+- **[docs/INDEX.md](./docs/INDEX.md)** - Full documentation index & roadmap
+- **[Architecture](./docs/architecture/ARCHITECTURE.md)** - System design & module organization
+- **[Metrics](./docs/METRICS.md)** - Quality gates, testing status, performance
+- **[Contributing](./docs/CONTRIBUTING.md)** - How to contribute
+
+### User & Developer Guides
+- 👨‍💻 **[Developer Guide](./docs/DEVELOPER_GUIDE.md)** - Architecture, development workflow
+- 👥 **[User Guide](./docs/USER_GUIDE.md)** - How to use the application
+- � **[Deployment Guide](./docs/deployment/DEPLOYMENT.md)** - Deployment procedures
+- 🔐 **[Security](./docs/deployment/SECURITY.md)** - Security policies & features
+
+### For Developers
+- 📊 **[Project Structure](./docs/PROJECT_STRUCTURE.md)** - Folder organization
+- 🧪 **[Phase 6: UI Binding](./docs/architecture/PHASE6_UI_DATA_BINDING.md)** - Next phase implementation
+- 📈 **[Market Data Setup](./docs/guides/MARKET_DATA_SETUP.md)** - Configure market data sources
+
+### Historical Reports (Archived)
+- 📁 **[docs/reports/](./docs/reports/)** - Phase completion reports, audit logs
 
 ---
 

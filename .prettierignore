@@ -1,0 +1,71 @@
+# Prettier Ignore Configuration
+# =============================
+
+# Dependencies
+node_modules/
+dist/
+build/
+coverage/
+.cache/
+.next/
+.nuxt/
+.vite/
+
+# Generated files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Temporary
+.tmp/
+temp/
+*.log
+
+# IDE & Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Git
+.git/
+.gitignore
+
+# Config files (keep as-is)
+.prettierrc
+.eslintrc*
+eslint.config.js
+jest.config.*
+vite.config.js
+config/
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Environment
+.env*
+.env.local
+.env.*.local
+
+# Deployment
+.github/
+.gitlab-ci.yml
+
+# Archives
+*.tar
+*.tar.gz
+*.zip
+*.rar
+
+# Media
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.svg
+*.ico
+*.webp

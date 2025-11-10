@@ -1,51 +1,58 @@
-# 📚 PORTFOLIO MANAGER PRO - DOCUMENTATION INDEX
+# 📚 Documentation Index
 
-**Version:** 3.3.0  
-**Status:** ✅ Complete  
-**Date:** 1. listopadu 2025
+**Portfolio Manager Pro v3.3.1 - Complete Documentation**
 
----
-
-## 🚀 START HERE
-
-### 1️⃣ **[QUICKSTART.md](../QUICKSTART.md)** (5 min read)
-**What:** 60-second setup guide  
-**Who:** Everyone - start here first!  
-**Contains:**
-- Quick start command (npm install + npm run dev)
-- Enterprise features overview
-- Main tech stack
-- Quick commands reference
-- Deployment options summary
-
-👉 **Begin here:** `npm install && npm run dev`
+**Updated:** November 10, 2025  
+**Status:** ✅ Complete & Organized  
 
 ---
 
-### 2️⃣ **[SETUP.md](../SETUP.md)** (15 min read)
-**What:** Complete installation & deployment guide  
-**Who:** Developers, DevOps, deployers  
-**Contains:**
-- Full system requirements
-- Step-by-step installation
-- Development workflow
-- All 6 deployment options (Netlify, Vercel, Cloudflare, GitHub Pages, Docker, AWS)
-- Environment configuration
-- Troubleshooting
+## 🎯 Getting Started (Start Here!)
 
-👉 **Next step:** Choose your deployment platform
+### For End Users
+1. **[Quick Start Guide](./guides/QUICKSTART.md)** (5 min)
+   - Basic setup and first steps
+   - Creating your first portfolio
+
+2. **[User Guide](./guides/USER_GUIDE.md)** (20 min)
+   - Complete feature walkthrough
+   - Tips and tricks
+
+### For Developers
+1. **[Quick Start Guide](./guides/QUICKSTART.md)** (5 min)
+   - Dev environment setup
+   - Running tests
+
+2. **[Developer Guide](../DEVELOPER_GUIDE.md)** (30 min)
+   - Architecture overview
+   - Development workflow
+
+3. **[Architecture Document](./architecture/ARCHITECTURE.md)** (40 min)
+   - System design
+   - Module interactions
 
 ---
 
-## 📖 DETAILED DOCUMENTATION
+## 📖 Documentation Sections
 
-### 🔧 DEVELOPMENT
-- **[DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md)** - Architecture, file structure, best practices
-- **[PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md)** - Complete folder organization
-- **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Detailed deployment instructions
+### 🏗️ Architecture & Design
+- **[ARCHITECTURE.md](./architecture/ARCHITECTURE.md)** - Complete system architecture
+- **[PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md)** - Project organization
+- **[METRICS.md](../METRICS.md)** - Quality gates & performance
 
-### 👤 USER GUIDE
-- **[USER_GUIDE.md](./USER_GUIDE.md)** - How to use the application features
+### 🚀 Deployment & Operations
+- **[Setup Guide](./deployment/SETUP.md)** - Installation instructions
+- **[Deployment Guide](./deployment/DEPLOYMENT.md)** - Production deployment
+- **[Security Guide](./deployment/SECURITY.md)** - Security policies
+
+### 👨‍� Development
+- **[Developer Guide](../DEVELOPER_GUIDE.md)** - Development reference
+- **[Contributing Guidelines](../CONTRIBUTING.md)** - How to contribute
+- **[Phase 6: UI Data Binding](./architecture/PHASE6_UI_DATA_BINDING.md)** - Next phase
+
+### 📊 Features & Configuration
+- **[Market Data Setup](./guides/MARKET_DATA_SETUP.md)** - Market data API setup
+- **[User Guide](./guides/USER_GUIDE.md)** - Feature documentation
 
 ### 🔐 SECURITY
 - **[SECURITY.md](../SECURITY.md)** - Security policies, authentication, data protection
