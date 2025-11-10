@@ -40,6 +40,24 @@ async function loadLegacyModules() {
     await import('../utilities/keyboard-shortcuts-overlay.js');
     await import('../utilities/service-worker.js');
 
+    // ENTERPRISE MODULES: Phase 4 - Financial & Compliance Excellence
+    // Financial precision & calculations
+    await import('../utilities/financial-precision-engine.js');
+    await import('../utilities/advanced-risk-metrics.js');
+    await import('../utilities/portfolio-optimization.js');
+
+    // Compliance & Quality
+    await import('../utilities/regulatory-compliance.js');
+    await import('../utilities/production-quality.js');
+
+    // Advanced analysis
+    await import('../utilities/stress-testing.js');
+    await import('../utilities/technical-indicators.js');
+
+    // UI Components
+    await import('../utilities/correlation-heatmap-ui.js');
+    await import('../utilities/advanced-dashboard.js');
+
     // FEATURES: Market data (lazy-loaded for better performance)
     // Marketplace loads after 3 seconds to prioritize core features
     // await import('../features/marketplace/market-data-service.js');
