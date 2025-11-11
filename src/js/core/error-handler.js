@@ -7,6 +7,8 @@
  */
 /* eslint-disable no-undef */
 
+import { logInfo, logWarn, logError } from '../utilities/logger.js';
+
 class ErrorHandler {
   constructor() {
     this.errors = [];
@@ -58,7 +60,7 @@ class ErrorHandler {
       originalConsoleError.apply(console, args);
     };
 
-    console.log('✅ Error Handler initialized');
+    logInfo('Error Handler initialized');
   }
 
   handleError(errorInfo) {
@@ -109,7 +111,7 @@ class ErrorHandler {
 
     // Only log every 5th error to console to reduce overhead
     if (this.recentErrors.length % 5 === 0) {
-      console.error('🔴 Error caught:', errorEntry);
+      logError('Error caught:', errorEntry);
     }
   }
 
@@ -230,7 +232,7 @@ class ErrorHandler {
   }
 
   handleErrorStorm() {
-    console.warn('🌩️ Error storm detected! Too many errors in short time.');
+    logWarn('Error storm detected! Too many errors in short time.');
 
     // Clear recent errors to stop spam
     this.recentErrors = [];
@@ -279,9 +281,9 @@ class ErrorHandler {
                 <pre style="background: rgba(255,255,255,0.1); padding: 12px; border-radius: 4px;
                     font-size: 0.75rem; overflow: auto; max-height: 200px; margin-top: 10px;">
                   ${this.errors
-    .slice(-5)
-    .map((e) => `${e.timestamp}: ${e.message}`)
-    .join('\n')}
+                    .slice(-5)
+                    .map((e) => `${e.timestamp}: ${e.message}`)
+                    .join('\n')}
                 </pre>
             </details>
         `;
@@ -303,7 +305,7 @@ class ErrorHandler {
   }
 
   tryRecover() {
-    console.log('🔄 Attempting to recover from error...');
+    logInfo('Attempting to recover from error...');
 
     // Remove error notification
     const notification = document.getElementById('error-notification');
@@ -332,9 +334,9 @@ class ErrorHandler {
           showToast('success', 'Obnoveno', 'Data byla úspěšně obnovena');
         }
 
-        console.log('✅ Recovery successful');
+        logInfo('Recovery successful');
       } catch (error) {
-        console.error('❌ Recovery failed:', error);
+        logError('Recovery failed:', error);
         window.location.reload();
       }
     } else {
@@ -354,7 +356,7 @@ class ErrorHandler {
 
       localStorage.setItem('errorLogs', JSON.stringify(logs));
     } catch (e) {
-      console.warn('Failed to log error to storage:', e);
+      logWarn('Failed to log error to storage:', e);
     }
   }
 
@@ -383,7 +385,7 @@ class ErrorHandler {
     this.errors = [];
     this.recentErrors = [];
     localStorage.removeItem('errorLogs');
-    console.log('✅ Error logs cleared');
+    logInfo('Error logs cleared');
   }
 
   exportErrors() {
@@ -397,7 +399,7 @@ class ErrorHandler {
     a.download = `error-report-${Date.now()}.json`;
     a.click();
     URL.revokeObjectURL(url);
-    console.log('✅ Error report exported');
+    logInfo('Error report exported');
   }
 }
 
@@ -471,4 +473,4 @@ errorHandlerStyle.textContent = `
 `;
 document.head.appendChild(errorHandlerStyle);
 
-console.log('✅ Error Handler module loaded');
+logInfo('Error Handler module loaded');

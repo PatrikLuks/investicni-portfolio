@@ -3,6 +3,8 @@
  * Push notifications, in-app alerts, customizable preferences
  */
 
+import { logInfo, logWarn, logError } from '../utilities/logger.js';
+
 class NotificationSystem {
   constructor() {
     this.notifications = [];
@@ -42,7 +44,7 @@ class NotificationSystem {
       // Setup event listeners
       this.setupEventListeners();
     } catch (error) {
-      console.error('❌ Notification System initialization failed:', error);
+      logError('Notification System initialization failed:', error);
     }
   }
 
@@ -66,9 +68,9 @@ class NotificationSystem {
               scope: '/',
             });
             this.serviceWorkerRegistration = registration;
-            console.log('✅ Service Worker registered for production');
+            logInfo('Service Worker registered for production');
           } catch (swError) {
-            console.warn('⚠️ Service Worker registration failed (production):', swError.message);
+            logWarn('Service Worker registration failed (production):', swError.message);
           }
         } else {
           // Development: SW se zcela přeskočí - Vite jej nemá
@@ -82,9 +84,9 @@ class NotificationSystem {
         const isDev =
           window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
         if (!isDev) {
-          console.warn('⚠️ Service Worker error:', error.message);
+          logWarn('Service Worker error:', error.message);
         } else {
-          console.warn('⚠️ Service Worker registration failed:', error.message);
+          logWarn('Service Worker registration failed:', error.message);
         }
       }
     }
@@ -111,7 +113,7 @@ class NotificationSystem {
         return false;
       }
     } catch (error) {
-      console.error('Permission request failed:', error);
+      logError('Permission request failed:', error);
       return false;
     }
   }
@@ -190,7 +192,7 @@ class NotificationSystem {
         };
       }
     } catch (error) {
-      console.error('Failed to show browser notification:', error);
+      logError('Failed to show browser notification:', error);
     }
   }
 
@@ -485,7 +487,7 @@ class NotificationSystem {
           <button class="delete-notif-btn" data-notif-id="${notif.id}" style="background: none; border: none; color: #999; cursor: pointer; font-size: 1rem; padding: 0;">×</button>
         </div>
       </div>
-    `,
+    `
       )
       .join('');
 
@@ -593,13 +595,13 @@ class NotificationSystem {
       return saved
         ? JSON.parse(saved)
         : {
-          browser: false,
-          portfolio: true,
-          trade: true,
-          alert: true,
-          collaboration: true,
-        };
-    // eslint-disable-next-line no-unused-vars
+            browser: false,
+            portfolio: true,
+            trade: true,
+            alert: true,
+            collaboration: true,
+          };
+      // eslint-disable-next-line no-unused-vars
     } catch (_error) {
       return {
         browser: false,
@@ -628,10 +630,10 @@ class NotificationSystem {
     try {
       localStorage.setItem(
         'notifications',
-        JSON.stringify(this.notifications.slice(0, this.maxNotifications)),
+        JSON.stringify(this.notifications.slice(0, this.maxNotifications))
       );
     } catch (error) {
-      console.error('Failed to save notifications:', error);
+      logError('Failed to save notifications:', error);
     }
   }
 
@@ -650,7 +652,7 @@ class NotificationSystem {
         this.updateUnreadBadge();
       }
     } catch (error) {
-      console.error('Failed to load notifications:', error);
+      logError('Failed to load notifications:', error);
     }
   }
 
