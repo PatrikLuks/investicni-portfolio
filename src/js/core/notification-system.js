@@ -487,7 +487,7 @@ class NotificationSystem {
           <button class="delete-notif-btn" data-notif-id="${notif.id}" style="background: none; border: none; color: #999; cursor: pointer; font-size: 1rem; padding: 0;">×</button>
         </div>
       </div>
-    `
+    `,
       )
       .join('');
 
@@ -595,12 +595,12 @@ class NotificationSystem {
       return saved
         ? JSON.parse(saved)
         : {
-            browser: false,
-            portfolio: true,
-            trade: true,
-            alert: true,
-            collaboration: true,
-          };
+          browser: false,
+          portfolio: true,
+          trade: true,
+          alert: true,
+          collaboration: true,
+        };
       // eslint-disable-next-line no-unused-vars
     } catch (_error) {
       return {
@@ -630,7 +630,7 @@ class NotificationSystem {
     try {
       localStorage.setItem(
         'notifications',
-        JSON.stringify(this.notifications.slice(0, this.maxNotifications))
+        JSON.stringify(this.notifications.slice(0, this.maxNotifications)),
       );
     } catch (error) {
       logError('Failed to save notifications:', error);

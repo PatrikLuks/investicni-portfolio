@@ -1,3 +1,4 @@
+import { logError } from './logger.js';
 /**
  * UTILITIES MODULE
  * Shared utility functions for export, import, and data operations
@@ -159,7 +160,7 @@ export function safeExecute(fn, fallback = null) {
   try {
     return fn();
   } catch (error) {
-    console.error('safeExecute error:', error);
+    logError('safeExecute error:', error);
     return fallback;
   }
 }

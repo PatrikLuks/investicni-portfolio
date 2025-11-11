@@ -37,7 +37,7 @@ function calculatePortfolioMetrics(portfolioData) {
 
   const totalInvestment = portfolioData.reduce(
     (sum, item) => sum + parseSafeNumber(item.investment),
-    0
+    0,
   );
   const totalValue = portfolioData.reduce((sum, item) => sum + parseSafeNumber(item.value), 0);
   const totalProfit = totalValue - totalInvestment;
@@ -240,7 +240,7 @@ function filterFunds(funds, searchQuery) {
   return funds.filter(
     (fund) =>
       (fund.name || '').toLowerCase().includes(query) ||
-      (fund.producer || '').toLowerCase().includes(query)
+      (fund.producer || '').toLowerCase().includes(query),
   );
 }
 

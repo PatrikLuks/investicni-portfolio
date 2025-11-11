@@ -258,7 +258,7 @@ class PerformanceEnhancement {
       logInfo(`[PerformanceEnhancement] Loaded: ${modulePath}`);
       return module;
     } catch (error) {
-      console.error(`[PerformanceEnhancement] Failed to load ${modulePath}:`, error);
+      logError(`[PerformanceEnhancement] Failed to load ${modulePath}:`, error);
       throw error;
     }
   }
@@ -304,7 +304,7 @@ class PerformanceEnhancement {
       logInfo(`[PerformanceEnhancement] Batch complete: ${results.length} results`);
       return results;
     } catch (error) {
-      console.error('[PerformanceEnhancement] Batch request failed:', error);
+      logError('[PerformanceEnhancement] Batch request failed:', error);
       throw error;
     }
   }
@@ -400,7 +400,7 @@ class PerformanceEnhancement {
           return registration;
         }
       } catch (error) {
-        console.error('[PerformanceEnhancement] Service Worker registration failed:', error);
+        logError('[PerformanceEnhancement] Service Worker registration failed:', error);
       }
     }
   }

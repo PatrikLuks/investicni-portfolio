@@ -1,3 +1,4 @@
+import { logError } from '../utilities/logger.js';
 /**
  * On-Demand Library Loader
  * Loads heavy external libraries ONLY when needed, not on page load
@@ -35,7 +36,7 @@ class LibraryLoader {
         return true;
       })
       .catch((e) => {
-        console.error('❌ Fuse.js load failed:', e);
+        logError('❌ Fuse.js load failed:', e);
         return false;
       });
 
@@ -69,7 +70,7 @@ class LibraryLoader {
         return true;
       })
       .catch((e) => {
-        console.error('❌ Chart.js load failed:', e);
+        logError('❌ Chart.js load failed:', e);
         return false;
       });
 
@@ -96,7 +97,7 @@ class LibraryLoader {
         return true;
       })
       .catch((e) => {
-        console.error('❌ jsPDF load failed:', e);
+        logError('❌ jsPDF load failed:', e);
         return false;
       });
 
@@ -123,7 +124,7 @@ class LibraryLoader {
         return true;
       })
       .catch((e) => {
-        console.error('❌ SheetJS load failed:', e);
+        logError('❌ SheetJS load failed:', e);
         return false;
       });
 

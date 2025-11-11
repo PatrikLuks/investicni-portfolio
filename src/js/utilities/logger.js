@@ -50,7 +50,7 @@ const DEBUG = (() => {
  */
 function logInfo(...args) {
   if (DEBUG) {
-    console.log('[DEBUG]', ...args);
+    logInfo('[DEBUG]', ...args);
   }
 }
 

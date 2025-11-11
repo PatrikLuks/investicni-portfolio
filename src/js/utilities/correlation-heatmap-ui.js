@@ -1,3 +1,4 @@
+import { logError } from './logger.js';
 /**
  * Correlation & Covariance Heatmap UI Component
  * Interactive visualization of portfolio asset correlations and relationships
@@ -40,7 +41,7 @@ class CorrelationHeatmapUI {
 
     const container = document.getElementById(containerId);
     if (!container) {
-      console.error(`[CorrelationHeatmap] Container not found: ${containerId}`);
+      logError(`[CorrelationHeatmap] Container not found: ${containerId}`);
       return;
     }
 
@@ -197,7 +198,7 @@ class CorrelationHeatmapUI {
    */
   render(correlationMatrix, assetNames = null) {
     if (!correlationMatrix) {
-      console.error('[CorrelationHeatmap] No correlation data provided');
+      logError('[CorrelationHeatmap] No correlation data provided');
       return;
     }
 
@@ -209,7 +210,7 @@ class CorrelationHeatmapUI {
 
     const grid = document.getElementById('heatmap-grid');
     if (!grid) {
-      console.error('[CorrelationHeatmap] Grid container not found');
+      logError('[CorrelationHeatmap] Grid container not found');
       return;
     }
 

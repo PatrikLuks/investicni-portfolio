@@ -419,7 +419,7 @@ class RegulatoryComplianceModule {
     return {
       expectedReturn: parseFloat((expectedReturn * 100).toFixed(2)),
       valueWithoutCosts: parseFloat(
-        (initialInvestment * Math.pow(1 + expectedReturn, years)).toFixed(2)
+        (initialInvestment * Math.pow(1 + expectedReturn, years)).toFixed(2),
       ),
       valueWithCosts: parseFloat(netValue.toFixed(2)),
       totalCostsAmount: parseFloat(totalCosts.toFixed(2)),
@@ -438,7 +438,7 @@ class RegulatoryComplianceModule {
         (charges.administrationFee || 0.002) +
         (charges.brokerageCommission || 0.0005) +
         (charges.spreadCosts || 0.001)
-      ).toFixed(4)
+      ).toFixed(4),
     );
   }
 

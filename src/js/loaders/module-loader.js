@@ -4,6 +4,8 @@
  * On-demand loading pro všechny ostatní moduly
  */
 
+import { logError } from '../../utilities/logger.js';
+
 class ModuleLoader {
   constructor() {
     this.loaded = new Set();
@@ -68,7 +70,7 @@ class ModuleLoader {
 
       script.onerror = (error) => {
         this.loading.delete(src);
-        console.error(`❌ Failed to load module: ${src}`, error);
+        logError(`❌ Failed to load module: ${src}`, error);
         if (critical) {
           reject(new Error(`Critical module ${src} failed - app cannot continue`));
         } else {
@@ -228,7 +230,7 @@ class ModuleLoader {
       // Defer non-critical modules to idle time
       this.deferRemainingModules();
     } catch (error) {
-      console.error('💥 Critical module loading failed:', error);
+      logError('💥 Critical module loading failed:', error);
       this.showErrorScreen(error);
     }
   }

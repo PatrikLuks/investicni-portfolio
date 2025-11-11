@@ -3,6 +3,8 @@
  * SheetJS integration for Excel export with formulas and formatting
  */
 
+import { logWarn, logError } from '../../utilities/logger.js';
+
 class ExcelExportManager {
   constructor() {
     this.workbook = null;
@@ -44,7 +46,7 @@ class ExcelExportManager {
     }
 
     if (!window.libraryLoader) {
-      console.warn('⚠️ LibraryLoader not available, falling back to direct load');
+      logWarn('LibraryLoader not available, falling back to direct load');
       return this.loadSheetJSManually();
     }
 
@@ -53,7 +55,7 @@ class ExcelExportManager {
       await window.libraryLoader.loadXLSX();
       this.sheetJSLoaded = true;
     } catch (error) {
-      console.error('❌ Failed to load SheetJS via LibraryLoader:', error);
+      logError('Failed to load SheetJS via LibraryLoader:', error);
       throw error;
     }
   }
@@ -109,7 +111,7 @@ class ExcelExportManager {
 
       return filename;
     } catch (error) {
-      console.error('❌ Excel export failed:', error);
+      logError('Excel export failed:', error);
       throw error;
     }
   }
@@ -604,7 +606,7 @@ window.addEventListener('DOMContentLoaded', () => {
         showToast('success', 'Export dokončen', 'Excel soubor byl úspěšně vygenerován');
       }
     } catch (error) {
-      console.error('Excel export failed:', error);
+      logError('Excel export failed:', error);
       alert(`Chyba při exportu do Excelu: ${error.message}`);
     } finally {
       excelBtn.disabled = false;

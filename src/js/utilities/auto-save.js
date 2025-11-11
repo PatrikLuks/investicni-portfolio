@@ -294,7 +294,7 @@ class SmartAutoSaveManager {
       const choice = confirm(
         'Data byla změněna externě. Chcete přepsat uložená data?\n\n' +
           'OK = Použít aktuální verzi\n' +
-          'Cancel = Ponechat uloženou verzi'
+          'Cancel = Ponechat uloženou verzi',
       );
 
       if (!choice) {

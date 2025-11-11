@@ -1,3 +1,4 @@
+import { logError } from '../utilities/logger.js';
 /**
  * @module legacy-modules-loader
  * PROPRIETARY SOFTWARE - ALL RIGHTS RESERVED
@@ -78,7 +79,7 @@ async function loadLegacyModules() {
 
     console.info('✓ All legacy modules loaded and initialized as ES6 imports');
   } catch (error) {
-    console.error('✗ Failed to load legacy modules:', error);
+    logError('✗ Failed to load legacy modules:', error);
     throw error;
   }
 }
@@ -97,7 +98,7 @@ async function lazyLoadMarketplace() {
     await import('../features/marketplace/market-data.js');
     console.info('✓ Marketplace modules loaded lazily');
   } catch (error) {
-    console.error('✗ Failed to lazy-load marketplace modules:', error);
+    logError('✗ Failed to lazy-load marketplace modules:', error);
   }
 }
 
@@ -114,7 +115,7 @@ async function lazyLoadCharts() {
     await import('../features/charts/advanced-charts.js');
     console.info('✓ Charts modules loaded lazily');
   } catch (error) {
-    console.error('✗ Failed to lazy-load charts modules:', error);
+    logError('✗ Failed to lazy-load charts modules:', error);
   }
 }
 

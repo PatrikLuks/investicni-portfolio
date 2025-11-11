@@ -32,7 +32,7 @@ class CalculationsEngine {
       logInfo('CalculationsEngine: Integrated with FinancialPrecisionEngine');
     } else {
       logInfo(
-        'CalculationsEngine: FinancialPrecisionEngine not yet available, will retry on demand'
+        'CalculationsEngine: FinancialPrecisionEngine not yet available, will retry on demand',
       );
     }
   }
@@ -128,7 +128,7 @@ class CalculationsEngine {
 
     const totalOriginal = data.reduce(
       (sum, item) => sum + parseFloat(item.nákupníCena) * parseFloat(item.počet),
-      0
+      0,
     );
     const totalCurrent = data.reduce((sum, item) => sum + parseFloat(item.aktuálníHodnota), 0);
 
@@ -445,7 +445,7 @@ class CalculationsEngine {
         const portfolioReturns = [];
         for (let i = 1; i < historicalValues.length; i++) {
           portfolioReturns.push(
-            (historicalValues[i] - historicalValues[i - 1]) / historicalValues[i - 1]
+            (historicalValues[i] - historicalValues[i - 1]) / historicalValues[i - 1],
           );
         }
         metrics.beta = this.calculateBeta(portfolioReturns, marketReturns.slice(1));
@@ -586,7 +586,7 @@ ${metrics.worstPerformers.map((p, i) => `  ${i + 1}. ${p.fond}: ${p.roi.toFixed(
       try {
         const precisionAssessment = this.precisionEngine.assessRisk(
           metrics.volatility,
-          Math.abs(metrics.maxDrawdown)
+          Math.abs(metrics.maxDrawdown),
         );
         assessment.volatility.rating = precisionAssessment.volatility.rating;
         assessment.volatility.level = precisionAssessment.volatility.level;
@@ -875,7 +875,7 @@ function updateMetricsPanel() {
       investmentDate: item.investmentDate || '',
     }));
   } catch (e) {
-    console.error('Failed to load portfolio data for metrics:', e);
+    logError('Failed to load portfolio data for metrics:', e);
   }
 
   if (!data || data.length === 0) {
@@ -914,7 +914,7 @@ function updateMetricsPanel() {
       <span class="performer-name">${p.fond}</span>
       <span class="performer-roi">${p.roi.toFixed(2)}%</span>
     </div>
-  `
+  `,
     )
     .join('');
 
@@ -927,7 +927,7 @@ function updateMetricsPanel() {
       <span class="performer-name">${p.fond}</span>
       <span class="performer-roi">${p.roi.toFixed(2)}%</span>
     </div>
-  `
+  `,
     )
     .join('');
 }

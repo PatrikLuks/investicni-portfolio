@@ -3,6 +3,8 @@
  * Features: HTML5 Drag & Drop API, touch support, visual feedback, row reordering
  */
 
+import { logError } from './logger.js';
+
 class DragDropManager {
   constructor() {
     this.draggedElement = null;
@@ -78,7 +80,7 @@ class DragDropManager {
    */
   enableOnTable(tableBody, onReorder) {
     if (!tableBody) {
-      console.error('Table body element not found');
+      logError('Table body element not found');
       return;
     }
 

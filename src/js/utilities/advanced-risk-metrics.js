@@ -523,7 +523,7 @@ class AdvancedRiskMetricsEngine {
         omega: this.calculateOmegaRatio(returns),
         information: this.calculateInformationRatio(
           returns,
-          returns.map(() => 0.001)
+          returns.map(() => 0.001),
         ), // Default benchmark
       },
       drawdownMetrics: {

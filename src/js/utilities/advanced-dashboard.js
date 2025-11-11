@@ -1,3 +1,4 @@
+import { logError } from './logger.js';
 /**
  * Advanced Dashboard & Analytics UI
  * Comprehensive enterprise analytics dashboard for portfolio management
@@ -35,7 +36,7 @@ class AdvancedAnalyticsDashboard {
 
     const container = document.getElementById(dashboardId);
     if (!container) {
-      console.error(`[AnalyticsDashboard] Container not found: ${dashboardId}`);
+      logError(`[AnalyticsDashboard] Container not found: ${dashboardId}`);
       return;
     }
 

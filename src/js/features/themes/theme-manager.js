@@ -1,3 +1,5 @@
+import { logWarn } from '../../utilities/logger.js';
+
 /**
  * Theme Manager - 4-Mode Theme System
  * Version: 4.0.0
@@ -132,7 +134,7 @@ class ThemeManager {
     const toggle = document.getElementById('darkModeToggle');
 
     if (!toggle) {
-      console.warn('Theme toggle button #darkModeToggle not found in HTML');
+      logWarn('Theme toggle button #darkModeToggle not found in HTML');
       return;
     }
 

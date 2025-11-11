@@ -14,6 +14,8 @@
  * @version 1.0.0
  */
 
+import { logError } from './logger.js';
+
 class DataBinding {
   constructor(data = {}) {
     this.data = data;
@@ -91,7 +93,7 @@ class DataBinding {
       element.dispatchEvent(
         new CustomEvent('bound-change', {
           detail: { property: dataProperty, value },
-        })
+        }),
       );
     };
 
@@ -248,7 +250,7 @@ class DataBinding {
         try {
           callback(newValue, oldValue);
         } catch (error) {
-          console.error(`Error in watcher for property "${property}":`, error);
+          logError(`Error in watcher for property "${property}":`, error);
         }
       });
     }
@@ -260,7 +262,7 @@ class DataBinding {
           try {
             binding.handler();
           } catch (error) {
-            console.error(`Error updating binding for property "${property}":`, error);
+            logError(`Error updating binding for property "${property}":`, error);
           }
         }
       });

@@ -1,3 +1,4 @@
+import { logError } from './logger.js';
 /**
  * Service Worker for Portfolio Manager PWA
  * Version: 1.1.0
@@ -45,7 +46,7 @@ self.addEventListener('install', (event) => {
       .then((cache) => cache.addAll(PRECACHE_URLS))
       .then(() => self.skipWaiting())
       .catch((error) => {
-        console.error('[SW] Precaching failed:', error);
+        logError('[SW] Precaching failed:', error);
       }),
   );
 });
@@ -116,7 +117,7 @@ async function cacheFirstStrategy(request, cacheName) {
 
     return response;
   } catch (err) {
-    console.error('[SW] Cache first strategy failed:', err);
+    logError('[SW] Cache first strategy failed:', err);
     return new Response('Offline - resource not available', {
       status: 503,
       statusText: 'Service Unavailable',
@@ -184,7 +185,7 @@ async function syncPortfolioData() {
       });
     });
   } catch (err) {
-    console.error('[SW] Sync failed:', err);
+    logError('[SW] Sync failed:', err);
     throw err;
   }
 }

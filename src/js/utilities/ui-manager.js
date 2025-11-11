@@ -3,6 +3,8 @@
  * Handles UI interactions, dialogs, notifications, and visual feedback
  */
 
+import { logError } from './logger.js';
+
 // ==================== TOAST NOTIFICATIONS ====================
 
 /**
@@ -157,7 +159,7 @@ function exportChartAsPNG(chartElement, filename = 'chart.png') {
       showToast('success', 'Export úspěšný', `Graf byl exportován jako ${filename}`);
     }
   } catch (e) {
-    console.error('Chart export failed:', e);
+    logError('Chart export failed:', e);
     showToast('error', 'Export selhal', 'Nepodařilo se exportovat graf');
   }
 }

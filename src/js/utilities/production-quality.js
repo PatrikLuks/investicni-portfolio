@@ -268,7 +268,7 @@ class ProductionQualitySystem {
         {
           duration: 0,
           actionable: true,
-        }
+        },
       );
     }
   }
@@ -365,7 +365,7 @@ class ProductionQualitySystem {
 
     logInfo(
       `[${timestamp}] [${level}] ${message}`,
-      data && Object.keys(data).length > 0 ? data : ''
+      data && Object.keys(data).length > 0 ? data : '',
     );
   }
 

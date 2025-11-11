@@ -1,3 +1,4 @@
+import { logError } from './logger.js';
 /**
  * Keyboard Shortcuts Overlay
  * Press ? to display all available shortcuts
@@ -74,7 +75,7 @@ class KeyboardShortcutsOverlay {
         }
       });
     } catch (error) {
-      console.error('❌ Shortcuts overlay initialization failed:', error);
+      logError('❌ Shortcuts overlay initialization failed:', error);
     }
   }
 
