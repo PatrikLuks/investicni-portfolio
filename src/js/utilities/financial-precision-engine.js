@@ -13,6 +13,8 @@
 
 /* global Decimal */
 
+import { logInfo, logWarn } from './logger.js';
+
 class FinancialPrecisionEngine {
   constructor() {
     // Configuration
@@ -55,7 +57,7 @@ class FinancialPrecisionEngine {
   init() {
     // Check if Decimal.js is available, fallback to native Math if not
     this.useDecimal = typeof Decimal !== 'undefined';
-    console.log(`[FinancialEngine] Using ${this.useDecimal ? 'Decimal.js' : 'native Math'} for calculations`);
+    logInfo(`Using ${this.useDecimal ? 'Decimal.js' : 'native Math'} for calculations`);
   }
 
   /**
@@ -80,7 +82,7 @@ class FinancialPrecisionEngine {
    */
   divide(a, b) {
     if (b === 0) {
-      console.warn('[FinancialEngine] Division by zero prevented');
+      logWarn('Division by zero prevented');
       return 0;
     }
     if (this.useDecimal) {
@@ -299,7 +301,10 @@ class FinancialPrecisionEngine {
       assessment.isRisky = true;
       assessment.recommendations.push('Consider diversifying your portfolio');
       assessment.recommendations.push('Review your asset allocation');
-    } else if (assessment.volatilityRating === 'MEDIUM' || assessment.drawdownRating === 'WARNING') {
+    } else if (
+      assessment.volatilityRating === 'MEDIUM' ||
+      assessment.drawdownRating === 'WARNING'
+    ) {
       assessment.overallRiskLevel = 'MODERATE';
       assessment.recommendations.push('Monitor portfolio performance closely');
     } else {
