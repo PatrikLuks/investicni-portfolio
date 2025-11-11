@@ -19,6 +19,8 @@
 
 /* global Decimal */
 
+import { logInfo } from './logger.js';
+
 class AdvancedRiskMetricsEngine {
   constructor() {
     this.confidenceLevel = 0.95; // 95% confidence for VaR
@@ -35,7 +37,7 @@ class AdvancedRiskMetricsEngine {
    */
   init() {
     this.useDecimal = typeof Decimal !== 'undefined';
-    console.log(`[AdvancedRiskMetrics] Using ${this.useDecimal ? 'Decimal.js' : 'native Math'}`);
+    logInfo(`Using ${this.useDecimal ? 'Decimal.js' : 'native Math'} for metrics`);
   }
 
   // ==================== VALUE AT RISK ====================

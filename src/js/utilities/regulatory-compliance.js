@@ -15,6 +15,8 @@
  * Enterprise-Grade Regulatory Compliance
  */
 
+import { logInfo } from './logger.js';
+
 class RegulatoryComplianceModule {
   constructor() {
     this.jurisdiction = 'EU'; // EU, US, ASIA
@@ -26,7 +28,7 @@ class RegulatoryComplianceModule {
   }
 
   init() {
-    console.log('[RegulatoryCompliance] Module initialized');
+    logInfo('Regulatory Compliance Module initialized');
   }
 
   // ==================== UCITS COMPLIANCE ====================
@@ -417,7 +419,7 @@ class RegulatoryComplianceModule {
     return {
       expectedReturn: parseFloat((expectedReturn * 100).toFixed(2)),
       valueWithoutCosts: parseFloat(
-        (initialInvestment * Math.pow(1 + expectedReturn, years)).toFixed(2),
+        (initialInvestment * Math.pow(1 + expectedReturn, years)).toFixed(2)
       ),
       valueWithCosts: parseFloat(netValue.toFixed(2)),
       totalCostsAmount: parseFloat(totalCosts.toFixed(2)),
@@ -436,7 +438,7 @@ class RegulatoryComplianceModule {
         (charges.administrationFee || 0.002) +
         (charges.brokerageCommission || 0.0005) +
         (charges.spreadCosts || 0.001)
-      ).toFixed(4),
+      ).toFixed(4)
     );
   }
 
@@ -496,8 +498,7 @@ class RegulatoryComplianceModule {
         'Diversification does not guarantee profit',
         'Market conditions can change rapidly',
       ],
-      competentAuthority:
-        'Regulated by Financial Services Authority (FSA) or equivalent',
+      competentAuthority: 'Regulated by Financial Services Authority (FSA) or equivalent',
       lastUpdated: new Date().toISOString(),
     };
   }

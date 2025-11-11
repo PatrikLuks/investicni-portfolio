@@ -18,6 +18,8 @@
 
 /* global Decimal */
 
+import { logInfo } from './logger.js';
+
 class PortfolioOptimizationEngine {
   constructor() {
     this.riskFreeRate = 0.02;
@@ -30,7 +32,7 @@ class PortfolioOptimizationEngine {
 
   init() {
     this.useDecimal = typeof Decimal !== 'undefined';
-    console.log(`[PortfolioOptimization] Using ${this.useDecimal ? 'Decimal.js' : 'native Math'}`);
+    logInfo(`Using ${this.useDecimal ? 'Decimal.js' : 'native Math'} for optimization`);
   }
 
   // ==================== COVARIANCE MATRIX ====================
@@ -342,8 +344,7 @@ class PortfolioOptimizationEngine {
 
     for (let risk = 0; risk <= maxRisk; risk += maxRisk / 20) {
       const allocationToRisky = risk / riskyPortfolio.risk;
-      const return_ =
-        riskFreeRate + allocationToRisky * (riskyPortfolio.return - riskFreeRate);
+      const return_ = riskFreeRate + allocationToRisky * (riskyPortfolio.return - riskFreeRate);
 
       cal.push({
         risk: parseFloat(risk.toFixed(4)),
@@ -380,7 +381,7 @@ class PortfolioOptimizationEngine {
         expectedReturns.length,
         minWeight,
         maxWeight,
-        totalWeight,
+        totalWeight
       );
 
       const sharpe = this.calculateSharpeRatio(weights, expectedReturns, covMatrix);
@@ -500,9 +501,13 @@ class PortfolioOptimizationEngine {
       minimumVariancePortfolio: this.findMinimumVariancePortfolio(expectedReturns, covMatrix),
       equalWeightPortfolio: this.findEqualWeightPortfolio(expectedReturns, covMatrix),
       efficientFrontier: this.generateEfficientFrontier(expectedReturns, covMatrix, 30),
-      correlationMatrix: this.calculateCorrelationMatrix(expectedReturns.map(() =>
-        Array(expectedReturns.length).fill(0).map(() => Math.random() * 0.2),
-      )),
+      correlationMatrix: this.calculateCorrelationMatrix(
+        expectedReturns.map(() =>
+          Array(expectedReturns.length)
+            .fill(0)
+            .map(() => Math.random() * 0.2)
+        )
+      ),
     };
 
     return report;
