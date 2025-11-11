@@ -15,6 +15,8 @@
  * - Russian (ru)
  */
 
+import { logInfo, logWarn, logError } from '../../utilities/logger.js';
+
 class I18nService {
   constructor() {
     this.currentLanguage = localStorage.getItem('language') || 'en';
@@ -40,9 +42,9 @@ class I18nService {
   async initialize() {
     try {
       await this.loadLanguage(this.currentLanguage);
-      console.log('[i18n] Initialized with language:', this.currentLanguage);
+      logInfo('i18n initialized with language:', this.currentLanguage);
     } catch (error) {
-      console.error('[i18n] Initialization failed:', error);
+      logError('i18n initialization failed:', error);
       // Fallback to English
       this.translations = this.getDefaultTranslations();
     }
@@ -68,9 +70,9 @@ class I18nService {
       // Notify listeners
       this.notifyListeners();
 
-      console.log('[i18n] Language loaded:', lang);
+      logInfo('i18n language loaded:', lang);
     } catch (error) {
-      console.warn('[i18n] Failed to load language:', error);
+      logWarn('i18n failed to load language:', error);
       this.translations = this.getDefaultTranslations();
     }
   }
@@ -106,7 +108,7 @@ class I18nService {
       }
     });
 
-    console.log('[i18n] Translations applied to DOM');
+    logInfo('i18n translations applied to DOM');
   }
 
   /**
@@ -128,7 +130,7 @@ class I18nService {
    */
   async setLanguage(lang) {
     if (!this.languages[lang]) {
-      console.warn('[i18n] Unknown language:', lang);
+      logWarn('i18n unknown language:', lang);
       return;
     }
 
