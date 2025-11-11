@@ -11,6 +11,8 @@
  * - CORS proxy solution
  */
 
+import { logInfo, logWarn } from '../../utilities/logger.js';
+
 class RealMarketDataService {
   constructor() {
     // Configuration
@@ -61,7 +63,7 @@ class RealMarketDataService {
     // Check cache first
     const cached = this.getFromCache(ticker);
     if (cached) {
-      console.log(`[Cache Hit] ${ticker}: $${cached.price}`);
+      logInfo(`Cache Hit ${ticker}: $${cached.price}`);
       return cached;
     }
 
@@ -71,7 +73,7 @@ class RealMarketDataService {
       this.setCache(ticker, quote);
       return quote;
     } catch (error) {
-      console.warn(`[Fallback] Using mock data for ${ticker}:`, error.message);
+      logWarn(`Fallback: Using mock data for ${ticker}:`, error.message);
       return this.getMockQuote(ticker);
     }
   }
@@ -86,7 +88,7 @@ class RealMarketDataService {
 
     for (const [name, config] of providers) {
       try {
-        console.log(`[Trying] ${config.name} for ${ticker}`);
+        logInfo(`Trying ${config.name} for ${ticker}`);
 
         if (name === 'yahoo') {
           return await this.fetchFromYahoo(ticker, config);
@@ -96,7 +98,7 @@ class RealMarketDataService {
           return await this.fetchFromFinnhub(ticker, config);
         }
       } catch (error) {
-        console.warn(`[Failed] ${config.name}:`, error.message);
+        logWarn(`Failed ${config.name}:`, error.message);
         continue;
       }
     }
@@ -158,7 +160,7 @@ class RealMarketDataService {
     const data = await response.json();
 
     if (data['Error Message'] || !data['Global Quote']) {
-      throw new Error('Alpha Vantage error: ' + (data['Error Message'] || 'Invalid response'));
+      throw new Error(`Alpha Vantage error: ${data['Error Message'] || 'Invalid response'}`);
     }
 
     const quote = data['Global Quote'];
@@ -188,7 +190,7 @@ class RealMarketDataService {
     const data = await response.json();
 
     if (data.error || data.c === undefined) {
-      throw new Error('Finnhub error: ' + (data.error || 'Invalid response'));
+      throw new Error(`Finnhub error: ${data.error || 'Invalid response'}`);
     }
 
     return {
@@ -239,7 +241,9 @@ class RealMarketDataService {
    */
   getFromCache(ticker) {
     const cached = this.cache.get(ticker);
-    if (!cached) return null;
+    if (!cached) {
+      return null;
+    }
 
     const age = Date.now() - cached.timestamp;
     if (age > this.config.cache.duration) {
