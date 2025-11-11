@@ -4,7 +4,7 @@
  * @module technical-indicators-panel
  */
 
-import { TechnicalIndicatorsEngine } from '../../utilities/technical-indicators.js';
+import TechnicalIndicatorsEngine from '../../utilities/technical-indicators.js';
 import { logError, logInfo } from '../../utilities/logger.js';
 
 class TechnicalIndicatorsPanel {
@@ -169,7 +169,9 @@ class TechnicalIndicatorsPanel {
    */
   populateSymbols(portfolio) {
     const select = this.element.querySelector('#technicalSymbol');
-    if (!select) return;
+    if (!select) {
+      return;
+    }
 
     const symbols = [...new Set(portfolio.map((p) => p.symbol).filter(Boolean))];
 
@@ -177,7 +179,7 @@ class TechnicalIndicatorsPanel {
       .map((symbol) => `<option value="${symbol}">${symbol}</option>`)
       .join('');
 
-    select.innerHTML = '<option value="">Vyberte symbol...</option>' + optionsHtml;
+    select.innerHTML = `<option value="">Vyberte symbol...</option>${optionsHtml}`;
 
     // Auto-select first
     if (symbols.length > 0) {
@@ -305,7 +307,9 @@ class TechnicalIndicatorsPanel {
    */
   renderSignals(signals) {
     const listEl = this.element.querySelector('#signalsList');
-    if (!listEl) return;
+    if (!listEl) {
+      return;
+    }
 
     if (!signals || signals.length === 0) {
       listEl.innerHTML = '<div class="no-signals">Žádné signály nejsou dostupné</div>';
@@ -333,8 +337,12 @@ class TechnicalIndicatorsPanel {
    * @returns {string} CSS class
    */
   getRSIClass(rsi) {
-    if (rsi >= 70) return 'overbought';
-    if (rsi <= 30) return 'oversold';
+    if (rsi >= 70) {
+      return 'overbought';
+    }
+    if (rsi <= 30) {
+      return 'oversold';
+    }
     return 'neutral';
   }
 
@@ -344,7 +352,9 @@ class TechnicalIndicatorsPanel {
    * @returns {string} Formatted price
    */
   formatPrice(value) {
-    if (!value) return '-';
+    if (!value) {
+      return '-';
+    }
     return value.toFixed(2);
   }
 

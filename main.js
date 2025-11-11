@@ -20,6 +20,9 @@ import { initializeApp } from './modules/app-core.js';
 // Import legacy modules loader (replaces 21 <script> tags in index.html)
 import { loadLegacyModules, lazyLoadMarketplace, lazyLoadCharts } from './src/js/loaders/legacy-modules-loader.js';
 
+// Import Phase 6 Analytics Integration
+import { initializeAnalytics } from './src/js/features/portfolio/analytics-integration.js';
+
 // Help system is lazy-loaded for better performance
 let helpSystemInitialized = false;
 

@@ -4,7 +4,7 @@
  * @module compliance-panel
  */
 
-import { RegulatoryComplianceModule } from '../../utilities/regulatory-compliance.js';
+import RegulatoryComplianceModule from '../../utilities/regulatory-compliance.js';
 import { logError, logInfo } from '../../utilities/logger.js';
 
 class CompliancePanel {
@@ -174,7 +174,9 @@ class CompliancePanel {
    */
   renderFrameworkStatus(framework, data) {
     const statusEl = this.element.querySelector(`#${framework}Status`);
-    if (!statusEl) return;
+    if (!statusEl) {
+      return;
+    }
 
     const badge = statusEl.querySelector('.status-badge');
     if (badge) {
@@ -211,9 +213,11 @@ class CompliancePanel {
     const scoreEl = this.element.querySelector('#complianceScore');
     if (scoreEl) {
       const totalChecks = 3;
-      const passedChecks = [status.ucits?.compliant, status.esma?.compliant, status.mifid2?.compliant].filter(
-        (v) => v
-      ).length;
+      const passedChecks = [
+        status.ucits?.compliant,
+        status.esma?.compliant,
+        status.mifid2?.compliant,
+      ].filter((v) => v).length;
       const percentage = Math.round((passedChecks / totalChecks) * 100);
 
       scoreEl.textContent = `${percentage}%`;
@@ -242,9 +246,15 @@ class CompliancePanel {
    * @returns {string} CSS class name
    */
   getComplianceClass(percentage) {
-    if (percentage === 100) return 'score-perfect';
-    if (percentage >= 66) return 'score-good';
-    if (percentage >= 33) return 'score-warning';
+    if (percentage === 100) {
+      return 'score-perfect';
+    }
+    if (percentage >= 66) {
+      return 'score-good';
+    }
+    if (percentage >= 33) {
+      return 'score-warning';
+    }
     return 'score-critical';
   }
 

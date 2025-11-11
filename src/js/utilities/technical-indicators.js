@@ -100,7 +100,10 @@ class TechnicalIndicatorsEngine {
     }
 
     // Calculate signal line (9-period EMA of MACD)
-    const macdSignalLine = this.calculateEMA(macd.filter((m) => m !== null), 9);
+    const macdSignalLine = this.calculateEMA(
+      macd.filter((m) => m !== null),
+      9
+    );
     let signalIdx = 0;
     for (let i = 0; i < macd.length; i++) {
       if (macd[i] !== null) {
@@ -441,25 +444,29 @@ class TechnicalIndicatorsEngine {
     // RSI signals
     const lastRSI = rsi[rsi.length - 1];
     if (lastRSI > 70) {
-      signals.signals.push({ type: 'OVERBOUGHT', indicator: 'RSI', value: lastRSI, strength: 'HIGH' });
+      signals.signals.push({
+        type: 'OVERBOUGHT',
+        indicator: 'RSI',
+        value: lastRSI,
+        strength: 'HIGH',
+      });
     } else if (lastRSI < 30) {
-      signals.signals.push({ type: 'OVERSOLD', indicator: 'RSI', value: lastRSI, strength: 'HIGH' });
+      signals.signals.push({
+        type: 'OVERSOLD',
+        indicator: 'RSI',
+        value: lastRSI,
+        strength: 'HIGH',
+      });
     }
 
     // MACD signals
-    if (
-      macd.latestHistogram > 0 &&
-      macd.histogram[macd.histogram.length - 2] <= 0
-    ) {
+    if (macd.latestHistogram > 0 && macd.histogram[macd.histogram.length - 2] <= 0) {
       signals.signals.push({
         type: 'BULLISH_CROSSOVER',
         indicator: 'MACD',
         strength: 'MEDIUM',
       });
-    } else if (
-      macd.latestHistogram < 0 &&
-      macd.histogram[macd.histogram.length - 2] >= 0
-    ) {
+    } else if (macd.latestHistogram < 0 && macd.histogram[macd.histogram.length - 2] >= 0) {
       signals.signals.push({
         type: 'BEARISH_CROSSOVER',
         indicator: 'MACD',
@@ -484,10 +491,10 @@ class TechnicalIndicatorsEngine {
 
     // Calculate overall signal
     const bullishSignals = signals.signals.filter((s) =>
-      ['BULLISH_CROSSOVER', 'OVERSOLD', 'MEAN_REVERSION_BUY'].includes(s.type),
+      ['BULLISH_CROSSOVER', 'OVERSOLD', 'MEAN_REVERSION_BUY'].includes(s.type)
     );
     const bearishSignals = signals.signals.filter((s) =>
-      ['BEARISH_CROSSOVER', 'OVERBOUGHT', 'MEAN_REVERSION_SELL'].includes(s.type),
+      ['BEARISH_CROSSOVER', 'OVERBOUGHT', 'MEAN_REVERSION_SELL'].includes(s.type)
     );
 
     if (bullishSignals.length > bearishSignals.length) {
@@ -499,7 +506,7 @@ class TechnicalIndicatorsEngine {
     }
 
     signals.technicalScore = Math.round(
-      ((bullishSignals.length - bearishSignals.length) / 3) * 50 + 50,
+      ((bullishSignals.length - bearishSignals.length) / 3) * 50 + 50
     );
 
     return signals;
@@ -510,6 +517,8 @@ class TechnicalIndicatorsEngine {
 window.technicalIndicators = new TechnicalIndicatorsEngine();
 
 // Export for module systems
+export default TechnicalIndicatorsEngine;
+
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = TechnicalIndicatorsEngine;
 }

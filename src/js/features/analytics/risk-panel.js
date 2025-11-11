@@ -4,7 +4,7 @@
  * @module risk-panel
  */
 
-import { AdvancedRiskMetricsEngine } from '../../utilities/advanced-risk-metrics.js';
+import AdvancedRiskMetricsEngine from '../../utilities/advanced-risk-metrics.js';
 import { logError, logInfo } from '../../utilities/logger.js';
 
 class RiskPanel {
@@ -175,7 +175,7 @@ class RiskPanel {
       const ddEl = this.element.querySelector('#riskMaxDrawdown');
       if (ddEl) {
         ddEl.textContent = `${(metrics.maxDrawdown * 100).toFixed(2)}%`;
-        ddEl.className = this.getRiskClass(metrics.maxDrawdown, -0.20);
+        ddEl.className = this.getRiskClass(metrics.maxDrawdown, -0.2);
       }
 
       // Update status
@@ -197,7 +197,9 @@ class RiskPanel {
    */
   updateStatus(metrics) {
     const statusEl = this.element.querySelector('#riskStatus');
-    if (!statusEl) return;
+    if (!statusEl) {
+      return;
+    }
 
     let status = '✅ Nízké riziko';
     let riskLevel = 'low';
@@ -221,8 +223,12 @@ class RiskPanel {
    * @returns {string} CSS class name
    */
   getRiskClass(value, threshold) {
-    if (value <= threshold) return 'metric-low';
-    if (value <= threshold * 1.5) return 'metric-medium';
+    if (value <= threshold) {
+      return 'metric-low';
+    }
+    if (value <= threshold * 1.5) {
+      return 'metric-medium';
+    }
     return 'metric-high';
   }
 
@@ -233,8 +239,12 @@ class RiskPanel {
    * @returns {string} CSS class name
    */
   getPerformanceClass(value, goodThreshold) {
-    if (value >= goodThreshold * 1.2) return 'metric-high';
-    if (value >= goodThreshold) return 'metric-medium';
+    if (value >= goodThreshold * 1.2) {
+      return 'metric-high';
+    }
+    if (value >= goodThreshold) {
+      return 'metric-medium';
+    }
     return 'metric-low';
   }
 
@@ -287,7 +297,9 @@ class RiskPanel {
    * Refresh metrics
    */
   refresh() {
-    if (!this.currentMetrics) return;
+    if (!this.currentMetrics) {
+      return;
+    }
     const refreshBtn = this.element.querySelector('.risk-panel-refresh');
     if (refreshBtn) {
       refreshBtn.classList.add('rotating');

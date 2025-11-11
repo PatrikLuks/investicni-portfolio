@@ -39,7 +39,7 @@ class StressTestingFramework {
       year: 2008,
       description: 'Lehman Brothers collapse and credit crunch',
       assetImpacts: {
-        equities: -0.50, // -50%
+        equities: -0.5, // -50%
         bonds: -0.15, // -15% (credit spreads widened)
         commodities: -0.45, // -45%
         realEstate: -0.35, // -35%
@@ -59,7 +59,7 @@ class StressTestingFramework {
       assetImpacts: {
         equities: -0.35, // -35%
         bonds: -0.05, // -5%
-        commodities: -0.30, // -30%
+        commodities: -0.3, // -30%
         realEstate: -0.15, // -15%
         cash: 0.01, // +1%
       },
@@ -77,7 +77,7 @@ class StressTestingFramework {
       assetImpacts: {
         equities: -0.22, // -22% in one day
         bonds: 0.05, // +5% (flight to safety)
-        commodities: -0.20, // -20%
+        commodities: -0.2, // -20%
         realEstate: -0.05, // -5% (delayed)
         cash: 0.02, // +2%
       },
@@ -93,10 +93,10 @@ class StressTestingFramework {
       year: 2022,
       description: 'Rapid 300 bps rate increase',
       assetImpacts: {
-        equities: -0.20, // -20% (earnings pressure)
+        equities: -0.2, // -20% (earnings pressure)
         bonds: -0.25, // -25% (duration loss)
         commodities: 0.05, // +5% (inflation)
-        realEstate: -0.20, // -20% (cap rate expansion)
+        realEstate: -0.2, // -20% (cap rate expansion)
         cash: 0.03, // +3% (higher yields)
       },
       correlationShift: 1.1,
@@ -111,10 +111,10 @@ class StressTestingFramework {
       year: 1970,
       description: 'High inflation + slow growth + rising rates',
       assetImpacts: {
-        equities: -0.40, // -40% (earnings squeeze + multiple compression)
+        equities: -0.4, // -40% (earnings squeeze + multiple compression)
         bonds: -0.35, // -35% (both inflation and rates)
-        commodities: 0.50, // +50% (inflation hedge)
-        realEstate: -0.10, // -10% (mixed)
+        commodities: 0.5, // +50% (inflation hedge)
+        realEstate: -0.1, // -10% (mixed)
         cash: 0.04, // +4% (higher rates)
       },
       correlationShift: 1.5,
@@ -130,8 +130,8 @@ class StressTestingFramework {
       description: 'Regional conflict, supply chain disruption',
       assetImpacts: {
         equities: -0.15, // -15% (uncertainty premium)
-        bonds: 0.10, // +10% (safe haven)
-        commodities: 0.30, // +30% (energy spike)
+        bonds: 0.1, // +10% (safe haven)
+        commodities: 0.3, // +30% (energy spike)
         realEstate: -0.05, // -5%
         cash: 0.02, // +2%
       },
@@ -263,7 +263,8 @@ class StressTestingFramework {
 
     // Concentration analysis under stress
     const maxLoss = Math.max(...stressedHoldings.map((h) => h.lossPercent));
-    const avgLoss = stressedHoldings.reduce((sum, h) => sum + h.lossPercent, 0) / stressedHoldings.length;
+    const avgLoss =
+      stressedHoldings.reduce((sum, h) => sum + h.lossPercent, 0) / stressedHoldings.length;
 
     return {
       originalPortfolioValue: Math.round(originalValue * 100) / 100,
@@ -289,11 +290,13 @@ class StressTestingFramework {
       averageLoss: Math.round((losses.reduce((a, b) => a + b, 0) / losses.length) * 100) / 100,
       worstCaseLoss: Math.round(Math.max(...losses) * 100) / 100,
       holdingsWithLosses: losses.length,
-      scenarioVaR: Math.round(
-        (stressedHoldings.reduce((sum, h) => sum + h.loss, 0) /
-          stressedHoldings.reduce((sum, h) => sum + h.originalValue, 0)) *
-          100 * 100,
-      ) / 100,
+      scenarioVaR:
+        Math.round(
+          (stressedHoldings.reduce((sum, h) => sum + h.loss, 0) /
+            stressedHoldings.reduce((sum, h) => sum + h.originalValue, 0)) *
+            100 *
+            100
+        ) / 100,
     };
   }
 
@@ -304,7 +307,7 @@ class StressTestingFramework {
   _estimateRecovery(scenario) {
     const recoveryDays = Math.max(
       10,
-      (scenario.duration * 21 * Math.log(2)) / Math.log(scenario.volatilityMultiplier + 1),
+      (scenario.duration * 21 * Math.log(2)) / Math.log(scenario.volatilityMultiplier + 1)
     );
 
     return {
@@ -372,7 +375,7 @@ class StressTestingFramework {
       const impact = minImpact + step * i;
 
       const scenario = {
-        name: `Sensitivity: ${assetType} ${((impact * 100).toFixed(1))}%`,
+        name: `Sensitivity: ${assetType} ${(impact * 100).toFixed(1)}%`,
         assetImpacts: { [assetType]: impact },
         correlationShift: 1.0,
         volatilityMultiplier: 1.5,
@@ -494,7 +497,7 @@ class StressTestingFramework {
     });
 
     const worstCase = scenarioResults.reduce((worst, current) =>
-      current.portfolioLossPercent > worst.portfolioLossPercent ? current : worst,
+      current.portfolioLossPercent > worst.portfolioLossPercent ? current : worst
     );
 
     return {
@@ -518,6 +521,8 @@ class StressTestingFramework {
 window.stressTesting = new StressTestingFramework();
 
 // Export for module systems
+export default StressTestingFramework;
+
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = StressTestingFramework;
 }

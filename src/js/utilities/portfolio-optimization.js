@@ -381,7 +381,7 @@ class PortfolioOptimizationEngine {
         expectedReturns.length,
         minWeight,
         maxWeight,
-        totalWeight,
+        totalWeight
       );
 
       const sharpe = this.calculateSharpeRatio(weights, expectedReturns, covMatrix);
@@ -505,8 +505,8 @@ class PortfolioOptimizationEngine {
         expectedReturns.map(() =>
           Array(expectedReturns.length)
             .fill(0)
-            .map(() => Math.random() * 0.2),
-        ),
+            .map(() => Math.random() * 0.2)
+        )
       ),
     };
 
@@ -518,6 +518,8 @@ class PortfolioOptimizationEngine {
 window.portfolioOptimization = new PortfolioOptimizationEngine();
 
 // Export for module systems
+export default PortfolioOptimizationEngine;
+
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = PortfolioOptimizationEngine;
 }

@@ -4,8 +4,8 @@
  * @module optimization-panel
  */
 
-import { PortfolioOptimizationEngine } from '../../utilities/portfolio-optimization.js';
-import { StressTestingFramework } from '../../utilities/stress-testing.js';
+import PortfolioOptimizationEngine from '../../utilities/portfolio-optimization.js';
+import StressTestingFramework from '../../utilities/stress-testing.js';
 import { logError, logInfo } from '../../utilities/logger.js';
 
 class OptimizationPanel {
@@ -65,7 +65,7 @@ class OptimizationPanel {
    * Generate optimization recommendation
    * @param {Array} portfolio - Portfolio items
    */
-  async generateRecommendation(portfolio) {
+  generateRecommendation(portfolio) {
     try {
       if (!portfolio || portfolio.length === 0) {
         this.renderEmpty();
@@ -111,7 +111,7 @@ class OptimizationPanel {
       return;
     }
 
-    const { optimized, stressTest } = this.currentRecommendation;
+    const { stressTest } = this.currentRecommendation;
 
     const html = `
       <div class="optimization-results">
@@ -297,8 +297,7 @@ class OptimizationPanel {
   renderLoading() {
     const contentEl = this.element.querySelector('#optimizationContent');
     if (contentEl) {
-      contentEl.innerHTML =
-        '<div class="optimization-loading">⏳ Analýza probíhá...</div>';
+      contentEl.innerHTML = '<div class="optimization-loading">⏳ Analýza probíhá...</div>';
     }
   }
 
