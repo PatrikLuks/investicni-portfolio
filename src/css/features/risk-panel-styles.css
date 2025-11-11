@@ -1,0 +1,226 @@
+/**
+ * Risk Panel Styles
+ * Styles for advanced risk metrics dashboard
+ */
+
+.risk-panel-container {
+  background: linear-gradient(135deg, var(--bg-card) 0%, rgba(102, 126, 234, 0.05) 100%);
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.risk-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.risk-panel-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+.risk-panel-refresh {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.risk-panel-refresh:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.risk-panel-refresh.rotating {
+  animation: spin 0.6s linear;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.risk-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.metric-card {
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  border: 1px solid var(--border-color);
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.metric-card:hover {
+  border-color: #667eea;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+  transform: translateY(-2px);
+}
+
+.metric-icon {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+.metric-label {
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.metric-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 8px;
+  font-family: 'Monaco', 'Courier New', monospace;
+}
+
+.metric-value.metric-low {
+  color: #4caf50; /* Green */
+}
+
+.metric-value.metric-medium {
+  color: #ff9800; /* Orange */
+}
+
+.metric-value.metric-high {
+  color: #f44336; /* Red */
+}
+
+.metric-description {
+  font-size: 0.8rem;
+  color: #999;
+  line-height: 1.4;
+}
+
+.risk-panel-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color);
+}
+
+.risk-status {
+  font-weight: 600;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.risk-status.risk-low {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.risk-status.risk-medium {
+  background: #fff3e0;
+  color: #e65100;
+}
+
+.risk-status.risk-high {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.risk-status.risk-error {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.risk-status.risk-empty {
+  background: #f5f5f5;
+  color: #999;
+}
+
+.risk-timestamp {
+  font-size: 0.85rem;
+  color: #999;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .risk-panel-container {
+    background: linear-gradient(135deg, #1e1e1e 0%, rgba(102, 126, 234, 0.1) 100%);
+  }
+
+  .metric-card {
+    background: #2a2a2a;
+    border-color: #444;
+  }
+
+  .metric-card:hover {
+    border-color: #667eea;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+  }
+
+  .metric-value {
+    color: #fff;
+  }
+
+  .metric-label {
+    color: #bbb;
+  }
+
+  .metric-description {
+    color: #888;
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .risk-panel-container {
+    padding: 16px;
+  }
+
+  .risk-metrics-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+  }
+
+  .metric-card {
+    padding: 12px;
+  }
+
+  .metric-icon {
+    font-size: 1.5rem;
+  }
+
+  .metric-value {
+    font-size: 1.4rem;
+  }
+
+  .risk-panel-footer {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
