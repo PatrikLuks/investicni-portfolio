@@ -4,6 +4,8 @@
  */
 /* eslint-disable no-undef */
 
+import { logError } from './logger.js';
+
 class SmartAutoSaveManager {
   constructor() {
     this.saveDelay = 3000; // 3 seconds debounce
@@ -121,7 +123,7 @@ class SmartAutoSaveManager {
         throw new Error('Save failed');
       }
     } catch (error) {
-      console.error('❌ Save error:', error);
+      logError('Save error:', error);
       this.updateSaveIndicator('error');
 
       // Add to offline queue as fallback
@@ -168,7 +170,7 @@ class SmartAutoSaveManager {
 
       return true;
     } catch (error) {
-      console.error('Save operation failed:', error);
+      logError('Save operation failed:', error);
       throw error;
     }
   }
@@ -268,7 +270,7 @@ class SmartAutoSaveManager {
 
       return hasConflict;
     } catch (error) {
-      console.error('Error checking for conflicts:', error);
+      logError('Error checking for conflicts:', error);
       return false;
     }
   }
@@ -292,7 +294,7 @@ class SmartAutoSaveManager {
       const choice = confirm(
         'Data byla změněna externě. Chcete přepsat uložená data?\n\n' +
           'OK = Použít aktuální verzi\n' +
-          'Cancel = Ponechat uloženou verzi',
+          'Cancel = Ponechat uloženou verzi'
       );
 
       if (!choice) {
@@ -305,7 +307,7 @@ class SmartAutoSaveManager {
 
       return true;
     } catch (error) {
-      console.error('Error resolving conflict:', error);
+      logError('Error resolving conflict:', error);
       return false;
     }
   }
@@ -361,7 +363,7 @@ class SmartAutoSaveManager {
           break;
         }
       } catch (error) {
-        console.error('Error processing offline item:', error);
+        logError('Error processing offline item:', error);
         break;
       }
     }
@@ -486,7 +488,7 @@ class SmartAutoSaveManager {
       const stored = localStorage.getItem('auto_save_offline_queue');
       this.offlineQueue = stored ? JSON.parse(stored) : [];
     } catch (error) {
-      console.error('Failed to load offline queue:', error);
+      logError('Failed to load offline queue:', error);
       this.offlineQueue = [];
     }
   }
@@ -498,7 +500,7 @@ class SmartAutoSaveManager {
     try {
       localStorage.setItem('auto_save_offline_queue', JSON.stringify(this.offlineQueue));
     } catch (error) {
-      console.error('Failed to persist offline queue:', error);
+      logError('Failed to persist offline queue:', error);
     }
   }
 
@@ -510,7 +512,7 @@ class SmartAutoSaveManager {
       const stored = localStorage.getItem('portfolio_data');
       this.lastSavedData = stored ? JSON.parse(stored) : null;
     } catch (error) {
-      console.error('Failed to load last saved data:', error);
+      logError('Failed to load last saved data:', error);
     }
   }
 
