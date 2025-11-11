@@ -19,7 +19,7 @@ class DataBinding {
     this.data = data;
     this.bindings = new Map();
     this.watchers = new Map();
-    this.computed = new Map();
+    this.computedProperties = new Map();
     this.handlers = new Map();
     this.proxy = this.createProxy(data);
   }
@@ -45,8 +45,8 @@ class DataBinding {
       },
 
       get: (obj, prop) => {
-        if (this.computed.has(prop)) {
-          return this.computed.get(prop)();
+        if (this.computedProperties.has(prop)) {
+          return this.computedProperties.get(prop)();
         }
         return obj[prop];
       },
@@ -60,7 +60,7 @@ class DataBinding {
    * @param {string} elementProperty - Element property (value, textContent, etc.)
    * @param {Object} options - Binding options
    */
-  bind(dataProperty, element, elementProperty = "value", options = {}) {
+  bind(dataProperty, element, elementProperty = 'value', options = {}) {
     if (!element) {
       return;
     }
@@ -75,26 +75,23 @@ class DataBinding {
     // Two-way binding: data → UI
     binding.handler = () => {
       const value = this.proxy[dataProperty];
-      if (elementProperty === "value") {
-        element.value = value ?? "";
-      } else if (
-        elementProperty === "textContent" ||
-        elementProperty === "text"
-      ) {
-        element.textContent = value ?? "";
-      } else if (elementProperty === "innerHTML") {
-        element.innerHTML = value ?? "";
-      } else if (elementProperty === "class") {
-        element.className = value ?? "";
-      } else if (elementProperty === "style") {
+      if (elementProperty === 'value') {
+        element.value = value ?? '';
+      } else if (elementProperty === 'textContent' || elementProperty === 'text') {
+        element.textContent = value ?? '';
+      } else if (elementProperty === 'innerHTML') {
+        element.innerHTML = value ?? '';
+      } else if (elementProperty === 'class') {
+        element.className = value ?? '';
+      } else if (elementProperty === 'style') {
         Object.assign(element.style, value || {});
       } else {
         element[elementProperty] = value;
       }
       element.dispatchEvent(
-        new CustomEvent("bound-change", {
+        new CustomEvent('bound-change', {
           detail: { property: dataProperty, value },
-        }),
+        })
       );
     };
 
@@ -102,26 +99,30 @@ class DataBinding {
     binding.handler();
 
     // Register watcher for data changes
-    this.watch(dataProperty, binding.handler);
+    const unwatch = this.watch(dataProperty, binding.handler);
 
     // Two-way binding: UI → data (for input elements)
     if (
-      elementProperty === "value" &&
-      (element.tagName === "INPUT" ||
-        element.tagName === "TEXTAREA" ||
-        element.tagName === "SELECT")
+      elementProperty === 'value' &&
+      (element.tagName === 'INPUT' ||
+        element.tagName === 'TEXTAREA' ||
+        element.tagName === 'SELECT')
     ) {
       const eventHandler = (event) => {
         this.proxy[dataProperty] = event.target.value;
       };
 
-      element.addEventListener("input", eventHandler);
-      element.addEventListener("change", eventHandler);
+      element.addEventListener('input', eventHandler);
+      element.addEventListener('change', eventHandler);
 
       binding.unsubscribe = () => {
-        element.removeEventListener("input", eventHandler);
-        element.removeEventListener("change", eventHandler);
+        element.removeEventListener('input', eventHandler);
+        element.removeEventListener('change', eventHandler);
+        unwatch(); // Remove the watcher
       };
+    } else {
+      // For non-input elements, just unwatch
+      binding.unsubscribe = unwatch;
     }
 
     if (!this.bindings.has(dataProperty)) {
@@ -202,7 +203,7 @@ class DataBinding {
       dirty: true,
     };
 
-    this.computed.set(property, () => {
+    this.computedProperties.set(property, () => {
       if (computation.dirty) {
         computation.cache = getter.call(this.data);
         computation.dirty = false;
@@ -228,8 +229,8 @@ class DataBinding {
    * @returns {*} Computed value
    */
   getComputed(property) {
-    if (this.computed.has(property)) {
-      return this.computed.get(property)();
+    if (this.computedProperties.has(property)) {
+      return this.computedProperties.get(property)();
     }
     return undefined;
   }
@@ -259,19 +260,16 @@ class DataBinding {
           try {
             binding.handler();
           } catch (error) {
-            console.error(
-              `Error updating binding for property "${property}":`,
-              error,
-            );
+            console.error(`Error updating binding for property "${property}":`, error);
           }
         }
       });
     }
 
     // Invalidate computed properties that might depend on this
-    for (const [computedProp] of this.computed.entries()) {
+    for (const [computedProp] of this.computedProperties.entries()) {
       // In real implementation, track dependencies
-      const computation = this.computed.get(computedProp);
+      const computation = this.computedProperties.get(computedProp);
       if (computation && computation.dirty !== undefined) {
         computation.dirty = true;
       }
@@ -288,13 +286,13 @@ class DataBinding {
       return;
     }
 
-    const fields = form.querySelectorAll("[name]");
+    const fields = form.querySelectorAll('[name]');
 
     fields.forEach((field) => {
       const property = mapping[field.name] || field.name;
 
       if (Object.prototype.hasOwnProperty.call(this.data, property)) {
-        this.bind(property, field, "value");
+        this.bind(property, field, 'value');
       }
     });
 
@@ -312,7 +310,7 @@ class DataBinding {
   getData() {
     const result = {};
     for (const [key, value] of Object.entries(this.data)) {
-      result[key] = this.computed.has(key) ? this.getComputed(key) : value;
+      result[key] = this.computedProperties.has(key) ? this.getComputed(key) : value;
     }
     return result;
   }
@@ -326,7 +324,9 @@ class DataBinding {
     if (merge) {
       Object.assign(this.proxy, updates);
     } else {
+      // Replace all data
       this.data = updates;
+      this.proxy = this.createProxy(this.data);
     }
   }
 
@@ -339,7 +339,7 @@ class DataBinding {
     this.data = initialData;
     this.bindings.clear();
     this.watchers.clear();
-    this.computed.clear();
+    this.computedProperties.clear();
     this.proxy = this.createProxy(this.data);
   }
 
@@ -364,7 +364,7 @@ class DataBinding {
   destroy() {
     this.unbindAll();
     this.watchers.clear();
-    this.computed.clear();
+    this.computedProperties.clear();
     this.handlers.clear();
     this.data = null;
   }
@@ -373,6 +373,6 @@ class DataBinding {
 // Export for module systems
 export default DataBinding;
 
-if (typeof module !== "undefined" && module.exports) {
+if (typeof module !== 'undefined' && module.exports) {
   module.exports = DataBinding;
 }
