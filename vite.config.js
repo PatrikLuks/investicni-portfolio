@@ -86,7 +86,7 @@ export default defineConfig({
             './src/js/utilities/legacy-utilities.js',
           ],
           // UI components
-          'ui-components': ['./modules/ui-manager.js', './modules/event-handlers.js'],
+          'ui-components': ['./src/js/utilities/ui-manager.js', './modules/event-handlers.js'],
           // Business logic
           'portfolio-logic': ['./src/js/utilities/portfolio-calculator.js'],
           // Help system (lazy loaded separately)

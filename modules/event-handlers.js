@@ -2,8 +2,8 @@
  * @module event-handlers
  * Manages all DOM event listeners and user interactions
  *
- * @typedef {import('./data-manager.js').FundData} FundData
- * @typedef {import('./data-manager.js').ClientInfo} ClientInfo
+ * @typedef {import('../src/js/utilities/data-manager.js').FundData} FundData
+ * @typedef {import('../src/js/utilities/data-manager.js').ClientInfo} ClientInfo
  */
 
 // This module will be populated with event handlers extracted from initializeApp()

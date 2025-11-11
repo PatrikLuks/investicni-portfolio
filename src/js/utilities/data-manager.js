@@ -30,9 +30,9 @@ class PortfolioStorage {
    * Initialize storage with keys
    */
   constructor() {
-    this.storageKey = "portfolioData_v2";
-    this.clientKey = "portfolioClient_v2";
-    this.lastSaveKey = "portfolioLastSave_v2";
+    this.storageKey = 'portfolioData_v2';
+    this.clientKey = 'portfolioClient_v2';
+    this.lastSaveKey = 'portfolioLastSave_v2';
     this.autosaveInterval = null;
   }
 
@@ -49,7 +49,7 @@ class PortfolioStorage {
       this.updateLastSaveDisplay(now);
       return true;
     } catch (e) {
-      console.error("Save failed:", e);
+      console.error('Save failed:', e);
       // Note: showToast should be called from the module that imports this
       return false;
     }
@@ -64,7 +64,7 @@ class PortfolioStorage {
       const data = localStorage.getItem(this.storageKey);
       return data ? JSON.parse(data) : [];
     } catch (e) {
-      console.error("Load failed:", e);
+      console.error('Load failed:', e);
       return [];
     }
   }
@@ -79,7 +79,7 @@ class PortfolioStorage {
       localStorage.setItem(this.clientKey, JSON.stringify(client));
       return true;
     } catch (e) {
-      console.error("Client save failed:", e);
+      console.error('Client save failed:', e);
       return false;
     }
   }
@@ -93,7 +93,7 @@ class PortfolioStorage {
       const client = localStorage.getItem(this.clientKey);
       return client ? JSON.parse(client) : null;
     } catch (e) {
-      console.error("Client load failed:", e);
+      console.error('Client load failed:', e);
       return null;
     }
   }
@@ -110,7 +110,7 @@ class PortfolioStorage {
       // Note: showToast should be called from the module that imports this
       return true;
     } catch (e) {
-      console.error("Clear failed:", e);
+      console.error('Clear failed:', e);
       return false;
     }
   }
@@ -149,21 +149,21 @@ class PortfolioStorage {
    */
   updateLastSaveDisplay(isoString) {
     const date = new Date(isoString);
-    const timeStr = date.toLocaleTimeString("cs-CZ", {
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
+    const timeStr = date.toLocaleTimeString('cs-CZ', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
     });
-    const indicator = document.getElementById("lastSaveIndicator");
-    const timeElement = document.getElementById("lastSaveTime");
+    const indicator = document.getElementById('lastSaveIndicator');
+    const timeElement = document.getElementById('lastSaveTime');
 
     if (indicator && timeElement) {
       timeElement.textContent = `Uloženo ${timeStr}`;
-      indicator.style.opacity = "1";
-      indicator.style.animation = "pulse 0.5s ease-in-out";
+      indicator.style.opacity = '1';
+      indicator.style.animation = 'pulse 0.5s ease-in-out';
       setTimeout(() => {
-        indicator.style.animation = "";
-        indicator.style.opacity = "0.7";
+        indicator.style.animation = '';
+        indicator.style.opacity = '0.7';
       }, 2000);
     }
   }
@@ -188,13 +188,11 @@ class PortfolioStorage {
  */
 function parseSafeNumber(value, defaultValue = 0) {
   // ES2024: nullish coalescing for null/undefined, explicit check for empty string
-  if (value === null || value === undefined || value === "") {
+  if (value === null || value === undefined || value === '') {
     return defaultValue;
   }
   const parsed =
-    typeof value === "string"
-      ? parseFloat(value.replace(/\s/g, ""))
-      : parseFloat(value);
+    typeof value === 'string' ? parseFloat(value.replace(/\s/g, '')) : parseFloat(value);
   return isNaN(parsed) ? defaultValue : parsed;
 }
 
@@ -210,22 +208,22 @@ function parseSafeNumber(value, defaultValue = 0) {
 function validateFundData(data) {
   const errors = [];
 
-  if (!data.name || data.name.trim() === "") {
-    errors.push("Název fondu je povinný");
+  if (!data.name || data.name.trim() === '') {
+    errors.push('Název fondu je povinný');
   }
 
-  if (!data.producer || data.producer.trim() === "") {
-    errors.push("Správce je povinný");
+  if (!data.producer || data.producer.trim() === '') {
+    errors.push('Správce je povinný');
   }
 
   const investment = parseSafeNumber(data.investment);
   if (investment <= 0) {
-    errors.push("Investice musí být kladné číslo");
+    errors.push('Investice musí být kladné číslo');
   }
 
   const value = parseSafeNumber(data.value);
   if (value < 0) {
-    errors.push("Hodnota nemůže být záporná");
+    errors.push('Hodnota nemůže být záporná');
   }
 
   return errors;

@@ -14,26 +14,26 @@
  * @returns {void}
  */
 function showToast(type, title, message, duration = 4000) {
-  const container = document.getElementById("toastContainer");
+  const container = document.getElementById('toastContainer');
   if (!container) {
     return;
   }
 
-  const toast = document.createElement("div");
+  const toast = document.createElement('div');
   toast.className = `toast ${type}`;
 
   const icons = {
-    success: "✓",
-    error: "✗",
-    warning: "⚠",
-    info: "ℹ",
+    success: '✓',
+    error: '✗',
+    warning: '⚠',
+    info: 'ℹ',
   };
 
   toast.innerHTML = `
     <div class="toast-icon">${icons[type]}</div>
     <div class="toast-content">
       <div class="toast-title">${title}</div>
-      ${message ? `<div class="toast-message">${message}</div>` : ""}
+      ${message ? `<div class="toast-message">${message}</div>` : ''}
     </div>
     <button class="toast-close" onclick="this.parentElement.remove()">×</button>
   `;
@@ -41,7 +41,7 @@ function showToast(type, title, message, duration = 4000) {
   container.appendChild(toast);
 
   setTimeout(() => {
-    toast.classList.add("removing");
+    toast.classList.add('removing');
     setTimeout(() => toast.remove(), 300);
   }, duration);
 }
@@ -57,11 +57,11 @@ function showToast(type, title, message, duration = 4000) {
  * @returns {void}
  */
 function showConfirmDialog(title, message, onConfirm, onCancel) {
-  const overlay = document.createElement("div");
-  overlay.className = "confirm-overlay";
+  const overlay = document.createElement('div');
+  overlay.className = 'confirm-overlay';
 
-  const dialog = document.createElement("div");
-  dialog.className = "confirm-dialog";
+  const dialog = document.createElement('div');
+  dialog.className = 'confirm-dialog';
 
   dialog.innerHTML = `
     <h3 class="confirm-title">${title}</h3>
@@ -75,11 +75,11 @@ function showConfirmDialog(title, message, onConfirm, onCancel) {
   overlay.appendChild(dialog);
   document.body.appendChild(overlay);
 
-  const confirmBtn = dialog.querySelector("#confirmBtn");
-  const cancelBtn = dialog.querySelector("#cancelBtn");
+  const confirmBtn = dialog.querySelector('#confirmBtn');
+  const cancelBtn = dialog.querySelector('#cancelBtn');
 
   const cleanup = () => {
-    overlay.classList.add("fade-out");
+    overlay.classList.add('fade-out');
     setTimeout(() => document.body.removeChild(overlay), 200);
   };
 
@@ -115,13 +115,13 @@ function showConfirmDialog(title, message, onConfirm, onCancel) {
  */
 function showLoading() {
   // Prevent duplicate overlays
-  if (document.getElementById("loadingOverlay")) {
+  if (document.getElementById('loadingOverlay')) {
     return;
   }
 
-  const overlay = document.createElement("div");
-  overlay.className = "loading-overlay";
-  overlay.id = "loadingOverlay";
+  const overlay = document.createElement('div');
+  overlay.className = 'loading-overlay';
+  overlay.id = 'loadingOverlay';
   overlay.innerHTML = '<div class="loading-spinner"></div>';
   document.body.appendChild(overlay);
 }
@@ -131,7 +131,7 @@ function showLoading() {
  * @returns {void}
  */
 function hideLoading() {
-  const overlay = document.getElementById("loadingOverlay");
+  const overlay = document.getElementById('loadingOverlay');
   if (overlay) {
     overlay.remove();
   }
@@ -145,24 +145,20 @@ function hideLoading() {
  * @param {string} [filename='chart.png'] - Output filename
  * @returns {void}
  */
-function exportChartAsPNG(chartElement, filename = "chart.png") {
+function exportChartAsPNG(chartElement, filename = 'chart.png') {
   try {
-    const canvas = chartElement.querySelector("canvas");
+    const canvas = chartElement.querySelector('canvas');
     if (canvas) {
-      const url = canvas.toDataURL("image/png");
-      const link = document.createElement("a");
+      const url = canvas.toDataURL('image/png');
+      const link = document.createElement('a');
       link.download = filename;
       link.href = url;
       link.click();
-      showToast(
-        "success",
-        "Export úspěšný",
-        `Graf byl exportován jako ${filename}`,
-      );
+      showToast('success', 'Export úspěšný', `Graf byl exportován jako ${filename}`);
     }
   } catch (e) {
-    console.error("Chart export failed:", e);
-    showToast("error", "Export selhal", "Nepodařilo se exportovat graf");
+    console.error('Chart export failed:', e);
+    showToast('error', 'Export selhal', 'Nepodařilo se exportovat graf');
   }
 }
 
@@ -175,12 +171,12 @@ const selectedRows = new Set();
  * @returns {void}
  */
 function updateBulkActionsBar() {
-  const bar = document.getElementById("bulkActionsBar");
-  const count = document.getElementById("selectedCount");
+  const bar = document.getElementById('bulkActionsBar');
+  const count = document.getElementById('selectedCount');
 
   if (bar && count) {
     count.textContent = selectedRows.size;
-    bar.classList.toggle("active", selectedRows.size > 0);
+    bar.classList.toggle('active', selectedRows.size > 0);
   }
 }
 
@@ -253,23 +249,20 @@ function animateValue(elementId, start, end, duration, isCurrency = false) {
 
   const timer = setInterval(() => {
     current += increment;
-    if (
-      (increment > 0 && current >= end) ||
-      (increment < 0 && current <= end)
-    ) {
+    if ((increment > 0 && current >= end) || (increment < 0 && current <= end)) {
       current = end;
       clearInterval(timer);
     }
 
     if (isCurrency) {
-      element.textContent = new Intl.NumberFormat("cs-CZ", {
-        style: "currency",
-        currency: "CZK",
+      element.textContent = new Intl.NumberFormat('cs-CZ', {
+        style: 'currency',
+        currency: 'CZK',
         minimumFractionDigits: 0,
         maximumFractionDigits: 0,
       }).format(Math.round(current));
     } else {
-      element.textContent = Math.round(current).toLocaleString("cs-CZ");
+      element.textContent = Math.round(current).toLocaleString('cs-CZ');
     }
   }, 16);
 }

@@ -3,24 +3,24 @@
  * Main application initialization and bootstrap
  * Investment Portfolio Manager Pro v3.1.0
  *
- * @typedef {import('./data-manager.js').FundData} FundData
- * @typedef {import('./data-manager.js').ClientInfo} ClientInfo
+ * @typedef {import('../src/js/utilities/data-manager.js').FundData} FundData
+ * @typedef {import('../src/js/utilities/data-manager.js').ClientInfo} ClientInfo
  */
 
-import { PortfolioStorage, parseSafeNumber, validateFundData, debounce } from './data-manager.js';
+import { PortfolioStorage, parseSafeNumber, validateFundData, debounce } from '../src/js/utilities/data-manager.js';
 import {
   showToast,
   showConfirmDialog,
   animateValue,
   getSelectedRows,
   clearSelectedRows,
-} from './ui-manager.js';
+} from '../src/js/utilities/ui-manager.js';
 import {
   calculatePortfolioMetrics,
   calculateFundYield,
   sortFunds,
   filterFunds,
-} from './portfolio-calculator.js';
+} from '../src/js/utilities/portfolio-calculator.js';
 import {
   initializeDOMReferences,
   setupClientFormHandler,
@@ -32,7 +32,7 @@ import {
   setPortfolioData,
   getClientInfo,
 } from './event-handlers.js';
-import { generateCSV, formatCurrency, formatPercentage, truncateText } from './utilities.js';
+import { generateCSV, formatCurrency, formatPercentage, truncateText } from '../src/js/utilities/legacy-utilities.js';
 
 // ==================== MODULE STATE ====================
 /** @type {FundData[]} */

@@ -13,7 +13,7 @@
  * @property {number} averageYield - Average yield across all funds
  */
 
-import { parseSafeNumber } from "./data-manager.js";
+import { parseSafeNumber } from './data-manager.js';
 
 // ==================== PORTFOLIO CALCULATIONS ====================
 
@@ -37,15 +37,11 @@ function calculatePortfolioMetrics(portfolioData) {
 
   const totalInvestment = portfolioData.reduce(
     (sum, item) => sum + parseSafeNumber(item.investment),
-    0,
+    0
   );
-  const totalValue = portfolioData.reduce(
-    (sum, item) => sum + parseSafeNumber(item.value),
-    0,
-  );
+  const totalValue = portfolioData.reduce((sum, item) => sum + parseSafeNumber(item.value), 0);
   const totalProfit = totalValue - totalInvestment;
-  const totalYield =
-    totalInvestment !== 0 ? (totalProfit / totalInvestment) * 100 : 0;
+  const totalYield = totalInvestment !== 0 ? (totalProfit / totalInvestment) * 100 : 0;
 
   // Find best and worst performing funds
   let bestFund = null;
@@ -57,8 +53,7 @@ function calculatePortfolioMetrics(portfolioData) {
   portfolioData.forEach((item) => {
     const investment = parseSafeNumber(item.investment);
     const value = parseSafeNumber(item.value);
-    const fundYield =
-      investment !== 0 ? ((value - investment) / investment) * 100 : 0;
+    const fundYield = investment !== 0 ? ((value - investment) / investment) * 100 : 0;
 
     totalYieldSum += fundYield;
 
@@ -73,8 +68,7 @@ function calculatePortfolioMetrics(portfolioData) {
     }
   });
 
-  const averageYield =
-    portfolioData.length > 0 ? totalYieldSum / portfolioData.length : 0;
+  const averageYield = portfolioData.length > 0 ? totalYieldSum / portfolioData.length : 0;
 
   return {
     totalInvestment,
@@ -109,15 +103,12 @@ function calculateDiversification(portfolioData) {
     };
   }
 
-  const totalValue = portfolioData.reduce(
-    (sum, item) => sum + parseSafeNumber(item.value),
-    0,
-  );
+  const totalValue = portfolioData.reduce((sum, item) => sum + parseSafeNumber(item.value), 0);
 
   // Group by producer
   const byProducer = {};
   portfolioData.forEach((item) => {
-    const producer = item.producer || "Neznámý";
+    const producer = item.producer || 'Neznámý';
     const value = parseSafeNumber(item.value);
 
     if (!byProducer[producer]) {
@@ -159,7 +150,7 @@ function aggregateByProducer(portfolioData) {
   const producerMap = {};
 
   portfolioData.forEach((fund) => {
-    const producer = fund.producer || "Neznámý";
+    const producer = fund.producer || 'Neznámý';
     const investment = parseSafeNumber(fund.investment);
     const value = parseSafeNumber(fund.value);
     const profit = value - investment;
@@ -186,9 +177,7 @@ function aggregateByProducer(portfolioData) {
   return Object.values(producerMap).map((producer) => ({
     ...producer,
     yield:
-      producer.totalInvestment !== 0
-        ? (producer.totalProfit / producer.totalInvestment) * 100
-        : 0,
+      producer.totalInvestment !== 0 ? (producer.totalProfit / producer.totalInvestment) * 100 : 0,
   }));
 }
 
@@ -201,32 +190,30 @@ function aggregateByProducer(portfolioData) {
  * @param {'asc'|'desc'} [direction='asc'] - Sort direction
  * @returns {FundData[]} Sorted array
  */
-function sortFunds(funds, column, direction = "asc") {
+function sortFunds(funds, column, direction = 'asc') {
   const sorted = [...funds];
 
   sorted.sort((a, b) => {
     let aVal, bVal;
 
     switch (column) {
-      case "name":
-      case "producer":
-        aVal = (a[column] || "").toLowerCase();
-        bVal = (b[column] || "").toLowerCase();
-        return direction === "asc"
-          ? aVal.localeCompare(bVal)
-          : bVal.localeCompare(aVal);
+      case 'name':
+      case 'producer':
+        aVal = (a[column] || '').toLowerCase();
+        bVal = (b[column] || '').toLowerCase();
+        return direction === 'asc' ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
 
-      case "investment":
-      case "value": {
+      case 'investment':
+      case 'value': {
         aVal = parseSafeNumber(a[column]);
         bVal = parseSafeNumber(b[column]);
-        return direction === "asc" ? aVal - bVal : bVal - aVal;
+        return direction === 'asc' ? aVal - bVal : bVal - aVal;
       }
 
-      case "yield": {
+      case 'yield': {
         const yieldA = calculateFundYield(a);
         const yieldB = calculateFundYield(b);
-        return direction === "asc" ? yieldA - yieldB : yieldB - yieldA;
+        return direction === 'asc' ? yieldA - yieldB : yieldB - yieldA;
       }
 
       default:
@@ -244,7 +231,7 @@ function sortFunds(funds, column, direction = "asc") {
  * @returns {FundData[]} Filtered array
  */
 function filterFunds(funds, searchQuery) {
-  if (!searchQuery || searchQuery.trim() === "") {
+  if (!searchQuery || searchQuery.trim() === '') {
     return funds;
   }
 
@@ -252,8 +239,8 @@ function filterFunds(funds, searchQuery) {
 
   return funds.filter(
     (fund) =>
-      (fund.name || "").toLowerCase().includes(query) ||
-      (fund.producer || "").toLowerCase().includes(query),
+      (fund.name || '').toLowerCase().includes(query) ||
+      (fund.producer || '').toLowerCase().includes(query)
   );
 }
 

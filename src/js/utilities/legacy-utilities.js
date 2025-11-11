@@ -20,11 +20,11 @@
  * @param {string} [clientName='client'] - Client name for filename
  * @returns {void}
  */
-export function generateCSV(data, clientName = "client") {
+export function generateCSV(data, clientName = 'client') {
   // Check if currency switch is enabled
-  const currencySwitch = document.getElementById("currencySwitch");
+  const currencySwitch = document.getElementById('currencySwitch');
   const useEuros = currencySwitch ? currencySwitch.checked : false;
-  const currencySymbol = useEuros ? "€" : "Kč";
+  const currencySymbol = useEuros ? '€' : 'Kč';
 
   // Always export in funds format
   const csvRows = [
@@ -35,28 +35,28 @@ export function generateCSV(data, clientName = "client") {
     const row = [
       `"${item.name}"`,
       `"${item.producer}"`,
-      item.investmentDate || "",
+      item.investmentDate || '',
       item.investment,
       item.value,
     ];
-    csvRows.push(row.join(","));
+    csvRows.push(row.join(','));
   });
 
-  const csvContent = csvRows.join("\n");
-  const BOM = "\uFEFF"; // UTF-8 BOM for Excel
+  const csvContent = csvRows.join('\n');
+  const BOM = '\uFEFF'; // UTF-8 BOM for Excel
   const csvContentWithBOM = BOM + csvContent;
 
   const blob = new Blob([csvContentWithBOM], {
-    type: "text/csv;charset=utf-8",
+    type: 'text/csv;charset=utf-8',
   });
 
   const url = window.URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  const date = new Date().toISOString().split("T")[0];
+  const link = document.createElement('a');
+  const date = new Date().toISOString().split('T')[0];
   const fileName = `portfolio-${clientName}-${date}.csv`;
 
   link.href = url;
-  link.setAttribute("download", fileName);
+  link.setAttribute('download', fileName);
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -69,9 +69,9 @@ export function generateCSV(data, clientName = "client") {
  * @param {string} currency - Currency code (default: 'CZK')
  * @returns {string} Formatted currency string
  */
-export function formatCurrency(value, currency = "CZK") {
-  return new Intl.NumberFormat("cs-CZ", {
-    style: "currency",
+export function formatCurrency(value, currency = 'CZK') {
+  return new Intl.NumberFormat('cs-CZ', {
+    style: 'currency',
     currency: currency,
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
@@ -120,13 +120,13 @@ export function isEmpty(value) {
   if (value === null || value === undefined) {
     return true;
   }
-  if (typeof value === "string" && value.trim() === "") {
+  if (typeof value === 'string' && value.trim() === '') {
     return true;
   }
   if (Array.isArray(value) && value.length === 0) {
     return true;
   }
-  if (typeof value === "object" && Object.keys(value).length === 0) {
+  if (typeof value === 'object' && Object.keys(value).length === 0) {
     return true;
   }
   return false;
@@ -159,7 +159,7 @@ export function safeExecute(fn, fallback = null) {
   try {
     return fn();
   } catch (error) {
-    console.error("safeExecute error:", error);
+    console.error('safeExecute error:', error);
     return fallback;
   }
 }
@@ -170,13 +170,13 @@ export function safeExecute(fn, fallback = null) {
  * @param {string} filename - Filename
  * @param {string} mimeType - MIME type (default: 'text/plain')
  */
-export function downloadTextFile(content, filename, mimeType = "text/plain") {
+export function downloadTextFile(content, filename, mimeType = 'text/plain') {
   const blob = new Blob([content], { type: mimeType });
   const url = window.URL.createObjectURL(blob);
-  const link = document.createElement("a");
+  const link = document.createElement('a');
 
   link.href = url;
-  link.setAttribute("download", filename);
+  link.setAttribute('download', filename);
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
