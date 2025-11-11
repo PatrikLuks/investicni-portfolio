@@ -9,6 +9,10 @@
  * 4. Run: npm install firebase
  */
 
+/* global firebase, btoa, atob */
+
+import { logInfo, logWarn, logError } from '../../utilities/logger.js';
+
 // Firebase configuration - REPLACE WITH YOUR CONFIG
 const firebaseConfig = {
   apiKey: 'YOUR_API_KEY_HERE',
@@ -29,7 +33,7 @@ class AuthenticationService {
     this.firebaseAvailable = typeof firebase !== 'undefined';
 
     if (!this.firebaseAvailable) {
-      console.warn('[Auth] Firebase not available - using local storage fallback');
+      logWarn('Auth: Firebase not available - using local storage fallback');
       this.loadLocalUser();
     }
   }
@@ -38,11 +42,13 @@ class AuthenticationService {
    * Initialize Firebase Authentication
    */
   async initialize() {
-    if (this.isInitialized) return;
+    if (this.isInitialized) {
+      return;
+    }
 
     try {
       if (!this.firebaseAvailable) {
-        console.log('[Auth] Skipping Firebase init - not installed');
+        logInfo('Auth: Skipping Firebase init - not installed');
         this.isInitialized = true;
         return;
       }
@@ -59,9 +65,9 @@ class AuthenticationService {
       });
 
       this.isInitialized = true;
-      console.log('[Auth] Firebase initialized');
+      logInfo('Auth: Firebase initialized');
     } catch (error) {
-      console.error('[Auth] Initialization failed:', error);
+      logError('Auth: Initialization failed:', error);
       this.useLocalStorageFallback();
     }
   }
@@ -86,7 +92,7 @@ class AuthenticationService {
       this.notifyListeners();
       return result.user;
     } catch (error) {
-      console.error('[Auth] Sign up failed:', error);
+      logError('Auth: Sign up failed:', error);
       throw new Error(this.getErrorMessage(error.code));
     }
   }
@@ -107,7 +113,7 @@ class AuthenticationService {
       this.notifyListeners();
       return result.user;
     } catch (error) {
-      console.error('[Auth] Sign in failed:', error);
+      logError('Auth: Sign in failed:', error);
       throw new Error(this.getErrorMessage(error.code));
     }
   }
@@ -129,7 +135,7 @@ class AuthenticationService {
       this.notifyListeners();
       return result.user;
     } catch (error) {
-      console.error('[Auth] Google sign in failed:', error);
+      logError('Auth: Google sign in failed:', error);
       throw new Error(this.getErrorMessage(error.code));
     }
   }
@@ -151,7 +157,7 @@ class AuthenticationService {
       this.notifyListeners();
       return result.user;
     } catch (error) {
-      console.error('[Auth] GitHub sign in failed:', error);
+      logError('Auth: GitHub sign in failed:', error);
       throw new Error(this.getErrorMessage(error.code));
     }
   }
@@ -171,7 +177,7 @@ class AuthenticationService {
       this.setCurrentUser(null);
       this.notifyListeners();
     } catch (error) {
-      console.error('[Auth] Sign out failed:', error);
+      logError('Auth: Sign out failed:', error);
     }
   }
 
@@ -193,7 +199,9 @@ class AuthenticationService {
    * Get user ID token for backend requests
    */
   async getUserToken() {
-    if (!this.currentUser) return null;
+    if (!this.currentUser) {
+      return null;
+    }
 
     if (this.firebaseAvailable) {
       return await this.currentUser.getIdToken();
@@ -223,7 +231,7 @@ class AuthenticationService {
       this.setCurrentUser(this.firebaseAvailable ? firebase.auth().currentUser : this.currentUser);
       this.notifyListeners();
     } catch (error) {
-      console.error('[Auth] Profile update failed:', error);
+      logError('Auth: Profile update failed:', error);
       throw error;
     }
   }
@@ -239,9 +247,9 @@ class AuthenticationService {
 
       const auth = firebase.auth();
       await auth.sendPasswordResetEmail(email);
-      console.log('[Auth] Password reset email sent to', email);
+      logInfo('Auth: Password reset email sent to', email);
     } catch (error) {
-      console.error('[Auth] Password reset failed:', error);
+      logError('Auth: Password reset failed:', error);
       throw new Error(this.getErrorMessage(error.code));
     }
   }
@@ -257,7 +265,7 @@ class AuthenticationService {
     }
 
     const user = {
-      uid: 'local_' + Date.now(),
+      uid: `local_${Date.now()}`,
       email,
       displayName: displayName || email.split('@')[0],
       password: btoa(password), // Simple encoding (NOT for production!)
@@ -281,7 +289,7 @@ class AuthenticationService {
     }
 
     this.setCurrentUser(user);
-    localStorage.setItem('auth_token', 'local_token_' + Date.now());
+    localStorage.setItem('auth_token', `local_token_${Date.now()}`);
     this.notifyListeners();
     return user;
   }
@@ -300,7 +308,7 @@ class AuthenticationService {
   }
 
   useLocalStorageFallback() {
-    console.log('[Auth] Using local storage fallback mode');
+    logInfo('Auth: Using local storage fallback mode');
     this.loadLocalUser();
   }
 
@@ -362,7 +370,7 @@ class AuthenticationService {
       'auth/popup-closed-by-user': 'Sign-in popup was closed',
     };
 
-    return messages[code] || 'Authentication failed: ' + code;
+    return messages[code] || `Authentication failed: ${code}`;
   }
 }
 
