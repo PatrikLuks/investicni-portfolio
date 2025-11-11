@@ -17,6 +17,8 @@
  * Enterprise Production Quality Framework
  */
 
+import { logInfo, logWarn, logError } from './logger.js';
+
 class ProductionQualitySystem {
   constructor() {
     this.appName = 'Investment Portfolio';
@@ -34,7 +36,7 @@ class ProductionQualitySystem {
   }
 
   init() {
-    console.log('[ProductionQuality] System initialized');
+    logInfo('Production Quality System initialized');
     this._setupGlobalErrorHandling();
     this._setupPerformanceMonitoring();
   }
@@ -196,7 +198,7 @@ class ProductionQualitySystem {
           return 'UNHANDLED';
       }
     } catch (e) {
-      console.error('[ProductionQuality] Recovery execution failed:', e);
+      logError('Recovery execution failed:', e);
       return 'RECOVERY_FAILED';
     }
   }
@@ -266,7 +268,7 @@ class ProductionQualitySystem {
         {
           duration: 0,
           actionable: true,
-        },
+        }
       );
     }
   }
@@ -360,19 +362,10 @@ class ProductionQualitySystem {
    */
   _consoleLog(logEntry) {
     const { timestamp, level, message, data } = logEntry;
-    const colors = {
-      DEBUG: 'color: #888; font-weight: bold;',
-      INFO: 'color: #06c; font-weight: bold;',
-      WARN: 'color: #f60; font-weight: bold;',
-      ERROR: 'color: #f00; font-weight: bold;',
-      CRITICAL: 'color: #000; background: #f00; font-weight: bold;',
-    };
 
-    const style = colors[level] || colors.INFO;
-    console.log(
-      `%c[${timestamp}] [${level}] ${message}`,
-      style,
-      data && Object.keys(data).length > 0 ? data : '',
+    logInfo(
+      `[${timestamp}] [${level}] ${message}`,
+      data && Object.keys(data).length > 0 ? data : ''
     );
   }
 
@@ -415,7 +408,7 @@ class ProductionQualitySystem {
           entryTypes: ['measure', 'navigation', 'resource', 'largest-contentful-paint'],
         });
       } catch {
-        console.warn('[ProductionQuality] PerformanceObserver not fully supported');
+        logWarn('PerformanceObserver not fully supported');
       }
     }
   }
