@@ -5,6 +5,8 @@
  */
 /* eslint-disable no-undef */
 
+import { logError } from './logger.js';
+
 class Command {
   constructor(execute, undo, description = '') {
     this.execute = execute;
@@ -48,7 +50,7 @@ class CommandStack {
 
       this.updateUI();
     } catch (error) {
-      console.error('Command execution failed:', error);
+      logError('Command execution failed:', error);
       if (window.errorHandler) {
         window.errorHandler.handleError({
           message: `Command failed: ${error.message}`,
@@ -80,7 +82,7 @@ class CommandStack {
 
       return true;
     } catch (error) {
-      console.error('Undo failed:', error);
+      logError('Undo failed:', error);
       return false;
     } finally {
       this.isExecuting = false;
@@ -107,7 +109,7 @@ class CommandStack {
 
       return true;
     } catch (error) {
-      console.error('Redo failed:', error);
+      logError('Redo failed:', error);
       this.currentIndex--;
       return false;
     } finally {
