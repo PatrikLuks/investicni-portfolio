@@ -4,6 +4,8 @@
  * @module data-manager
  */
 
+import { logError } from './logger.js';
+
 /**
  * @typedef {Object} ClientInfo
  * @property {string} clientName - Client name
@@ -49,7 +51,7 @@ class PortfolioStorage {
       this.updateLastSaveDisplay(now);
       return true;
     } catch (e) {
-      console.error('Save failed:', e);
+      logError('Save failed:', e);
       // Note: showToast should be called from the module that imports this
       return false;
     }
@@ -64,7 +66,7 @@ class PortfolioStorage {
       const data = localStorage.getItem(this.storageKey);
       return data ? JSON.parse(data) : [];
     } catch (e) {
-      console.error('Load failed:', e);
+      logError('Load failed:', e);
       return [];
     }
   }
@@ -79,7 +81,7 @@ class PortfolioStorage {
       localStorage.setItem(this.clientKey, JSON.stringify(client));
       return true;
     } catch (e) {
-      console.error('Client save failed:', e);
+      logError('Client save failed:', e);
       return false;
     }
   }
@@ -93,7 +95,7 @@ class PortfolioStorage {
       const client = localStorage.getItem(this.clientKey);
       return client ? JSON.parse(client) : null;
     } catch (e) {
-      console.error('Client load failed:', e);
+      logError('Client load failed:', e);
       return null;
     }
   }
@@ -110,7 +112,7 @@ class PortfolioStorage {
       // Note: showToast should be called from the module that imports this
       return true;
     } catch (e) {
-      console.error('Clear failed:', e);
+      logError('Clear failed:', e);
       return false;
     }
   }
