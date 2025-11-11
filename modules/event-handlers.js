@@ -6,6 +6,9 @@
  * @typedef {import('../src/js/utilities/data-manager.js').ClientInfo} ClientInfo
  */
 
+// Import logger
+import { logError } from '../src/js/utilities/logger.js';
+
 // This module will be populated with event handlers extracted from initializeApp()
 // For now, creating a placeholder structure
 
@@ -192,7 +195,7 @@ function setupPortfolioFormHandler(
 
       showToast('success', 'Fond přidán', `${fundData.name} byl úspěšně přidán do portfolia`);
     } catch (error) {
-      console.error('Add fund failed:', error);
+      logError('Add fund failed:', error);
       showToast('error', 'Chyba', 'Nepodařilo se přidat fond do portfolia');
     }
   });
