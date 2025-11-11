@@ -4,6 +4,8 @@
  * Multi-provider API integration with fallback and caching
  */
 
+import { logError, logWarn } from '../../utilities/logger.js';
+
 class MarketDataService {
   constructor() {
     this.providers = {
@@ -66,7 +68,7 @@ class MarketDataService {
           this.providers.finnhub.enabled = true;
         }
       } catch (e) {
-        console.error('Failed to load API keys:', e);
+        logError('Failed to load API keys:', e);
       }
     }
   }
@@ -174,7 +176,7 @@ class MarketDataService {
 
       const result = data.chart.result[0];
       const quote = result.meta;
-      const indicators = result.indicators.quote[0];
+      const _indicators = result.indicators.quote[0];
 
       return {
         symbol: symbol,
@@ -306,6 +308,7 @@ class MarketDataService {
     throw new Error(`All providers failed:\n${errors.join('\n')}`);
   }
 
+  // eslint-disable-next-line require-await
   async getBatchQuotes(symbols) {
     const promises = symbols.map((symbol) =>
       this.getQuote(symbol).catch((error) => ({
@@ -317,6 +320,7 @@ class MarketDataService {
     return Promise.all(promises);
   }
 
+  // eslint-disable-next-line require-await
   async searchSymbol(query) {
     // Note: Yahoo Finance API has CORS restrictions
     // For production, use a backend proxy server
@@ -324,8 +328,8 @@ class MarketDataService {
 
     // Log warning only once per session
     if (!window._marketDataWarningShown) {
-      console.warn('⚠️ Yahoo Finance API blocked by CORS. Using mock data for development.');
-      console.info('💡 For production: Set up a backend proxy server to access Yahoo Finance API');
+      logWarn('Yahoo Finance API blocked by CORS. Using mock data for development.');
+      logWarn('For production: Set up a backend proxy server to access Yahoo Finance API');
       window._marketDataWarningShown = true;
     }
 
@@ -378,7 +382,7 @@ class MarketDataService {
   }
 
   getProviderStatus() {
-    return Object.entries(this.providers).map(([key, provider]) => ({
+    return Object.entries(this.providers).map(([_key, provider]) => ({
       name: provider.name,
       enabled: provider.enabled,
       hasApiKey: !!provider.apiKey,
@@ -441,7 +445,7 @@ class AutoUpdateService {
         showToast('Market data updated', 'info');
       }
     } catch (error) {
-      console.error('Auto-update failed:', error);
+      logError('Auto-update failed:', error);
     }
   }
 
