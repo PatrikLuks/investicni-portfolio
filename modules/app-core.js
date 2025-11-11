@@ -32,7 +32,83 @@ import {
   setPortfolioData,
   getClientInfo,
 } from './event-handlers.js';
-import { generateCSV, formatCurrency, formatPercentage, truncateText } from '../src/js/utilities/legacy-utilities.js';
+
+// ==================== UTILITY FUNCTIONS ====================
+/**
+ * Format number as currency (CZK)
+ * @param {number} value - Number to format
+ * @returns {string} Formatted currency string
+ */
+function formatCurrency(value) {
+  return new Intl.NumberFormat('cs-CZ', {
+    style: 'currency',
+    currency: 'CZK',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(value);
+}
+
+/**
+ * Format number as percentage
+ * @param {number} value - Number to format
+ * @param {number} decimals - Decimal places
+ * @returns {string} Formatted percentage
+ */
+function formatPercentage(value, decimals = 2) {
+  return `${value.toFixed(decimals)}%`;
+}
+
+/**
+ * Truncate text to max length
+ * @param {string} text - Text to truncate
+ * @param {number} maxLength - Max length
+ * @returns {string} Truncated text
+ */
+function truncateText(text, maxLength = 50) {
+  if (!text || text.length <= maxLength) {
+    return text;
+  }
+  return `${text.substring(0, maxLength)}...`;
+}
+
+/**
+ * Generate and download CSV file
+ * @param {FundData[]} data - Portfolio data
+ * @param {string} clientName - Client name
+ */
+function generateCSV(data, clientName = 'client') {
+  const currencySwitch = document.getElementById('currencySwitch');
+  const useEuros = currencySwitch?.checked || false;
+  const currencySymbol = useEuros ? '€' : 'Kč';
+
+  const csvRows = [
+    `Název fondu,Producent,Datum investice,Čistá investice (${currencySymbol}),Aktuální hodnota (${currencySymbol})`,
+  ];
+
+  data.forEach((item) => {
+    csvRows.push([
+      `"${item.name}"`,
+      `"${item.producer}"`,
+      item.investmentDate || '',
+      item.investment,
+      item.value,
+    ].join(','));
+  });
+
+  const BOM = '\uFEFF';
+  const csvContent = BOM + csvRows.join('\n');
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  const date = new Date().toISOString().split('T')[0];
+
+  link.href = url;
+  link.setAttribute('download', `portfolio-${clientName}-${date}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  window.URL.revokeObjectURL(url);
+}
 
 // ==================== MODULE STATE ====================
 /** @type {FundData[]} */

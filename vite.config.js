@@ -83,7 +83,6 @@ export default defineConfig({
           'app-core': [
             './modules/app-core.js',
             './src/js/utilities/data-manager.js',
-            './src/js/utilities/legacy-utilities.js',
           ],
           // UI components
           'ui-components': ['./src/js/utilities/ui-manager.js', './modules/event-handlers.js'],
@@ -155,7 +154,6 @@ export default defineConfig({
       'modules/app-core',
       'src/js/utilities/data-manager',
       'src/js/utilities/ui-manager',
-      'src/js/utilities/legacy-utilities',
     ],
     exclude: [
       'modules/help-system', // Lazy loaded
