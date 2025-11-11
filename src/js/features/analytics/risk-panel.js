@@ -6,6 +6,7 @@
 
 import AdvancedRiskMetricsEngine from '../../utilities/advanced-risk-metrics.js';
 import { logError, logInfo } from '../../utilities/logger.js';
+import { formatCurrency } from '../../utilities/formatting.js';
 
 class RiskPanel {
   constructor(elementId = 'risk-panel') {
@@ -146,14 +147,14 @@ class RiskPanel {
       // Update VaR
       const varEl = this.element.querySelector('#riskVar95');
       if (varEl) {
-        varEl.textContent = `${this.formatCurrency(metrics.var95)}`;
+        varEl.textContent = `${formatCurrency(metrics.var95)}`;
         varEl.className = this.getRiskClass(-metrics.var95, 1000);
       }
 
       // Update CVaR
       const cvarEl = this.element.querySelector('#riskCvar95');
       if (cvarEl) {
-        cvarEl.textContent = `${this.formatCurrency(metrics.cvar95)}`;
+        cvarEl.textContent = `${formatCurrency(metrics.cvar95)}`;
         cvarEl.className = this.getRiskClass(-metrics.cvar95, 1500);
       }
 
@@ -246,20 +247,6 @@ class RiskPanel {
       return 'metric-medium';
     }
     return 'metric-low';
-  }
-
-  /**
-   * Format currency value
-   * @param {number} value - Value to format
-   * @returns {string} Formatted currency
-   */
-  formatCurrency(value) {
-    const formatter = new Intl.NumberFormat('cs-CZ', {
-      style: 'currency',
-      currency: 'CZK',
-      maximumFractionDigits: 0,
-    });
-    return formatter.format(Math.abs(value));
   }
 
   /**

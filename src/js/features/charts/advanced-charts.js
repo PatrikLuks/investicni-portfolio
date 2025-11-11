@@ -2,23 +2,10 @@
  * Advanced Charts Module
  * Version: 3.1.0
  * Treemap, Heatmap, Candlestick, and Sankey charts using Chart.js + D3.js
+ * Chart.js library loaded globally by library-loader.js
  */
 
-/* global Chart */
-
-/**
- * Format currency value
- * @param {number} value - Value to format
- * @returns {string} Formatted currency
- */
-function formatCurrency(value) {
-  return new Intl.NumberFormat('cs-CZ', {
-    style: 'currency',
-    currency: 'CZK',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(value);
-}
+import { formatCurrency } from '../../utilities/formatting.js';
 
 // Treemap Chart - Portfolio Asset Allocation Visualization
 class TreemapChart {

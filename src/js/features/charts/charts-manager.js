@@ -4,6 +4,7 @@
  */
 
 import { logError } from '../../utilities/logger.js';
+import { formatCurrency } from '../../utilities/formatting.js';
 
 class AdvancedChartsManager {
   constructor() {
@@ -100,10 +101,10 @@ class AdvancedChartsManager {
             position: 'right',
             labels: {
               generateLabels: (chart) => {
-                const { data } = chart;
-                return data.labels.map((label, i) => ({
-                  text: `${label}: ${this.formatCurrency(data.datasets[0].data[i])}`,
-                  fillStyle: data.datasets[0].backgroundColor[i],
+                const chartData = chart.data;
+                return chartData.labels.map((label, i) => ({
+                  text: `${label}: ${formatCurrency(chartData.datasets[0].data[i])}`,
+                  fillStyle: chartData.datasets[0].backgroundColor[i],
                   hidden: false,
                   index: i,
                 }));
@@ -117,7 +118,7 @@ class AdvancedChartsManager {
                 const value = context.parsed;
                 const total = context.dataset.data.reduce((a, b) => a + b, 0);
                 const percentage = ((value / total) * 100).toFixed(2);
-                return `${label}: ${this.formatCurrency(value)} (${percentage}%)`;
+                return `${label}: ${formatCurrency(value)} (${percentage}%)`;
               },
             },
           },
@@ -175,7 +176,7 @@ class AdvancedChartsManager {
           },
           tooltip: {
             callbacks: {
-              label: (context) => `Hodnota: ${this.formatCurrency(context.parsed.y)}`,
+              label: (context) => `Hodnota: ${formatCurrency(context.parsed.y)}`,
             },
           },
           zoom: {
@@ -198,7 +199,7 @@ class AdvancedChartsManager {
           y: {
             beginAtZero: false,
             ticks: {
-              callback: (value) => this.formatCurrency(value),
+              callback: (value) => formatCurrency(value),
             },
           },
           x: {
@@ -253,14 +254,14 @@ class AdvancedChartsManager {
           },
           tooltip: {
             callbacks: {
-              label: (context) => `Hodnota: ${this.formatCurrency(context.parsed.x)}`,
+              label: (context) => `Hodnota: ${formatCurrency(context.parsed.x)}`,
             },
           },
         },
         scales: {
           x: {
             ticks: {
-              callback: (value) => this.formatCurrency(value),
+              callback: (value) => formatCurrency(value),
             },
           },
         },
@@ -319,7 +320,7 @@ class AdvancedChartsManager {
             callbacks: {
               label: (context) => {
                 const value = context.parsed.y;
-                return `${value >= 0 ? 'Zisk' : 'Ztráta'}: ${this.formatCurrency(Math.abs(value))}`;
+                return `${value >= 0 ? 'Zisk' : 'Ztráta'}: ${formatCurrency(Math.abs(value))}`;
               },
             },
           },
@@ -327,7 +328,7 @@ class AdvancedChartsManager {
         scales: {
           y: {
             ticks: {
-              callback: (value) => this.formatCurrency(value),
+              callback: (value) => formatCurrency(value),
             },
           },
         },
@@ -483,20 +484,6 @@ class AdvancedChartsManager {
   }
 
   /**
-   * Format currency
-   * @param {number} value - Value to format
-   * @returns {string} - Formatted currency
-   */
-  formatCurrency(value) {
-    return new Intl.NumberFormat('cs-CZ', {
-      style: 'currency',
-      currency: 'CZK',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(value);
-  }
-
-  /**
    * Create charts panel UI
    */
   createChartsPanel() {
@@ -581,7 +568,7 @@ class AdvancedChartsManager {
    * Destroy all charts
    */
   destroyAllCharts() {
-    this.chartInstances.forEach((chart, id) => {
+    this.chartInstances.forEach((chart, _) => {
       chart.destroy();
     });
     this.chartInstances.clear();

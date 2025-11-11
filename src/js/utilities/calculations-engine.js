@@ -10,6 +10,7 @@
  */
 
 import { logInfo, logError } from './logger.js';
+import { formatCurrency } from './formatting.js';
 
 class CalculationsEngine {
   constructor() {
@@ -32,7 +33,7 @@ class CalculationsEngine {
       logInfo('CalculationsEngine: Integrated with FinancialPrecisionEngine');
     } else {
       logInfo(
-        'CalculationsEngine: FinancialPrecisionEngine not yet available, will retry on demand',
+        'CalculationsEngine: FinancialPrecisionEngine not yet available, will retry on demand'
       );
     }
   }
@@ -128,7 +129,7 @@ class CalculationsEngine {
 
     const totalOriginal = data.reduce(
       (sum, item) => sum + parseFloat(item.nákupníCena) * parseFloat(item.počet),
-      0,
+      0
     );
     const totalCurrent = data.reduce((sum, item) => sum + parseFloat(item.aktuálníHodnota), 0);
 
@@ -445,7 +446,7 @@ class CalculationsEngine {
         const portfolioReturns = [];
         for (let i = 1; i < historicalValues.length; i++) {
           portfolioReturns.push(
-            (historicalValues[i] - historicalValues[i - 1]) / historicalValues[i - 1],
+            (historicalValues[i] - historicalValues[i - 1]) / historicalValues[i - 1]
           );
         }
         metrics.beta = this.calculateBeta(portfolioReturns, marketReturns.slice(1));
@@ -477,9 +478,9 @@ class CalculationsEngine {
 📊 PORTFOLIO METRICS SUMMARY
 
 💰 Value & Returns:
-  • Total Value: ${this.formatCurrency(metrics.totalValue)}
-  • Total Cost: ${this.formatCurrency(metrics.totalCost)}
-  • Gain/Loss: ${this.formatCurrency(metrics.totalGainLoss)}
+  • Total Value: ${formatCurrency(metrics.totalValue)}
+  • Total Cost: ${formatCurrency(metrics.totalCost)}
+  • Gain/Loss: ${formatCurrency(metrics.totalGainLoss)}
   • ROI: ${metrics.roi.toFixed(2)}%
   • CAGR: ${metrics.cagr.toFixed(2)}%
 
@@ -496,20 +497,6 @@ ${metrics.topPerformers.map((p, i) => `  ${i + 1}. ${p.fond}: ${p.roi.toFixed(2)
 ⚠️ Worst Performers:
 ${metrics.worstPerformers.map((p, i) => `  ${i + 1}. ${p.fond}: ${p.roi.toFixed(2)}%`).join('\n')}
     `.trim();
-  }
-
-  /**
-   * Format currency
-   * @param {number} value - Value to format
-   * @returns {string} - Formatted currency
-   */
-  formatCurrency(value) {
-    return new Intl.NumberFormat('cs-CZ', {
-      style: 'currency',
-      currency: 'CZK',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(value);
   }
 
   /**
@@ -586,7 +573,7 @@ ${metrics.worstPerformers.map((p, i) => `  ${i + 1}. ${p.fond}: ${p.roi.toFixed(
       try {
         const precisionAssessment = this.precisionEngine.assessRisk(
           metrics.volatility,
-          Math.abs(metrics.maxDrawdown),
+          Math.abs(metrics.maxDrawdown)
         );
         assessment.volatility.rating = precisionAssessment.volatility.rating;
         assessment.volatility.level = precisionAssessment.volatility.level;
@@ -914,7 +901,7 @@ function updateMetricsPanel() {
       <span class="performer-name">${p.fond}</span>
       <span class="performer-roi">${p.roi.toFixed(2)}%</span>
     </div>
-  `,
+  `
     )
     .join('');
 
@@ -927,7 +914,7 @@ function updateMetricsPanel() {
       <span class="performer-name">${p.fond}</span>
       <span class="performer-roi">${p.roi.toFixed(2)}%</span>
     </div>
-  `,
+  `
     )
     .join('');
 }

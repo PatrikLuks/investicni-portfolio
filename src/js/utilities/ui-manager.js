@@ -4,6 +4,7 @@
  */
 
 import { logError } from './logger.js';
+import { formatCurrency } from './formatting.js';
 
 // ==================== TOAST NOTIFICATIONS ====================
 
@@ -257,12 +258,7 @@ function animateValue(elementId, start, end, duration, isCurrency = false) {
     }
 
     if (isCurrency) {
-      element.textContent = new Intl.NumberFormat('cs-CZ', {
-        style: 'currency',
-        currency: 'CZK',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      }).format(Math.round(current));
+      element.textContent = formatCurrency(Math.round(current));
     } else {
       element.textContent = Math.round(current).toLocaleString('cs-CZ');
     }
