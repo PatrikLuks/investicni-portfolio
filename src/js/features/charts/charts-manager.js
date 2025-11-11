@@ -3,6 +3,8 @@
  * Features: Interactive Chart.js charts, zoom, pan, export to PNG, multiple chart types
  */
 
+import { logError } from '../../utilities/logger.js';
+
 class AdvancedChartsManager {
   constructor() {
     this.charts = new Map();
@@ -347,14 +349,14 @@ class AdvancedChartsManager {
       try {
         await window.libraryLoader.loadChart();
       } catch (e) {
-        console.error('❌ Failed to load Chart.js:', e);
+        logError('Failed to load Chart.js:', e);
         return null;
       }
     }
 
     const container = document.getElementById(containerId);
     if (!container) {
-      console.error(`Container ${containerId} not found`);
+      logError(`Container ${containerId} not found`);
       return null;
     }
 
@@ -385,7 +387,7 @@ class AdvancedChartsManager {
   updateChart(containerId, newData) {
     const chart = this.chartInstances.get(containerId);
     if (!chart) {
-      console.error(`Chart ${containerId} not found`);
+      logError(`Chart ${containerId} not found`);
       return;
     }
 
@@ -407,7 +409,7 @@ class AdvancedChartsManager {
   exportChartAsPNG(containerId, filename = 'chart.png') {
     const chart = this.chartInstances.get(containerId);
     if (!chart) {
-      console.error(`Chart ${containerId} not found`);
+      logError(`Chart ${containerId} not found`);
       return;
     }
 

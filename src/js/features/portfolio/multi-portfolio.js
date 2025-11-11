@@ -4,6 +4,8 @@
  * Manage multiple portfolios with hierarchy and aggregation
  */
 
+import { logError } from '../../utilities/logger.js';
+
 class PortfolioManager {
   constructor() {
     this.portfolios = new Map();
@@ -28,7 +30,7 @@ class PortfolioManager {
           this.currentPortfolioId = this.portfolios.keys().next().value;
         }
       } catch (e) {
-        console.error('Failed to load portfolios:', e);
+        logError('Failed to load portfolios:', e);
         this.createDefaultPortfolio();
       }
     } else {

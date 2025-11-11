@@ -4,6 +4,8 @@
  * User interface for API configuration and market data updates
  */
 
+import { logError } from '../../utilities/logger.js';
+
 // API Settings Modal
 function createApiSettingsModal() {
   const modal = document.createElement('div');
@@ -100,7 +102,7 @@ function openApiSettingsModal() {
         document.getElementById('finnhubKey').value = keys.finnhub;
       }
     } catch (e) {
-      console.error('Failed to load API keys:', e);
+      logError('Failed to load API keys:', e);
     }
   }
 
@@ -274,7 +276,7 @@ function getPortfolioSymbols() {
     const symbols = portfolio.map((item) => item.symbol).filter(Boolean);
     return [...new Set(symbols)]; // Remove duplicates
   } catch (e) {
-    console.error('Failed to get portfolio symbols:', e);
+    logError('Failed to get portfolio symbols:', e);
     return [];
   }
 }
@@ -343,7 +345,7 @@ function updatePortfolioWithQuotes(quotes) {
       window.dispatchEvent(new Event('portfolioUpdated'));
     }
   } catch (e) {
-    console.error('Failed to update portfolio:', e);
+    logError('Failed to update portfolio:', e);
   }
 }
 
@@ -385,7 +387,7 @@ async function searchSymbol(query) {
     const results = await window.marketDataService.searchSymbol(query);
     return results.slice(0, 10); // Limit to 10 results
   } catch (error) {
-    console.error('Symbol search failed:', error);
+    logError('Symbol search failed:', error);
     return [];
   }
 }

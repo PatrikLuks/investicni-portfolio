@@ -3,6 +3,8 @@
  * Live price feeds and market updates via WebSocket
  */
 
+import { logError } from '../../utilities/logger.js';
+
 class MarketDataFeed {
   constructor() {
     this.ws = null;
@@ -28,7 +30,7 @@ class MarketDataFeed {
       // Start simulated feed (in production, use real WebSocket)
       this.startSimulatedFeed();
     } catch (error) {
-      console.error('❌ Market Data Feed initialization failed:', error);
+      logError('Market Data Feed initialization failed:', error);
     }
   }
 
@@ -610,7 +612,7 @@ class MarketDataFeed {
         }
       });
     } catch (e) {
-      console.error('Failed to load portfolio symbols:', e);
+      logError('Failed to load portfolio symbols:', e);
     }
 
     this.renderWatchlist();
@@ -1047,7 +1049,7 @@ class MarketDataFeed {
       });
 
     } catch (error) {
-      console.error(`❌ Error updating price for ${symbol}:`, error);
+      logError(`Error updating price for ${symbol}:`, error);
     }
   }
 

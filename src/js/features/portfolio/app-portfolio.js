@@ -1,4 +1,6 @@
 // Získání reference na formuláře a elementy
+import { logInfo, logError } from '../../utilities/logger.js';
+
 const clientForm = document.getElementById('clientForm');
 const portfolioForm = document.getElementById('portfolioForm');
 const generateReportBtn = document.getElementById('generateReport');
@@ -152,9 +154,9 @@ function addNewFund(fundName) {
     existingPortfolio.push(fundData);
     localStorage.setItem('investmentPortfolio', JSON.stringify(existingPortfolio));
 
-    console.log(`✅ Fund added to localStorage: ${fundName}`);
+    logInfo(`Fund added to localStorage: ${fundName}`);
   } catch (e) {
-    console.error('Failed to add fund to localStorage:', e);
+    logError('Failed to add fund to localStorage:', e);
   }
 }
 
@@ -1312,7 +1314,7 @@ function generatePortfolioHTML(portfolioData) {
                     try {
                         await window.libraryLoader.loadChart();
                     } catch (e) {
-                        console.error('❌ Failed to load Chart.js:', e);
+                        logError('Failed to load Chart.js:', e);
                         return;
                     }
                 }

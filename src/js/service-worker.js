@@ -19,24 +19,24 @@ const ASSETS_TO_CACHE = [
 
 // Install event - cache core assets
 self.addEventListener('install', (event) => {
-  console.log('✅ SW: Installing service worker...');
+  self.console.log('✅ SW: Installing service worker...');
   event.waitUntil(
     caches
       .open(CACHE_NAME)
       .then((cache) => {
-        console.log('✅ SW: Caching core assets');
+        self.console.log('✅ SW: Caching core assets');
         return cache.addAll(ASSETS_TO_CACHE);
       })
       .then(() => self.skipWaiting())
       .catch((error) => {
-        console.error('❌ SW: Installation failed:', error);
+        self.console.error('❌ SW: Installation failed:', error);
       })
   );
 });
 
 // Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
-  console.log('✅ SW: Activating service worker...');
+  self.console.log('✅ SW: Activating service worker...');
   event.waitUntil(
     caches
       .keys()
@@ -44,7 +44,7 @@ self.addEventListener('activate', (event) => {
         return Promise.all(
           cacheNames.map((cacheName) => {
             if (cacheName !== CACHE_NAME) {
-              console.log('🗑️ SW: Deleting old cache:', cacheName);
+              self.console.log('🗑️ SW: Deleting old cache:', cacheName);
               return caches.delete(cacheName);
             }
           })
