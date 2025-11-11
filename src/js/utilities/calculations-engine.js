@@ -9,6 +9,8 @@
  * - Performance optimization with caching
  */
 
+import { logInfo, logError } from './logger.js';
+
 class CalculationsEngine {
   constructor() {
     this.riskFreeRate = 0.02; // 2% default risk-free rate
@@ -27,9 +29,11 @@ class CalculationsEngine {
     // Check if FinancialPrecisionEngine is globally available
     if (typeof window !== 'undefined' && window.FinancialPrecisionEngine) {
       this.precisionEngine = new window.FinancialPrecisionEngine();
-      console.log('✅ CalculationsEngine: Integrated with FinancialPrecisionEngine');
+      logInfo('CalculationsEngine: Integrated with FinancialPrecisionEngine');
     } else {
-      console.log('⚠️ CalculationsEngine: FinancialPrecisionEngine not yet available, will retry on demand');
+      logInfo(
+        'CalculationsEngine: FinancialPrecisionEngine not yet available, will retry on demand'
+      );
     }
   }
 
@@ -124,7 +128,7 @@ class CalculationsEngine {
 
     const totalOriginal = data.reduce(
       (sum, item) => sum + parseFloat(item.nákupníCena) * parseFloat(item.počet),
-      0,
+      0
     );
     const totalCurrent = data.reduce((sum, item) => sum + parseFloat(item.aktuálníHodnota), 0);
 
@@ -441,7 +445,7 @@ class CalculationsEngine {
         const portfolioReturns = [];
         for (let i = 1; i < historicalValues.length; i++) {
           portfolioReturns.push(
-            (historicalValues[i] - historicalValues[i - 1]) / historicalValues[i - 1],
+            (historicalValues[i] - historicalValues[i - 1]) / historicalValues[i - 1]
           );
         }
         metrics.beta = this.calculateBeta(portfolioReturns, marketReturns.slice(1));
@@ -580,7 +584,10 @@ ${metrics.worstPerformers.map((p, i) => `  ${i + 1}. ${p.fond}: ${p.roi.toFixed(
     // If precision engine available, enhance with advanced analytics
     if (this.precisionEngine && typeof this.precisionEngine.assessRisk === 'function') {
       try {
-        const precisionAssessment = this.precisionEngine.assessRisk(metrics.volatility, Math.abs(metrics.maxDrawdown));
+        const precisionAssessment = this.precisionEngine.assessRisk(
+          metrics.volatility,
+          Math.abs(metrics.maxDrawdown)
+        );
         assessment.volatility.rating = precisionAssessment.volatility.rating;
         assessment.volatility.level = precisionAssessment.volatility.level;
         assessment.volatility.severity = precisionAssessment.volatility.severity;
@@ -605,7 +612,7 @@ ${metrics.worstPerformers.map((p, i) => `  ${i + 1}. ${p.fond}: ${p.roi.toFixed(
           assessment.diversification = composition;
         }
       } catch (error) {
-        console.error('❌ Error in precision assessment:', error);
+        logError('Error in precision assessment:', error);
       }
     } else {
       // Fallback: Local risk assessment without precision engine
@@ -666,9 +673,15 @@ ${metrics.worstPerformers.map((p, i) => `  ${i + 1}. ${p.fond}: ${p.roi.toFixed(
     // Overall risk level
     if (assessment.volatility.severity === 'safe' && assessment.drawdown.severity === 'safe') {
       assessment.overallRiskLevel = 'LOW';
-    } else if (assessment.volatility.severity === 'danger' || assessment.drawdown.severity === 'danger') {
+    } else if (
+      assessment.volatility.severity === 'danger' ||
+      assessment.drawdown.severity === 'danger'
+    ) {
       assessment.overallRiskLevel = 'CRITICAL';
-    } else if (assessment.volatility.severity === 'warning' || assessment.drawdown.severity === 'warning') {
+    } else if (
+      assessment.volatility.severity === 'warning' ||
+      assessment.drawdown.severity === 'warning'
+    ) {
       assessment.overallRiskLevel = 'HIGH';
     } else {
       assessment.overallRiskLevel = 'MEDIUM';
@@ -723,7 +736,6 @@ ${metrics.worstPerformers.map((p, i) => `  ${i + 1}. ${p.fond}: ${p.roi.toFixed(
     return recommendations;
   }
 }
-
 
 // Global instance
 window.calculationsEngine = new CalculationsEngine();
@@ -902,7 +914,7 @@ function updateMetricsPanel() {
       <span class="performer-name">${p.fond}</span>
       <span class="performer-roi">${p.roi.toFixed(2)}%</span>
     </div>
-  `,
+  `
     )
     .join('');
 
@@ -915,7 +927,7 @@ function updateMetricsPanel() {
       <span class="performer-name">${p.fond}</span>
       <span class="performer-roi">${p.roi.toFixed(2)}%</span>
     </div>
-  `,
+  `
     )
     .join('');
 }

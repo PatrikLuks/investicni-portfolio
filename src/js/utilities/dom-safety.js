@@ -6,6 +6,8 @@
  * Investment Portfolio Manager Pro v3.2.1
  */
 
+import { logWarn, logError } from './logger.js';
+
 /**
  * Safely get element by ID with null check
  * @param {string} id - Element ID
@@ -16,12 +18,12 @@ function safeGetElement(id, context = '') {
   try {
     const element = document.getElementById(id);
     if (!element) {
-      console.warn(`DOM Safety: Element '${id}' not found${context ? ` in ${context}` : ''}`);
+      logWarn(`DOM Safety: Element '${id}' not found${context ? ` in ${context}` : ''}`);
       return null;
     }
     return element;
   } catch (error) {
-    console.error(`DOM Safety: Error getting element '${id}':`, error);
+    logError(`DOM Safety: Error getting element '${id}':`, error);
     return null;
   }
 }
@@ -55,7 +57,7 @@ function safeSetText(id, text) {
     element.textContent = text;
     return true;
   } catch (error) {
-    console.error(`DOM Safety: Error setting text on '${id}':`, error);
+    logError(`DOM Safety: Error setting text on '${id}':`, error);
     return false;
   }
 }
@@ -75,7 +77,7 @@ function safeSetHTML(id, html) {
     element.innerHTML = html;
     return true;
   } catch (error) {
-    console.error(`DOM Safety: Error setting HTML on '${id}':`, error);
+    logError(`DOM Safety: Error setting HTML on '${id}':`, error);
     return false;
   }
 }
@@ -96,7 +98,7 @@ function safeSetStyle(id, property, value) {
     element.style[property] = value;
     return true;
   } catch (error) {
-    console.error(`DOM Safety: Error setting style on '${id}':`, error);
+    logError(`DOM Safety: Error setting style on '${id}':`, error);
     return false;
   }
 }
@@ -146,7 +148,7 @@ function safeAddEventListener(id, event, handler) {
     element.addEventListener(event, handler);
     return true;
   } catch (error) {
-    console.error(`DOM Safety: Error adding event listener to '${id}':`, error);
+    logError(`DOM Safety: Error adding event listener to '${id}':`, error);
     return false;
   }
 }
@@ -166,7 +168,7 @@ function safeQuerySelector(selector, _context = '') {
     }
     return element;
   } catch (error) {
-    console.error(`DOM Safety: Error querying selector '${selector}':`, error);
+    logError(`DOM Safety: Error querying selector '${selector}':`, error);
     return null;
   }
 }
@@ -182,13 +184,13 @@ function safeQuerySelectorAll(selector, context = '') {
     const elements = document.querySelectorAll(selector);
     if (!elements || elements.length === 0) {
       console.warn(
-        `DOM Safety: Selector '${selector}' found 0 elements${context ? ` in ${context}` : ''}`,
+        `DOM Safety: Selector '${selector}' found 0 elements${context ? ` in ${context}` : ''}`
       );
       return [];
     }
     return Array.from(elements);
   } catch (error) {
-    console.error(`DOM Safety: Error querying selector all '${selector}':`, error);
+    logError(`DOM Safety: Error querying selector all '${selector}':`, error);
     return [];
   }
 }
@@ -207,7 +209,7 @@ function safeRemoveElement(id) {
     element.remove();
     return true;
   } catch (error) {
-    console.error(`DOM Safety: Error removing element '${id}':`, error);
+    logError(`DOM Safety: Error removing element '${id}':`, error);
     return false;
   }
 }
@@ -227,7 +229,7 @@ function safeAppendChild(parentId, child) {
     parent.appendChild(child);
     return true;
   } catch (error) {
-    console.error(`DOM Safety: Error appending child to '${parentId}':`, error);
+    logError(`DOM Safety: Error appending child to '${parentId}':`, error);
     return false;
   }
 }
@@ -247,7 +249,7 @@ function safeAddClass(id, className) {
     element.classList.add(className);
     return true;
   } catch (error) {
-    console.error(`DOM Safety: Error adding class to '${id}':`, error);
+    logError(`DOM Safety: Error adding class to '${id}':`, error);
     return false;
   }
 }
@@ -267,7 +269,7 @@ function safeRemoveClass(id, className) {
     element.classList.remove(className);
     return true;
   } catch (error) {
-    console.error(`DOM Safety: Error removing class from '${id}':`, error);
+    logError(`DOM Safety: Error removing class from '${id}':`, error);
     return false;
   }
 }
@@ -286,7 +288,7 @@ function safeToggleClass(id, className) {
   try {
     return element.classList.toggle(className);
   } catch (error) {
-    console.error(`DOM Safety: Error toggling class on '${id}':`, error);
+    logError(`DOM Safety: Error toggling class on '${id}':`, error);
     return null;
   }
 }
@@ -308,7 +310,7 @@ function safeSetAttributes(id, attributes = {}) {
     });
     return true;
   } catch (error) {
-    console.error(`DOM Safety: Error setting attributes on '${id}':`, error);
+    logError(`DOM Safety: Error setting attributes on '${id}':`, error);
     return false;
   }
 }
@@ -326,7 +328,7 @@ function safeGetFormData(formId) {
   try {
     return new FormData(form);
   } catch (error) {
-    console.error(`DOM Safety: Error getting form data from '${formId}':`, error);
+    logError(`DOM Safety: Error getting form data from '${formId}':`, error);
     return null;
   }
 }
@@ -345,7 +347,7 @@ function safeResetForm(formId) {
     form.reset();
     return true;
   } catch (error) {
-    console.error(`DOM Safety: Error resetting form '${formId}':`, error);
+    logError(`DOM Safety: Error resetting form '${formId}':`, error);
     return false;
   }
 }
